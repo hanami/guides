@@ -8,6 +8,7 @@
 
 body {
   color: #525f7f;
+  position: relative;
 }
 
 p {
@@ -137,6 +138,14 @@ div.highlight > pre {
 main p {
   min-width: 100%;
   text-align: justify;
+}
+
+.nav-link.active {
+  border-left: 2px #0099e5 solid;
+  font-weight: 500;
+  padding-left: 1.5rem;
+  color: #0099e5;
+  background-color: transparent;
 }
 
 /* This corresponds to .alert class from original theme */

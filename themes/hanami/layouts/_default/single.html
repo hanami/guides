@@ -41,7 +41,7 @@
     <!-- Docs CSS -->
     <link type="text/css" href="/assets/css/docs.min.css" rel="stylesheet">
   </head>
-  <body>
+  <body data-spy="scroll" data-target="#secondary-navigation" data-offset="50">
     <header class="navbar navbar-expand navbar-dark flex-row align-items-md-center ct-navbar">
     <a class="navbar-brand mr-0 mr-md-2" href="../../docs/getting-started/overview.html" aria-label="Bootstrap">
       <img src="/assets/img/brand/white.png">
@@ -209,16 +209,18 @@
         </nav>
       </div>
       <div class="d-none d-xl-block col-xl-2 ct-toc">
-        <ul class="section-nav">
+        <ul class="section-nav" id="secondary-navigation">
+        {{ $sections := findRE `<h2.*?>(.|\n)*?</h2>` .Content }}
+        {{ range $sections }}
+          {{ $title := htmlUnescape (. | plainify) }}
+          {{ $anchor := trim (slicestr (index (findRE `id="(.*)"` .) 0) 4) `"` }}
           <li class="toc-entry toc-h2">
-            <a href="#primary-colors">Primary colors</a>
+            <a href="#{{ $anchor }}" class="nav-link">{{ $title }}</a>
           </li>
-          <li class="toc-entry toc-h2">
-            <a href="#light-neutrals">Light neutrals</a>
-          </li>
+        {{ end }}
         </ul>
       </div>
-      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 ct-content" role="main">
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 ct-content">
         <div class="ct-page-title">
           <h1 class="ct-title" id="content">{{ .Title }}</h1>
           <div class="avatar-group mt-3">
