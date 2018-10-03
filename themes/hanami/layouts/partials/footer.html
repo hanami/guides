@@ -1,0 +1,81 @@
+<section class="section section-lg pt-0">
+  <div class="container">
+    <div class="card bg-gradient-learn-more shadow-lg border-0">
+      <div class="p-5">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <h3 class="text-white">Still can't find an answer?</h3>
+            <p class="lead text-white mt-3">Maybe you want to have a look at our <strong><a href="https://snippets.hanamirb.org" target="_blank"><span class="text-primary">snippets</span></a></strong> or to ask questions in our <strong><a href="http://chat.hanamirb.org" target="_blank"><span class="text-primary">chat</span></a></strong>.</p>
+          </div>
+          <div class="col-lg-3 ml-lg-auto">
+            <a href="http://chat.hanamirb.org" class="btn btn-lg btn-block btn-white" target="_blank">
+              <span class="btn-inner--icon text-primary"><i class="ni ni-chat-round mr-2"></i></span>
+              <span class="nav-link-inner--text text-primary">Join our chat</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<footer class="footer has-cards">
+  <div class="container">
+    <div class="row row-grid align-items-center my-md">
+      <div class="col-lg-6">
+        <h3 class="text-primary font-weight-light mb-2">Thank you for supporting us!</h3>
+        <h4 class="mb-0 font-weight-light">Let's get in touch on any of these platforms.</h4>
+      </div>
+      <div class="col-lg-6 text-lg-center btn-wrapper">
+        <a target="_blank" href="https://github.com/{{ .Site.Params.Github }}" class="btn btn-neutral btn-icon-only btn-github btn-round btn-lg" data-toggle="tooltip" data-original-title="Star on Github">
+          <i class="fa fa-github"></i>
+        </a>
+        <a target="_blank" href="https://twitter.com/{{ .Site.Params.Twitter }}" class="btn btn-neutral btn-icon-only btn-twitter btn-round btn-lg" data-toggle="tooltip" data-original-title="Follow us">
+          <i class="fa fa-twitter"></i>
+        </a>
+        <a target="_blank" href="https://www.facebook.com/{{ .Site.Params.Facebook }}" class="btn btn-neutral btn-icon-only btn-facebook btn-round btn-lg" data-toggle="tooltip" data-original-title="Like us">
+          <i class="fa fa-facebook-square"></i>
+        </a>
+        <a target="_blank" href="https://instagram.com/{{ .Site.Params.Instagram }}" class="btn btn-neutral btn-icon-only btn-instagram btn-lg btn-round" data-toggle="tooltip" data-original-title="Follow us">
+          <i class="fa fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+    <hr>
+    <div class="row align-items-center justify-content-md-between">
+      <div class="col-md-6">
+        <div class="copyright">
+          Hanami is a web framework for Ruby — 
+          &copy; 2018
+          <a href="https://lucaguidi.com" target="_blank"><span class="text-primary">Luca Guidi</span></a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <ul class="nav nav-footer justify-content-end">
+          <li class="nav-item">
+            <a href="http://hanamirb.org" class="nav-link" target="_blank">Hanami</a>
+          </li>
+          <li class="nav-item">
+            <a href="http://hanamirb.org/blog/" class="nav-link" target="_blank">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a href="https://snippets.hanamirb.org" class="nav-link" target="_blank">Snippets</a>
+          </li>
+          <li class="nav-item">
+            <a href="https://github.com/hanami/guides" class="nav-link" target="_blank">Contribute</a>
+          </li>
+          <li class="nav-item">
+            <a href="http://hanamirb.org/donate/" class="nav-link" target="_blank">Donate</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- Core -->
+<script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/popper/popper.min.js"></script>
+<script src="/assets/vendor/bootstrap/bootstrap.min.js"></script>
+<script src="/assets/vendor/headroom/headroom.min.js"></script>
+<!-- Argon JS -->
+<script src="/assets/js/argon.js?v=1.0.1"></script>
+{{ template "_internal/google_analytics.html" . }}
