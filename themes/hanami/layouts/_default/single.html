@@ -9,7 +9,7 @@
     <meta property="og:type"         content="article" />
     <meta property="og:locale"       content="en_US" />
     <meta property="og:site_name"    content="{{ .Site.Title }}" />
-    <meta property="og:title"        content="{{ .Title }} | {{ .Site.Title }}" />
+    <meta property="og:title"        content="{{ .Section | title }}: {{ .Title }} | {{ .Site.Title }}" />
     <meta property="og:description"  content="{{ .Params.Status }}" />
     <meta property="og:image"        content="{{ .Site.BaseURL }}covers/{{ trim .RelPermalink "/" }}.png" />
     <meta property="og:image:type"   content="image/png" />
@@ -20,11 +20,11 @@
     <meta name="twitter:card"        content="summary" />
     <meta name="twitter:site"        content="@{{ .Site.Params.twitter }}" />
     <meta name="twitter:creator"     content="@{{ .Site.Params.twitter }}" />
-    <meta name="twitter:title"       content="{{ .Title }} | {{ .Site.Title }}" />
+    <meta name="twitter:title"       content="{{ .Section | title }}: {{ .Title }} | {{ .Site.Title }}" />
     <meta name="twitter:description" content="{{ .Params.Status }}" />
     <meta name="twitter:image"       content="{{ .Site.BaseURL }}covers/{{ trim .RelPermalink "/" }}.png" />
 
-    <title>{{ .Title }} | {{ .Site.Title }}</title>
+    <title>{{ .Section | title }}: {{ .Title }} | {{ .Site.Title }}</title>
 
     <meta name="author" content="Hanami team">
     <meta name="keywords" content="{{ .Site.Params.keywords }}" />
@@ -106,105 +106,21 @@
         <nav class="collapse ct-links" id="ct-docs-nav">
           <!-- Show links for all groups -->
           <div class="ct-toc-item active">
-            <a class="ct-toc-link" href="../../docs/getting-started/overview.html">Getting started</a>
+          {{ range .Site.Params.topics }}
+          {{ $t := title ( . | humanize) }}
+            <a class="ct-toc-link" href="#">{{ $t }}</a>
             <ul class="nav ct-sidenav">
-              <li>
-                <a href="../../docs/getting-started/overview.html">Overview</a>
-              </li>
-              <li>
-                <a href="../../docs/getting-started/download.html">Download</a>
-              </li>
-              <li>
-                <a href="../../docs/getting-started/quick-start.html">Quick start</a>
-              </li>
-              <li>
-                <a href="../../docs/getting-started/license.html">License</a>
-              </li>
-              <li>
-                <a href="../../docs/getting-started/contents.html">Contents</a>
-              </li>
-              <li>
-                <a href="../../docs/getting-started/build-tools.html">Build tools</a>
-              </li>
-            </ul>
-          </div>
-          <!-- Show links for all groups -->
-          <div class="ct-toc-item active">
-            <a class="ct-toc-link" href="../../docs/foundation/colors.html">Foundation</a>
-            <ul class="nav ct-sidenav">
+            {{ range where $.Site.RegularPages "Section" . }}
+              {{ if eq .URL $.Page.URL }}
               <li class="active ct-sidenav-active">
-                <a href="../../docs/foundation/colors.html">Colors</a>
-              </li>
+              {{ else }}
               <li>
-                <a href="../../docs/foundation/grid.html">Grid</a>
+              {{ end }}
+                <a href="{{ .URL }}">{{ .Title }}</a>
               </li>
-              <li>
-                <a href="../../docs/foundation/typography.html">Typography</a>
-              </li>
-              <li>
-                <a href="../../docs/foundation/icons.html">Icons</a>
-              </li>
+            {{ end }}
             </ul>
-          </div>
-          <!-- Show links for all groups -->
-          <div class="ct-toc-item active">
-            <a class="ct-toc-link" href="../../docs/components/alerts.html">Components</a>
-            <ul class="nav ct-sidenav">
-              <li>
-                <a href="../../docs/components/alerts.html">Alerts</a>
-              </li>
-              <li>
-                <a href="../../docs/components/badge.html">Badge</a>
-              </li>
-              <li>
-                <a href="../../docs/components/buttons.html">Buttons</a>
-              </li>
-              <li>
-                <a href="../../docs/components/carousel.html">Carousel</a>
-              </li>
-              <li>
-                <a href="../../docs/components/dropdowns.html">Dropdowns</a>
-              </li>
-              <li>
-                <a href="../../docs/components/forms.html">Forms</a>
-              </li>
-              <li>
-                <a href="../../docs/components/modal.html">Modal</a>
-              </li>
-              <li>
-                <a href="../../docs/components/navs.html">Navs</a>
-              </li>
-              <li>
-                <a href="../../docs/components/navbar.html">Navbar</a>
-              </li>
-              <li>
-                <a href="../../docs/components/pagination.html">Pagination</a>
-              </li>
-              <li>
-                <a href="../../docs/components/popovers.html">Popovers</a>
-              </li>
-              <li>
-                <a href="../../docs/components/progress.html">Progress</a>
-              </li>
-              <li>
-                <a href="../../docs/components/tooltips.html">Tooltips</a>
-              </li>
-            </ul>
-          </div>
-          <!-- Show links for all groups -->
-          <div class="ct-toc-item active">
-            <a class="ct-toc-link" href="../../docs/plugins/datepicker.html">Plugins</a>
-            <ul class="nav ct-sidenav">
-              <li>
-                <a href="../../docs/plugins/datepicker.html">Datepicker</a>
-              </li>
-              <li>
-                <a href="../../docs/plugins/headroom.html">Headroom</a>
-              </li>
-              <li>
-                <a href="../../docs/plugins/sliders.html">Sliders</a>
-              </li>
-            </ul>
+          {{ end }}
           </div>
         </nav>
       </div>
@@ -222,7 +138,7 @@
       </div>
       <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 ct-content">
         <div class="ct-page-title">
-          <h1 class="ct-title" id="content">{{ .Title }}</h1>
+          <h1 class="ct-title" id="content">{{ .Section | title }}: {{ .Title }}</h1>
           <div class="avatar-group mt-3">
           </div>
         </div>

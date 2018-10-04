@@ -23,3 +23,23 @@ pygmentsstyle = "monokailight"
   instagram = "hanamirb"
   github = "hanami/hanami"
   keywords = "hanami,hanamirb,lotus,lotusrb,web,framework,ruby,open source,oss,os,software,free,free software,architecture,fast,lightweight,testing,tdd,bdd,test driven development,behaviour driven development,full stack,mvc,model view object,pattern,patterns,design patterns,oop,object oriented programming,testability,http,https,routing,router,http router,restful,resource,resources,convention,controller,models,repository,query,sql,interactors,two-step view,view,template,presenters,render,rendering,helpers,erb,haml,tilt,json,xml,yaml,yml,framwork,framewrok,riby,free sowftare"
+
+  topics = [
+    "introduction",
+    "architecture",
+    "projects",
+    "routing",
+    "actions",
+    "views",
+    "models",
+    "repositories",
+    "entities",
+    "associations",
+    "migrations",
+    "validations",
+    "helpers",
+    "mailers",
+    "assets",
+    "command-line",
+    "upgrade-notes",
+  ]

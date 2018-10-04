@@ -2,6 +2,9 @@
 title: "Getting Started"
 date: 2018-10-03T11:39:29+02:00
 draft: false
+aliases: [
+  "getting-started"
+]
 ---
 
 <p id="getting-started-lead" class="lead">
