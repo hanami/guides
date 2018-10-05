@@ -24,7 +24,7 @@
     <meta name="twitter:description" content="{{ .Params.Status }}" />
     <meta name="twitter:image"       content="{{ .Site.BaseURL }}covers/{{ trim .RelPermalink "/" }}.png" />
 
-    <title>{{ .Section | title }}: {{ .Title }} | {{ .Site.Title }}</title>
+    <title>{{ .Section | humanize | title }}: {{ .Title }} | {{ .Site.Title }}</title>
 
     <meta name="author" content="Hanami team">
     <meta name="keywords" content="{{ .Site.Params.keywords }}" />
@@ -138,7 +138,7 @@
       </div>
       <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 ct-content">
         <div class="ct-page-title">
-          <h1 class="ct-title" id="content">{{ .Section | title }}: {{ .Title }}</h1>
+          <h1 class="ct-title" id="content">{{ .Section | humanize | title }}: {{ .Title }}</h1>
           <div class="avatar-group mt-3">
           </div>
         </div>

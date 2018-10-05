@@ -1,12 +1,11 @@
 ---
 title: "Basic Usage"
-date: 2018-10-04T11:50:38+02:00
-draft: false
+order: 20
 ---
 
 ## Requests Handling
 
-In the [previous section](/guides/1.2/actions/overview), we generated an action.  Now let's use it.
+In the [previous section](/actions/overview), we generated an action.  Now let's use it.
 
 First, we check our routes:
 
@@ -15,7 +14,7 @@ First, we check our routes:
 get '/dashboard', to: 'dashboard#index'
 ```
 
-### View Rendering
+## View Rendering
 
 Then we edit the corresponding template:
 
@@ -36,7 +35,7 @@ Here is how Hanami handles an incoming request:
 
 If we visit `/dashboard` we should see `<h1>Dashboard</h1>` in our browser.
 
-### Bypass Rendering
+## Bypass Rendering
 
 By default an action takes care of the HTTP status code and response header, but not of the body of the response.
 As seen above, it delegates the corresponding view to render and set this value.

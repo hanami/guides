@@ -1,7 +1,6 @@
 ---
 title: "Getting Started"
-date: 2018-10-03T11:39:29+02:00
-draft: false
+order: 10
 aliases: [
   "getting-started"
 ]

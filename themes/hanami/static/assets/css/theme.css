@@ -149,7 +149,9 @@ main p {
 }
 
 /* This corresponds to .alert class from original theme */
-p.notice {
+p.notice,
+p.convention,
+p.warning {
   position: relative;
   margin-bottom: 1rem;
   padding: 1rem 1.5rem;
@@ -161,7 +163,9 @@ p.notice {
   border-radius: .25rem;
 }
 
-p.notice code {
+p.notice code,
+p.convention code,
+p.warning code {
   margin-top: 1em;
   margin-left: 1em;
 }
@@ -170,4 +174,16 @@ p.notice {
   color: #fff;
   border-color: #37d5f2;
   background-color: #37d5f2;
+}
+
+p.convention {
+  color: #fff;
+  border-color: #7889e8;
+  background-color: #7889e8;
+}
+
+p.warning {
+  color: #fff;
+  border-color: #fc7c5f;
+  background-color: #fc7c5f;
 }

@@ -1,10 +1,7 @@
 ---
 title: "Overview"
-date: 2018-10-04T11:56:57+02:00
-draft: false
+order: 10
 ---
-
-# Architecture
 
 Hanami is based on two principles: [Clean Architecture](https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html) and [Monolith First](http://martinfowler.com/bliki/MonolithFirst.html).
 
@@ -27,7 +24,7 @@ This is a _soft-dependency_, it can be removed from our `Gemfile` and replaced w
 Let's have a look at how the `lib/` directory appears for a new generated project called `bookshelf` that uses `Hanami::Model`.
 
 ```shell
-% tree lib
+$ tree lib
 lib
 ├── bookshelf
 │   ├── entities
@@ -63,7 +60,7 @@ This application **depends** on the core of our product, as it uses entities, re
 It's used as web delivery mechanism, for our features.
 
 ```shell
-% tree apps/web
+$ tree apps/web
 apps/web
 ├── application.rb
 ├── assets
@@ -100,7 +97,7 @@ On the other hand, it's **too early** for us to implement a microservices archit
 Hanami has a solution for our problem: we can generate a new app that lives in the same Ruby process, but it's a separated component.
 
 ```shell
-% bundle exec hanami generate app admin
+$ bundle exec hanami generate app admin
 ```
 
 This command MUST be run from the root of our project. It will generate a new application (`Admin::Application`) under `apps/admin`.
@@ -113,7 +110,7 @@ We would just need to move everything under `apps/admin` into another repository
 We have already examined `lib/` and `apps/`, but there are other parts of a newly generated project that deserve to be explained.
 
 ```shell
-% tree -L 1
+$ tree -L 1
 .
 ├── Gemfile
 ├── Gemfile.lock
