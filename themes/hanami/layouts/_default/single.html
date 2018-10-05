@@ -110,7 +110,7 @@
           {{ $t := title ( . | humanize) }}
             <a class="ct-toc-link" href="#">{{ $t }}</a>
             <ul class="nav ct-sidenav">
-            {{ range where $.Site.RegularPages "Section" . }}
+            {{ range sort (where $.Site.RegularPages "Section" .) ".Params.order" }}
               {{ if eq .URL $.Page.URL }}
               <li class="active ct-sidenav-active">
               {{ else }}
