@@ -54,7 +54,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="{{ .Site.Params.githubrepo }}/edit/master/content/{{ .File.Path }}" target="_blank" title="Edit this page">
+          <a class="nav-link nav-link-icon" href="{{ .Site.Params.githubrepo }}/edit/{{ getenv "HANAMI_GUIDES_GIT_BRANCH" }}/content/{{ .File.Path }}" target="_blank" title="Edit this page">
             <i class="fa fa-pencil-square-o"></i>
           </a>
         </li>
