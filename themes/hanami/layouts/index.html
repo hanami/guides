@@ -25,7 +25,18 @@
     <meta name="twitter:image"       content="{{ .Site.BaseURL }}assets/img/brand/hanami-snippets-social.png" />
 
     <title>{{ .Site.Title }}</title>
-    {{ partial "head.html" . }}
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ "/assets/img/brand/favicon.ico" | relURL }}">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <!-- Icons -->
+    <link href="{{ "/assets/vendor/nucleo/css/nucleo.css" | relURL }}" rel="stylesheet">
+    <link href="{{ "/assets/vendor/font-awesome/css/font-awesome.min.css" | relURL }}" rel="stylesheet">
+    <!-- Argon CSS -->
+    <link type="text/css" href="{{ "/assets/css/argon.css?v=1.0.1" | relURL }}" rel="stylesheet">
+    <link type="text/css" href="{{ "/assets/css/theme.css" | relURL }}" rel="stylesheet">
+    <!-- Docs CSS -->
+    <link type="text/css" href="{{ "/assets/css/docs.min.css" | relURL }}" rel="stylesheet">
   </head>
   <body>
     {{ partial "header.html" . }}
@@ -74,7 +85,13 @@
         </div>
       </div>
     </section>
-    {{ partial "footer.html" . }}
-    <script src="/assets/js/theme.js"></script>
+    <!-- Core -->
+    <script src="{{ "/assets/vendor/jquery/jquery.min.js" | relURL }}"></script>
+    <script src="{{ "/assets/vendor/popper/popper.min.js" | relURL }}"></script>
+    <script src="{{ "/assets/vendor/bootstrap/bootstrap.min.js" | relURL }}"></script>
+    <script src="{{ "/assets/vendor/headroom/headroom.min.js" | relURL }}"></script>
+    <!-- Argon JS -->
+    <script src="{{ "/assets/js/argon.js?v=1.0.1" | relURL }}"></script>
+    <script src="{{ "/assets/js/theme.js" | relURL }}"></script>
   </body>
 </html>

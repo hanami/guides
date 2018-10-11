@@ -29,76 +29,70 @@
     <meta name="author" content="Hanami team">
     <meta name="keywords" content="{{ .Site.Params.keywords }}" />
     <!-- Favicon -->
-    <link rel="shortcut icon" href="/assets/img/brand/favicon.ico">
+    <link rel="shortcut icon" href="{{ "/assets/img/brand/favicon.ico" | relURL }}">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <!-- Icons -->
-    <link href="/assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
-    <link href="/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{{ "/assets/vendor/nucleo/css/nucleo.css" | relURL }}" rel="stylesheet">
+    <link href="{{ "/assets/vendor/font-awesome/css/font-awesome.min.css" | relURL }}" rel="stylesheet">
     <!-- Argon CSS -->
-    <link type="text/css" href="/assets/css/argon.css?v=1.0.1" rel="stylesheet">
-    <link type="text/css" href="/assets/css/theme.css" rel="stylesheet">
+    <link type="text/css" href="{{ "/assets/css/argon.css?v=1.0.1" | relURL }}" rel="stylesheet">
+    <link type="text/css" href="{{ "/assets/css/theme.css" | relURL }}" rel="stylesheet">
     <!-- Docs CSS -->
-    <link type="text/css" href="/assets/css/docs.min.css" rel="stylesheet">
+    <link type="text/css" href="{{ "/assets/css/docs.min.css" | relURL }}" rel="stylesheet">
   </head>
   <body data-spy="scroll" data-target="#secondary-navigation" data-offset="50">
     <header class="navbar navbar-expand navbar-dark flex-row align-items-md-center ct-navbar">
-    <a class="navbar-brand mr-0 mr-md-2" href="../../docs/getting-started/overview.html" aria-label="Bootstrap">
-      <img src="/assets/img/brand/white.png">
-      <sup>Docs</sup>
+      <a class="navbar-brand mr-0 mr-md-2" href="{{ "/" | relURL }}" aria-label="Bootstrap">
+      <img src="{{ "/assets/img/brand/white.png" | relURL }}" alt="Hanami guides logo">
     </a>
-    <ul class="navbar-nav flex-row mr-auto ml-4 d-none d-md-flex">
-      <li class="nav-item">
-        <a class="nav-link" href="../../index.html">Live Preview</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="https://github.com/creativetimofficial/argon-design-system/issues" target="_blank">Support</a>
-      </li>
-    </ul>
     <div class="d-none d-sm-block ml-auto">
       <ul class="navbar-nav ct-navbar-nav flex-row align-items-center">
-        <li class="nav-item dropdown d-none">
-          <a class="btn-link text-white dropdown-toggle mr-sm-3" href="#" id="ct-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">1.0.1</a>
-          <div class="dropdown-menu" aria-labelledby="ct-versions">
-            <a class="dropdown-item active" href="../..//docs/1.0.1/">Latest - 1.0.1</a>
-          </div>
-        </li>
         <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="https://www.facebook.com/creativetim" target="_blank">
-            <i class="fa fa-facebook-square"></i>
+          <a class="nav-link nav-link-icon" href="http://hanamirb.org" target="_blank" title="Hanami website">
+            <i class="ni ni-world"></i>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="https://twitter.com/creativetim" target="_blank">
+          <a class="nav-link nav-link-icon" href="{{ .Site.Params.githubrepo }}/edit/master/content/{{ .File.Path }}" target="_blank" title="Edit this page">
+            <i class="fa fa-pencil-square-o"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-link-icon" href="https://github.com/{{ .Site.Params.github }}" target="_blank" title="Star Hanami on GitHub">
+            <i class="fa fa-github"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-link-icon" href="https://twitter.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Twitter">
             <i class="fa fa-twitter"></i>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="https://www.instagram.com/creativetimofficial" target="_blank">
+          <a class="nav-link nav-link-icon" href="https://www.facebook.com/{{ .Site.Params.twitter }}" target="_blank" title="Like Hanami on Facebook">
+            <i class="fa fa-facebook-square"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-link-icon" href="https://www.instagram.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Instagram">
             <i class="fa fa-instagram"></i>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="https://www.instagram.com/creativetimofficial" target="_blank">
-            <i class="fa fa-dribbble"></i>
+          <a class="nav-link nav-link-icon" href="http://chat.hanamirb.org/" target="_blank" title="Hanami chat">
+            <i class="ni ni-chat-round"></i>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="https://github.com/creativetimofficial" target="_blank">
-            <i class="fa fa-github"></i>
+          <a class="nav-link nav-link-icon" href="/downloads" target="_blank" title="Hanami Guides downloads">
+            <i class="fa fa-cloud-download"></i>
           </a>
+        </li>
+        <li class="nav-item">
+          <span class="badge badge-pill badge-primary">v{{ .Site.Params.hanamiversion }}</span>
         </li>
       </ul>
     </div>
-    <a href="https://www.creative-tim.com/product/argon-design-system" target="_blank" class="btn btn-neutral btn-icon ml-sm-3 d-none d-md-block">
-      <span class="btn-inner--icon">
-        <i class="fa fa-cloud-download mr-2"></i>
-      </span>
-      <span class="nav-link-inner--text">Download</span>
-    </a>
-    <button class="navbar-toggler ct-search-docs-toggle d-block d-md-none ml-auto ml-sm-0" type="button" data-toggle="collapse" data-target="#ct-docs-nav" aria-controls="ct-docs-nav" aria-expanded="false" aria-label="Toggle docs navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
   </header>
   <div class="container-fluid">
     <div class="row flex-xl-nowrap">
@@ -148,12 +142,12 @@
     </div>
   </div>
   <!-- Core -->
-  <script src="/assets/vendor/jquery/jquery.min.js"></script>
-  <script src="/assets/vendor/popper/popper.min.js"></script>
-  <script src="/assets/vendor/bootstrap/bootstrap.min.js"></script>
-  <script src="/assets/vendor/headroom/headroom.min.js"></script>
+  <script src="{{ "/assets/vendor/jquery/jquery.min.js" | relURL }}"></script>
+  <script src="{{ "/assets/vendor/popper/popper.min.js" | relURL }}"></script>
+  <script src="{{ "/assets/vendor/bootstrap/bootstrap.min.js" | relURL }}"></script>
+  <script src="{{ "/assets/vendor/headroom/headroom.min.js" | relURL }}"></script>
   <!-- Argon JS -->
-  <script src="/assets/js/argon.js?v=1.0.1"></script>
-  <script src="/assets/js/theme.js"></script>
+  <script src="{{ "/assets/js/argon.js?v=1.0.1" | relURL }}"></script>
+  <script src="{{ "/assets/js/theme.js" | relURL }}"></script>
   </body>
 </html>
