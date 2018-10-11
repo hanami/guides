@@ -102,7 +102,7 @@
           <div class="ct-toc-item active">
           {{ range .Site.Params.topics }}
           {{ $t := title ( . | humanize) }}
-            <a class="ct-toc-link" href="#">{{ $t }}</a>
+            <span class="ct-toc-link">{{ $t }}</span>
             <ul class="nav ct-sidenav">
             {{ range sort (where $.Site.RegularPages "Section" .) ".Params.order" }}
               {{ if eq .URL $.Page.URL }}

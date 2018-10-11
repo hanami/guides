@@ -187,3 +187,12 @@ p.warning {
   border-color: #fc7c5f;
   background-color: #fc7c5f;
 }
+
+span.ct-toc-link {
+  cursor: pointer;
+  font-size: 1em;
+}
+
+ul.ct-sidenav {
+  margin-left: 0.5em;
+}
