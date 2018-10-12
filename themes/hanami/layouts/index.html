@@ -39,7 +39,137 @@
     <link type="text/css" href="{{ "/assets/css/docs.min.css" | relURL }}" rel="stylesheet">
   </head>
   <body>
-    {{ partial "header.html" . }}
+    <header class="header-global">
+      <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
+        <div class="container">
+          <a class="navbar-brand mr-lg-5" href="{{ "/" | relURL }}">
+            <img src="{{ "/assets/img/brand/white.png" | relURL}}">
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="navbar-collapse collapse" id="navbar_global">
+            <div class="navbar-collapse-header">
+              <div class="row">
+                <div class="col-6 collapse-brand">
+                  <a href="{{ "/" | relURL }}">
+                    <img src="{{ "/assets/img/brand/white.png" | relURL}}">
+                  </a>
+                </div>
+                <div class="col-6 collapse-close">
+                  <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+              <li class="nav-item">
+                <a class="nav-link nav-link-icon" href="https://github.com/{{ .Site.Params.github }}" target="_blank" title="Star Hanami on GitHub">
+                  <i class="fa fa-github"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link nav-link-icon" href="https://twitter.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Twitter">
+                  <i class="fa fa-twitter"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link nav-link-icon" href="https://www.facebook.com/{{ .Site.Params.twitter }}" target="_blank" title="Like Hanami on Facebook">
+                  <i class="fa fa-facebook-square"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link nav-link-icon" href="https://www.instagram.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Instagram">
+                  <i class="fa fa-instagram"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link nav-link-icon" href="http://chat.hanamirb.org/" target="_blank" title="Hanami chat">
+                  <i class="ni ni-chat-round"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link nav-link-icon" href="/downloads" target="_blank" title="Hanami Guides downloads">
+                  <i class="fa fa-cloud-download"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <span class="badge badge-pill badge-primary">v{{ .Site.Params.hanamiversion }}</span>
+              </li>
+              <li class="nav-item d-none d-lg-block ml-lg-4">
+                <a href="{{ "getting-started" | relURL }}" target="_blank" class="btn btn-neutral btn-icon">
+                  <span class="btn-inner--icon text-primary">
+                    <i class="ni ni-spaceship mr-2"></i>
+                  </span>
+                  <span class="nav-link-inner--text text-primary">Get started</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+<main>
+<div class="position-relative">
+  <!-- shape Hero -->
+  <section class="section section-lg section-shaped pb-250">
+    <div class="shape shape-style-1 shape-hanami">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="container py-lg-md d-flex">
+      <div class="col px-0">
+        <div class="row">
+          <div class="col-lg-6">
+            {{ if eq .Kind "taxonomy" }}
+            <h1 class="display-3  text-white">{{ .Title | upper }} <!-- gem or tag -->
+              {{ with .Params.description }}
+              <span>{{ . }}</span>
+              {{ end }}
+            </h1>
+            {{ else }}
+              {{ with .Params.Preview }}
+              <h1 class="display-3 text-white">{{ $.Title }} <!-- snippet -->
+              <span>{{ . }}</span>
+            </h1>
+              {{ else }}
+            <h1 class="display-3  text-white">Hanami <span>The web, with simplicity</span> <!-- home page -->
+            </h1>
+            <p class="lead  text-white">Learn Hanami with our extensive <strong>guides</strong>.</p>
+            <div class="btn-wrapper">
+              <a href="http://hanamirb.org" class="btn btn-primary btn-icon mb-3 mb-sm-0">
+                <span class="btn-inner--icon"><i class="fa fa-code"></i></span>
+                <span class="btn-inner--text">Main website</span>
+              </a>
+              <a href="{{ "getting-started" | relURL }}" class="btn btn-white btn-icon mb-3 mb-sm-0">
+                <span class="btn-inner--icon text-primary"><i class="ni ni-spaceship"></i></span>
+                <span class="btn-inner--text text-primary">Get started</span>
+              </a>
+            </div>
+              {{ end }}
+            {{ end }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- SVG separator -->
+    <div class="separator separator-bottom separator-skew">
+      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+  </section>
+  <!-- 1st Hero Variation -->
+</div>
     <section class="section section-lg pt-lg-0 mt--200">
       <div class="container">
         <div class="row justify-content-center">
@@ -85,6 +215,87 @@
         </div>
       </div>
     </section>
+    <section class="section section-lg pt-0">
+      <div class="container">
+        <div class="card bg-gradient-learn-more shadow-lg border-0">
+          <div class="p-5">
+            <div class="row align-items-center">
+              <div class="col-lg-8">
+                <h3 class="text-white">Want to learn more?</h3>
+                <p class="lead text-white mt-3">Maybe you want to have a look at our <strong><a href="https://snippets.hanamirb.org" target="_blank"><span class="text-primary">snippets</span></a></strong> or to ask questions in our <strong><a href="http://chat.hanamirb.org" target="_blank"><span class="text-primary">chat</span></a></strong>.</p>
+              </div>
+              <div class="col-lg-3 ml-lg-auto">
+                <a href="http://chat.hanamirb.org" class="btn btn-lg btn-block btn-white" target="_blank">
+                  <span class="btn-inner--icon text-primary"><i class="ni ni-chat-round mr-2"></i></span>
+                  <span class="nav-link-inner--text text-primary">Join our chat</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer has-cards">
+      <div class="container">
+        <div class="row row-grid align-items-center my-md">
+          <div class="col-lg-6">
+            <h3 class="text-primary font-weight-light mb-2">Thank you for supporting us!</h3>
+            <h4 class="mb-0 font-weight-light">Let's get in touch on any of these platforms.</h4>
+          </div>
+          <div class="col-lg-6 text-lg-center btn-wrapper">
+            <a target="_blank" href="https://github.com/{{ .Site.Params.Github }}" class="btn btn-neutral btn-icon-only btn-github btn-round btn-lg" data-toggle="tooltip" data-original-title="Star on Github">
+              <i class="fa fa-github"></i>
+            </a>
+            <a target="_blank" href="https://twitter.com/{{ .Site.Params.Twitter }}" class="btn btn-neutral btn-icon-only btn-twitter btn-round btn-lg" data-toggle="tooltip" data-original-title="Follow us">
+              <i class="fa fa-twitter"></i>
+            </a>
+            <a target="_blank" href="https://www.facebook.com/{{ .Site.Params.Facebook }}" class="btn btn-neutral btn-icon-only btn-facebook btn-round btn-lg" data-toggle="tooltip" data-original-title="Like us">
+              <i class="fa fa-facebook-square"></i>
+            </a>
+            <a target="_blank" href="https://instagram.com/{{ .Site.Params.Instagram }}" class="btn btn-neutral btn-icon-only btn-instagram btn-lg btn-round" data-toggle="tooltip" data-original-title="Follow us">
+              <i class="fa fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+        <hr>
+        <div class="row align-items-center justify-content-md-between">
+          <div class="col-md-6">
+            <div class="copyright">
+            Hanami is a web framework for Ruby — 
+            &copy; 2018
+            <a href="https://lucaguidi.com" target="_blank"><span class="text-primary">Luca Guidi</span></a>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <ul class="nav nav-footer justify-content-end">
+              <li class="nav-item">
+                <a href="http://hanamirb.org" class="nav-link" target="_blank">Hanami</a>
+              </li>
+              <li class="nav-item">
+                <a href="http://hanamirb.org/blog/" class="nav-link" target="_blank">Blog</a>
+              </li>
+              <li class="nav-item">
+                <a href="https://snippets.hanamirb.org" class="nav-link" target="_blank">Snippets</a>
+              </li>
+              <li class="nav-item">
+                <a href="https://github.com/hanami/guides" class="nav-link" target="_blank">Contribute</a>
+              </li>
+              <li class="nav-item">
+                <a href="http://hanamirb.org/donate/" class="nav-link" target="_blank">Donate</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Core -->
+    <script src="/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="/assets/vendor/popper/popper.min.js"></script>
+    <script src="/assets/vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="/assets/vendor/headroom/headroom.min.js"></script>
+    <!-- Argon JS -->
+    <script src="/assets/js/argon.js?v=1.0.1"></script>
+    {{ template "_internal/google_analytics.html" . }}
     <!-- Core -->
     <script src="{{ "/assets/vendor/jquery/jquery.min.js" | relURL }}"></script>
     <script src="{{ "/assets/vendor/popper/popper.min.js" | relURL }}"></script>

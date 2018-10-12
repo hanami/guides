@@ -11,14 +11,27 @@ body {
   position: relative;
 }
 
+a:link,
+a:visited {
+  color: #35DDFF;
+}
+
+a:hover,
+a:active {
+  text-decoration: underline;
+}
+
 p {
   font-size: 1.2rem;
 }
 
 code {
-  background-color: #8E43E8;
-  color: #fff;
-  padding: 0.1em;
+  /* background-color: rgba(70,232,149, 0.5); */
+  background-color: rgba(255,216,66,.5);
+  color: #525f7f;
+  padding: 0.2em 0.1em;
+  font-family: monospace;
+  font-size: 1.2em;
 }
 
 .headroom--not-top {
@@ -54,6 +67,10 @@ code {
 {
     color: #FF6138;
     background-color: rgba(142,67,232,.5);
+}
+
+.btn-wrapper a {
+  color: #FFF;
 }
 
 .text-primary
@@ -107,6 +124,12 @@ a.text-primary:focus
     box-shadow: none, 0 0 0 0 rgba(94, 114, 228, .5);
 }
 
+.badge-primary
+{
+    color: #FFFF9D;
+    background-color: rgba(70,232,149,.8);
+}
+
 .badge-secondary
 {
     color: #FFFF9D;
@@ -125,6 +148,10 @@ a.text-primary:focus
     background: linear-gradient(87deg, #46E895 0, #35DDFF 100%) !important;
 }
 
+header.navbar {
+  background-color: #8E43E8;
+}
+
 div.highlight > pre {
   padding: 1em;
 }
@@ -141,11 +168,24 @@ main p {
 }
 
 .nav-link.active {
-  border-left: 2px #0099e5 solid;
   font-weight: 500;
   padding-left: 1.5rem;
-  color: #0099e5;
+  color: #8E43E8;
   background-color: transparent;
+}
+
+.ct-page-title {
+  border-left: 2px solid #8E43E8;
+}
+
+.ct-sidebar .nav > .active > a,
+.ct-sidebar .nav > .active > a:hover,
+.ct-sidebar .nav > .active > a:active {
+  color: #8E43E8;
+}
+
+.ct-sidebar .nav>.active>a:before {
+  background-color: #8E43E8;
 }
 
 /* This corresponds to .alert class from original theme */
@@ -163,29 +203,27 @@ p.warning {
   border-radius: .25rem;
 }
 
-p.notice code,
-p.convention code,
-p.warning code {
-  margin-top: 1em;
-  margin-left: 1em;
-}
-
 p.notice {
-  color: #fff;
-  border-color: #37d5f2;
-  background-color: #37d5f2;
+  color: #FFF;
+  border-color: #35DDFF;
+  background-color: #35DDFF;
 }
 
 p.convention {
   color: #fff;
-  border-color: #7889e8;
-  background-color: #7889e8;
+  border-color: #46E895;
+  background-color: #46E895;
 }
 
 p.warning {
   color: #fff;
   border-color: #fc7c5f;
   background-color: #fc7c5f;
+}
+
+p.convention code,
+p.warning code {
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 span.ct-toc-link {
@@ -195,4 +233,19 @@ span.ct-toc-link {
 
 ul.ct-sidenav {
   margin-left: 0.5em;
+}
+
+#secondary-navigation a:link,
+#secondary-navigation a:visited {
+  color: #99979c;
+}
+
+#secondary-navigation a:hover,
+#secondary-navigation a:active {
+  color: #35DDFF;
+}
+
+.btn-clipboard,
+.btn-clipboard:hover {
+  background-color: #8E43E8;
 }
