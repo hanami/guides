@@ -11,7 +11,7 @@
     <meta property="og:site_name"    content="{{ .Site.Title }}" />
     <meta property="og:title"        content="{{ .Section | humanize | title }}: {{ .Title }} | {{ .Site.Title }}" />
     <meta property="og:description"  content="{{ .Section | humanize | title }}: {{ .Title }} | {{ .Site.Title }}" />
-    <meta property="og:image"        content="{{ .Site.BaseURL }}covers/{{ trim .RelPermalink "/" }}.png" />
+    <meta property="og:image"        content="{{ "/assets/img/brand/hanami-guides-social.png" | absURL }}" />
     <meta property="og:image:type"   content="image/png" />
     <meta property="og:image:width"  content="2968" />
     <meta property="og:image:height" content="2968" />
@@ -22,7 +22,7 @@
     <meta name="twitter:creator"     content="@{{ .Site.Params.twitter }}" />
     <meta name="twitter:title"       content="{{ .Section | humanize | title }}: {{ .Title }} | {{ .Site.Title }}" />
     <meta name="twitter:description" content="{{ .Section | humanize | title }}: {{ .Title }} | {{ .Site.Title }}" />
-    <meta name="twitter:image"       content="{{ .Site.BaseURL }}covers/{{ trim .RelPermalink "/" }}.png" />
+    <meta name="twitter:image"       content="{{  "/assets/img/brand/hanami-guides-social.png" | absURL }}" />
 
     <title>{{ .Section | humanize | title }}: {{ .Title }} | {{ .Site.Title }}</title>
 
