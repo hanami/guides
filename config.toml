@@ -17,7 +17,7 @@ pygmentsstyle = "monokailight"
   priority = 0.5
 
 [params]
-  hanamiversion = "1.2"
+  hanamiversion = "1.2.0"
   description = "Code guides for Hanami Ruby web framework"
   facebook = "hanamirb"
   twitter = "hanamirb"
