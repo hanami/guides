@@ -20,6 +20,14 @@
 
     // Copy & Paste snippets
     $("div.highlight").before('<div class="ct-clipboard"><button class="btn-clipboard" title="" data-original-title="Copy to clipboard">Copy</button></div>');
+
+    new ClipboardJS(".btn-clipboard", {
+      text: function(button) {
+        var btn = $(button);
+        var code = btn.parent().next("div.highlight");
+
+        return code.text();
+      }
+    });
   });
 })(jQuery);
-
