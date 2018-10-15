@@ -189,26 +189,48 @@
           <div class="col-md-6 order-md-1">
             <div class="pr-md-5">
               <div class="badge badge-circle badge-secondary icon icon-shape rounded-circle mb-5">
-                <i class="ni ni-settings-gear-65"></i>
+                <i class="ni ni-check-bold"></i>
               </div>
-              <h3>Learn by topic</h3>
-              <p>We have snippets for all the Hanami components:</p>
+              <h3>Learn Hanami</h3>
+              <p>Learn Hanami via our extensive guides.</p>
               <ul class="list-unstyled mt-5">
-                {{ range .Site.Params.Gems }}
-                {{ $icon := index $.Site.Params.icons . }}
                 <li class="py-2">
                   <div class="d-flex align-items-center">
                     <div>
                       <div class="badge badge-circle badge-secondary mr-3">
-                        <i class="fa {{ $icon }}"></i>
+                        <i class="ni ni-spaceship"></i>
                       </div>
                     </div>
                     <div>
-                      <h6 class="mb-0"><a href="/gems/{{ . | urlize }}"><span class="text-primary">{{ . }}</span></a></h6>
+                      <h6 class="mb-0"><a href="{{ "/introduction/getting-started" | relURL }}"><span class="text-primary">Getting started</span></a></h6>
                     </div>
                   </div>
                 </li>
-                {{ end }}
+                <li class="py-2">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <div class="badge badge-circle badge-secondary mr-3">
+                        <i class="ni ni-settings-gear-65"></i>
+                      </div>
+                    </div>
+                    <div>
+                    {{ $upgradeNotesUrl := printf "/upgrade-notes/v%s" (replace .Site.Params.hanamiversion "." "") }}
+                    <h6 class="mb-0"><a href="{{ $upgradeNotesUrl | relURL }}"><span class="text-primary">Upgrade notes</span></a></h6>
+                    </div>
+                  </div>
+                </li>
+                <li class="py-2">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <div class="badge badge-circle badge-secondary mr-3">
+                        <i class="fa fa-cloud-download"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <h6 class="mb-0"><a href="/downloads" target="_blank"><span class="text-primary">Download the guides</span></a></h6>
+                    </div>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>

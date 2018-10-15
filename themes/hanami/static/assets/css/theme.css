@@ -137,8 +137,8 @@ a.text-primary:focus
 
 .badge-secondary
 {
-    color: #FFFF9D;
-    background-color: rgba(121,189,143,.5);
+    color: #8E43E8;
+    background-color: rgba(70,232,149,.5);
 }
 .badge-secondary[href]:hover,
 .badge-secondary[href]:focus
