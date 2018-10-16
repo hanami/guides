@@ -26,10 +26,9 @@ p {
 }
 
 code {
-  /* background-color: rgba(70,232,149, 0.5); */
-  background-color: rgba(255,216,66,.5);
+  background-color: rgba(155, 52, 241, 0.17);;
   color: #525f7f;
-  padding: 0.2em 0.1em;
+  padding: 0.2em 0.2em;
   font-family: monospace;
   font-size: 1.2em;
 }
@@ -209,19 +208,19 @@ p.warning {
 }
 
 p.notice {
-  color: #FFF;
+  color: #32325d;
   border-color: #35DDFF;
   background-color: #35DDFF;
 }
 
 p.convention {
-  color: #fff;
+  color: #32325d;
   border-color: #46E895;
   background-color: #46E895;
 }
 
 p.warning {
-  color: #fff;
+  color: #32325d;
   border-color: #fc7c5f;
   background-color: #fc7c5f;
 }
