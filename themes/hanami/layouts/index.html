@@ -214,7 +214,7 @@
                       </div>
                     </div>
                     <div>
-                    {{ $upgradeNotesUrl := printf "/upgrade-notes/v%s" (replace .Site.Params.hanamiversion "." "") }}
+                    {{ $upgradeNotesUrl := printf "/upgrade-notes/v%s0" (delimit (first 2 (split .Site.Params.hanamiversion ".")) "") }}
                     <h6 class="mb-0"><a href="{{ $upgradeNotesUrl | relURL }}"><span class="text-primary">Upgrade notes</span></a></h6>
                     </div>
                   </div>
