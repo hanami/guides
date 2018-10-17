@@ -129,6 +129,21 @@ a.text-primary:focus
     box-shadow: none, 0 0 0 0 rgba(94, 114, 228, .5);
 }
 
+.btn-outline-primary {
+  color: #8E43E8;
+  border-color: #8E43E8;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:active,
+.btn-outline-primary:not(:disabled):not(.disabled):active,
+.btn-outline-primary:not(:disabled):not(.disabled).active,
+.show > .btn-outline-primary.dropdown-toggle {
+  color: #fff;
+  border-color: #8E43E8;
+  background-color: #8E43E8;
+}
+
 .badge-primary
 {
     color: #FFFF9D;
@@ -253,4 +268,8 @@ ul.ct-sidenav {
 .btn-clipboard,
 .btn-clipboard:hover {
   background-color: #8E43E8;
+}
+
+.text-align-right {
+  text-align: right;
 }

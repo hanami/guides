@@ -139,6 +139,48 @@
         </div>
         <hr>
         {{ .Content }}
+
+        {{- $counter := 0 -}}
+        {{- $index := -1 -}}
+        {{- $pages := slice -}}
+        {{- range .Site.Params.topics -}}
+          {{- range sort (where $.Site.RegularPages "Section" .) ".Params.order" -}}
+            {{- $counter = add $counter 1 -}}
+            {{- if eq .URL $.Page.URL -}}
+            {{- $index = (sub $counter 1) -}}
+            {{- end -}}
+
+            {{- $pages = $pages | append . -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $previousPage := index $pages (sub $index 1) -}}
+        {{- $nextPage := index $pages (add $index 1) -}}
+
+        <hr>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              {{ with $previousPage }}
+              <a href="{{ .URL }}">
+                <button class="btn btn-icon btn-3 btn-outline-primary" type="button">
+                  <span class="btn-inner--icon"><i class="ni ni-bold-left"></i></span>
+                  <span class="btn-inner--text">{{ .Section | humanize }}: {{ .Title }}</span>
+                </button>
+              </a>
+              {{ end }}
+            </div>
+            <div class="col text-align-right">
+              {{ with $nextPage }}
+              <a href="{{ .URL }}">
+                <button class="btn btn-icon btn-3 btn-outline-primary" type="button">
+                  <span class="btn-inner--text">{{ .Section | humanize }}: {{ .Title }}</span>
+                  <span class="btn-inner--icon"><i class="ni ni-bold-right"></i></span>
+                </button>
+              </a>
+              {{ end }}
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   </div>
