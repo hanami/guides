@@ -1,5 +1,11 @@
 (function($){
   $(document).ready(function(){
+    // Search link
+    $("#search-link").click(function(event) {
+      event.preventDefault();
+      $("#search-form").fadeToggle();
+    });
+
     // Alerts
     $("p.notice").prepend('<span class="alert-inner--icon"><i class="ni ni-like-2"></i></span>');
     $("p.convention").prepend('<span class="alert-inner--icon"><i class="ni ni-ruler-pencil"></i></span>');

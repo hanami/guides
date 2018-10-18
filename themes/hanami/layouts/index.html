@@ -37,6 +37,8 @@
     <link type="text/css" href="{{ "/assets/css/theme.css" | relURL }}" rel="stylesheet">
     <!-- Docs CSS -->
     <link type="text/css" href="{{ "/assets/css/docs.min.css" | relURL }}" rel="stylesheet">
+    <!-- Search CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
   </head>
   <body>
     <header class="header-global">
@@ -65,6 +67,16 @@
               </div>
             </div>
             <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+              <li class="nav-item">
+                <form id="search-form">
+                  <input type="text" placeholder="Search" class="form-control" id="search-input" />
+                </form>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link nav-link-icon" href="#" title="Search" id="search-link">
+                  <i class="fa fa-search"></i>
+                </a>
+              </li>
               <li class="nav-item">
                 <a class="nav-link nav-link-icon" href="https://github.com/{{ .Site.Params.github }}" target="_blank" title="Star Hanami on GitHub">
                   <i class="fa fa-github"></i>
@@ -97,14 +109,6 @@
               </li>
               <li class="nav-item">
                 <span class="badge badge-pill badge-primary">v{{ .Site.Params.hanamiversion }}</span>
-              </li>
-              <li class="nav-item d-none d-lg-block ml-lg-4">
-                <a href="{{ "getting-started" | relURL }}" class="btn btn-neutral btn-icon">
-                  <span class="btn-inner--icon text-primary">
-                    <i class="ni ni-spaceship mr-2"></i>
-                  </span>
-                  <span class="nav-link-inner--text text-primary">Get started</span>
-                </a>
               </li>
             </ul>
           </div>
@@ -327,6 +331,15 @@
     <!-- Argon JS -->
     <script src="{{ "/assets/js/argon.js?v=1.0.1" | relURL }}"></script>
     <script src="{{ "/assets/js/theme.js" | relURL }}"></script>
+    <!-- Search -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+    <script type="text/javascript"> docsearch({
+      apiKey: '69274449268769eb3878f6a13dd112f9',
+      indexName: 'hanamirb_guides',
+      inputSelector: '#search-input',
+      debug: false // Set debug to true if you want to inspect the dropdown
+    });
+    </script>
     {{ template "_internal/google_analytics.html" . }}
   </body>
 </html>
