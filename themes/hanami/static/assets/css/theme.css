@@ -34,6 +34,10 @@ code {
   font-size: 1.2em;
 }
 
+#search-form {
+  display: none;
+}
+
 .img-responsive {
   width: 100%;
   height: 100%;
