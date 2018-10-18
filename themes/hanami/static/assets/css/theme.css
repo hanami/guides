@@ -187,11 +187,22 @@ main p {
   text-align: justify;
 }
 
+#secondary-navigation a:link,
+#secondary-navigation a:visited {
+  color: #99979c;
+}
+
+#secondary-navigation a:hover,
+#secondary-navigation a:active {
+  color: #8E43E8;
+}
+
 .nav-link.active {
   font-weight: 500;
   padding-left: 1.5rem;
-  color: #8E43E8;
+  color: #8E43E8 !important;
   background-color: transparent;
+  border-left: 1px solid #8E43E8;
 }
 
 .ct-page-title {
@@ -253,16 +264,6 @@ span.ct-toc-link {
 
 ul.ct-sidenav {
   margin-left: 0.5em;
-}
-
-#secondary-navigation a:link,
-#secondary-navigation a:visited {
-  color: #99979c;
-}
-
-#secondary-navigation a:hover,
-#secondary-navigation a:active {
-  color: #35DDFF;
 }
 
 .btn-clipboard,
