@@ -192,6 +192,8 @@ main p {
   color: #99979c;
 }
 
+.ct-sidebar .nav > li > a:hover,
+.ct-sidebar .nav > li > a:active,
 #secondary-navigation a:hover,
 #secondary-navigation a:active {
   color: #8E43E8;
