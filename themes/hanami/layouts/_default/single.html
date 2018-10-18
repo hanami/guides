@@ -41,12 +41,21 @@
     <link type="text/css" href="{{ "/assets/css/docs.min.css" | relURL }}" rel="stylesheet">
     <!-- Theme CSS -->
     <link type="text/css" href="{{ "/assets/css/theme.css" | relURL }}" rel="stylesheet">
+    <!-- Search CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
   </head>
   <body data-spy="scroll" data-target="#secondary-navigation" data-offset="50">
     <header class="navbar navbar-expand navbar-dark flex-row align-items-md-center ct-navbar">
       <a class="navbar-brand mr-0 mr-md-2" href="{{ "/" | relURL }}" aria-label="Bootstrap">
       <img src="{{ "/assets/img/brand/white.png" | relURL }}" alt="Hanami guides logo">
     </a>
+    <ul class="navbar-nav flex-row mr-auto ml-4 d-none d-md-flex">
+      <li class="nav-item">
+        <form>
+          <input type="text" placeholder="Search" class="form-control" id="search-input" />
+        </form>
+      </li>
+    </ul>
     <div class="d-none d-sm-block ml-auto">
       <ul class="navbar-nav ct-navbar-nav flex-row align-items-center">
         <li class="nav-item">
@@ -193,6 +202,15 @@
   <!-- Argon JS -->
   <script src="{{ "/assets/js/argon.js?v=1.0.1" | relURL }}"></script>
   <script src="{{ "/assets/js/theme.js" | relURL }}"></script>
+  <!-- Search -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+  <script type="text/javascript"> docsearch({
+    apiKey: '69274449268769eb3878f6a13dd112f9',
+    indexName: 'hanamirb_guides',
+    inputSelector: '#search-input',
+    debug: false // Set debug to true if you want to inspect the dropdown
+  });
+  </script>
   {{ template "_internal/google_analytics.html" . }}
   </body>
 </html>
