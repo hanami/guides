@@ -47,13 +47,17 @@ We can't link `/foo`, because it isn't a named route (it lacks of the `:as` opti
 ## Absolute URLs
 
 ```ruby
-module Web::Controllers::Books
-  class Create
-    include Web::Action
+module Web
+  module Controllers
+    module Books
+      class Create
+        include Web::Action
 
-    def call(params)
-      # ...
-      redirect_to routes.book_url(id: book.id)
+        def call(params)
+          # ...
+          redirect_to routes.book_url(id: book.id)
+        end
+      end
     end
   end
 end

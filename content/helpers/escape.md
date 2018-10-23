@@ -84,14 +84,18 @@ If we want to escape a specific _local_:
 ```ruby
 # apps/web/controllers/snippets/show.rb
 
-module Web::Controllers::Snippets
-  class Show
-    include Web::Action
+module Web
+  module Controllers
+    module Snippets
+      class Show
+        include Web::Action
 
-    expose :snippet
+        expose :snippet
 
-    def call(params)
-      @snippet = "<h1>Hello World</h1>"
+        def call(params)
+          @snippet = "<h1>Hello World</h1>"
+        end
+      end
     end
   end
 end
