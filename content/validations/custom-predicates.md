@@ -85,25 +85,33 @@ end
 require 'hanami/validations'
 require_relative 'my_predicates'
 
-module Web::Controllers::Signup
-  class Params < Hanami::Action::Params
-    predicates MyPredicates
+module Web
+  module Controllers
+    module Signup
+      class Params < Hanami::Action::Params
+        predicates MyPredicates
 
-    validations do
-      required(:id).filled(:uuid?)
+        validations do
+          required(:id).filled(:uuid?)
+        end
+      end
     end
   end
 end
 ```
 
 ```ruby
-module Web::Controllers::Signup
-  class Create
-    include Web::Action
-    params Params
+module Web
+  module Controllers
+    module Signup
+      class Create
+        include Web::Action
+        params Params
 
-    def call(params)
-      # ...
+        def call(params)
+          # ...
+        end
+      end
     end
   end
 end
