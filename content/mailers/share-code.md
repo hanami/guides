@@ -16,10 +16,12 @@ We create a module:
 
 ```ruby
 # lib/mailers/default_sender.rb
-module Mailers::DefaultSender
-  def self.included(mailer)
-    mailer.class_eval do
-      from 'sender@bookshelf.org'
+module Mailers
+  module  DefaultSender
+    def self.included(mailer)
+      mailer.class_eval do
+        from 'sender@bookshelf.org'
+      end
     end
   end
 end
@@ -38,7 +40,7 @@ Hanami.configure do
 
     # See http://hanamirb.org/guides/1.2/mailers/delivery
     delivery :test
-    
+
     prepare do
       include Mailers::DefaultSender
     end

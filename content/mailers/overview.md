@@ -24,8 +24,10 @@ Let's see how a mailer is structured:
 
 ```ruby
 # lib/bookshelf/mailers/welcome.rb
-class Mailers::Welcome
-  include Hanami::Mailer
+module Mailers
+  class Welcome
+    include Hanami::Mailer
+  end
 end
 ```
 
