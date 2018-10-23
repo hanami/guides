@@ -114,6 +114,7 @@ $ tree -L 1
 .
 ├── Gemfile
 ├── Gemfile.lock
+├── README.md
 ├── Rakefile
 ├── apps
 ├── config
@@ -126,6 +127,7 @@ $ tree -L 1
 Let's quickly introduce them:
 
   * `Gemfile` and `Gemfile.lock` are [Bundler](http://bundler.io) artifacts
+  * `README.md` tells us how to setup and use the project.
   * `Rakefile` describes Rake task for our project.
   * `config/` contains an important file `config/environment.rb`, which is the **entry point** for our project.
     By requiring it, we'll preload our dependencies (Ruby gems), Hanami frameworks and our code.

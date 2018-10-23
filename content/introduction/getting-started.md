@@ -70,7 +70,7 @@ $ cd bookshelf
 $ tree -L 1
 .
 ├── Gemfile
-├── README
+├── README.md
 ├── Rakefile
 ├── apps
 ├── config
