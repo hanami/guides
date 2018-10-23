@@ -70,6 +70,7 @@ $ cd bookshelf
 $ tree -L 1
 .
 ├── Gemfile
+├── README
 ├── Rakefile
 ├── apps
 ├── config
@@ -79,12 +80,13 @@ $ tree -L 1
 ├── public
 └── spec
 
-6 directories, 3 files
+6 directories, 4 files
 ```
 
 Here's what we need to know:
 
 * `Gemfile` defines our Rubygems dependencies (using Bundler).
+* `README.md` tells us how to setup and use the project.
 * `Rakefile` describes our Rake tasks.
 * `apps` contains one or more web applications compatible with Rack, where we can find the first generated Hanami application called `web`.
   It's the place where we find our controllers, views, routes and templates.
@@ -109,20 +111,31 @@ And... bask in the glory of your first Hanami project at
 
 ## Hanami's Architecture
 
-Hanami's architecture **can host several Hanami (and Rack) applications in the same Ruby process**.
+Hanami's architecture revolves around your project containing many `apps`.
+These all live together in the same codebase, and are run in the same Ruby process.
 
-These applications live under `apps/`.
-Each of them can be a component of our product, such as the user facing web interface, the admin pane, metrics, HTTP API etc..
+They live under `apps/`.
 
-All these parts are a _delivery mechanism_ to the business logic that lives under `lib/`.
-This is where our models are defined and interact with each other to compose the **features** that our product provides.
+By default, we have a `web` app, which can be thought of as the normal, user-facing web interface.
+This is the most popular, so you'll probably want to keep it in your future Hanami projects.
+But, just so you know, there's nothing special or different about this app, it's just so common that Hanami generates it for us.
 
-Hanami's architecture is heavily inspired by [Clean Architecture](https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html).
+Later (in a real project), we would add other apps, such as an `admin` panel, a JSON `api`, or an analytics `dashboard`.
+We could also break our `web` app into smaller.
+Hanami fully supports that, too!
+
+Different `apps` represent __delivery mechanisms__.
+That means they're different ways of interacting with the core of your project, or the "business logic".
+
+Hanami doesn't want us to [repeat ourselves](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), so that "business logic" is shared.
+Web applications almost always store and interact with data stored in a database.
+Both our 'business logic' and our persistence live in `lib/`.
+
+_(Hanami architecture is heavily inspired by [Clean Architecture](https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html).)_
 
 ## Writing Our First Test
 
-The opening screen we see when we point our browser at our app, is a
-default page which is displayed when there are no routes defined.
+The opening screen we see when we point our browser at our app, is a default page which is displayed when there are no routes defined.
 
 Hanami encourages [Behavior Driven Development](https://en.wikipedia.org/wiki/Behavior-driven_development) (BDD) as a way to write web applications.
 In order to get our first custom page to display, we'll write a high-level feature test:
@@ -131,23 +144,17 @@ In order to get our first custom page to display, we'll write a high-level featu
 # spec/web/features/visit_home_spec.rb
 require 'features_helper'
 
-describe 'Visit home' do
+RSpec.describe 'Visit home' do
   it 'is successful' do
     visit '/'
 
-    page.body.must_include('Bookshelf')
+    expect(page).to have_content('Bookshelf')
   end
 end
 ```
 
-Note that, although Hanami is ready for a Behavior Driven Development workflow out of the box, **it is in no way bound to any particular testing framework** -- nor does it come with special integrations or libraries.
-
-We'll go with [Minitest](https://github.com/seattlerb/minitest) here (which is the default), but we can use [RSpec](http://rspec.info) by creating the project with `--test=rspec` option.
-Hanami will then generate helpers and stub files for it.
-
-<p class="notice">
-  Please check <code>.env.test</code> in case you need to tweak the database URL.
-</p>
+Hanami is ready for a Behavior Driven Development (BDD) workflow out of the box, but **it is in no way bound to any particular testing framework**.
+It does not come with any special testing integrations or libraries, so if you know RSpec (or Minitest), there's nothing new to learn there.
 
 We have to migrate our schema in the test database by running:
 
@@ -155,31 +162,39 @@ We have to migrate our schema in the test database by running:
 $ HANAMI_ENV=test bundle exec hanami db prepare
 ```
 
-As you can see, we have set the `HANAMI_ENV` environment variable to instruct our command about the environment to use.
+The `HANAMI_ENV` at the beginning is an environment variable, which tells Hanami to use the `test` environment.
+This is necessary here because the default is `HANAMI_ENV=development`.
+
+<p class="notice">
+If you have trouble, your <tt>DATABASE_URL</tt> is defined in <tt>.env.test</tt>
+</p>
+
 
 ### Following a Request
 
-With the specs at `spec/web/views/application_layout_spec.rb` commented out for now, we should have a test that fails with a similar report like:
+Now we have a test, we can see it fail:
 
 ```shell
 $ bundle exec rake test
-Run options: --seed 44759
+F.
 
-# Running:
+Failures:
 
-F
+  1) Visit home is successful
+     Failure/Error: expect(page).to have_content('Bookshelf')
+       expected to find text "Bookshelf" in "404 - Not Found"
+     # ./spec/web/features/visit_home_spec.rb:7:in `block (2 levels) in <top (required)>'
 
-Finished in 0.018611s, 53.7305 runs/s, 53.7305 assertions/s.
+Finished in 0.02604 seconds (files took 1.14 seconds to load)
+2 examples, 1 failure
 
-  1) Failure:
-Homepage#test_0001_is successful [/Users/hanami/bookshelf/spec/web/features/visit_home_spec.rb:6]:
-Expected "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Not Found</title>\n  </head>\n  <body>\n    <h1>Not Found</h1>\n  </body>\n</html>\n" to include "Bookshelf".
+Failed examples:
 
-1 runs, 1 assertions, 1 failures, 0 errors, 0 skips
+rspec ./spec/web/features/visit_home_spec.rb:4 # Visit home is successful
 ```
 
 Now let's make it pass.
-Lets add the code required to make this test pass, step-by-step.
+We'll add the code required to make this test pass, step-by-step.
 
 The first thing we need to add is a route:
 
@@ -188,62 +203,77 @@ The first thing we need to add is a route:
 root to: 'home#index'
 ```
 
-We pointed our application's root URL to the `index` action of the `home` controller (see the [routing guide](/guides/1.2/routing/overview) for more information).
-Now we can create the index action.
+We pointed our app's root URL to the `index` action of the `home` controller (see the [routing guide](/routing/overview) for more information).
+
+If we run our tests, we'll get an error that the endpoint cannot be found.
+
+That makes sense, because we need to create the `home#index` action.
 
 ```ruby
 # apps/web/controllers/home/index.rb
-module Web::Controllers::Home
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Home
+      class Index
+        include Web::Action
 
-    def call(params)
+        def call(params)
+        end
+      end
     end
   end
 end
 ```
 
-This is an empty action that doesn't implement any business logic.
-Each action has a corresponding view, which is a Ruby object and needs to be added in order to complete the request.
+This is an empty action that doesn't do anything special.
+Each action in Hanami is defined by [its own class](https://en.wikipedia.org/wiki/Single_responsibility_principle), which makes it simple to test and work on.
+And, each action has a corresponding view, which is also defined by its own class.
+This one needs to be added in order to complete the request.
 
 ```ruby
 # apps/web/views/home/index.rb
-module Web::Views::Home
-  class Index
-    include Web::View
+module Web
+  module Views
+    module Home
+      class Index
+        include Web::View
+      end
+    end
   end
 end
 ```
 
-...which, in turn, is empty and does nothing more than render its template.
-This is the file we need to edit in order to make our test pass. All we need to do is add the bookshelf heading.
+It's also empty, and doesn't do anything special.
+Its only responsibility is to render a template, which is what views do by default.
+
+This template is what we need to add, in order to make our tests pass.
+All we need to do is add the bookshelf heading.
 
 ```erb
 # apps/web/templates/home/index.html.erb
 <h1>Bookshelf</h1>
 ```
 
-Save your changes, run your test again and it now passes. Great!
+Now let's run our test suite again.
 
 ```shell
-Run options: --seed 19286
+$ bundle exec rake
 
-# Running:
-
-.
-
-Finished in 0.011854s, 84.3600 runs/s, 168.7200 assertions/s.
-
-1 runs, 2 assertions, 0 failures, 0 errors, 0 skips
+Finished in 0.01394 seconds (files took 1.03 seconds to load)
+2 examples, 0 failures
 ```
+
+This means all our tests pass!
 
 ## Generating New Actions
 
-Let's use our new knowledge about the major Hanami components to add a new action.
-The purpose of our Bookshelf project is to manage books.
+Let's use our new knowledge about Hanami __routes__, __actions__, __views__, and __templates__.
+
+The purpose of our sample Bookshelf project is to manage books.
 
 We'll store books in our database and let the user manage them with our project.
-A first step would be to show a listing of all the books in our system.
+
+Our first step will be list out all the books we know about.
 
 Let's write a new feature test describing what we want to achieve:
 
@@ -251,42 +281,66 @@ Let's write a new feature test describing what we want to achieve:
 # spec/web/features/list_books_spec.rb
 require 'features_helper'
 
-describe 'List books' do
+RSpec.describe 'List books' do
   it 'displays each book on the page' do
     visit '/books'
 
     within '#books' do
-      assert page.has_css?('.book', count: 2), 'Expected to find 2 books'
+      expect(page).to have_css('.book', count: 2)
     end
   end
 end
 ```
 
-The test is simple enough, and fails because the URL `/books` is not currently recognised in our application. We'll create a new controller action to fix that.
+This test means that when we go to (/books)[http://localhost:2300/books],
+we'll see two HTML elements that have class `book`,
+and both will be inside of an HTML element that has an id of `books`.
+
+Our test suite is `Unable to find visible css "#books"`.
+
+Not only are we missing that element,
+we don't even have a page to put that element on!
+
+Let's create a new action to fix that.
 
 ### Hanami Generators
 
-Hanami ships with various **generators** to save on typing some of the code involved in adding new functionality.
-In our terminal, enter:
+Hanami ships with a number of **generators**.
+These are tools that write some basic code for you, to help us write less code.
+
+In our terminal, let's run:
 
 ```shell
 $ bundle exec hanami generate action web books#index
 ```
 
-This will generate a new action _index_ in the _books_ controller of the _web_ application.
-It gives us an empty action, view and template; it also adds a default route to `apps/web/config/routes.rb`:
+<p class="notice">
+  If you're using ZSH and that doesn't work
+  (with an error like <tt>zsh: no matches found: books#index</tt>),
+  Hanami lets us write this instead: <tt>hanami generate action web books/index</tt>
+</p>
+
+This does a lot for us:
+
+- Creating an action at `apps/web/controllers/books/index.rb` (and spec for it),
+- Creating a view at `apps/web/views/books/index.rb` (and a spec for it),
+- Creating a template at `apps/web/templates/books/index.html.erb`.
+
+_(If you're confused by 'action' vs. 'controller', here's a tip: Hanami only has `action` classes, so a controller is just a module to group several related actions together.)_
+
+They files are all pretty much empty.
+They have some basic code in there, so Hanami knows how to use the class.
+Thankfully we don't have to manually create those five files,
+with that specific code in them.
+
+The generator also adds a new route for us in the `web` app's routes file (`apps/web/config/routes.rb`).
 
 ```ruby
 get '/books', to: 'books#index'
 ```
 
-If you're using ZSH, you may get `zsh: no matches found: books#index`. In that case, you can use:
-
-```shell
-% hanami generate action web books/index
-```
-
-To make our test pass, we need to edit our newly generated template file in `apps/web/templates/books/index.html.erb`:
+To make our tests pass,
+we need to edit our newly generated template file in `apps/web/templates/books/index.html.erb`:
 
 ```html
 <h1>Bookshelf</h1>
@@ -305,25 +359,31 @@ To make our test pass, we need to edit our newly generated template file in `app
 </div>
 ```
 
-Save your changes and see your tests pass! The output will also contain a skipped test. This is due to an autogenerated test in `spec/web/views/books/index_spec.rb`.
+Now our tests pass!
 
-The terminology of controllers and actions might be confusing, so let's clear this up: actions form the basis of our Hanami applications; controllers are mere modules that group several actions together.
-So while the "controller" is _conceptually_ present in our project, in practice we only deal with actions.
+We've used a generator to create a new end-point (page) in our application.
 
-We've used a generator to create a new endpoint in our application.
-But one thing you may have noticed is that our new template contains the same `<h1>` as our `home/index.html.erb` template.
-Let's fix that.
+But, we've started to repeat ourselves.
+
+In both our `books/index.html.erb` template,
+and our `homes/index.html.erb` template from above,
+we have `<h1>Bookshelf</h1>`.
+
+This is not a huge deal, but in a real application,
+we'll likely have a logo or a common navigation shared across all of the pages in our `app`.
+
+Let's fix that repetition, to show how that works.
 
 ### Layouts
 
-To avoid repeating ourselves in every single template, we can use a layout.
-Open up the file `apps/web/templates/application.html.erb` and edit it to look like this:
+To avoid repeating ourselves in every single template, we can modify our layout template.
+Let's edit `apps/web/templates/application.html.erb` to look like this:
 
 ```rhtml
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Bookshelf</title>
+    <title>Web</title>
     <%= favicon %>
   </head>
   <body>
@@ -333,49 +393,57 @@ Open up the file `apps/web/templates/application.html.erb` and edit it to look l
 </html>
 ```
 
-Now you can remove the duplicate lines from the other templates. Let's run the tests again to check that everything worked fine.
+And remove the duplicate lines from the other templates,
+since they're duplicated now.
 
-A **layout** is like any other template, but it is used to wrap your regular templates.
+A **layout template** is like any other template, but it is used to wrap your regular templates.
 The `yield` line is replaced with the contents of our regular template.
 It's the perfect place to put our repeating headers and footers.
 
 ## Modeling Our Data With Entities
 
 Hard-coding books in our templates is, admittedly, kind of cheating.
-Let's add some dynamic data to our application.
+Let's add some dynamic data to our application!
 
 We'll store books in our database and display them on our page.
 To do so, we need a way to read and write to our database.
-Enter entities and repositories:
+There are two types of objects that we'll use for this:
 
-* an **entity** is a domain object (eg. `Book`) uniquely identified by its identity.
-* a **repository** mediates between entities and the persistence layer.
+* an **entity** is a domain object (a `Book`) that is uniquely identified by its identity,
+* a **repository** is what we use to persist, retrieve, and delete data for an entity, in the persistence layer.
 
 Entities are totally unaware of the database.
 This makes them **lightweight** and **easy to test**.
 
-For this reason we need a repository to persist the data that a `Book` depends on.
-Read more about entities and repositories in the [models guide](/guides/1.2/models/overview).
+Since entities are completely decoupled from the database,
+we use repositories to persist the data behind a `Book`.
 
-Hanami ships with a generator for models, so let's use it to create a `Book` entity and the corresponding repository:
+_(We also use repositories to turn the data from the database back into a `Book`, and delete that data, too.)_
+
+Read more about entities and repositories in the [models guide](/guides/1.1/models/overview).
+
+Hanami ships with a generator for models,
+so let's use it to create a `Book` entity and its corresponding repository:
 
 ```shell
 $ bundle exec hanami generate model book
 create  lib/bookshelf/entities/book.rb
 create  lib/bookshelf/repositories/book_repository.rb
-create  db/migrations/20161115110038_create_books.rb
+create  db/migrations/20181024110038_create_books.rb
 create  spec/bookshelf/entities/book_spec.rb
 create  spec/bookshelf/repositories/book_repository_spec.rb
 ```
 
-The generator gives us an entity, a repository, a migration, and accompanying test files.
+The generator gives us an entity, a repository, and their associated test files.
+
+It also gives a database migration.
 
 ### Migrations To Change Our Database Schema
 
-Let's modify the generated migration (the path to the migration will differ for you, because it contains a timestamp) to include `title` and `author` fields:
+Let's modify the generated migration to include `title` and `author` fields:
 
 ```ruby
-# db/migrations/20161115110038_create_books.rb
+# db/migrations/20181024110038_create_books.rb
 
 Hanami::Model.migration do
   change do
@@ -393,7 +461,7 @@ end
 ```
 
 Hanami provides a DSL to describe changes to our database schema. You can read more
-about how migrations work in the [migrations' guide](/guides/1.2/migrations/overview).
+about how migrations work in the [migrations' guide](/migrations/overview).
 
 In this case, we define a new table with columns for each of our entities' attributes.
 Let's prepare our database for the development and test environments:
@@ -408,7 +476,7 @@ $ HANAMI_ENV=test bundle exec hanami db prepare
 An entity is something really close to a plain Ruby object.
 We should focus on the behaviors that we want from it and only then, how to save it.
 
-For now, we keep the generated entity class:
+For now, we need to create simple entity class:
 
 ```ruby
 # lib/bookshelf/entities/book.rb
@@ -421,12 +489,11 @@ We can verify it all works as expected with a unit test:
 
 ```ruby
 # spec/bookshelf/entities/book_spec.rb
-require_relative '../../spec_helper'
 
-describe Book do
+RSpec.describe Book do
   it 'can be initialized with attributes' do
     book = Book.new(title: 'Refactoring')
-    book.title.must_equal 'Refactoring'
+    expect(book.title).to eq('Refactoring')
   end
 end
 ```
@@ -443,9 +510,9 @@ $ bundle exec hanami console
 >> repository.all
 => []
 >> book = repository.create(title: 'TDD', author: 'Kent Beck')
-=> #<Book:0x007f9ab61c23b8 @attributes={:id=>1, :title=>"TDD", :author=>"Kent Beck", :created_at=>2016-11-15 11:11:38 UTC, :updated_at=>2016-11-15 11:11:38 UTC}>
+=> #<Book:0x007f9ab61c23b8 @attributes={:id=>1, :title=>"TDD", :author=>"Kent Beck", :created_at=>2018-10-24 11:11:38 UTC, :updated_at=>2018-10-24 11:11:38 UTC}>
 >> repository.find(book.id)
-=> #<Book:0x007f9ab6181610 @attributes={:id=>1, :title=>"TDD", :author=>"Kent Beck", :created_at=>2016-11-15 11:11:38 UTC, :updated_at=>2016-11-15 11:11:38 UTC}>
+=> #<Book:0x007f9ab6181610 @attributes={:id=>1, :title=>"TDD", :author=>"Kent Beck", :created_at=>2018-10-24 11:11:38 UTC, :updated_at=>2018-10-24 11:11:38 UTC}>
 ```
 
 Hanami repositories have methods to load one or more entities from our database; and to create and update existing records.
@@ -464,7 +531,7 @@ Let's adjust the feature test we created earlier:
 # spec/web/features/list_books_spec.rb
 require 'features_helper'
 
-describe 'List books' do
+RSpec.describe 'List books' do
   let(:repository) { BookRepository.new }
   before do
     repository.clear
@@ -477,7 +544,7 @@ describe 'List books' do
     visit '/books'
 
     within '#books' do
-      assert page.has_css?('.book', count: 2), 'Expected to find 2 books'
+      expect(page).to have_selector('.book', count: 2), 'Expected to find 2 books'
     end
   end
 end
@@ -492,37 +559,37 @@ Let's write a test to force this change in our view:
 
 ```ruby
 # spec/web/views/books/index_spec.rb
-require_relative '../../../spec_helper'
+require_relative '../../../../apps/web/views/books/index'
 
-describe Web::Views::Books::Index do
+RSpec.describe Web::Views::Books::Index do
   let(:exposures) { Hash[books: []] }
   let(:template)  { Hanami::View::Template.new('apps/web/templates/books/index.html.erb') }
   let(:view)      { Web::Views::Books::Index.new(template, exposures) }
   let(:rendered)  { view.render }
 
   it 'exposes #books' do
-    view.books.must_equal exposures.fetch(:books)
+    expect(view.books).to eq(exposures.fetch(:books))
   end
 
-  describe 'when there are no books' do
+  context 'when there are no books' do
     it 'shows a placeholder message' do
-      rendered.must_include('<p class="placeholder">There are no books yet.</p>')
+      expect(rendered).to include('<p class="placeholder">There are no books yet.</p>')
     end
   end
 
-  describe 'when there are books' do
+  context 'when there are books' do
     let(:book1)     { Book.new(title: 'Refactoring', author: 'Martin Fowler') }
     let(:book2)     { Book.new(title: 'Domain Driven Design', author: 'Eric Evans') }
     let(:exposures) { Hash[books: [book1, book2]] }
 
     it 'lists them all' do
-      rendered.scan(/class="book"/).count.must_equal 2
-      rendered.must_include('Refactoring')
-      rendered.must_include('Domain Driven Design')
+      expect(rendered.scan(/class="book"/).length).to eq(2)
+      expect(rendered).to include('Refactoring')
+      expect(rendered).to include('Domain Driven Design')
     end
 
     it 'hides the placeholder message' do
-      rendered.wont_include('<p class="placeholder">There are no books yet.</p>')
+      expect(rendered).to_not include('<p class="placeholder">There are no books yet.</p>')
     end
   end
 end
@@ -553,14 +620,14 @@ Let's rewrite our template to implement these requirements:
 ```
 
 If we run our feature test now, we'll see it fails — because our controller
-action does not actually [_expose_](/guides/1.2/actions/exposures) the books to our view. We can write a test for
+action does not actually [_expose_](/guides/1.1/actions/exposures) the books to our view. We can write a test for
 that change:
 
 ```ruby
 # spec/web/controllers/books/index_spec.rb
-require_relative '../../../spec_helper'
+require_relative '../../../../apps/web/controllers/books/index'
 
-describe Web::Controllers::Books::Index do
+RSpec.describe Web::Controllers::Books::Index do
   let(:action) { Web::Controllers::Books::Index.new }
   let(:params) { Hash[] }
   let(:repository) { BookRepository.new }
@@ -573,12 +640,12 @@ describe Web::Controllers::Books::Index do
 
   it 'is successful' do
     response = action.call(params)
-    response[0].must_equal 200
+    expect(response[0]).to eq(200)
   end
 
   it 'exposes all books' do
     action.call(params)
-    action.exposures[:books].must_equal [@book]
+    expect(action.exposures[:books]).to eq([@book])
   end
 end
 ```
@@ -588,14 +655,18 @@ Now we've specified that the action exposes `:books`, we can implement our actio
 
 ```ruby
 # apps/web/controllers/books/index.rb
-module Web::Controllers::Books
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Books
+      class Index
+        include Web::Action
 
-    expose :books
+        expose :books
 
-    def call(params)
-      @books = BookRepository.new.all
+        def call(params)
+          @books = BookRepository.new.all
+        end
+      end
     end
   end
 end
@@ -605,7 +676,7 @@ By using the `expose` method in our action class, we can expose the contents of 
 That's enough to make all our tests pass again!
 
 ```shell
-% bundle exec rake
+$ bundle exec rake
 Run options: --seed 59133
 
 # Running:
@@ -614,7 +685,7 @@ Run options: --seed 59133
 
 Finished in 0.042065s, 213.9543 runs/s, 380.3633 assertions/s.
 
-9 runs, 16 assertions, 0 failures, 0 errors, 0 skips
+6 runs, 7 assertions, 0 failures, 0 errors, 0 skips
 ```
 
 ## Building Forms To Create Records
@@ -629,7 +700,7 @@ Here's that story expressed in a test:
 # spec/web/features/add_book_spec.rb
 require 'features_helper'
 
-describe 'Add a book' do
+RSpec.describe 'Add a book' do
   after do
     BookRepository.new.clear
   end
@@ -644,8 +715,8 @@ describe 'Add a book' do
       click_button 'Create'
     end
 
-    current_path.must_equal('/books')
-    assert page.has_content?('New book')
+    expect(page).to have_current_path('/books')
+    expect(page).to have_content('New book')
   end
 end
 ```
@@ -657,7 +728,7 @@ By now, we should be familiar with the working of actions, views and templates.
 We'll speed things up a little, so we can quickly get to the good parts.
 First, create a new action for our "New Book" page:
 
-```shell
+```
 $ bundle exec hanami generate action web books#new
 ```
 
@@ -672,7 +743,7 @@ The interesting bit will be our new template, because we'll be using Hanami's fo
 
 ### Using Form Helpers
 
-Let's use [form helpers](/guides/1.2/helpers/forms) to build this form in `apps/web/templates/books/new.html.erb`:
+Let's use [form helpers](/helpers/forms) to build this form in `apps/web/templates/books/new.html.erb`:
 
 ```erb
 # apps/web/templates/books/new.html.erb
@@ -698,14 +769,14 @@ Let's use [form helpers](/guides/1.2/helpers/forms) to build this form in `apps/
 ```
 
 We've added `<label>` tags for our form fields, and wrapped each field in a
-container `<div>` using Hanami's [HTML builder helper](/guides/1.2/helpers/html5).
+container `<div>` using Hanami's [HTML builder helper](/helpers/html5).
 
 ### Submitting Our Form
 
 To submit our form, we need yet another action.
 Let's create a `Books::Create` action:
 
-```shell
+```
 $ bundle exec hanami generate action web books#create
 ```
 
@@ -723,9 +794,9 @@ Let's express them as unit tests:
 
 ```ruby
 # spec/web/controllers/books/create_spec.rb
-require_relative '../../../spec_helper'
+require_relative '../../../../apps/web/controllers/books/create'
 
-describe Web::Controllers::Books::Create do
+RSpec.describe Web::Controllers::Books::Create do
   let(:action) { Web::Controllers::Books::Create.new }
   let(:params) { Hash[book: { title: 'Confident Ruby', author: 'Avdi Grimm' }] }
   let(:repository) { BookRepository.new }
@@ -738,32 +809,35 @@ describe Web::Controllers::Books::Create do
     action.call(params)
     book = repository.last
 
-    book.id.wont_be_nil
-    book.title.must_equal params.dig(:book, :title)
+    expect(book.id).to_not be_nil
   end
 
   it 'redirects the user to the books listing' do
     response = action.call(params)
 
-    response[0].must_equal 302
-    response[1]['Location'].must_equal '/books'
+    expect(response[0]).to eq(302)
+    expect(response[1]['Location']).to eq('/books')
   end
 end
 ```
 
-Let's make these tests pass!
+Making these tests pass is easy enough.
 We've already seen how we can write entities to our database, and we can use `redirect_to` to implement our redirection:
 
 ```ruby
 # apps/web/controllers/books/create.rb
-module Web::Controllers::Books
-  class Create
-    include Web::Action
+module Web
+  module Controllers
+    module Books
+      class Create
+        include Web::Action
 
-    def call(params)
-      BookRepository.new.create(params[:book])
+        def call(params)
+          BookRepository.new.create(params[:book])
 
-      redirect_to '/books'
+          redirect_to '/books'
+        end
+      end
     end
   end
 end
@@ -772,18 +846,16 @@ end
 This minimal implementation should suffice to make our tests pass.
 
 ```shell
-% bundle exec rake
+$ bundle exec rake
 Run options: --seed 63592
 
 # Running:
 
-...S.S.........
+...............
 
 Finished in 0.081961s, 183.0142 runs/s, 305.0236 assertions/s.
 
-15 runs, 23 assertions, 0 failures, 0 errors, 2 skips
-
-You have skipped tests. Run with --verbose for details.
+12 runs, 14 assertions, 0 failures, 0 errors, 2 skips
 ```
 
 Congratulations!
@@ -802,9 +874,9 @@ Let's specify this behaviour as unit tests:
 
 ```ruby
 # spec/web/controllers/books/create_spec.rb
-require_relative '../../../spec_helper'
+require_relative '../../../../apps/web/controllers/books/create'
 
-describe Web::Controllers::Books::Create do
+RSpec.describe Web::Controllers::Books::Create do
   let(:action) { Web::Controllers::Books::Create.new }
   let(:repository) { BookRepository.new }
 
@@ -812,39 +884,39 @@ describe Web::Controllers::Books::Create do
     repository.clear
   end
 
-  describe 'with valid params' do
+  context 'with valid params' do
     let(:params) { Hash[book: { title: 'Confident Ruby', author: 'Avdi Grimm' }] }
 
-    it 'creates a book' do
+    it 'creates a new book' do
       action.call(params)
       book = repository.last
 
-      book.id.wont_be_nil
-      book.title.must_equal params.dig(:book, :title)
+      expect(book.id).to_not be_nil
+      expect(book.title).to eq(params.dig(:book, :title))
     end
 
     it 'redirects the user to the books listing' do
       response = action.call(params)
 
-      response[0].must_equal 302
-      response[1]['Location'].must_equal '/books'
+      expect(response[0]).to eq(302)
+      expect(response[1]['Location']).to eq('/books')
     end
   end
 
-  describe 'with invalid params' do
+  context 'with invalid params' do
     let(:params) { Hash[book: {}] }
 
     it 'returns HTTP client error' do
       response = action.call(params)
-      response[0].must_equal 422
+      expect(response[0]).to eq(422)
     end
 
     it 'dumps errors in params' do
       action.call(params)
       errors = action.params.errors
 
-      errors.dig(:book, :title).must_equal  ['is missing']
-      errors.dig(:book, :author).must_equal ['is missing']
+      expect(errors.dig(:book, :title)).to eq(['is missing'])
+      expect(errors.dig(:book, :author)).to eq(['is missing'])
     end
   end
 end
@@ -862,26 +934,30 @@ With our validations in place, we can limit our entity creation and redirection 
 
 ```ruby
 # apps/web/controllers/books/create.rb
-module Web::Controllers::Books
-  class Create
-    include Web::Action
+module Web
+  module Controllers
+    module Books
+      class Create
+        include Web::Action
 
-    expose :book
+        expose :book
 
-    params do
-      required(:book).schema do
-        required(:title).filled(:str?)
-        required(:author).filled(:str?)
-      end
-    end
+        params do
+          required(:book).schema do
+            required(:title).filled(:str?)
+            required(:author).filled(:str?)
+          end
+        end
 
-    def call(params)
-      if params.valid?
-        @book = BookRepository.new.create(params[:book])
+        def call(params)
+          if params.valid?
+            @book = BookRepository.new.create(params[:book])
 
-        redirect_to '/books'
-      else
-        self.status = 422
+            redirect_to '/books'
+          else
+            self.status = 422
+          end
+        end
       end
     end
   end
@@ -898,10 +974,14 @@ In this case `apps/web/templates/books/new.html.erb` will be used to render the 
 
 ```ruby
 # apps/web/views/books/create.rb
-module Web::Views::Books
-  class Create
-    include Web::View
-    template 'books/new'
+module Web
+  module Views
+    module Books
+      class Create
+        include Web::View
+        template 'books/new'
+      end
+    end
   end
 end
 ```
@@ -919,9 +999,10 @@ First, we expect a list of errors to be included in the page when `params` conta
 
 ```ruby
 # spec/web/views/books/new_spec.rb
-require_relative '../../../spec_helper'
+require 'ostruct'
+require_relative '../../../../apps/web/views/books/new'
 
-describe Web::Views::Books::New do
+RSpec.describe Web::Views::Books::New do
   let(:params)    { OpenStruct.new(valid?: false, error_messages: ['Title must be filled', 'Author must be filled']) }
   let(:exposures) { Hash[params: params] }
   let(:template)  { Hanami::View::Template.new('apps/web/templates/books/new.html.erb') }
@@ -929,9 +1010,9 @@ describe Web::Views::Books::New do
   let(:rendered)  { view.render }
 
   it 'displays list of errors when params contains errors' do
-    rendered.must_include('There was a problem with your submission')
-    rendered.must_include('Title must be filled')
-    rendered.must_include('Author must be filled')
+    expect(rendered).to include('There was a problem with your submission')
+    expect(rendered).to include('Title must be filled')
+    expect(rendered).to include('Author must be filled')
   end
 end
 ```
@@ -942,7 +1023,7 @@ We should also update our feature spec to reflect this new behavior:
 # spec/web/features/add_book_spec.rb
 require 'features_helper'
 
-describe 'Add a book' do
+RSpec.describe 'Add a book' do
   # Spec written earlier omitted for brevity
 
   it 'displays list of errors when params contains errors' do
@@ -952,17 +1033,17 @@ describe 'Add a book' do
       click_button 'Create'
     end
 
-    current_path.must_equal('/books')
+    expect(current_path).to eq('/books')
 
-    assert page.has_content?('There was a problem with your submission')
-    assert page.has_content?('Title must be filled')
-    assert page.has_content?('Author must be filled')
+    expect(page).to have_content('There was a problem with your submission')
+    expect(page).to have_content('Title must be filled')
+    expect(page).to have_content('Author must be filled')
   end
 end
 ```
 
 In our template we can loop over `params.errors` (if there are any) and display a friendly message.
-Open up `apps/web/templates/books/new.html.erb` and add the following at the top of the file:
+Open up `apps/web/templates/books/new.html.erb`:
 
 ```erb
 <% unless params.valid? %>
@@ -980,18 +1061,16 @@ Open up `apps/web/templates/books/new.html.erb` and add the following at the top
 Run your tests again and see they are all passing again!
 
 ```shell
-% bundle exec rake
+$ bundle exec rake
 Run options: --seed 59940
 
 # Running:
 
-......S..........
+..................
 
-Finished in 0.188950s, 89.9707 runs/s, 179.9413 assertions/s.
+Finished in 0.078112s, 230.4372 runs/s, 473.6765 assertions/s.
 
-17 runs, 34 assertions, 0 failures, 0 errors, 1 skips
-
-You have skipped tests. Run with --verbose for details.
+15 runs, 27 assertions, 0 failures, 0 errors, 1 skips
 ```
 
 ### Improving Our Use Of The Router
@@ -1015,7 +1094,7 @@ resources :books, only: [:index, :new, :create]
 ```
 
 To get a sense of what routes are defined, now we've made this change, you can
-run `bundle exec hanami routes` on your command-line to inspect the end result:
+use the special command-line task `routes` to inspect the end result:
 
 ```shell
 $ bundle exec hanami routes
@@ -1027,12 +1106,15 @@ $ bundle exec hanami routes
     books POST       /books                         Web::Controllers::Books::Create
 ```
 
-The output shows you the name of the defined helper method (you can suffix this name with `_path` or `_url` and call it on the `routes` helper), the allowed HTTP method, the path and finally the controller action that will be used to handle the request.
+The output for `hanami routes` shows you the name of the defined helper method (you can suffix this name with `_path` or `_url` and call it on the `routes` helper), the allowed HTTP method, the path and finally the controller action that will be used to handle the request.
 
 Now we've applied the `resources` helper method, we can take advantage of the named route methods.
-Remember how we built our form using `form_for` in `apps/web/templates/books/new.html.erb`?
+Remember how we built our form using `form_for`?
 
 ```erb
+# apps/web/templates/books/new.html.erb
+<h2>Add book</h2>
+
 <%=
   form_for :book, '/books' do
     # ...
@@ -1040,10 +1122,13 @@ Remember how we built our form using `form_for` in `apps/web/templates/books/new
 %>
 ```
 
-We don't need to include a hard-coded path in our template, when our router is already perfectly aware of which route to point the form to.
+It's silly to include a hard-coded path in our template, when our router is already perfectly aware of which route to point the form to.
 We can use the `routes` helper method that is available in our views and actions to access route-specific helper methods:
 
 ```erb
+# apps/web/templates/books/new.html.erb
+<h2>Add book</h2>
+
 <%=
   form_for :book, routes.books_path do
     # ...
@@ -1064,6 +1149,6 @@ redirect_to routes.books_path
 Let's review what we've done: we've traced requests through Hanami's major frameworks to understand how they relate to each other; we've seen how we can model our domain using entities and repositories; we've seen solutions for building forms, maintaining our database schema, and validating user input.
 
 We've come a long way, but there's still plenty more to explore.
-Explore the [other guides](/guides/1.2), the [Hanami API documentation](http://www.rubydoc.info/gems/hanami), read the [source code](https://github.com/hanami) and follow the [blog](/blog).
+Explore the [other guides](/), the [Hanami API documentation](https://docs.hanamirb.org), read the [source code](https://github.com/hanami) and follow the [blog](http://hanamirb.org/blog).
 
 **Above all, enjoy building amazing things!**
