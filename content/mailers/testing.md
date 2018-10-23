@@ -12,9 +12,7 @@ Please make sure to **clear** them in testing setup.
 
 ```ruby
 # spec/bookshelf/mailers/welcome_spec.rb
-require 'spec_helper'
-
-describe Mailers::Welcome do
+RSpec.describe Mailers::Welcome do
   before { Hanami::Mailer.deliveries.clear }
 
   let(:user) { ... }
