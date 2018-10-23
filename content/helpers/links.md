@@ -34,15 +34,19 @@ Output:
 Alternatively, the content can be expressed as a given block.
 
 ```ruby
-module Web::Views::Books
-  class Show
-    include Web::View
+module Web
+  module Views
+    module Books
+      class Show
+        include Web::View
 
-    def look_inside_link
-      url = routes.look_inside_book_path(id: book.id)
+        def look_inside_link
+          url = routes.look_inside_book_path(id: book.id)
 
-      link_to url, class: 'book-cover' do
-        html.img(src: book.cover_url)
+          link_to url, class: 'book-cover' do
+            html.img(src: book.cover_url)
+          end
+        end
       end
     end
   end
