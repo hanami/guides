@@ -10,7 +10,6 @@ For the following example we're gonna use RSpec for the concise syntax for test 
 
 ```ruby
 # spec/web/views/books/show_spec.rb
-require 'spec_helper'
 require_relative '../../../../apps/web/views/books/show'
 
 RSpec.describe Web::Views::Books::Show do
@@ -20,22 +19,22 @@ RSpec.describe Web::Views::Books::Show do
   let(:rendered)  { view.render }
   let(:user)      { double('user', admin?: false) }
 
-  describe "price" do
+  context "price" do
     it "returns formatted price" do
-      expect(view.formatted_price).to eq "$1.00"
+      expect(view.formatted_price).to eq("$1.00")
     end
   end
 
-  describe "edit link" do
+  context "edit link" do
     it "doesn't show it by default" do
-      expect(rendered).to_not match %(<a href="">edit</a>)
+      expect(rendered).to_not match(%(<a href="">edit</a>))
     end
 
     context "when admin" do
       let(:user) { double('user', admin?: true) }
 
       it "shows it" do
-        expect(rendered).to match %(<a href="">edit</a>)
+        expect(rendered).to match(%(<a href="">edit</a>))
       end
     end
   end
