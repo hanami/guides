@@ -286,14 +286,12 @@ $ curl http://localhost:2300/books      \
 In order to make book payload available in `params`, we should enable this feature:
 
 ```ruby
-# apps/web/application.rb
-module Web
-  class Application < Hanami::Application
-    configure do
-      # ...
-      body_parsers :json
-    end
-  end
+# config/environment.rb
+require "hanami/middleware/body_parser"
+
+Hanami.configure do
+  # ...
+  middleware.use Hanami::Middleware::BodyParser, :json
 end
 ```
 
@@ -307,7 +305,7 @@ class FooParser
   def mime_types
     ['application/foo']
   end
-  
+
   def parse(body)
     # manually parse body
   end
@@ -317,15 +315,11 @@ end
 and subsequently register it:
 
 ```ruby
-# apps/web/application.rb
-# ...
-module Web
-  class Application < Hanami::Application
-    configure do
-      # ...
-      body_parsers FooParser.new
-      # ...
-    end
-  end
+# config/environment.rb
+require "hanami/middleware/body_parser"
+
+Hanami.configure do
+  # ...
+  middleware.use Hanami::Middleware::BodyParser, FooParser.new
 end
 ```
