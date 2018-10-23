@@ -49,7 +49,7 @@ Hanami::View::MissingTemplateError: Can't find template "dashboard/index" for "x
 ## View For Specific Format
 
 This scenario works well if the presentational logic of a view can be applied for all the format templates that it handles.
-What if we want to have a [custom rendering](/guides/1.2/views/basic-usage) or different presentational logic?
+What if we want to have a [custom rendering](/views/basic-usage) or different presentational logic?
 
 We can inherit from our view and declare that our subclass only handles a specific format.
 
@@ -57,12 +57,16 @@ We can inherit from our view and declare that our subclass only handles a specif
 # apps/web/views/dashboard/json_index.rb
 require_relative './index'
 
-module Web::Views::Dashboard
-  class JsonIndex < Index
-    format :json
+module Web
+  module Views
+    module Dashboard
+      class JsonIndex < Index
+        format :json
 
-    def render
-      raw JSON.generate({foo: 'bar'})
+        def render
+          raw JSON.generate({foo: 'bar'})
+        end
+      end
     end
   end
 end

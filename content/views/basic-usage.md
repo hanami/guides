@@ -36,12 +36,16 @@ If we amend our template by adding an interpolated variable, the view is respons
 
 ```ruby
 # apps/web/views/dashboard/index.rb
-module Web::Views::Dashboard
-  class Index
-    include Web::View
+module Web
+  module Views
+    module Dashboard
+      class Index
+        include Web::View
 
-    def title
-      'Dashboard'
+        def title
+          'Dashboard'
+        end
+      end
     end
   end
 end
@@ -57,13 +61,17 @@ They are a payload that comes from the action.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
-    expose :title
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+        expose :title
 
-    def call(params)
-      @title = 'Dashboard'
+        def call(params)
+          @title = 'Dashboard'
+        end
+      end
     end
   end
 end
@@ -73,9 +81,13 @@ We can remove `#title` from our view, to get the same output when accessing `/da
 
 ```ruby
 # apps/web/views/dashboard/index.rb
-module Web::Views::Dashboard
-  class Index
-    include Web::View
+module Web
+  module Views
+    module Dashboard
+      class Index
+        include Web::View
+      end
+    end
   end
 end
 ```
@@ -90,13 +102,17 @@ in the action, it can be accessed as follows:
 
 ```ruby
 # apps/web/views/dashboard/index.rb
-module Web::Views::Dashboard
-  class Index
-    include Web::View
+module Web
+  module Views
+    moduleDashboard
+      class Index
+        include Web::View
 
-    def full_title
-      "The title: " + title
-     end
+        def full_title
+          "The title: " + title
+         end
+      end
+    end
   end
 end
 ```
@@ -110,12 +126,16 @@ We can override that method to define a custom rendering policy.
 
 ```ruby
 # apps/web/views/dashboard/index.rb
-module Web::Views::Dashboard
-  class Index
-    include Web::View
+module Web
+  module Views
+    module Dashboard
+      class Index
+        include Web::View
 
-    def render
-      raw %(<h1>Dashboard</h1>)
+        def render
+          raw %(<h1>Dashboard</h1>)
+        end
+      end
     end
   end
 end

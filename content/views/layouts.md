@@ -54,10 +54,14 @@ If we want to disable a layout for a view, we can use a DSL for that:
 
 ```ruby
 # apps/web/views/dashboard/index.rb
-module Web::Views::Dashboard
-  class Index
-    include Web::View
-    layout false
+module Web
+  module Views
+    module Dashboard
+      class Index
+        include Web::View
+        layout false
+      end
+    end
   end
 end
 ```
@@ -86,10 +90,14 @@ end
 Now, in our `app/web/views/user_sessions/new.rb` we can specify you'd like to use the login layout for this View:
 
 ```ruby
-module Web::Views::UserSessions
-  class New
-    include Web::View
-    layout :login
+module Web
+  module Views
+    module UserSessions
+      class New
+        include Web::View
+        layout :login
+      end
+    end
   end
 end
 ```
@@ -119,9 +127,13 @@ Given the following template for a layout:
 With following views:
 
 ```ruby
-module Web::Views::Books
-  class Index
-    include Web::View
+module Web
+  module Views
+    module Books
+      class Index
+        include Web::View
+      end
+    end
   end
 end
 ```
@@ -129,12 +141,16 @@ end
 and
 
 ```ruby
-module Web::Views::Books
-  class Show
-    include Web::View
+module Web
+  module Views
+    module Books
+      class Show
+        include Web::View
 
-    def javascript
-      raw %(<script src="/path/to/script.js"></script>)
+        def javascript
+          raw %(<script src="/path/to/script.js"></script>)
+        end
+      end
     end
   end
 end

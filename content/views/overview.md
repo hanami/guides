@@ -5,7 +5,7 @@ order: 10
 
 A view is an object that's responsible for rendering a template.
 
-In a full stack Hanami application, an incoming HTTP request goes through the [router](/routing/overview), it instantiates and calls an [action](/guides/1.2/actions/overview), which sets the status code and the headers for the response.
+In a full stack Hanami application, an incoming HTTP request goes through the [router](/routing/overview), it instantiates and calls an [action](/actions/overview), which sets the status code and the headers for the response.
 The last bit is the body, which is set by the corresponding view's output.
 
 ## A Simple View
@@ -13,7 +13,7 @@ The last bit is the body, which is set by the corresponding view's output.
 Hanami ships a generator for actions that creates a view and a template.
 
 ```shell
-% hanami generate action web dashboard#index
+$ hanami generate action web dashboard#index
     insert  apps/web/config/routes.rb
     create  spec/web/controllers/dashboard/index_spec.rb
     create  apps/web/controllers/dashboard/index.rb
@@ -22,23 +22,27 @@ Hanami ships a generator for actions that creates a view and a template.
     create  spec/web/views/dashboard/index_spec.rb
 ```
 
-Looking at those file names, we have an action called `Web::Controllers::Dashboard::Index` (read about [actions naming](/guides/1.2/actions/overview)).
+Looking at those file names, we have an action called `Web::Controllers::Dashboard::Index` (read about [actions naming](/actions/overview)).
 Our view has a similar name: `Web::Views::Dashboard::Index`.
 
 Let's examine the view:
 
 ```ruby
 # apps/web/views/dashboard/index.rb
-module Web::Views::Dashboard
-  class Index
-    include Web::View
+module Web
+  module Views
+    module Dashboard
+      class Index
+        include Web::View
+      end
+    end
   end
 end
 ```
 
 ## Naming
 
-That file begins with a module declaration which is similar to the [action naming structure](/guides/1.2/actions/overview).
+That file begins with a module declaration which is similar to the [action naming structure](/actions/overview).
 The only difference is that we use `Views` module instead of `Controllers`.
 **All the views are nested under it.**
 This module is generated at the runtime for us, when the application starts.

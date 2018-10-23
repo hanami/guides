@@ -60,24 +60,28 @@ Let's have a look at the corresponding production code.
 
 ```ruby
 # apps/web/views/books/show.rb
-module Web::Views::Books
-  class Show
-    include Web::View
+module Web
+  module Views
+    module Books
+      class Show
+        include Web::View
 
-    def formatted_price
-      "$#{ format_number book.price }"
-    end
+        def formatted_price
+          "$#{ format_number book.price }"
+        end
 
-    def edit_link
-      if can_edit_book?
-        link_to "Edit", routes.edit_book_path(id: book.id)
+        def edit_link
+          if can_edit_book?
+            link_to "Edit", routes.edit_book_path(id: book.id)
+          end
+        end
+
+        private
+
+        def can_edit_book?
+          current_user.admin?
+        end
       end
-    end
-
-    private
-
-    def can_edit_book?
-      current_user.admin?
     end
   end
 end
