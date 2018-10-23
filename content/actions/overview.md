@@ -14,18 +14,22 @@ It has several advantages in terms of testability and control of an action.
 Hanami ships with a generator for actions. Let's create a new one:
 
 ```shell
-hanami generate action web dashboard#index
+$ hanami generate action web dashboard#index
 ```
 
 Let's examine the action:
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
+        def call(params)
+        end
+      end
     end
   end
 end

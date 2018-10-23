@@ -15,19 +15,23 @@ These methods each accept a symbol that is the name of the method that we want t
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
-    before :track_remote_ip
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+        before :track_remote_ip
 
-    def call(params)
-      # ...
-    end
+        def call(params)
+          # ...
+        end
 
-    private
-    def track_remote_ip
-      @remote_ip = request.ip
-      # ...
+        private
+        def track_remote_ip
+          @remote_ip = request.ip
+          # ...
+        end
+      end
     end
   end
 end
@@ -40,18 +44,22 @@ A callback method can optionally accept an argument: `params`.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
-    before :validate_params
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+        before :validate_params
 
-    def call(params)
-      # ...
-    end
+        def call(params)
+          # ...
+        end
 
-    private
-    def validate_params(params)
-      # ...
+        private
+        def validate_params(params)
+          # ...
+        end
+      end
     end
   end
 end
@@ -64,14 +72,18 @@ They are bound to the instance context of the action.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
-    before { @remote_ip = request.ip }
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+        before { @remote_ip = request.ip }
 
-    def call(params)
-      # @remote_ip is available here
-      # ...
+        def call(params)
+          # @remote_ip is available here
+          # ...
+        end
+      end
     end
   end
 end
@@ -81,13 +93,17 @@ A callback proc can bound an optional argument: `params`.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
-    before {|params| params.valid? }
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+        before {|params| params.valid? }
 
-    def call(params)
-      # ...
+        def call(params)
+          # ...
+        end
+      end
     end
   end
 end
@@ -107,18 +123,22 @@ Hanami takes advantage of this mechanism to provide **faster control flow** in o
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      halt 401 unless authenticated?
-      # ...
-    end
+        def call(params)
+          halt 401 unless authenticated?
+          # ...
+        end
 
-    private
-    def authenticated?
-      # ...
+        private
+        def authenticated?
+          # ...
+        end
+      end
     end
   end
 end
@@ -135,18 +155,22 @@ That means that `halt` can be used to skip `#call` invocation entirely if we use
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
-    before :authenticate!
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+        before :authenticate!
 
-    def call(params)
-      # ...
-    end
+        def call(params)
+          # ...
+        end
 
-    private
-    def authenticate!
-      halt 401 if current_user.nil?
+        private
+        def authenticate!
+          halt 401 if current_user.nil?
+        end
+      end
     end
   end
 end
@@ -159,12 +183,16 @@ An optional second argument can be passed to set a custom body.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      halt 404, "These aren't the droids you're looking for"
+        def call(params)
+          halt 404, "These aren't the droids you're looking for"
+        end
+      end
     end
   end
 end
@@ -184,19 +212,23 @@ The typical case is a **failed form submission**: we want to return a non-succes
 
 ```ruby
 # apps/web/controllers/books/create.rb
-module Web::Controllers::Books
-  class Create
-    include Web::Action
+module Web
+  module Controllers
+    module Books
+      class Create
+        include Web::Action
 
-    params do
-      required(:title).filled(:str?)
-    end
+        params do
+          required(:title).filled(:str?)
+        end
 
-    def call(params)
-      if params.valid?
-        # persist
-      else
-        self.status = 422
+        def call(params)
+          if params.valid?
+            # persist
+          else
+            self.status = 422
+          end
+        end
       end
     end
   end
@@ -205,10 +237,14 @@ end
 
 ```ruby
 # apps/web/views/books/create.rb
-module Web::Views::Books
-  class Create
-    include Web::View
-    template 'books/new'
+module Web
+  module Views
+    module Books
+      class Create
+        include Web::View
+        template 'books/new'
+      end
+    end
   end
 end
 ```
@@ -238,13 +274,17 @@ By default the status is set to `302`.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      redirect_to routes.root_path
-      foo('bar') # This line will never be executed
+        def call(params)
+          redirect_to routes.root_path
+          foo('bar') # This line will never be executed
+        end
+      end
     end
   end
 end

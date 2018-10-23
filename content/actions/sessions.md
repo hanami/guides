@@ -45,14 +45,18 @@ Sessions behave like a Hash: we can read, assign and remove values.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      session[:b]         # read
-      session[:a] = 'foo' # assign
-      session[:c] = nil   # remove
+        def call(params)
+          session[:b]         # read
+          session[:a] = 'foo' # assign
+          session[:c] = nil   # remove
+        end
+      end
     end
   end
 end

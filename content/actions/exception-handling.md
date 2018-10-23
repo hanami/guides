@@ -10,12 +10,16 @@ The behavior changes according to the current Hanami environment and the custom 
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      raise 'boom'
+        def call(params)
+          raise 'boom'
+        end
+      end
     end
   end
 end
@@ -32,13 +36,17 @@ If we want to map an exception to a specific HTTP status code, we can use `handl
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
-    handle_exception ArgumentError => 400
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+        handle_exception ArgumentError => 400
 
-    def call(params)
-      raise ArgumentError
+        def call(params)
+          raise ArgumentError
+        end
+      end
     end
   end
 end
@@ -53,28 +61,32 @@ If the mapping with a custom HTTP status doesn't fit our needs, we can specify a
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class PermissionDenied < StandardError
-    def initialize(role)
-      super "You must be admin, but you are: #{ role }"
-    end
-  end
-
-  class Index
-    include Web::Action
-    handle_exception PermissionDenied => :handle_permission_error
-
-    def call(params)
-      unless current_user.admin?
-        raise PermissionDenied.new(current_user.role)
+module Web
+  module Controllers
+    module Dashboard
+      class PermissionDenied < StandardError
+        def initialize(role)
+          super "You must be admin, but you are: #{ role }"
+        end
       end
 
-      # ...
-    end
+      class Index
+        include Web::Action
+        handle_exception PermissionDenied => :handle_permission_error
 
-    private
-    def handle_permission_error(exception)
-      status 403, exception.message
+        def call(params)
+          unless current_user.admin?
+            raise PermissionDenied.new(current_user.role)
+          end
+
+          # ...
+        end
+
+        private
+        def handle_permission_error(exception)
+          status 403, exception.message
+        end
+      end
     end
   end
 end

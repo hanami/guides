@@ -40,15 +40,19 @@ Cookies behave like a `Hash`: we can read, assign and remove values.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      cookies[:b]         # read
-      cookies[:a] = 'foo' # assign
-      cookies[:c] = nil   # remove
-      cookies[:d] = { value: 'foo', path: '/bar' } # assign with options
+        def call(params)
+          cookies[:b]         # read
+          cookies[:a] = 'foo' # assign
+          cookies[:c] = nil   # remove
+          cookies[:d] = { value: 'foo', path: '/bar' } # assign with options
+        end
+      end
     end
   end
 end
@@ -75,16 +79,20 @@ We're going to set two cookies from the action: the first will inherit applicati
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      # Set-Cookie:a=foo; max-age=300; HttpOnly
-      cookies[:a] = 'foo'
+        def call(params)
+          # Set-Cookie:a=foo; max-age=300; HttpOnly
+          cookies[:a] = 'foo'
 
-      # Set-Cookie:b=bar; max-age=100; HttpOnly
-      cookies[:b] = { value: 'bar', max_age: 100 }
+          # Set-Cookie:b=bar; max-age=100; HttpOnly
+          cookies[:b] = { value: 'bar', max_age: 100 }
+        end
+      end
     end
   end
 end

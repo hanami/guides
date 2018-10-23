@@ -10,20 +10,24 @@ Here an example of some information that we can introspect.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      puts request.path_info                 # => "/dashboard"
-      puts request.request_method            # => "GET"
-      puts request.get?                      # => true
-      puts request.post?                     # => false
-      puts request.xhr?                      # => false
-      puts request.referer                   # => "http://example.com/"
-      puts request.user_agent                # => "Mozilla/5.0 Macintosh; ..."
-      puts request.ip                        # => "127.0.0.1"
-      puts request.env['HTTP_AUTHORIZATION'] # => "Basic abc123"
+        def call(params)
+          puts request.path_info                 # => "/dashboard"
+          puts request.request_method            # => "GET"
+          puts request.get?                      # => true
+          puts request.post?                     # => false
+          puts request.xhr?                      # => false
+          puts request.referer                   # => "http://example.com/"
+          puts request.user_agent                # => "Mozilla/5.0 Macintosh; ..."
+          puts request.ip                        # => "127.0.0.1"
+          puts request.env['HTTP_AUTHORIZATION'] # => "Basic abc123"
+        end
+      end
     end
   end
 end
@@ -40,11 +44,15 @@ The implicit return value of `#call` is a serialized `Rack::Response` (see [#fin
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
+        def call(params)
+        end
+      end
     end
   end
 end
@@ -56,14 +64,18 @@ It has private accessors to explicitly set status, headers and body:
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      self.status = 201
-      self.body   = 'Your resource has been created'
-      self.headers.merge!({ 'X-Custom' => 'OK' })
+        def call(params)
+          self.status = 201
+          self.body   = 'Your resource has been created'
+          self.headers.merge!({ 'X-Custom' => 'OK' })
+        end
+      end
     end
   end
 end
@@ -75,12 +87,16 @@ As shortcut we can use `#status`.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      status 201, "Your resource has been created"
+        def call(params)
+          status 201, "Your resource has been created"
+        end
+      end
     end
   end
 end

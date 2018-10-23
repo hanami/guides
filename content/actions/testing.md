@@ -89,13 +89,17 @@ Here the corresponding production code.
 
 ```ruby
 # apps/web/controllers/users/show.rb
-module Web::Controllers::Users
-  class Show
-    include Web::Action
+module Web
+  module Controllers
+    module Users
+      class Show
+        include Web::Action
 
-    def call(params)
-      puts params.class # => Web::Controllers::Users::Show::Params
-      self.body = "ID: #{ params[:id] }"
+        def call(params)
+          puts params.class # => Web::Controllers::Users::Show::Params
+          self.body = "ID: #{ params[:id] }"
+        end
+      end
     end
   end
 end
@@ -118,14 +122,18 @@ When we do `expose :user`, Hanami creates a getter (`#user`), so we can easily a
 
 ```ruby
 # apps/web/controllers/users/show.rb
-module Web::Controllers::Users
-  class Show
-    include Web::Action
-    expose :user, :foo
+module Web
+  module Controllers
+    module Users
+      class Show
+        include Web::Action
+        expose :user, :foo
 
-    def call(params)
-      @user = UserRepository.new.find(params[:id])
-      @foo  = 'bar'
+        def call(params)
+          @user = UserRepository.new.find(params[:id])
+          @foo  = 'bar'
+        end
+      end
     end
   end
 end
@@ -194,17 +202,21 @@ Here how to adapt our action.
 
 ```ruby
 # apps/web/controllers/users/show.rb
-module Web::Controllers::Users
-  class Show
-    include Web::Action
-    expose :user
+module Web
+  module Controllers
+    module Users
+      class Show
+        include Web::Action
+        expose :user
 
-    def initialize(repository: UserRepository.new)
-      @repository = repository
-    end
+        def initialize(repository: UserRepository.new)
+          @repository = repository
+        end
 
-    def call(params)
-      @user = @repository.find(params[:id])
+        def call(params)
+          @user = @repository.find(params[:id])
+        end
+      end
     end
   end
 end
@@ -261,14 +273,18 @@ Then we have the following action.
 
 ```ruby
 # apps/api_v1/controllers/users/show.rb
-module ApiV1::Controllers::Users
-  class Show
-    include ApiV1::Action
-    accept :json
+module ApiV1
+  module Controllers
+    module Users
+      class Show
+        include ApiV1::Action
+        accept :json
 
-    def call(params)
-      user = UserRepository.new.find(params[:id])
-      self.body = JSON.generate(user.to_h)
+        def call(params)
+          user = UserRepository.new.find(params[:id])
+          self.body = JSON.generate(user.to_h)
+        end
+      end
     end
   end
 end

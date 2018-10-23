@@ -67,16 +67,20 @@ Actions allow us to mount a fine grained middleware stack.
 # apps/web/controllers/sessions/create.rb
 require 'omniauth'
 
-module Web::Controllers::Sessions
-  class Create
-    include Web::Action
+module Web
+  module Controllers
+    module Sessions
+      class Create
+        include Web::Action
 
-    use OmniAuth::Builder {
-      # ...
-    }
+        use OmniAuth::Builder {
+          # ...
+        }
 
-    def call(params)
-      # ...
+        def call(params)
+          # ...
+        end
+      end
     end
   end
 end
@@ -86,16 +90,20 @@ We can use the following syntax to mount different middleware that require argum
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    use XMiddleware.new('x', 123)
-    use YMiddleware.new
-    use ZMiddleware
+        use XMiddleware.new('x', 123)
+        use YMiddleware.new
+        use ZMiddleware
 
-    def call(params)
-      # ...
+        def call(params)
+          # ...
+        end
+      end
     end
   end
 end
