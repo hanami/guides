@@ -104,7 +104,7 @@ in the action, it can be accessed as follows:
 # apps/web/views/dashboard/index.rb
 module Web
   module Views
-    moduleDashboard
+    module Dashboard
       class Index
         include Web::View
 

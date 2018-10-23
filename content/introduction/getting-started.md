@@ -420,7 +420,7 @@ we use repositories to persist the data behind a `Book`.
 
 _(We also use repositories to turn the data from the database back into a `Book`, and delete that data, too.)_
 
-Read more about entities and repositories in the [models guide](/guides/1.1/models/overview).
+Read more about entities and repositories in the [models guide](/models/overview).
 
 Hanami ships with a generator for models,
 so let's use it to create a `Book` entity and its corresponding repository:
@@ -620,7 +620,7 @@ Let's rewrite our template to implement these requirements:
 ```
 
 If we run our feature test now, we'll see it fails — because our controller
-action does not actually [_expose_](/guides/1.1/actions/exposures) the books to our view. We can write a test for
+action does not actually [_expose_](/actions/exposures) the books to our view. We can write a test for
 that change:
 
 ```ruby
