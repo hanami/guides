@@ -48,12 +48,16 @@ If we set the body of the response from an action, **our application will ignore
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      self.body = 'OK'
+        def call(params)
+          self.body = 'OK'
+        end
+      end
     end
   end
 end
@@ -81,16 +85,20 @@ This is a really useful technique for unit testing our actions.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def initialize(greeting: Greeting.new)
-      @greeting = greeting
-    end
+        def initialize(greeting: Greeting.new)
+          @greeting = greeting
+        end
 
-    def call(params)
-      self.body = @greeting.message
+        def call(params)
+          self.body = @greeting.message
+        end
+      end
     end
   end
 end

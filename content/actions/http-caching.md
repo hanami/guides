@@ -15,16 +15,20 @@ The first argument is a cache response directive like `:public` or `"must-revali
 # apps/web/controllers/dashboard/index.rb
 require 'hanami/action/cache'
 
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
-    include Hanami::Action::Cache
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+        include Hanami::Action::Cache
 
-    cache_control :public, max_age: 600
-      # => Cache-Control: public, max-age: 600
+        cache_control :public, max_age: 600
+          # => Cache-Control: public, max-age: 600
 
-    def call(params)
-      # ...
+        def call(params)
+          # ...
+        end
+      end
     end
   end
 end
@@ -41,16 +45,21 @@ Hanami's solution for _expire_ combines support for all the browsers by sending 
 # apps/web/controllers/dashboard/index.rb
 require 'hanami/action/cache'
 
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
-    include Hanami::Action::Cache
-    expires 60, :public, max_age: 300
-      # => Expires: Mon, 18 May 2015 09:19:18 GMT
-      #    Cache-Control: public, max-age: 300
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+        include Hanami::Action::Cache
 
-    def call(params)
-      # ...
+        expires 60, :public, max_age: 300
+          # => Expires: Mon, 18 May 2015 09:19:18 GMT
+          #    Cache-Control: public, max-age: 300
+
+        def call(params)
+          # ...
+        end
+      end
     end
   end
 end
@@ -74,22 +83,26 @@ If the header does match, the action will be halted and a `304` will be returned
 # apps/web/controllers/users/show.rb
 require 'hanami/action/cache'
 
-module Web::Controllers::Users
-  class Show
-    include Web::Action
-    include Hanami::Action::Cache
+module Web
+  module Controllers
+    module Users
+      class Show
+        include Web::Action
+        include Hanami::Action::Cache
 
-    def call(params)
-      @user = UserRepository.new.find(params[:id])
-      fresh etag: etag
+        def call(params)
+          @user = UserRepository.new.find(params[:id])
+          fresh etag: etag
 
-      # ...
-    end
+          # ...
+        end
 
-    private
+        private
 
-    def etag
-      "#{ @user.id }-#{ @user.updated_at }"
+        def etag
+          "#{ @user.id }-#{ @user.updated_at }"
+        end
+      end
     end
   end
 end
@@ -114,16 +127,20 @@ If the timestamp does match, the action will be halted and a `304` will be retur
 # apps/web/controllers/users/show.rb
 require 'hanami/action/cache'
 
-module Web::Controllers::Users
-  class Show
-    include Web::Action
-    include Hanami::Action::Cache
+module Web
+  module Controllers
+    module Users
+      class Show
+        include Web::Action
+        include Hanami::Action::Cache
 
-    def call(params)
-      @user = UserRepository.new.find(params[:id])
-      fresh last_modified: @user.updated_at
+        def call(params)
+          @user = UserRepository.new.find(params[:id])
+          fresh last_modified: @user.updated_at
 
-      # ...
+          # ...
+        end
+      end
     end
   end
 end

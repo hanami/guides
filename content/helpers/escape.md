@@ -84,14 +84,18 @@ If we want to escape a specific _local_:
 ```ruby
 # apps/web/controllers/snippets/show.rb
 
-module Web::Controllers::Snippets
-  class Show
-    include Web::Action
+module Web
+  module Controllers
+    module Snippets
+      class Show
+        include Web::Action
 
-    expose :snippet
+        expose :snippet
 
-    def call(params)
-      @snippet = "<h1>Hello World</h1>"
+        def call(params)
+          @snippet = "<h1>Hello World</h1>"
+        end
+      end
     end
   end
 end
@@ -100,12 +104,16 @@ end
 ```ruby
 # apps/web/views/snippets/show.rb
 
-module Web::Views::Snippets
-  class Show
-    include Web::View
+module Web
+  module Views
+    module Snippets
+      class Show
+        include Web::View
 
-    def snippet
-      raw locals[:snippet]
+        def snippet
+          raw locals[:snippet]
+        end
+      end
     end
   end
 end
@@ -125,12 +133,16 @@ We can also return unescaped output for the entire view:
 # apps/web/views/books/json_show.rb
 require 'json'
 
-module Web::Views::Books
-  class JsonShow < Show
-    format :json
+module Web
+  module Views
+    module Books
+      class JsonShow < Show
+        format :json
 
-    def render
-      raw JSON.generate(book.to_h)
+        def render
+          raw JSON.generate(book.to_h)
+        end
+      end
     end
   end
 end

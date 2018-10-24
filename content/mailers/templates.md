@@ -32,9 +32,11 @@ If we want to associate a different template to a mailer, we can use `template`.
 
 ```ruby
 # lib/bookshelf/mailers/forgot_password.rb
-class Mailers::ForgotPassword
-  include Hanami::Mailer
-  template 'send_password'
+module Mailers
+  class ForgotPassword
+    include Hanami::Mailer
+    template 'send_password'
+  end
 end
 ```
 

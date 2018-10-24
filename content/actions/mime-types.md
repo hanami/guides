@@ -13,15 +13,19 @@ The first returns a symbol representation of the MIME Type (eg. `:html`, `:json`
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      puts format                     # => :html
+        def call(params)
+          puts format                     # => :html
 
-      puts accept?('text/html')       # => true
-      puts accept?('application/png') # => false
+          puts accept?('text/html')       # => true
+          puts accept?('application/png') # => false
+        end
+      end
     end
   end
 end
@@ -93,16 +97,20 @@ There is a way we can force the returned `Content-Type`: use `#format=`.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      puts self.format # => :html
+        def call(params)
+          puts self.format # => :html
 
-      # force a different value
-      self.format        =  :json
-      puts self.format # => :json
+          # force a different value
+          self.format        =  :json
+          puts self.format # => :json
+        end
+      end
     end
   end
 end
@@ -117,13 +125,17 @@ If the incoming request doesn't satisfy this constraint, the application will re
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
-    accept :html, :json
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+        accept :html, :json
 
-    def call(params)
-      # ...
+        def call(params)
+          # ...
+        end
+      end
     end
   end
 end

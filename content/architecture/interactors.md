@@ -110,21 +110,18 @@ Let's call our interactor `AddBook`,
 and write a new spec `spec/bookshelf/interactors/add_book_spec.rb`:
 
 ```ruby
-require 'spec_helper'
+# spec/bookshelf/interactors/add_book_spec.rb
 
-describe AddBook do
+RSpec.describe AddBook do
   let(:interactor) { AddBook.new }
   let(:attributes) { Hash.new }
 
   it "succeeds" do
-    expect(interactor.call(attributes)).to be_a_success
+    result = interactor.call(attributes)
+    expect(result.successful?).to be(true)
   end
 end
 ```
-
-(Note: Hanami has no specific RSpec integrations,
-this expectation works because `Hanami::Interactor` defines a `success?` class,
-which [RSpec lets us delegate to with `be_a_success`](https://relishapp.com/rspec/rspec-expectations/docs/built-in-matchers/predicate-matchers)
 
 Running your test suite will cause a NameError because there is no `AddBook` class.
 Let's create that class in a `lib/bookshelf/interactors/add_book.rb` file:
@@ -170,17 +167,17 @@ Now, let's make our `AddBook` interactor actually do something!
 Edit `spec/bookshelf/interactors/add_book_spec.rb`:
 
 ```ruby
-require 'spec_helper'
+# spec/bookshelf/interactors/add_book_spec.rb
 
-describe AddBook do
+RSpec.describe AddBook do
   let(:interactor) { AddBook.new }
   let(:attributes) { Hash[author: "James Baldwin", title: "The Fire Next Time"] }
 
-  describe "good input" do
+  context "good input" do
     let(:result) { interactor.call(attributes) }
 
     it "succeeds" do
-      expect(result).to be_a_success
+      expect(result.successful?).to be(true)
     end
 
     it "creates a Book with correct title and author" do
@@ -236,17 +233,17 @@ but it doesn't exist in the database yet.
 We need to use our `BookRepository` to persist it.
 
 ```ruby
-require 'spec_helper'
+# spec/bookshelf/interactors/add_book_spec.rb
 
-describe AddBook do
+RSpec.describe AddBook do
   let(:interactor) { AddBook.new }
   let(:attributes) { Hash[author: "James Baldwin", title: "The Fire Next Time"] }
 
-  describe "good input" do
+  context "good input" do
     let(:result) { interactor.call(attributes) }
 
     it "succeeds" do
-      expect(result).to be_a_success
+      expect(result.successful?).to be(true)
     end
 
     it "creates a Book with correct title and author" do
@@ -329,7 +326,7 @@ to create the `@repository` instance variable.
 
 Right now, our spec tests the behavior of the repository,
 by checking to make sure `id` is populated
-(`expect(result.book.id).to_not be_nil`).
+(`expect(result.book.id).to_not be(nil)`).
 
 This is an implementation detail.
 
@@ -337,20 +334,20 @@ Instead, we can change our spec to merely make sure the repository receives the 
 and trust that the repository will persist it (since that is its responsibility).
 
 Let's change remove our `it "persists the Book"` expectation and
-create a `describe "persistence"` block:
+create a `context "persistence"` block:
 
 ```ruby
-require 'spec_helper'
+# spec/bookshelf/interactors/add_book_spec.rb
 
-describe AddBook do
+RSpec.describe AddBook do
   let(:interactor) { AddBook.new }
   let(:attributes) { Hash[author: "James Baldwin", title: "The Fire Next Time"] }
 
-  describe "good input" do
+  context "good input" do
     let(:result) { interactor.call(attributes) }
 
     it "succeeds" do
-      expect(result).to be_a_success
+      expect(result.successful?).to be(true)
     end
 
     it "creates a Book with correct title and author" do
@@ -359,7 +356,7 @@ describe AddBook do
     end
   end
 
-  describe "persistence" do
+  context "persistence" do
     let(:repository) { instance_double("BookRepository") }
 
     it "persists the Book" do
@@ -392,7 +389,7 @@ $ bundle exec hanami generate mailer book_added_notification
       create  lib/bookshelf/mailers/templates/book_added_notification.html.erb
 ```
 
-We won't get into the details of [how the mailer works](/guides/mailers/overview),
+We won't get into the details of [how the mailer works](/mailers/overview),
 but it's pretty simple: there's a `Hanami::Mailer` class, an associated spec,
 and two templates (one for plaintext, and one for html).
 
@@ -403,6 +400,8 @@ with a subject line saying 'Book added!'.
 Edit the mailer spec `spec/bookshelf/mailers/book_added_notification_spec.rb`:
 
 ```ruby
+# spec/bookshelf/mailers/book_added_notification_spec.rb
+
 RSpec.describe Mailers::BookAddedNotification, type: :mailer do
   subject { Mailers::BookAddedNotification }
 
@@ -431,6 +430,8 @@ end
 And edit the mailer `lib/bookshelf/mailers/book_added_notification.rb`:
 
 ```ruby
+# lib/bookshelf/mailers/book_added_notification.rb
+
 class Mailers::BookAddedNotification
   include Hanami::Mailer
 
@@ -450,7 +451,7 @@ Let's edit our `AddBook` spec, to ensure our mailer is called:
 
 ```ruby
   ...
-  describe "sending email" do
+  context "sending email" do
     let(:mailer) { instance_double("Mailers::BookAddedNotification") }
 
     it "send :deliver to the mailer" do
@@ -522,19 +523,19 @@ This time, in our action.
 We'll add a `initialize` method,
 with a keyword argument for `interactor`.
 
-But first, let's the spec `spec/web/controllers/books/create_spec.rb`.
+But first, let's edit the spec `spec/web/controllers/books/create_spec.rb`.
 
 We're going to remove references to `BookRepository`,
 and leverage a double for our `AddBook` interactor:
 
 ```ruby
-require 'spec_helper'
+# spec/web/controllers/books/create_spec.rb
 
 RSpec.describe Web::Controllers::Books::Create do
   let(:interactor) { instance_double('AddBook', call: nil) }
   let(:action) { Web::Controllers::Books::Create.new(interactor: interactor) }
 
-  describe 'with valid params' do
+  context 'with valid params' do
     let(:params) { Hash[book: { title: '1984', author: 'George Orwell' }] }
 
     it 'calls interactor' do
@@ -550,7 +551,7 @@ RSpec.describe Web::Controllers::Books::Create do
     end
   end
 
-  describe 'with invalid params' do
+  context 'with invalid params' do
     let(:params) { Hash[book: {}] }
 
     it 'calls interactor' do

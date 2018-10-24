@@ -16,11 +16,13 @@ We craft a module in `apps/web/views/accept_json.rb`.
 
 ```ruby
 # apps/web/views/accept_json.rb
-module Web::Views
-  module AcceptJson
-    def self.included(view)
-      view.class_eval do
-        format :json
+module Web
+  module Views
+    module AcceptJson
+      def self.included(view)
+        view.class_eval do
+          format :json
+        end
       end
     end
   end

@@ -11,13 +11,15 @@ It's a **private method for views and layouts** called `#html`.
 This is how it will look used with a layout:
 
 ```ruby
-module Web::Views
-  class ApplicationLayout
-    include Web::Layout
+module Web
+  module Views
+    class ApplicationLayout
+      include Web::Layout
 
-    def sidebar
-      html.aside(id: 'sidebar') do
-        div 'hello'
+      def sidebar
+        html.aside(id: 'sidebar') do
+          div 'hello'
+        end
       end
     end
   end
@@ -190,13 +192,17 @@ end
 Local variables from views are available inside the nested blocks of HTML builder:
 
 ```ruby
-module Web::Views::Books
-  class Show
-    include Web::View
+module Web
+  module Views
+    module Books
+      class Show
+        include Web::View
 
-    def title_widget
-      html.div do
-        h1 book.title
+        def title_widget
+          html.div do
+            h1 book.title
+          end
+        end
       end
     end
   end

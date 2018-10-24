@@ -70,7 +70,7 @@ end
 Code included via <code>prepare</code> is available for ALL the actions of an application.
 </p>
 
-### Skipping A Callback
+## Skipping A Callback
 
 Let's say we have included `Authentication` globally, but want to skip the execution of its callback for certain resources.
 A typical use case is to redirect unauthenticated requests to our sign in form.
@@ -79,17 +79,21 @@ The solution is really simple and elegant at the same time: override that method
 
 ```ruby
 # apps/web/controllers/sessions/new.rb
-module Web::Controllers::Sessions
-  class New
-    include Web::Action
+module Web
+  module Controllers
+    module Sessions
+      class New
+        include Web::Action
 
-    def call(params)
-      # ...
-    end
+        def call(params)
+          # ...
+        end
 
-    private
-    def authenticate!
-      # no-op
+        private
+        def authenticate!
+          # no-op
+        end
+      end
     end
   end
 end
@@ -108,19 +112,23 @@ Ruby comes to our rescue.
 
 ```ruby
 # apps/web/controllers/books/set_book.rb
-module Web::Controllers::Books
-  module SetBook
-    def self.included(action)
-      action.class_eval do
-        before :set_book
+module Web
+  module Controllers
+    module Books
+      module SetBook
+        def self.included(action)
+          action.class_eval do
+            before :set_book
+          end
+        end
+
+        private
+
+        def set_book
+          @book = BookRepository.new.find(params[:id])
+          halt 404 if @book.nil?
+        end
       end
-    end
-
-    private
-
-    def set_book
-      @book = BookRepository.new.find(params[:id])
-      halt 404 if @book.nil?
     end
   end
 end
@@ -132,15 +140,18 @@ We have defined a module for our behavior to share. Let's include it in all the 
 # apps/web/controllers/books/update.rb
 require_relative './set_book'
 
-module Web::Controllers::Books
-  class Update
-    include Web::Action
-    include SetBook
+module Web
+  module Controllers
+    module Books
+      class Update
+        include Web::Action
+        include SetBook
 
-    def call(params)
-      # ...
+        def call(params)
+          # ...
+        end
+      end
     end
   end
 end
 ```
-

@@ -8,12 +8,16 @@ Hanami offers a helpful way to present numbers via `#format_number`, a **private
 ## Usage
 
 ```ruby
-module Web::Views::Books
-  class Show
-    include Web::View
+module Web
+  module Views
+    module Books
+      class Show
+        include Web::View
 
-    def download_count
-      format_number book.download_count
+        def download_count
+          format_number book.download_count
+        end
+      end
     end
   end
 end

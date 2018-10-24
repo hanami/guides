@@ -13,16 +13,15 @@ That means we can instantiate, exercise and verify expectations **directly on ac
 
 ```ruby
 # spec/web/controllers/dashboard/index_spec.rb
-require 'spec_helper'
 require_relative '../../../../apps/web/controllers/dashboard/index'
 
-describe Web::Controllers::Dashboard::Index do
+RSpec.describe Web::Controllers::Dashboard::Index do
   let(:action) { Web::Controllers::Dashboard::Index.new }
   let(:params) { Hash[] }
 
   it "is successful" do
     response = action.call(params)
-    response[0].must_equal 200
+    expect(response[0]).to be(200)
   end
 end
 ```
@@ -67,10 +66,9 @@ The following test example uses both.
 
 ```ruby
 # spec/web/controllers/users/show_spec.rb
-require 'spec_helper'
 require_relative '../../../../apps/web/controllers/users/show'
 
-describe Web::Controllers::Users::Show do
+RSpec.describe Web::Controllers::Users::Show do
   let(:action)  { Web::Controllers::Users::Show.new }
   let(:format)  { 'application/json' }
   let(:user_id) { '23' }
@@ -78,9 +76,9 @@ describe Web::Controllers::Users::Show do
   it "is successful" do
     response = action.call(id: user_id, 'HTTP_ACCEPT' => format)
 
-    response[0].must_equal                 200
-    response[1]['Content-Type'].must_equal "#{ format }; charset=utf-8"
-    response[2].must_equal                 ["ID: #{ user_id }"]
+    expect(response[0]).to                 eq(200)
+    expect(response[1]['Content-Type']).to eq("#{ format }; charset=utf-8")
+    expect(response[2]).to                 eq(["ID: #{ user_id }"])
   end
 end
 ```
@@ -89,13 +87,17 @@ Here the corresponding production code.
 
 ```ruby
 # apps/web/controllers/users/show.rb
-module Web::Controllers::Users
-  class Show
-    include Web::Action
+module Web
+  module Controllers
+    module Users
+      class Show
+        include Web::Action
 
-    def call(params)
-      puts params.class # => Web::Controllers::Users::Show::Params
-      self.body = "ID: #{ params[:id] }"
+        def call(params)
+          puts params.class # => Web::Controllers::Users::Show::Params
+          self.body = "ID: #{ params[:id] }"
+        end
+      end
     end
   end
 end
@@ -118,14 +120,18 @@ When we do `expose :user`, Hanami creates a getter (`#user`), so we can easily a
 
 ```ruby
 # apps/web/controllers/users/show.rb
-module Web::Controllers::Users
-  class Show
-    include Web::Action
-    expose :user, :foo
+module Web
+  module Controllers
+    module Users
+      class Show
+        include Web::Action
+        expose :user, :foo
 
-    def call(params)
-      @user = UserRepository.new.find(params[:id])
-      @foo  = 'bar'
+        def call(params)
+          @user = UserRepository.new.find(params[:id])
+          @foo  = 'bar'
+        end
+      end
     end
   end
 end
@@ -135,23 +141,19 @@ We have used two _exposures_: `:user` and `:foo`, let's verify if they are prope
 
 ```ruby
 # spec/web/controllers/users/show_spec.rb
-require 'spec_helper'
 require_relative '../../../../apps/web/controllers/users/show'
 
-describe Web::Controllers::Users::Show do
-  before do
-    @user = UserRepository.new.create(name: 'Luca')
-  end
-
+RSpec.describe Web::Controllers::Users::Show do
+  let(:user) { UserRepository.new.create(name: 'Luca') }
   let(:action)  { Web::Controllers::Users::Show.new }
 
   it "is successful" do
-    response = action.call(id: @user.id)
+    response = action.call(id: user.id)
 
-    response[0].must_equal 200
+    expect(response[0]).to be(200)
 
-    action.user.must_equal @user
-    action.exposures.must_equal({user: @user, foo: 'bar'})
+    action.user.must_equal user
+    action.exposures.must_equal({user: user, foo: 'bar'})
   end
 end
 ```
@@ -171,7 +173,6 @@ We're going to use RSpec for this example as it has a nicer API for mocks (doubl
 
 ```ruby
 # spec/web/controllers/users/show_spec.rb
-require 'spec_helper'
 require_relative '../../../../apps/web/controllers/users/show'
 
 RSpec.describe Web::Controllers::Users::Show do
@@ -182,8 +183,8 @@ RSpec.describe Web::Controllers::Users::Show do
   it "is successful" do
     response = action.call(id: user.id)
 
-    expect(response[0]).to      eq 200
-    expect(action.user).to      eq user
+    expect(response[0]).to      eq(200)
+    expect(action.user).to      eq(user)
     expect(action.exposures).to eq({user: user})
   end
 end
@@ -194,17 +195,21 @@ Here how to adapt our action.
 
 ```ruby
 # apps/web/controllers/users/show.rb
-module Web::Controllers::Users
-  class Show
-    include Web::Action
-    expose :user
+module Web
+  module Controllers
+    module Users
+      class Show
+        include Web::Action
+        expose :user
 
-    def initialize(repository: UserRepository.new)
-      @repository = repository
-    end
+        def initialize(repository: UserRepository.new)
+          @repository = repository
+        end
 
-    def call(params)
-      @user = @repository.find(params[:id])
+        def call(params)
+          @user = @repository.find(params[:id])
+        end
+      end
     end
   end
 end
@@ -222,10 +227,9 @@ The following test example uses this method.
 
 ```ruby
 # spec/web/controllers/users/create_spec.rb
-require 'spec_helper'
 require_relative '../../../../apps/web/controllers/users/create'
 
-describe Web::Controllers::Users::Create do
+RSpec.describe Web::Controllers::Users::Create do
   let(:action)  { Web::Controllers::Users::Create.new }
   let(:user_params) { name: 'Luca' }
 
@@ -233,7 +237,7 @@ describe Web::Controllers::Users::Create do
     response = action.call(id: user_params)
     flash = action.exposures[:flash]
 
-    flash[:info].must_equal 'User was successfully created'
+    expect(flash[:info]).to eq('User was successfully created')
   end
 end
 ```
@@ -261,14 +265,18 @@ Then we have the following action.
 
 ```ruby
 # apps/api_v1/controllers/users/show.rb
-module ApiV1::Controllers::Users
-  class Show
-    include ApiV1::Action
-    accept :json
+module ApiV1
+  module Controllers
+    module Users
+      class Show
+        include ApiV1::Action
+        accept :json
 
-    def call(params)
-      user = UserRepository.new.find(params[:id])
-      self.body = JSON.generate(user.to_h)
+        def call(params)
+          user = UserRepository.new.find(params[:id])
+          self.body = JSON.generate(user.to_h)
+        end
+      end
     end
   end
 end
@@ -279,25 +287,18 @@ This is why we haven't set `user` as an instance variable and why we haven't exp
 
 ```ruby
 # spec/api_v1/requests/users_spec.rb
-require 'spec_helper'
-
-describe "API V1 users" do
+RSpec.describe "API V1 users" do
   include Rack::Test::Methods
 
-  before do
-    @user = UserRepository.new.create(name: 'Luca')
-  end
-
   # app is required by Rack::Test
-  def app
-    Hanami.app
-  end
+  let(:app) { Hanami.app }
+  let(:user) { UserRepository.new.create(name: 'Luca') }
 
   it "is successful" do
-    get "/api/v1/users/#{ @user.id }"
+    get "/api/v1/users/#{ user.id }"
 
-    last_response.must_be :ok?
-    last_response.body.must_equal(JSON.generate(@user.to_h))
+    expect(last_response.status).to be(200)
+    expect(last_response.body).to eq(JSON.generate(user.to_h))
   end
 end
 ```

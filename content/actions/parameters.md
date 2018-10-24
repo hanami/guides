@@ -20,12 +20,16 @@ To access the value of a param, we can use the _subscriber operator_ `#[]`.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
 
-    def call(params)
-      self.body = "Query string: #{ params[:q] }"
+        def call(params)
+          self.body = "Query string: #{ params[:q] }"
+        end
+      end
     end
   end
 end
@@ -154,25 +158,29 @@ We can coerce the Ruby type, validate if a param is required, determine if it is
 
 ```ruby
 # apps/web/controllers/signup/create.rb
-module Web::Controllers::Signup
-  class Create
-    include Web::Action
-    MEGABYTE = 1024 ** 2
+module Web
+  module Controllers
+    module Signup
+      class Create
+        include Web::Action
+        MEGABYTE = 1024 ** 2
 
-    params do
-      required(:name).filled(:str?)
-      required(:email).filled(:str?, format?: /@/).confirmation
-      required(:password).filled(:str?).confirmation
-      required(:terms_of_service).filled(:bool?)
-      required(:age).filled(:int?, included_in?: 18..99)
-      optional(:avatar).filled(size?: 1..(MEGABYTE * 3))
-    end
+        params do
+          required(:name).filled(:str?)
+          required(:email).filled(:str?, format?: /@/).confirmation
+          required(:password).filled(:str?).confirmation
+          required(:terms_of_service).filled(:bool?)
+          required(:age).filled(:int?, included_in?: 18..99)
+          optional(:avatar).filled(size?: 1..(MEGABYTE * 3))
+        end
 
-    def call(params)
-      if params.valid?
-        # ...
-      else
-        # ...
+        def call(params)
+          if params.valid?
+            # ...
+          else
+            # ...
+          end
+        end
       end
     end
   end
@@ -189,17 +197,21 @@ An alternative is to extract a class and pass it as an argument to `.params`.
 
 ```ruby
 # apps/web/controllers/signup/my_params.rb
-module Web::Controllers::Signup
-  class MyParams < Web::Action::Params
-    MEGABYTE = 1024 ** 2
+module Web
+  module Controllers
+    module Signup
+      class MyParams < Web::Action::Params
+        MEGABYTE = 1024 ** 2
 
-    params do
-      required(:name).filled(:str?)
-      required(:email).filled(:str?, format?: /@/).confirmation
-      required(:password).filled(:str?).confirmation
-      required(:terms_of_service).filled(:bool?)
-      required(:age).filled(:int?, included_in?: 18..99)
-      optional(:avatar).filled(size?: 1..(MEGABYTE * 3)
+        params do
+          required(:name).filled(:str?)
+          required(:email).filled(:str?, format?: /@/).confirmation
+          required(:password).filled(:str?).confirmation
+          required(:terms_of_service).filled(:bool?)
+          required(:age).filled(:int?, included_in?: 18..99)
+          optional(:avatar).filled(size?: 1..(MEGABYTE * 3)
+        end
+      end
     end
   end
 end
@@ -209,16 +221,20 @@ end
 # apps/web/controllers/signup/create.rb
 require_relative './my_params'
 
-module Web::Controllers::Signup
-  class Create
-    include Web::Action
-    params MyParams
+module Web
+  module Controllers
+    module Signup
+      class Create
+        include Web::Action
+        params MyParams
 
-    def call(params)
-      if params.valid?
-        # ...
-      else
-        # ...
+        def call(params)
+          if params.valid?
+            # ...
+          else
+            # ...
+          end
+        end
       end
     end
   end
@@ -230,27 +246,33 @@ end
 In case there is a predicate that is needed only for the current params, you can define inline predicates:
 
 ```ruby
-module Web::Controllers::Books
-  class Create
-    include Web::Action
+# apps/web/controllers/books/create.rb
 
-    params Class.new(Hanami::Action::Params) {
-      predicate(:cool?, message: "is not cool") do |current|
-        current.match(/cool/)
-      end
+module Web
+  module Controllers
+    module Books
+      class Create
+        include Web::Action
 
-      validations do
-        required(:book).schema do
-          required(:title) { filled? & str? & cool? }
+        params Class.new(Hanami::Action::Params) {
+          predicate(:cool?, message: "is not cool") do |current|
+            current.match(/cool/)
+          end
+
+          validations do
+            required(:book).schema do
+              required(:title) { filled? & str? & cool? }
+            end
+          end
+        }
+
+        def call(params)
+          if params.valid?
+            self.body = 'OK'
+          else
+            self.body = params.error_messages.join("\n")
+          end
         end
-      end
-    }
-
-    def call(params)
-      if params.valid?
-        self.body = 'OK'
-      else
-        self.body = params.error_messages.join("\n")
       end
     end
   end
@@ -263,13 +285,19 @@ Rack ignores request bodies unless they come from a form submission.
 If we have a JSON endpoint, the payload isn't available in `params`.
 
 ```ruby
-module Web::Controllers::Books
-  class Create
-    include Web::Action
-    accept :json
+# apps/web/controllers/books/create.rb
 
-    def call(params)
-      puts params.to_h # => {}
+module Web
+  module Controllers
+    module Books
+      class Create
+        include Web::Action
+        accept :json
+
+        def call(params)
+          puts params.to_h # => {}
+        end
+      end
     end
   end
 end
@@ -286,14 +314,12 @@ $ curl http://localhost:2300/books      \
 In order to make book payload available in `params`, we should enable this feature:
 
 ```ruby
-# apps/web/application.rb
-module Web
-  class Application < Hanami::Application
-    configure do
-      # ...
-      body_parsers :json
-    end
-  end
+# config/environment.rb
+require "hanami/middleware/body_parser"
+
+Hanami.configure do
+  # ...
+  middleware.use Hanami::Middleware::BodyParser, :json
 end
 ```
 
@@ -307,7 +333,7 @@ class FooParser
   def mime_types
     ['application/foo']
   end
-  
+
   def parse(body)
     # manually parse body
   end
@@ -317,15 +343,11 @@ end
 and subsequently register it:
 
 ```ruby
-# apps/web/application.rb
-# ...
-module Web
-  class Application < Hanami::Application
-    configure do
-      # ...
-      body_parsers FooParser.new
-      # ...
-    end
-  end
+# config/environment.rb
+require "hanami/middleware/body_parser"
+
+Hanami.configure do
+  # ...
+  middleware.use Hanami::Middleware::BodyParser, FooParser.new
 end
 ```

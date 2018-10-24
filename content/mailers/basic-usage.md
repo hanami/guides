@@ -13,12 +13,14 @@ For this purpose a mailer exposes three mandatory methods: `.from`, `.to`, `.sub
 They all accept a string, but `.to` can also accept an array of strings in order to set multiple recipients.
 
 ```ruby
-class Mailers::Welcome
-  include Hanami::Mailer
+module Mailers
+  class Welcome
+    include Hanami::Mailer
 
-  from    'noreply@bookshelf.org'
-  to      'user@example.com'
-  subject 'Welcome to Bookshelf'
+    from    'noreply@bookshelf.org'
+    to      'user@example.com'
+    subject 'Welcome to Bookshelf'
+  end
 end
 ```
 
@@ -35,21 +37,23 @@ You may have noticed that have a hardcoded value can be useful to set the sender
 If you pass a **symbol as an argument**, it will be interpreted as a **method** that we want to use for that information.
 
 ```ruby
-class Mailers::Welcome
-  include Hanami::Mailer
+module Mailers
+  class Welcome
+    include Hanami::Mailer
 
-  from    'noreply@bookshelf.org'
-  to      :recipient
-  subject :subject
+    from    'noreply@bookshelf.org'
+    to      :recipient
+    subject :subject
 
-  private
+    private
 
-  def recipient
-    user.email
-  end
+    def recipient
+      user.email
+    end
 
-  def subject
-    "Welcome #{ user.name }!"
+    def subject
+      "Welcome #{ user.name }!"
+    end
   end
 end
 ```
@@ -85,13 +89,15 @@ All the public methods defined in a mailer are accessible from the templates:
 
 ```ruby
 # lib/bookshelf/mailers/welcome.rb
-class Mailers::Welcome
-  include Hanami::Mailer
+module Mailers
+  class Welcome
+    include Hanami::Mailer
 
-  # ...
+    # ...
 
-  def greeting
-    "Ahoy"
+    def greeting
+      "Ahoy"
+    end
   end
 end
 ```

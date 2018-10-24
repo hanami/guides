@@ -9,7 +9,7 @@ If we commit a mistake, we can destroy what we just generated via `hanami destro
 ## Applications
 
 With the Container architecture, we can have multiple Hanami applications running under `apps/`.
-We can [generate new applications](/command-line/generators) for different components that we want to add to our project.
+We can [generate new applications](/command-line/generators/#applications) for different components that we want to add to our project.
 
 To destroy one of them:
 

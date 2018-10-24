@@ -70,15 +70,19 @@ This will produce
 An **alternative usage** is to define a concrete method in a view and to use it in the template:
 
 ```ruby
-module Web::Views::Books
-  class New
-    include Web::View
+module Web
+  module Views
+    module Books
+      class New
+        include Web::View
 
-    def form
-      form_for :book, routes.books_path do
-        text_field :title
+        def form
+          form_for :book, routes.books_path do
+            text_field :title
 
-        submit 'Create'
+            submit 'Create'
+          end
+        end
       end
     end
   end

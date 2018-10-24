@@ -13,14 +13,18 @@ Only the whitelisted exposures are made available to the corresponding view.
 
 ```ruby
 # apps/web/controllers/dashboard/index.rb
-module Web::Controllers::Dashboard
-  class Index
-    include Web::Action
-    expose :greeting
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+        expose :greeting
 
-    def call(params)
-      @greeting = "Hello"
-      @foo      = 23
+        def call(params)
+          @greeting = "Hello"
+          @foo      = 23
+        end
+      end
     end
   end
 end
@@ -31,12 +35,16 @@ Only `greeting` can be used from the view and template.
 
 ```ruby
 # apps/web/views/dashboard/index.rb
-module Web::Views::Dashboard
-  class Index
-    include Web::View
+module Web
+  module View
+    module Dashboard
+      class Index
+        include Web::View
 
-    def welcome_message
-      greeting + " and welcome"
+        def welcome_message
+          greeting + " and welcome"
+        end
+      end
     end
   end
 end
