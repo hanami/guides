@@ -175,7 +175,7 @@ If you have trouble, your <tt>DATABASE_URL</tt> is defined in <tt>.env.test</tt>
 Now we have a test, we can see it fail:
 
 ```shell
-$ bundle exec rake spec
+$ bundle exec rake
 F.
 
 Failures:
