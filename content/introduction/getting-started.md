@@ -292,7 +292,7 @@ RSpec.describe 'List books' do
 end
 ```
 
-This test means that when we go to (/books)[http://localhost:2300/books],
+This test means that when we go to [/books](http://localhost:2300/books),
 we'll see two HTML elements that have class `book`,
 and both will be inside of an HTML element that has an id of `books`.
 
