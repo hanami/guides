@@ -55,7 +55,7 @@
               <div class="row">
                 <div class="col-6 collapse-brand">
                   <a href="{{ "/" | relURL }}">
-                    <img src="{{ "/assets/img/brand/white.png" | relURL}}">
+                    <img src="{{ "/assets/img/brand/purple.png" | relURL}}">
                   </a>
                 </div>
                 <div class="col-6 collapse-close">
@@ -75,36 +75,43 @@
               <li class="nav-item">
                 <a class="nav-link nav-link-icon" href="#" title="Search" id="search-link">
                   <i class="fa fa-search"></i>
+                  <span class="nav-link-inner--text d-lg-none">Search</span>
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link nav-link-icon" href="https://github.com/{{ .Site.Params.github }}" target="_blank" title="Star Hanami on GitHub">
                   <i class="fa fa-github"></i>
+                  <span class="nav-link-inner--text d-lg-none">GitHub</span>
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link nav-link-icon" href="https://twitter.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Twitter">
                   <i class="fa fa-twitter"></i>
+                  <span class="nav-link-inner--text d-lg-none">Twitter</span>
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link nav-link-icon" href="https://www.facebook.com/{{ .Site.Params.twitter }}" target="_blank" title="Like Hanami on Facebook">
                   <i class="fa fa-facebook-square"></i>
+                  <span class="nav-link-inner--text d-lg-none">Facebook</span>
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link nav-link-icon" href="https://www.instagram.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Instagram">
                   <i class="fa fa-instagram"></i>
+                  <span class="nav-link-inner--text d-lg-none">Instagram</span>
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link nav-link-icon" href="http://chat.hanamirb.org/" target="_blank" title="Hanami chat">
                   <i class="ni ni-chat-round"></i>
+                  <span class="nav-link-inner--text d-lg-none">Chat</span>
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link nav-link-icon" href="https://github.com/hanami/guides/releases" target="_blank" title="Download Hanami Guides for offline usage">
                   <i class="fa fa-cloud-download"></i>
+                  <span class="nav-link-inner--text d-lg-none">Downloads</span>
                 </a>
               </li>
               <li class="nav-item">
@@ -314,14 +321,6 @@
         </div>
       </div>
     </footer>
-    <!-- Core -->
-    <script src="/assets/vendor/jquery/jquery.min.js"></script>
-    <script src="/assets/vendor/popper/popper.min.js"></script>
-    <script src="/assets/vendor/bootstrap/bootstrap.min.js"></script>
-    <script src="/assets/vendor/headroom/headroom.min.js"></script>
-    <!-- Argon JS -->
-    <script src="/assets/js/argon.js?v=1.0.1"></script>
-    {{ template "_internal/google_analytics.html" . }}
     <!-- Core -->
     <script src="{{ "/assets/vendor/jquery/jquery.min.js" | relURL }}"></script>
     <script src="{{ "/assets/vendor/popper/popper.min.js" | relURL }}"></script>
