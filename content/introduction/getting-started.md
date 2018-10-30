@@ -328,7 +328,7 @@ This does a lot for us:
 
 _(If you're confused by 'action' vs. 'controller', here's a tip: Hanami only has `action` classes, so a controller is just a module to group several related actions together.)_
 
-They files are all pretty much empty.
+These files are all pretty much empty.
 They have some basic code in there, so Hanami knows how to use the class.
 Thankfully we don't have to manually create those five files,
 with that specific code in them.
