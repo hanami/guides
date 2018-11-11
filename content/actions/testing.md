@@ -4,7 +4,7 @@ order: 140
 ---
 
 Hanami pays a lot of attention to code testability and it offers advanced features to make our lives easier.
-The framework supports Minitest (default) and RSpec.
+The framework supports RSpec (default) and Minitest.
 
 ## Unit Tests
 

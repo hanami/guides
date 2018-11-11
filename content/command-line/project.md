@@ -32,8 +32,8 @@ The default testing framework is Minitest.
 
 We can use the `--test` argument to specify a different framework, from the list below:
 
-  * `minitest` (default)
-  * `rspec`
+  * `rspec` (default)
+  * `minitest`
 
 ## Template Engine
 
