@@ -176,7 +176,7 @@ Because we haven't [explicitly loaded](/guides/1.2/associations/overview#explici
 We can use the method that we have defined on before (`#find_with_comments`):
 
 ```ruby
-story = stories.new.find_with_comments(story.id)
+story = stories.find_with_comments(story.id)
   # => #<Story:0x00007fd45e327e60 @attributes={:id=>2, :user_id=>1, :text=>"Hello folks", :created_at=>2017-10-24 09:09:59 UTC, :updated_at=>2017-10-24 09:09:59 UTC, :user=>#<User:0x00007fd45e326bc8 @attributes={:id=>1, :name=>"Luca", :created_at=>2017-10-24 09:06:57 UTC, :updated_at=>2017-10-24 09:06:57 UTC}>, :comments=>[#<Comment:0x00007fd45e325930 @attributes={:id=>1, :user_id=>2, :story_id=>2, :text=>"Hi and welcome!", :created_at=>2017-10-24 09:12:30 UTC, :updated_at=>2017-10-24 09:12:30 UTC, :user=>#<User:0x00007fd45e324490 @attributes={:id=>2, :name=>"Maria G", :created_at=>2017-10-24 09:07:16 UTC, :updated_at=>2017-10-24 09:07:16 UTC}>}>]}>
 
 story.comments
