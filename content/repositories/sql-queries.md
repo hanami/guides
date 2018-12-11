@@ -15,6 +15,18 @@ class UserRepository < Hanami::Repository
 end
 ```
 
+## Raw SQL
+
+You can perform queries with raw SQL:
+
+```ruby
+class UserRepository < Hanami::Repository
+  def all_by_sql
+    users.read("SELECT * FROM users")
+  end
+end
+```
+
 ## Sort
 
 You can sort records using `#order`:
