@@ -559,12 +559,11 @@ Let's write a test to force this change in our view:
 
 ```ruby
 # spec/web/views/books/index_spec.rb
-require_relative '../../../../apps/web/views/books/index'
 
 RSpec.describe Web::Views::Books::Index do
   let(:exposures) { Hash[books: []] }
   let(:template)  { Hanami::View::Template.new('apps/web/templates/books/index.html.erb') }
-  let(:view)      { Web::Views::Books::Index.new(template, exposures) }
+  let(:view)      { described_class.new(template, exposures) }
   let(:rendered)  { view.render }
 
   it 'exposes #books' do
@@ -625,10 +624,9 @@ that change:
 
 ```ruby
 # spec/web/controllers/books/index_spec.rb
-require_relative '../../../../apps/web/controllers/books/index'
 
 RSpec.describe Web::Controllers::Books::Index do
-  let(:action) { Web::Controllers::Books::Index.new }
+  let(:action) { described_class.new }
   let(:params) { Hash[] }
   let(:repository) { BookRepository.new }
 
@@ -794,10 +792,9 @@ Let's express them as unit tests:
 
 ```ruby
 # spec/web/controllers/books/create_spec.rb
-require_relative '../../../../apps/web/controllers/books/create'
 
 RSpec.describe Web::Controllers::Books::Create do
-  let(:action) { Web::Controllers::Books::Create.new }
+  let(:action) { described_class.new }
   let(:params) { Hash[book: { title: 'Confident Ruby', author: 'Avdi Grimm' }] }
   let(:repository) { BookRepository.new }
 
@@ -874,10 +871,9 @@ Let's specify this behaviour as unit tests:
 
 ```ruby
 # spec/web/controllers/books/create_spec.rb
-require_relative '../../../../apps/web/controllers/books/create'
 
 RSpec.describe Web::Controllers::Books::Create do
-  let(:action) { Web::Controllers::Books::Create.new }
+  let(:action) { described_class.new }
   let(:repository) { BookRepository.new }
 
   before do
@@ -999,14 +995,12 @@ First, we expect a list of errors to be included in the page when `params` conta
 
 ```ruby
 # spec/web/views/books/new_spec.rb
-require 'ostruct'
-require_relative '../../../../apps/web/views/books/new'
 
 RSpec.describe Web::Views::Books::New do
   let(:params)    { OpenStruct.new(valid?: false, error_messages: ['Title must be filled', 'Author must be filled']) }
   let(:exposures) { Hash[params: params] }
   let(:template)  { Hanami::View::Template.new('apps/web/templates/books/new.html.erb') }
-  let(:view)      { Web::Views::Books::New.new(template, exposures) }
+  let(:view)      { described_class.new(template, exposures) }
   let(:rendered)  { view.render }
 
   it 'displays list of errors when params contains errors' do
