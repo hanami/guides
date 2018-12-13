@@ -959,13 +959,13 @@ module Web
 end
 ```
 
-When the params are valid, the Book is created and the action redirects to a different URL.
-But when the params are not valid, what happens?
+When the params are valid, the Book is created, and the action redirects to a different URL.
+However, when the params are not valid, what happens?
 
 First, the HTTP status code is set to
 [422 (Unprocessable Entity)](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#422).
 Then the control will pass to the corresponding view, which needs to know which template to render.
-In this case `apps/web/templates/books/new.html.erb` will be used to render the form again.
+In this case, `apps/web/templates/books/new.html.erb` will be used to render the form again.
 
 ```ruby
 # apps/web/views/books/create.rb
@@ -1035,7 +1035,7 @@ RSpec.describe 'Add a book' do
 end
 ```
 
-In our template we can loop over `params.errors` (if there are any) and display a friendly message.
+In our template, we can loop over `params.errors` (if there are any) and display a friendly message.
 Open up `apps/web/templates/books/new.html.erb`:
 
 ```erb
@@ -1068,7 +1068,7 @@ Finished in 0.078112s, 230.4372 runs/s, 473.6765 assertions/s.
 
 ### Improving Our Use Of The Router
 
-The last improvement we are going to make, is in the use of our router.
+The last improvement we are going to make is in the use of our router.
 Open up the routes file for the "web" application:
 
 ```ruby
@@ -1079,7 +1079,7 @@ get '/books',     to: 'books#index'
 root              to: 'home#index'
 ```
 
-Hanami provides a convenient helper method to build these REST-style routes, that we can use to simplify our router a bit:
+Hanami provides a convenient helper method to build these REST-style routes that we can use to simplify our router a bit:
 
 ```ruby
 root to: 'home#index'
@@ -1101,7 +1101,7 @@ $ bundle exec hanami routes
 
 The output for `hanami routes` shows you the name of the defined helper method (you can suffix this name with `_path` or `_url` and call it on the `routes` helper), the allowed HTTP method, the path and finally the controller action that will be used to handle the request.
 
-Now we've applied the `resources` helper method, we can take advantage of the named route methods.
+Now we've applied the `resources` helper method; we can take advantage of the named route methods.
 Remember how we built our form using `form_for`?
 
 ```erb
@@ -1115,7 +1115,7 @@ Remember how we built our form using `form_for`?
 %>
 ```
 
-It's silly to include a hard-coded path in our template, when our router is already perfectly aware of which route to point the form to.
+It's silly to include a hard-coded path in our template when our router is already perfectly aware of which route to point the form to.
 We can use the `routes` helper method that is available in our views and actions to access route-specific helper methods:
 
 ```erb
@@ -1137,7 +1137,7 @@ redirect_to routes.books_path
 
 ## Wrapping Up
 
-**Congratulations for completing your first Hanami project!**
+**Congratulations on completing your first Hanami project!**
 
 Let's review what we've done: we've traced requests through Hanami's major frameworks to understand how they relate to each other; we've seen how we can model our domain using entities and repositories; we've seen solutions for building forms, maintaining our database schema, and validating user input.
 
