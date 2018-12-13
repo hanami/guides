@@ -273,7 +273,7 @@ The purpose of our sample Bookshelf project is to manage books.
 
 We'll store books in our database and let the user manage them with our project.
 
-Our first step will be list out all the books we know about.
+Our first step is to list out all the books we know about.
 
 Let's write a new feature test describing what we want to achieve:
 
