@@ -305,8 +305,7 @@ Let's create a new action to fix that.
 
 ### Hanami Generators
 
-Hanami ships with a number of **generators**.
-These are tools that write some basic code for you, to help us write less code.
+Hanami ships with a number of **generators**, which are tools that write some code for you.
 
 In our terminal, let's run:
 
@@ -326,7 +325,7 @@ This does a lot for us:
 - Creating a view at `apps/web/views/books/index.rb` (and a spec for it),
 - Creating a template at `apps/web/templates/books/index.html.erb`.
 
-_(If you're confused by 'action' vs. 'controller', here's a tip: Hanami only has `action` classes, so a controller is just a module to group several related actions together.)_
+_(If you're confused by 'action' vs. 'controller,' here's a tip: Hanami only has `action` classes, so a controller is just a module to group several related actions together.)_
 
 These files are all pretty much empty.
 They have some basic code in there, so Hanami knows how to use the class.
@@ -370,7 +369,7 @@ and our `homes/index.html.erb` template from above,
 we have `<h1>Bookshelf</h1>`.
 
 This is not a huge deal, but in a real application,
-we'll likely have a logo or a common navigation shared across all of the pages in our `app`.
+we'll likely have a logo or common navigation shared across all of the pages in our `app`.
 
 Let's fix that repetition, to show how that works.
 
