@@ -97,7 +97,7 @@ Here's what we need to know:
 * `public` will contain compiled static assets.
 * `spec` contains our tests.
 
-Go ahead and install our gem dependency with Bundler; then we can launch a development server:
+Go ahead and install our gem dependencies with Bundler; then we can launch a development server:
 
 ```shell
 $ bundle install
@@ -112,24 +112,24 @@ And... bask in the glory of your first Hanami project at
 ## Hanami's Architecture
 
 Hanami's architecture revolves around your project containing many `apps`.
-These all live together in the same codebase, and are run in the same Ruby process.
+These all live together in the same codebase, and exist in the same Ruby process.
 
 They live under `apps/`.
 
-By default, we have a `web` app, which can be thought of as the normal, user-facing web interface.
+By default, we have a `web` app, which can be thought of as the standard, user-facing web interface.
 This is the most popular, so you'll probably want to keep it in your future Hanami projects.
-But, just so you know, there's nothing special or different about this app, it's just so common that Hanami generates it for us.
+However, there's nothing unique about this app, it's just so common that Hanami generates it for us.
 
-Later (in a real project), we would add other apps, such as an `admin` panel, a JSON `api`, or an analytics `dashboard`.
+Later (in a real project), we would add other apps, such as an `admin` panel, a JSON `API`, or an analytics `dashboard`.
 We could also break our `web` app into smaller.
 Hanami fully supports that, too!
 
 Different `apps` represent __delivery mechanisms__.
 That means they're different ways of interacting with the core of your project, or the "business logic".
 
-Hanami doesn't want us to [repeat ourselves](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), so that "business logic" is shared.
+Hanami doesn't want us to [repeat ourselves](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) so that "business logic" is shared.
 Web applications almost always store and interact with data stored in a database.
-Both our 'business logic' and our persistence live in `lib/`.
+Both our "business logic" and our persistence live in `lib/`.
 
 _(Hanami architecture is heavily inspired by [Clean Architecture](https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html).)_
 
