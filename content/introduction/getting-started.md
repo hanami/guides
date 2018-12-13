@@ -62,7 +62,7 @@ $ hanami new bookshelf
   </code>
 </p>
 
-This will create a new directory `bookshelf` in our current location.
+This creates a new directory `bookshelf` in our current location.
 Let's see what it contains:
 
 ```shell
@@ -86,10 +86,10 @@ $ tree -L 1
 Here's what we need to know:
 
 * `Gemfile` defines our Rubygems dependencies (using Bundler).
-* `README.md` tells us how to setup and use the project.
+* `README.md` tells us how to set up and use the project.
 * `Rakefile` describes our Rake tasks.
 * `apps` contains one or more web applications compatible with Rack, where we can find the first generated Hanami application called `web`.
-  It's the place where we find our controllers, views, routes and templates.
+  It's the place where we find our controllers, views, routes and, templates.
 * `config` contains configuration files.
 * `config.ru` is for Rack servers.
 * `db` contains our database schema and migrations.
