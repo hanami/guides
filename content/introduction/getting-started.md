@@ -135,10 +135,10 @@ _(Hanami architecture is heavily inspired by [Clean Architecture](https://blog.8
 
 ## Writing Our First Test
 
-The opening screen we see when we point our browser at our app, is a default page which is displayed when there are no routes defined.
+The opening screen we see when we point our browser at our app is a default page which is displayed when there are no routes defined.
 
 Hanami encourages [Behavior Driven Development](https://en.wikipedia.org/wiki/Behavior-driven_development) (BDD) as a way to write web applications.
-In order to get our first custom page to display, we'll write a high-level feature test:
+To get our first custom page to display, we'll write a high-level feature test:
 
 ```ruby
 # spec/web/features/visit_home_spec.rb
@@ -172,7 +172,7 @@ If you have trouble, your <tt>DATABASE_URL</tt> is defined in <tt>.env.test</tt>
 
 ### Following a Request
 
-Now we have a test, we can see it fail:
+Now we have a test; we can see it fail:
 
 ```shell
 $ bundle exec rake
@@ -207,7 +207,7 @@ We pointed our app's root URL to the `index` action of the `home` controller (se
 
 If we run our tests, we'll get an error that the endpoint cannot be found.
 
-That makes sense, because we need to create the `home#index` action.
+That makes sense because we need to create the `home#index` action.
 
 ```ruby
 # apps/web/controllers/home/index.rb
@@ -226,8 +226,8 @@ end
 ```
 
 This is an empty action that doesn't do anything special.
-Each action in Hanami is defined by [its own class](https://en.wikipedia.org/wiki/Single_responsibility_principle), which makes it simple to test and work on.
-And, each action has a corresponding view, which is also defined by its own class.
+Each action in Hanami is defined by [its class](https://en.wikipedia.org/wiki/Single_responsibility_principle), which makes it simple to test.
+Moreover, each action has a corresponding view, which is also defined by its class.
 This one needs to be added in order to complete the request.
 
 ```ruby
@@ -243,10 +243,10 @@ module Web
 end
 ```
 
-It's also empty, and doesn't do anything special.
+It's also empty and doesn't do anything special.
 Its only responsibility is to render a template, which is what views do by default.
 
-This template is what we need to add, in order to make our tests pass.
+This template is what we need to add, to make our tests pass.
 All we need to do is add the bookshelf heading.
 
 ```erb
