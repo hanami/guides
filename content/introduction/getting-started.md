@@ -514,7 +514,7 @@ $ bundle exec hanami console
 => #<Book:0x007f9ab6181610 @attributes={:id=>1, :title=>"TDD", :author=>"Kent Beck", :created_at=>2018-10-24 11:11:38 UTC, :updated_at=>2018-10-24 11:11:38 UTC}>
 ```
 
-Hanami repositories have methods to load one or more entities from our database; and to create and update existing records.
+Hanami repositories have methods to load one or more entities from our database, and to create and update existing records.
 The repository is also the place where you would define new methods to implement custom queries.
 
 To recap, we've seen how Hanami uses entities and repositories to model our data.
