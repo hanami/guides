@@ -523,7 +523,7 @@ We can use migrations to apply changes to our database schema.
 
 ### Displaying Dynamic Data
 
-With our new experience modelling data, we can get to work displaying dynamic data on our book listing page.
+With our new experience modeling data, we can get to work displaying dynamic data on our book listing page.
 Let's adjust the feature test we created earlier:
 
 ```ruby
@@ -550,9 +550,9 @@ end
 ```
 
 We create the required records in our test and then assert the correct number of book classes on the page.
-When we run this test it should pass. If it does not pass, a likely reason is that the test database was not migrated.
+When we run this test, it should pass. If it does not pass, a likely reason is that the test database was not migrated.
 
-Now we can go change our template and remove the static HTML.
+Now we can change our template and remove the static HTML.
 Our view needs to loop over all available records and render them.
 Let's write a test to force this change in our view:
 
@@ -618,7 +618,7 @@ Let's rewrite our template to implement these requirements:
 ```
 
 If we run our feature test now, we'll see it fails — because our controller
-action does not actually [_expose_](/actions/exposures) the books to our view. We can write a test for
+action does not [_expose_](/actions/exposures) the books to our view. We can write a test for
 that change:
 
 ```ruby
@@ -647,7 +647,7 @@ RSpec.describe Web::Controllers::Books::Index do
 end
 ```
 
-Writing tests for controller actions is basically two-fold: you either assert on the response object, which is a Rack-compatible array of status, headers and content; or on the action itself, which will contain exposures after we've called it.
+Writing tests for controller actions is basically two-fold: you either assert on the response object, which is a Rack-compatible array of status, headers, and content; or on the action itself, which will contain exposures after we've called it.
 Now we've specified that the action exposes `:books`, we can implement our action:
 
 ```ruby
@@ -720,7 +720,7 @@ end
 
 ### Laying The Foundations For A Form
 
-By now, we should be familiar with the working of actions, views and templates.
+By now, we should be familiar with the working of actions, views, and templates.
 
 We'll speed things up a little, so we can quickly get to the good parts.
 First, create a new action for our "New Book" page:
