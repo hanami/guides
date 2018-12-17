@@ -325,7 +325,7 @@ This does a lot for us:
 - Creating a view at `apps/web/views/books/index.rb` (and a spec for it),
 - Creating a template at `apps/web/templates/books/index.html.erb`.
 
-_(If you're confused by 'action' vs. 'controller,' here's a tip: Hanami only has `action` classes, so a controller is just a module to group several related actions together.)_
+_(If you're confused by 'action' vs. 'controller': Hanami only has `action` classes, so a controller is just a module to group several related actions together.)_
 
 These files are all pretty much empty.
 They have some basic code in there, so Hanami knows how to use the class.
