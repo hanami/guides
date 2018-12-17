@@ -121,7 +121,7 @@ This is the most popular, so you'll probably want to keep it in your future Hana
 However, there's nothing unique about this app, it's just so common that Hanami generates it for us.
 
 Later (in a real project), we would add other apps, such as an `admin` panel, a JSON `API`, or an analytics `dashboard`.
-We could also break our `web` app into smaller.
+We could also break our `web` app into smaller parts, extracting isolated pieces of functionality.
 Hanami fully supports that, too!
 
 Different `apps` represent __delivery mechanisms__.
