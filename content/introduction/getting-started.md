@@ -41,7 +41,7 @@ First, we're going to assume a basic knowledge of developing web applications.
 
 You should also be familiar with [Bundler](http://bundler.io), [Rake](http://rake.rubyforge.org), working with a terminal and building apps using the [Model, View, Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) paradigm.
 
-Lastly, in this guide we'll be using a [SQLite](https://sqlite.org/) database.
+Lastly, in this guide, we'll be using an [SQLite](https://sqlite.org/) database.
 If you want to follow along, make sure you have a working installation of Ruby 2.3+ and SQLite 3+ on your system.
 
 ## Create a New Hanami Project
@@ -62,7 +62,7 @@ $ hanami new bookshelf
   </code>
 </p>
 
-This will create a new directory `bookshelf` in our current location.
+This creates a new directory `bookshelf` in our current location.
 Let's see what it contains:
 
 ```shell
@@ -86,10 +86,10 @@ $ tree -L 1
 Here's what we need to know:
 
 * `Gemfile` defines our Rubygems dependencies (using Bundler).
-* `README.md` tells us how to setup and use the project.
+* `README.md` tells us how to set up and use the project.
 * `Rakefile` describes our Rake tasks.
 * `apps` contains one or more web applications compatible with Rack, where we can find the first generated Hanami application called `web`.
-  It's the place where we find our controllers, views, routes and templates.
+  It's the place where we find our controllers, views, routes and, templates.
 * `config` contains configuration files.
 * `config.ru` is for Rack servers.
 * `db` contains our database schema and migrations.
@@ -97,7 +97,7 @@ Here's what we need to know:
 * `public` will contain compiled static assets.
 * `spec` contains our tests.
 
-Go ahead and install our gem dependency with Bundler; then we can launch a development server:
+Go ahead and install our gem dependencies with Bundler; then we can launch a development server:
 
 ```shell
 $ bundle install
@@ -112,33 +112,33 @@ And... bask in the glory of your first Hanami project at
 ## Hanami's Architecture
 
 Hanami's architecture revolves around your project containing many `apps`.
-These all live together in the same codebase, and are run in the same Ruby process.
+These all live together in the same codebase, and exist in the same Ruby process.
 
 They live under `apps/`.
 
-By default, we have a `web` app, which can be thought of as the normal, user-facing web interface.
+By default, we have a `web` app, which can be thought of as the standard, user-facing web interface.
 This is the most popular, so you'll probably want to keep it in your future Hanami projects.
-But, just so you know, there's nothing special or different about this app, it's just so common that Hanami generates it for us.
+However, there's nothing unique about this app, it's just so common that Hanami generates it for us.
 
 Later (in a real project), we would add other apps, such as an `admin` panel, a JSON `api`, or an analytics `dashboard`.
-We could also break our `web` app into smaller.
+We could also break our `web` app into smaller parts, extracting isolated pieces of functionality.
 Hanami fully supports that, too!
 
 Different `apps` represent __delivery mechanisms__.
 That means they're different ways of interacting with the core of your project, or the "business logic".
 
-Hanami doesn't want us to [repeat ourselves](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), so that "business logic" is shared.
+Hanami doesn't want us to [repeat ourselves](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) therefore "business logic" is shared.
 Web applications almost always store and interact with data stored in a database.
-Both our 'business logic' and our persistence live in `lib/`.
+Both our "business logic" and our persistence live in `lib/`.
 
 _(Hanami architecture is heavily inspired by [Clean Architecture](https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html).)_
 
 ## Writing Our First Test
 
-The opening screen we see when we point our browser at our app, is a default page which is displayed when there are no routes defined.
+The opening screen we see when we point our browser at our app is a default page which is displayed when there are no routes defined.
 
 Hanami encourages [Behavior Driven Development](https://en.wikipedia.org/wiki/Behavior-driven_development) (BDD) as a way to write web applications.
-In order to get our first custom page to display, we'll write a high-level feature test:
+To get our first custom page to display, we'll write a high-level feature test:
 
 ```ruby
 # spec/web/features/visit_home_spec.rb
@@ -172,7 +172,7 @@ If you have trouble, your <tt>DATABASE_URL</tt> is defined in <tt>.env.test</tt>
 
 ### Following a Request
 
-Now we have a test, we can see it fail:
+Now we have a test; we can see it fail:
 
 ```shell
 $ bundle exec rake
@@ -207,7 +207,7 @@ We pointed our app's root URL to the `index` action of the `home` controller (se
 
 If we run our tests, we'll get an error that the endpoint cannot be found.
 
-That makes sense, because we need to create the `home#index` action.
+That makes sense because we need to create the `home#index` action.
 
 ```ruby
 # apps/web/controllers/home/index.rb
@@ -226,8 +226,8 @@ end
 ```
 
 This is an empty action that doesn't do anything special.
-Each action in Hanami is defined by [its own class](https://en.wikipedia.org/wiki/Single_responsibility_principle), which makes it simple to test and work on.
-And, each action has a corresponding view, which is also defined by its own class.
+Each action in Hanami is defined by [a single class](https://en.wikipedia.org/wiki/Single_responsibility_principle), which makes it simple to test.
+Moreover, each action has a corresponding view, which is also defined by its class.
 This one needs to be added in order to complete the request.
 
 ```ruby
@@ -243,10 +243,10 @@ module Web
 end
 ```
 
-It's also empty, and doesn't do anything special.
+It's also empty and doesn't do anything special.
 Its only responsibility is to render a template, which is what views do by default.
 
-This template is what we need to add, in order to make our tests pass.
+This template is what we need to add, to make our tests pass.
 All we need to do is add the bookshelf heading.
 
 ```erb
@@ -273,7 +273,7 @@ The purpose of our sample Bookshelf project is to manage books.
 
 We'll store books in our database and let the user manage them with our project.
 
-Our first step will be list out all the books we know about.
+Our first step is to list out all the books we know about.
 
 Let's write a new feature test describing what we want to achieve:
 
@@ -305,8 +305,7 @@ Let's create a new action to fix that.
 
 ### Hanami Generators
 
-Hanami ships with a number of **generators**.
-These are tools that write some basic code for you, to help us write less code.
+Hanami ships with a number of **generators**, which are tools that write some code for you.
 
 In our terminal, let's run:
 
@@ -326,7 +325,7 @@ This does a lot for us:
 - Creating a view at `apps/web/views/books/index.rb` (and a spec for it),
 - Creating a template at `apps/web/templates/books/index.html.erb`.
 
-_(If you're confused by 'action' vs. 'controller', here's a tip: Hanami only has `action` classes, so a controller is just a module to group several related actions together.)_
+_(If you're confused by 'action' vs. 'controller': Hanami only has `action` classes, so a controller is just a module to group several related actions together.)_
 
 These files are all pretty much empty.
 They have some basic code in there, so Hanami knows how to use the class.
@@ -370,7 +369,7 @@ and our `homes/index.html.erb` template from above,
 we have `<h1>Bookshelf</h1>`.
 
 This is not a huge deal, but in a real application,
-we'll likely have a logo or a common navigation shared across all of the pages in our `app`.
+we'll likely have a logo or common navigation shared across all of the pages in our `app`.
 
 Let's fix that repetition, to show how that works.
 
@@ -412,7 +411,7 @@ There are two types of objects that we'll use for this:
 * an **entity** is a domain object (a `Book`) that is uniquely identified by its identity,
 * a **repository** is what we use to persist, retrieve, and delete data for an entity, in the persistence layer.
 
-Entities are totally unaware of the database.
+Entities are entirely unaware of the database.
 This makes them **lightweight** and **easy to test**.
 
 Since entities are completely decoupled from the database,
@@ -476,7 +475,7 @@ $ HANAMI_ENV=test bundle exec hanami db prepare
 An entity is something really close to a plain Ruby object.
 We should focus on the behaviors that we want from it and only then, how to save it.
 
-For now, we need to create simple entity class:
+For now, we need to create a simple entity class:
 
 ```ruby
 # lib/bookshelf/entities/book.rb
@@ -501,7 +500,7 @@ end
 ### Using Repositories
 
 Now we are ready to play around with our repository.
-We can use Hanami's `console` command to launch IRb with our application pre-loaded, so we can use our objects:
+We can use Hanami's `console` command to launch `irb` with our application pre-loaded, so we can use our objects:
 
 ```shell
 $ bundle exec hanami console
@@ -515,7 +514,7 @@ $ bundle exec hanami console
 => #<Book:0x007f9ab6181610 @attributes={:id=>1, :title=>"TDD", :author=>"Kent Beck", :created_at=>2018-10-24 11:11:38 UTC, :updated_at=>2018-10-24 11:11:38 UTC}>
 ```
 
-Hanami repositories have methods to load one or more entities from our database; and to create and update existing records.
+Hanami repositories have methods to load one or more entities from our database, and to create and update existing records.
 The repository is also the place where you would define new methods to implement custom queries.
 
 To recap, we've seen how Hanami uses entities and repositories to model our data.
@@ -524,7 +523,7 @@ We can use migrations to apply changes to our database schema.
 
 ### Displaying Dynamic Data
 
-With our new experience modelling data, we can get to work displaying dynamic data on our book listing page.
+With our new experience modeling data, we can get to work displaying dynamic data on our book listing page.
 Let's adjust the feature test we created earlier:
 
 ```ruby
@@ -551,9 +550,9 @@ end
 ```
 
 We create the required records in our test and then assert the correct number of book classes on the page.
-When we run this test it should pass. If it does not pass, a likely reason is that the test database was not migrated.
+When we run this test, it should pass. If it does not pass, a likely reason is that the test database was not migrated.
 
-Now we can go change our template and remove the static HTML.
+Now we can change our template and remove the static HTML.
 Our view needs to loop over all available records and render them.
 Let's write a test to force this change in our view:
 
@@ -619,7 +618,7 @@ Let's rewrite our template to implement these requirements:
 ```
 
 If we run our feature test now, we'll see it fails — because our controller
-action does not actually [_expose_](/actions/exposures) the books to our view. We can write a test for
+action does not [_expose_](/actions/exposures) the books to our view. We can write a test for
 that change:
 
 ```ruby
@@ -648,7 +647,7 @@ RSpec.describe Web::Controllers::Books::Index do
 end
 ```
 
-Writing tests for controller actions is basically two-fold: you either assert on the response object, which is a Rack-compatible array of status, headers and content; or on the action itself, which will contain exposures after we've called it.
+Writing tests for controller actions is basically two-fold: you either assert on the response object, which is a Rack-compatible array of status, headers, and content; or on the action itself, which will contain exposures after we've called it.
 Now we've specified that the action exposes `:books`, we can implement our action:
 
 ```ruby
@@ -721,7 +720,7 @@ end
 
 ### Laying The Foundations For A Form
 
-By now, we should be familiar with the working of actions, views and templates.
+By now, we should be familiar with the working of actions, views, and templates.
 
 We'll speed things up a little, so we can quickly get to the good parts.
 First, create a new action for our "New Book" page:
@@ -921,10 +920,10 @@ end
 Now our tests specify two alternative scenarios: our original happy path, and a new scenario in which validations fail.
 To make our tests pass, we need to implement validations.
 
-Although you can add validation rules to the entity, Hanami also allows you to define validation rules as close to the source of the input as possible, i.e. the action.
+Although you can add validation rules to the entity, Hanami also allows you to define validation rules as close to the source of the input as possible, i.e., the action.
 Hanami controller actions can use the `params` class method to define acceptable incoming parameters.
 
-This approach both whitelists what params are used (others are discarded to prevent mass-assignment vulnerabilities from untrusted user input) _and_ adds rules to define what values are acceptable — in this case we've specified that the nested attributes for a book's title and author should be present.
+This approach both whitelists what params are used (others are discarded to prevent mass-assignment vulnerabilities from untrusted user input) _and_ adds rules to define what values are acceptable — in this case, we've specified that the nested attributes for a book's title and author should be present.
 
 With our validations in place, we can limit our entity creation and redirection to cases where the incoming params are valid:
 
@@ -960,13 +959,13 @@ module Web
 end
 ```
 
-When the params are valid, the Book is created and the action redirects to a different URL.
-But when the params are not valid, what happens?
+When the params are valid, the Book is created, and the action redirects to a different URL.
+However, when the params are not valid, what happens?
 
 First, the HTTP status code is set to
 [422 (Unprocessable Entity)](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#422).
 Then the control will pass to the corresponding view, which needs to know which template to render.
-In this case `apps/web/templates/books/new.html.erb` will be used to render the form again.
+In this case, `apps/web/templates/books/new.html.erb` will be used to render the form again.
 
 ```ruby
 # apps/web/views/books/create.rb
@@ -1036,7 +1035,7 @@ RSpec.describe 'Add a book' do
 end
 ```
 
-In our template we can loop over `params.errors` (if there are any) and display a friendly message.
+In our template, we can loop over `params.errors` (if there are any) and display a friendly message.
 Open up `apps/web/templates/books/new.html.erb`:
 
 ```erb
@@ -1069,7 +1068,7 @@ Finished in 0.078112s, 230.4372 runs/s, 473.6765 assertions/s.
 
 ### Improving Our Use Of The Router
 
-The last improvement we are going to make, is in the use of our router.
+The last improvement we are going to make is in the use of our router.
 Open up the routes file for the "web" application:
 
 ```ruby
@@ -1080,7 +1079,7 @@ get '/books',     to: 'books#index'
 root              to: 'home#index'
 ```
 
-Hanami provides a convenient helper method to build these REST-style routes, that we can use to simplify our router a bit:
+Hanami provides a convenient helper method to build these REST-style routes that we can use to simplify our router a bit:
 
 ```ruby
 root to: 'home#index'
@@ -1102,7 +1101,7 @@ $ bundle exec hanami routes
 
 The output for `hanami routes` shows you the name of the defined helper method (you can suffix this name with `_path` or `_url` and call it on the `routes` helper), the allowed HTTP method, the path and finally the controller action that will be used to handle the request.
 
-Now we've applied the `resources` helper method, we can take advantage of the named route methods.
+Now we've applied the `resources` helper method; we can take advantage of the named route methods.
 Remember how we built our form using `form_for`?
 
 ```erb
@@ -1116,7 +1115,7 @@ Remember how we built our form using `form_for`?
 %>
 ```
 
-It's silly to include a hard-coded path in our template, when our router is already perfectly aware of which route to point the form to.
+It's silly to include a hard-coded path in our template when our router is already perfectly aware of which route to point the form to.
 We can use the `routes` helper method that is available in our views and actions to access route-specific helper methods:
 
 ```erb
@@ -1138,7 +1137,7 @@ redirect_to routes.books_path
 
 ## Wrapping Up
 
-**Congratulations for completing your first Hanami project!**
+**Congratulations on completing your first Hanami project!**
 
 Let's review what we've done: we've traced requests through Hanami's major frameworks to understand how they relate to each other; we've seen how we can model our domain using entities and repositories; we've seen solutions for building forms, maintaining our database schema, and validating user input.
 
