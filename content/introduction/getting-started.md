@@ -226,7 +226,7 @@ end
 ```
 
 This is an empty action that doesn't do anything special.
-Each action in Hanami is defined by [its class](https://en.wikipedia.org/wiki/Single_responsibility_principle), which makes it simple to test.
+Each action in Hanami is defined by [a single class](https://en.wikipedia.org/wiki/Single_responsibility_principle), which makes it simple to test.
 Moreover, each action has a corresponding view, which is also defined by its class.
 This one needs to be added in order to complete the request.
 
