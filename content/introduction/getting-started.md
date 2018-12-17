@@ -411,7 +411,7 @@ There are two types of objects that we'll use for this:
 * an **entity** is a domain object (a `Book`) that is uniquely identified by its identity,
 * a **repository** is what we use to persist, retrieve, and delete data for an entity, in the persistence layer.
 
-Entities are unaware of the database.
+Entities are entirely unaware of the database.
 This makes them **lightweight** and **easy to test**.
 
 Since entities are completely decoupled from the database,
