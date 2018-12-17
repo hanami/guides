@@ -472,7 +472,7 @@ $ HANAMI_ENV=test bundle exec hanami db prepare
 
 ### Working With Entities
 
-An entity is something really close to an everyday Ruby object.
+An entity is something really close to a plain Ruby object.
 We should focus on the behaviors that we want from it and only then, how to save it.
 
 For now, we need to create a simple entity class:
