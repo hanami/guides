@@ -120,7 +120,7 @@ By default, we have a `web` app, which can be thought of as the standard, user-f
 This is the most popular, so you'll probably want to keep it in your future Hanami projects.
 However, there's nothing unique about this app, it's just so common that Hanami generates it for us.
 
-Later (in a real project), we would add other apps, such as an `admin` panel, a JSON `API`, or an analytics `dashboard`.
+Later (in a real project), we would add other apps, such as an `admin` panel, a JSON `api`, or an analytics `dashboard`.
 We could also break our `web` app into smaller parts, extracting isolated pieces of functionality.
 Hanami fully supports that, too!
 
