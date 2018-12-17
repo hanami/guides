@@ -500,7 +500,7 @@ end
 ### Using Repositories
 
 Now we are ready to play around with our repository.
-We can use Hanami's `console` command to launch irb with our application pre-loaded, so we can use our objects:
+We can use Hanami's `console` command to launch `irb` with our application pre-loaded, so we can use our objects:
 
 ```shell
 $ bundle exec hanami console
