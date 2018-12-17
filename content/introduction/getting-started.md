@@ -127,7 +127,7 @@ Hanami fully supports that, too!
 Different `apps` represent __delivery mechanisms__.
 That means they're different ways of interacting with the core of your project, or the "business logic".
 
-Hanami doesn't want us to [repeat ourselves](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) so that "business logic" is shared.
+Hanami doesn't want us to [repeat ourselves](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) therefore "business logic" is shared.
 Web applications almost always store and interact with data stored in a database.
 Both our "business logic" and our persistence live in `lib/`.
 
