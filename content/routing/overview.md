@@ -75,7 +75,7 @@ Hanami is able to figure out the namespace (`Web::Controllers`) and compose the 
 
 ### Mounting Applications
 
-If we want to mount an application, we should use `mount` within the Hanami environment configuration file. The global configuration file is located at `config/environment.rb`. Place `mount` within the Hanami.configure block.
+If we want to mount an application, we should use `mount` within the Hanami environment configuration file. The global configuration file is located at `config/environment.rb`. Place `mount` within the `Hanami.configure` block.
 
 ```ruby
 Hanami.configure do
