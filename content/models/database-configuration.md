@@ -44,3 +44,20 @@ To setup your test environment database, enter:
 ```shell
 $ HANAMI_ENV=test bundle exec hanami db prepare
 ```
+
+## Sequel plugins
+
+Hanami models uses rom as a low level backend. It's mean that we can easy use any sequel plugins in your app.
+For this you need to define `gateway` block in model configuration and add extention to `gateway.connection` object:
+
+```ruby
+# config/environment.rb
+
+Hanami.configure do
+  model do
+    gateway do |g|
+      g.connection.extension(:connection_validator)
+    end
+  end
+end
+```
