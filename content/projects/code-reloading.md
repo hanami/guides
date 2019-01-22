@@ -14,7 +14,7 @@ New generated projects have this entry in their `Gemfile`:
 ```ruby
 group :development do
   # Code reloading
-  # See: http://hanamirb.org/guides/1.2/projects/code-reloading
+  # See: https://guides.hanamirb.org/projects/code-reloading
   gem 'shotgun'
 end
 ```

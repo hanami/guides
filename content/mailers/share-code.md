@@ -38,7 +38,7 @@ Hanami.configure do
   mailer do
     root 'lib/bookshelf/mailers'
 
-    # See http://hanamirb.org/guides/1.2/mailers/delivery
+    # See https://guides.hanamirb.org/mailers/delivery
     delivery :test
 
     prepare do
