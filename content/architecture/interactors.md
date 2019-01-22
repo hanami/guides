@@ -533,7 +533,7 @@ and leverage a double for our `AddBook` interactor:
 
 RSpec.describe Web::Controllers::Books::Create do
   let(:interactor) { instance_double('AddBook', call: nil) }
-  let(:action) { Web::Controllers::Books::Create.new(interactor: interactor) }
+  let(:action) { described_class.new(interactor: interactor) }
 
   context 'with valid params' do
     let(:params) { Hash[book: { title: '1984', author: 'George Orwell' }] }
