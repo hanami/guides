@@ -5,19 +5,19 @@ order: 30
 
 ## Features
 
-From helpers provide a powerful Ruby API to describe HTML5 forms, to be used both with views and templates. It they allow to:
+Form helpers provide a powerful Ruby API to describe HTML5 forms, to be used both with views and templates. They support the following features:
 
-   * Support for complex markup without the need of concatenation
-   * Auto closing HTML5 tags
-   * Support for view local variables
-   * Method override support (`PUT`/`PATCH`/`DELETE` HTTP verbs aren't understood by browsers)
+   * Complex markup without the need of concatenation
+   * Auto-closing HTML5 tags
+   * View-local variables
+   * HTTP method override (because `PUT`/`PATCH`/`DELETE` HTTP verbs aren’t understood by browsers)
    * Automatic generation of HTML attributes for inputs: `id`, `name`, `value`
-   * Allow to override automatic HTML attributes
-   * Read values from request params and/or given entities, to autofill `value` attributes
+   * Overriding automatic HTML attributes
+   * Reading values from request params and/or given entities, to autofill `value` attributes
    * Automatic selection of current value for radio button and select inputs
-   * CSRF Protection
+   * CSRF protection
    * Infinite nested fields
-   * ORM Agnostic
+   * ORM-agnostic
 
 ## Technical notes
 
