@@ -34,7 +34,7 @@ We have an extra helper for this specific task: `#escape_html_attribute` (aliase
 <img src="/path/to/avatar.png" title="<%= ha(user.name) %>'s Avatar">
 ```
 
-## Whitelisted URLs
+## Whitelisted URL schemes
 
 Imagine we have a feature in our application that allows users to link from their profile, a website.
 In the edit profile form we have a text field that accepts a URL.
