@@ -28,7 +28,7 @@ It supports:
 
 ## Testing Framework
 
-The default testing framework is Minitest.
+The default testing framework is RSpec.
 
 We can use the `--test` argument to specify a different framework, from the list below:
 
