@@ -26,7 +26,7 @@ At this point, we need to explicitly tell something really important about built
 
 Why this is so important? Because if we try to invoke a method on the input we’ll get a `NoMethodError` if the input doesn’t respond to it. Which isn’t nice, right?
 
-Before to use a predicate, we want to ensure that the input is an instance of the expected type. Let’s introduce another new predicate for our need: `#type?`.
+Before using a predicate, we want to ensure that the input is an instance of the expected type. Let’s introduce another new predicate for our need: `#type?`.
 
 ```ruby
 required(:age) { type?(Integer) & gteq?(18) }
@@ -132,10 +132,11 @@ Easy to tell, it’s the concatenation of the original key with the <code>_confi
 
 ## Forms
 
-An important precondition to check before to implement a validator is about the expected input.
+Before implementing a validator, we should be aware of the use case's expected input:
+
 When we use validators for already preprocessed data it's safe to use basic validations from `Hanami::Validations` mixin.
 
-If the data is coming directly from user input via a HTTP form, it's advisable to use `Hanami::Validations::Form` instead.
+If the data is coming directly from user input via a HTTP form, it is advisable to use `Hanami::Validations::Form` instead.
 **The two mixins have the same API, but the latter is able to do low level input preprocessing specific for forms**. For instance, blank inputs are casted to `nil` in order to avoid blank strings in the database.
 
 ## Rules
@@ -186,7 +187,8 @@ We can use these variables to define the rule. We covered a few cases:
 
 ## Nested Input Data
 
-While we’re building complex web forms, we may find comfortable to organise data in a hierarchy of cohesive input fields. For instance, all the fields related to a customer, may have the `customer` prefix. To reflect this arrangement on the server side, we can group keys.
+While we’re building complex web forms, we may find it comfortable to organise data in a hierarchy of cohesive input fields. For instance, all the fields related to a customer may have the `customer` prefix. Reflecting
+this arrangement on the server side, we can group keys.
 
 ```ruby
 validations do
@@ -325,10 +327,10 @@ We can observe that:
 
 ## Error Messages
 
-To pick the right error message is crucial for user experience.
-As usual `Hanami::Validations` comes to the rescue for most common cases and it leaves space to customization of behaviors.
+Picking a fitting error message is crucial for the user experience.
+`Hanami::Validations` handles most common cases while allowing customized behavior as well.
 
-We have seen that builtin predicates have default messages, while [inline predicates](#inline-custom-predicates) allow to specify a custom message via the `:message` option.
+We have seen that built-in predicates have default messages, while [inline predicates](#inline-custom-predicates) allow to specify a custom message via the `:message` option.
 
 ```ruby
 class SignupValidator
@@ -355,6 +357,8 @@ result.messages.fetch(:age)   # => ['must be greater than 18']
 
 Inline error messages are ideal for quick and dirty development, but we suggest to use an external YAML file to configure these messages:
 
+This example
+
 ```yaml
 # config/messages.yml
 en:
@@ -362,7 +366,7 @@ en:
     email?: "must be an email"
 ```
 
-To be used like this:
+can be used like this.
 
 ```ruby
 class SignupValidator
@@ -383,7 +387,7 @@ end
 
 ### Custom Error Messages
 
-In the example above, the failure message for age is fine: `"must be greater than 18"`, but how to tweak it? What if we need to change into something diffent? Again, we can use the YAML configuration file for our purpose.
+In the example above, the failure message for age is fine: `"must be greater than 18"`, but what if we need to change it? Again, we can use the YAML configuration file for our purpose.
 
 ```yaml
 # config/messages.yml
@@ -398,7 +402,7 @@ en:
 
 ```
 
-Now our validator is able to look at the right error message.
+Now our validator is able to pick the right error message.
 
 ```ruby
 result = SignupValidator.new(email: 'foo', age: 1).validate
@@ -410,7 +414,7 @@ result.messages.fetch(:age) # => ['must be an adult']
 #### Custom namespace
 
 <p class="convention">
-For a given validator named <code>SignupValidator</code>, the framework will look for <code>signup</code> translation key.
+For a given validator named <code>SignupValidator</code>, the framework will look for a <code>signup</code> translation key.
 </p>
 
 If for some reason that doesn't work for us, we can customize the namespace:
@@ -426,7 +430,7 @@ class SignupValidator
 end
 ```
 
-The new namespace should be used in the YAML file too.
+The new namespace should be used in the YAML file, too.
 
 ```yaml
 # config/messages.yml
