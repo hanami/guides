@@ -238,22 +238,21 @@ p.warning {
   padding: 1rem 1.5rem;
   border: 0;
   border-radius: .25rem;
+  font-weight: 400;
+  color: #333;
 }
 
 p.notice {
-  color: #FFF;
   border-color: #35DDFF;
   background-color: #35DDFF;
 }
 
 p.convention {
-  color: #fff;
   border-color: #46E895;
   background-color: #46E895;
 }
 
 p.warning {
-  color: #fff;
   border-color: #fc7c5f;
   background-color: #fc7c5f;
 }
