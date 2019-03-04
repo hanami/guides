@@ -49,6 +49,7 @@ It accepts a symbol that is translated into a delivery strategy:
   * Sendmail (`:sendmail`)
   * SMTP (`:smtp`, for local SMTP installations)
   * SMTP Connection (`:smtp_connection`, via `Net::SMTP` - for remote SMTP installations)
+  * Logger (`:logger`, prints email details to the console - useful in development)
   * Test (`:test`, for testing purposes)
 
 It defaults to SMTP (`:smtp`) for production environment, while `:test` is automatically set for development and test.
