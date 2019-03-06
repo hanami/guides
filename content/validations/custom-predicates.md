@@ -9,7 +9,7 @@ But what if our case is not common? We can define our own custom predicates.
 
 ## Inline Custom Predicates
 
-If we are facing a really unique validation that don't need to be reused across our code, we can opt for an inline custom predicate:
+If we are facing a really unique validation that does not need to be reused across our code, we can opt for an inline custom predicate:
 
 ```ruby
 require 'hanami/validations'
@@ -29,7 +29,7 @@ end
 
 ## Global Custom Predicates
 
-If our goal is to share common used custom predicates, we can include them in a module to use in all our validators:
+If our goal is to share commonly used custom predicates, we can include them in a module to be used in all our validators:
 
 ```ruby
 require 'hanami/validations'
