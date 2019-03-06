@@ -48,7 +48,7 @@ $ HANAMI_ENV=test bundle exec hanami db prepare
 ## Sequel plugins
 
 Hanami models use [ROM](https://rom-rb.org/) as a low-level backend. This means that you can easily use any [Sequel](https://github.com/jeremyevans/sequel) plugins in your app.
-For this you need to define `gateway` block in model configuration and add extention to `gateway.connection` object:
+For this you need to define a `gateway` block in your model configuration and add the extension by calling `extension` on `gateway.connection` and passing the name in:
 
 ```ruby
 # config/environment.rb
