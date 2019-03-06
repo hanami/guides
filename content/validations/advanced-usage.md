@@ -146,7 +146,7 @@ If the outcome of a validation depends on two or more attributes we can use _rul
 
 Here's a practical example: a job board.
 We want to validate the form of the job creation with some mandatory fields: `type` (full time, part-time, contract), `title` (eg. Developer), `description`, `company` (just the name) and a `website` (which is optional).
-A user must specify the location: on-site or remote. If it's on site, they must specify the `location`, otherwise they have to tick the checkbox for `remote`.
+A user must specify the location: on-site or remote. If it is on-site, they must specify the `location`, otherwise they have to tick the checkbox for `remote`.
 
 Here's the code:
 
