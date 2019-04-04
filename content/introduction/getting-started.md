@@ -615,6 +615,7 @@ Let's rewrite our template to implement these requirements:
 <% else %>
   <p class="placeholder">There are no books yet.</p>
 <% end %>
+<a href="/books/new">New book</a>
 ```
 
 If we run our feature test now, we'll see it fails — because our controller
