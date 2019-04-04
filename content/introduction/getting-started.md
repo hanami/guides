@@ -365,7 +365,7 @@ We've used a generator to create a new end-point (page) in our application.
 But, we've started to repeat ourselves.
 
 In both our `books/index.html.erb` template,
-and our `homes/index.html.erb` template from above,
+and our `home/index.html.erb` template from above,
 we have `<h1>Bookshelf</h1>`.
 
 This is not a huge deal, but in a real application,
