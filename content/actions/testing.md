@@ -309,7 +309,7 @@ Please avoid <em>test doubles</em> when writing full integration tests, as we wa
 
 ## Session Testing
 
-If action works with session and you need to test this action you can put session to `params` block. For example you have a action with current account:
+If you need to test an action that works with a session, you can place the session in a `params` block. For example, say you have an action with a `current_account`:
 
 ```ruby
 module Web
@@ -349,13 +349,13 @@ RSpec.describe Web::Controllers::Dashboard::Index, type: :action do
 
   subject { action.call(params) }
 
-  context 'when user login' do
+  context 'when user is logged in' do
     let(:session) { { account_id: 1 } }
 
     it { expect(subject[0]).to eq 200 }
   end
 
-  context 'when user not login' do
+  context 'when user is not logged in' do
     let(:session) { {} }
 
     it { expect(subject).to redirect_to('/login') }
