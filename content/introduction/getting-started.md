@@ -205,7 +205,7 @@ root to: 'home#index'
 
 We pointed our app's root URL to the `index` action of the `home` controller (see the [routing guide](/routing/overview) for more information).
 
-If we run our tests, we'll get an error that the endpoint cannot be found.
+If we run our tests, we'll get a `Hanami::Routing::EndpointNotFound` error.
 
 That makes sense because we need to create the `home#index` action.
 
