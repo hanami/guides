@@ -1036,7 +1036,7 @@ RSpec.describe 'Add a book' do
 end
 ```
 
-In our template, we can loop over `params.errors` (if there are any) and display a friendly message.
+In our template, we can loop over `params.error_messages` (if there are any) and display a friendly message.
 Open up `apps/web/templates/books/new.html.erb`:
 
 ```erb
