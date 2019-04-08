@@ -483,7 +483,7 @@ class Book < Hanami::Entity
 end
 ```
 
-This class will generate getters and setters for each attribute which we pass to initialize params.
+This class will generate getters and setters for each attribute which we pass to initialize `params`.
 We can verify it all works as expected with a unit test:
 
 ```ruby
@@ -924,9 +924,9 @@ To make our tests pass, we need to implement validations.
 Although you can add validation rules to the entity, Hanami also allows you to define validation rules as close to the source of the input as possible, i.e., the action.
 Hanami controller actions can use the `params` class method to define acceptable incoming parameters.
 
-This approach both whitelists what params are used (others are discarded to prevent mass-assignment vulnerabilities from untrusted user input) _and_ adds rules to define what values are acceptable — in this case, we've specified that the nested attributes for a book's title and author should be present.
+This approach both whitelists what `params` are used (others are discarded to prevent mass-assignment vulnerabilities from untrusted user input) _and_ adds rules to define what values are acceptable — in this case, we've specified that the nested attributes for a book's title and author should be present.
 
-With our validations in place, we can limit our entity creation and redirection to cases where the incoming params are valid:
+With our validations in place, we can limit our entity creation and redirection to cases where the incoming `params` are valid:
 
 ```ruby
 # apps/web/controllers/books/create.rb
@@ -960,8 +960,8 @@ module Web
 end
 ```
 
-When the params are valid, the Book is created, and the action redirects to a different URL.
-However, when the params are not valid, what happens?
+When the `params` are valid, the Book is created, and the action redirects to a different URL.
+However, when the `params` are not valid, what happens?
 
 First, the HTTP status code is set to
 [422 (Unprocessable Entity)](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#422).
@@ -982,7 +982,7 @@ module Web
 end
 ```
 
-This approach will work nicely because Hanami's form builder is smart enough to inspect the `params` in this action and populate the form fields with values found in the params.
+This approach will work nicely because Hanami's form builder is smart enough to inspect the `params` in this action and populate the form fields with values found in the `params`.
 If the user fills in only one field before submitting, they are presented with their original input, saving them the frustration of typing it again.
 
 Run your tests again and see they are all passing again!
