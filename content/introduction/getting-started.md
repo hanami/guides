@@ -483,7 +483,7 @@ class Book < Hanami::Entity
 end
 ```
 
-This class will generate getters and setters for each attribute which we pass to initialize `params`.
+This class will generate getters and setters for each attribute we pass to initialize `params`.
 We can verify it all works as expected with a unit test:
 
 ```ruby
