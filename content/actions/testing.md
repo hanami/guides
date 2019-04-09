@@ -306,3 +306,59 @@ end
 <p class="notice">
 Please avoid <em>test doubles</em> when writing full integration tests, as we want to verify that the whole stack is behaving as expected.
 </p>
+
+## Session Testing
+
+If you need to test an action that works with a session, you can place the session in a `params` block. For example, say you have an action with a `current_account`:
+
+```ruby
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+
+        expose :current_account
+
+        before :authenticate!
+
+        def call(params)
+          redirect
+        end
+
+        private
+
+        def authenticate!
+          redirect_to('/login') unless current_account
+        end
+
+        def current_account
+          @current_account ||= AccountRepository.new.find(session[:account_id])
+        end
+      end
+    end
+  end
+end
+```
+
+For testing this code you can put `account_id` in to `'rack.session'` key in `params`:
+
+```ruby
+RSpec.describe Web::Controllers::Dashboard::Index, type: :action do
+  let(:params) { { 'rack.session' => session } }
+
+  subject { action.call(params) }
+
+  context 'when user is logged in' do
+    let(:session) { { account_id: 1 } }
+
+    it { expect(subject[0]).to eq 200 }
+  end
+
+  context 'when user is not logged in' do
+    let(:session) { {} }
+
+    it { expect(subject).to redirect_to('/login') }
+  end
+end
+```
