@@ -205,7 +205,7 @@ root to: 'home#index'
 
 We pointed our app's root URL to the `index` action of the `home` controller (see the [routing guide](/routing/overview) for more information).
 
-If we run our tests, we'll get an error that the endpoint cannot be found.
+If we run our tests, we'll get a `Hanami::Routing::EndpointNotFound` error.
 
 That makes sense because we need to create the `home#index` action.
 
@@ -483,7 +483,7 @@ class Book < Hanami::Entity
 end
 ```
 
-This class will generate getters and setters for each attribute which we pass to initialize params.
+This class will generate getters and setters for each attribute we pass to initialize `params`.
 We can verify it all works as expected with a unit test:
 
 ```ruby
@@ -726,7 +726,7 @@ By now, we should be familiar with the working of actions, views, and templates.
 We'll speed things up a little, so we can quickly get to the good parts.
 First, create a new action for our "New Book" page:
 
-```
+```shell
 $ bundle exec hanami generate action web books#new
 ```
 
@@ -774,7 +774,7 @@ container `<div>` using Hanami's [HTML builder helper](/helpers/html5).
 To submit our form, we need yet another action.
 Let's create a `Books::Create` action:
 
-```
+```shell
 $ bundle exec hanami generate action web books#create
 ```
 
@@ -924,9 +924,9 @@ To make our tests pass, we need to implement validations.
 Although you can add validation rules to the entity, Hanami also allows you to define validation rules as close to the source of the input as possible, i.e., the action.
 Hanami controller actions can use the `params` class method to define acceptable incoming parameters.
 
-This approach both whitelists what params are used (others are discarded to prevent mass-assignment vulnerabilities from untrusted user input) _and_ adds rules to define what values are acceptable — in this case, we've specified that the nested attributes for a book's title and author should be present.
+This approach both whitelists what `params` are used (others are discarded to prevent mass-assignment vulnerabilities from untrusted user input) _and_ adds rules to define what values are acceptable — in this case, we've specified that the nested attributes for a book's title and author should be present.
 
-With our validations in place, we can limit our entity creation and redirection to cases where the incoming params are valid:
+With our validations in place, we can limit our entity creation and redirection to cases where the incoming `params` are valid:
 
 ```ruby
 # apps/web/controllers/books/create.rb
@@ -960,8 +960,8 @@ module Web
 end
 ```
 
-When the params are valid, the Book is created, and the action redirects to a different URL.
-However, when the params are not valid, what happens?
+When the `params` are valid, the Book is created, and the action redirects to a different URL.
+However, when the `params` are not valid, what happens?
 
 First, the HTTP status code is set to
 [422 (Unprocessable Entity)](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#422).
@@ -982,7 +982,7 @@ module Web
 end
 ```
 
-This approach will work nicely because Hanami's form builder is smart enough to inspect the `params` in this action and populate the form fields with values found in the params.
+This approach will work nicely because Hanami's form builder is smart enough to inspect the `params` in this action and populate the form fields with values found in the `params`.
 If the user fills in only one field before submitting, they are presented with their original input, saving them the frustration of typing it again.
 
 Run your tests again and see they are all passing again!
@@ -1036,7 +1036,7 @@ RSpec.describe 'Add a book' do
 end
 ```
 
-In our template, we can loop over `params.errors` (if there are any) and display a friendly message.
+In our template, we can loop over `params.error_messages` (if there are any) and display a friendly message.
 Open up `apps/web/templates/books/new.html.erb`:
 
 ```erb
