@@ -29,3 +29,9 @@ folder, but you're free to put it elsewhere, and get rid of `lib/` entirely, if
 you choose.
 
 Please be aware that if `hanami-model` is removed from the project features like [database commands](/command-line/database) and [migrations](/migrations/overview) won't be available.
+
+## Hanami + ROM 4.0
+
+If you want to use latest [rom](https://rom-rb.org) version without hanami-model you can use [this repository](https://github.com/solnic/hanami-bookshelf-rom/) as a tutorial for this:
+
+https://github.com/solnic/hanami-bookshelf-rom/
