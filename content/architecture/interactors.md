@@ -540,7 +540,7 @@ RSpec.describe Web::Controllers::Books::Create do
 
     it 'calls interactor' do
       expect(interactor).to receive(:call)
-      response = action.call(params)
+      action.call(params)
     end
 
     it 'redirects the user to the books listing' do
@@ -556,7 +556,7 @@ RSpec.describe Web::Controllers::Books::Create do
 
     it 'does not call interactor' do
       expect(interactor).to_not receive(:call)
-      response = action.call(params)
+      action.call(params)
     end
 
     it 're-renders the books#new view' do
