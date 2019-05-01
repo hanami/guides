@@ -540,7 +540,7 @@ RSpec.describe Web::Controllers::Books::Create do
 
     it 'calls interactor' do
       expect(interactor).to receive(:call)
-      response = action.call(params)
+      action.call(params)
     end
 
     it 'redirects the user to the books listing' do
@@ -556,7 +556,7 @@ RSpec.describe Web::Controllers::Books::Create do
 
     it 'does not call interactor' do
       expect(interactor).to_not receive(:call)
-      response = action.call(params)
+      action.call(params)
     end
 
     it 're-renders the books#new view' do
@@ -565,7 +565,7 @@ RSpec.describe Web::Controllers::Books::Create do
     end
 
     it 'sets errors attribute accordingly' do
-      response = action.call(params)
+      action.call(params)
 
       expect(action.params.errors[:book][:title]).to eq(['is missing'])
       expect(action.params.errors[:book][:author]).to eq(['is missing'])
