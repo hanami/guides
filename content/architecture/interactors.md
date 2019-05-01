@@ -565,7 +565,7 @@ RSpec.describe Web::Controllers::Books::Create do
     end
 
     it 'sets errors attribute accordingly' do
-      response = action.call(params)
+      action.call(params)
 
       expect(action.params.errors[:book][:title]).to eq(['is missing'])
       expect(action.params.errors[:book][:author]).to eq(['is missing'])
