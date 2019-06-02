@@ -172,7 +172,7 @@ story.comments
   # => nil
 ```
 
-Because we haven't [explicitly loaded](/guides/1.2/associations/overview#explicit-loading) the associated records `story.comments` is `nil`.
+Because we haven't [explicitly loaded](/associations/overview#explicit-loading) the associated records `story.comments` is `nil`.
 We can use the method that we have defined on before (`#find_with_comments`):
 
 ```ruby
