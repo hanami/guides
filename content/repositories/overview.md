@@ -118,7 +118,7 @@ This is a **huge improvement**, because:
   </p>
   <p>
     Learn more on how to craft queries with
-    <a href="http://rom-rb.org/current/learn/sql/queries/">ROM</a>
+    <a href="https://rom-rb.org/5.0/learn/sql/queries/index.html">ROM</a>
     and <a href="http://sequel.jeremyevans.net/documentation.html">Sequel</a>.
   </p>
 </div>
