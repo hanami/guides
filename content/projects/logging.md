@@ -101,7 +101,7 @@ logger level: :debug, formatter: NoParamsFormatter.new
 
 ## Arbitrary Arguments
 
-You can speficy [arbitrary arguments](https://ruby-doc.org/stdlib/libdoc/logger/rdoc/Logger.html#class-Logger-label-How+to+create+a+logger), that are compatible with Ruby's `Logger`.
+You can specify [arbitrary arguments](https://ruby-doc.org/stdlib/libdoc/logger/rdoc/Logger.html#class-Logger-label-How+to+create+a+logger), that are compatible with Ruby's `Logger`.
 
 Here's how to setup daily log rotation:
 
