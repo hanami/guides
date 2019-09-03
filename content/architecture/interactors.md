@@ -16,7 +16,7 @@ but you're free to build a Hanami app without them at all.
 In this guide, we'll explain how Hanami's Interactors work by adding a small feature to an existing application.
 
 The existing application we'll work from is the `bookshelf` application
-from the [Getting Started Guide](/guides/getting-started).
+from the [Getting Started Guide](/introduction/getting-started).
 
 ## A New Feature: Email Notifications
 
