@@ -32,7 +32,7 @@ If we want to skip compression, just comment one or both the lines above.
 
 We support the following engines:
 
-  * `:builtin` - It isn't efficient like the other algorithms, but it's a good starting point because it's written in **pure Ruby** and **it doesn't require external dependencies**.
+  * `:builtin` - It isn't efficient like the other algorithms, but it's a **good starting point** because it's written in **pure Ruby** and **it doesn't require external dependencies**, but it's **very limited** in terms of functionalities.
   * `:yui` - It's based on [Yahoo! YUI Compressor](http://yui.github.io/yuicompressor). It requires [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and Java 1.4+
   * `:uglifier` - It's based on [UglifyJS2](http://lisperator.net/uglifyjs). It requires [uglifier](https://rubygems.org/gems/uglifier) gem and Node.js
   * `:closure` - It's based on [Google Closure Compiler](https://developers.google.com/closure/compiler). It requires [`closure-compiler`](https://rubygems.org/gems/closure-compiler) gem and Java
@@ -45,7 +45,7 @@ We support the following engines:
 
 We support the following engines:
 
-  * `:builtin` - It isn't efficient like the other algorithms, but it's a good starting point because it's written in **pure Ruby** and **it doesn't require external dependencies**.
+  * `:builtin` - It isn't efficient like the other algorithms, but it's a **good starting point** because it's written in **pure Ruby** and **it doesn't require external dependencies**, but it's **very limited** in terms of functionalities.
   * `:yui` - It's based on [Yahoo! YUI Compressor](http://yui.github.io/yuicompressor). It requires [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and Java 1.4+
   * `:sass` - It's based on [Sass](http://sass-lang.com). It requires [sass](https://rubygems.org/gems/sass) gem
 
