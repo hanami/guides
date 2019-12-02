@@ -83,7 +83,7 @@ That means our action will behave according to the configuration of the `Web` ap
 
 ## Interface
 
-When we include `Web::Action`, we made our object compliant with [Hanami::Controller](https://github.com/hanami/controller)'s actions.
+When we include `Web::Action`, we make our object compliant with [Hanami::Controller](https://github.com/hanami/controller)'s actions.
 We need to implement `#call`, which is a method that accepts only one argument: `params`.
 That is the object that carries the payload that comes from incoming HTTP requests from the [router](/routing/basic-usage).
 

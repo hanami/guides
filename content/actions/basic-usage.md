@@ -104,7 +104,7 @@ module Web
 end
 ```
 
-There is a limitation that we should always be kept in mind:
+There is a limitation that should always be kept in mind:
 
 <p class="warning">
   Action initializer MUST have an arity of 0.
