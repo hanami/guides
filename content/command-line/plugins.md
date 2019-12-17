@@ -60,8 +60,8 @@ module Hanami
   end
 end
 
-Hanami::CLI.before("db migrate"), ->(*) { puts "I am about to migrate database.." }
-Hanami::CLI.after "db migrate", Hanami::Database::Analyzer::Stats.new
+Hanami::CLI::Commands.before("db migrate"), ->(*) { puts "I am about to migrate database.." }
+Hanami::CLI::Commands.after "db migrate", Hanami::Database::Analyzer::Stats.new
 ```
 
 By running `db migrate`, the third-party code is executed:
