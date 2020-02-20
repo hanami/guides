@@ -30,7 +30,7 @@ By default it uses standard output because it's a [best practice](http://12facto
 
 If you want to use a file, pass `stream: 'path/to/file.log'` as an option.
 
-## Filter sensitive informations
+## Filter sensitive information
 
 Hanami automatically logs the body of non-GET HTTP requests.
 
@@ -40,7 +40,7 @@ When a user submits a form, all the fields and their values will appear in the l
 [bookshelf] [INFO] [2017-08-11 18:17:54 +0200] HTTP/1.1 POST 302 ::1 /signup 5 {"signup"=>{"username"=>"jodosha", "password"=>"secret", "password_confirmation"=>"secret", "bio"=>"lorem"}} 0.00593
 ```
 
-To avoid sensitive informations to be logged, you can filter them:
+To prevent sensitive information from being logged, you can filter it:
 
 ```ruby
 # config/environment.rb
