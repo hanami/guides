@@ -28,7 +28,7 @@ Hanami::Model.migration do
     alter_table :users do
       # `users` table is implicit within this block, so it can be omitted.
       add_column :email, String,  null: false, unique: true
-      set_column_default :visits_counts, default: 0
+      set_column_default :visits_counts, 0
     end
   end
 end
