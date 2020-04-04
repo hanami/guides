@@ -333,8 +333,7 @@ This is an implementation detail.
 Instead, we can change our spec to merely make sure the repository receives the `create` message,
 and trust that the repository will persist it (since that is its responsibility).
 
-Let's change remove our `it "persists the Book"` expectation and
-create a `context "persistence"` block:
+Let's move our `it "persists the Book"` expectation inside of a `context "persistence"` block:
 
 ```ruby
 # spec/bookshelf/interactors/add_book_spec.rb
@@ -520,7 +519,7 @@ by illustrating another benefit of interactors.
 We're going to use Dependency Injection again.
 This time, in our action.
 
-We'll add a `initialize` method,
+We'll add an `initialize` method,
 with a keyword argument for `interactor`.
 
 But first, let's edit the spec `spec/web/controllers/books/create_spec.rb`.
