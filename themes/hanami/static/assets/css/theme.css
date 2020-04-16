@@ -13,7 +13,8 @@ body {
 
 a:link,
 a:visited {
-  color: #35DDFF;
+  color: #8E43E8;
+  font-weight: 500;
 }
 
 a:hover,
