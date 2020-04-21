@@ -34,6 +34,8 @@ Hanami::Model.migration do
 end
 ```
 
+* To add a unique constraint use `add_unique_constraint(:column_name)`
+
 ## Shortcuts
 
 Some methods can be used without `alter_table` block. Those methods **accept the name of the target table as first argument**, then the other args.
