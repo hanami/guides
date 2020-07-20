@@ -5,7 +5,7 @@ order: 70
 
 A web page may link to external resources such as stylesheets, or images (assets).
 With HTTP/1.1 the browser parses the HTML and for each link, it downloads the asset and eventually take an action on it: renders an image or evaluate JavaScript code.
-With HTTP/2 introduced an enhancement: the server can proactively "push" in parallel both the HTML payload **and** the some assets to the browser. This workflow is allowed due to the HTTP/2 TCP connections are multiplexed. That means many communications can happen at the same time.
+With HTTP/2 introduced an enhancement: the server can proactively "push" in parallel both the HTML payload **and** some assets to the browser. This workflow is allowed due to the HTTP/2 TCP connections are multiplexed. That means many communications can happen at the same time.
 
 Unfortunately HTTP/2 adoption is still slow, so the IETF "backported" this workflow to HTTP/1.1 as well, by introducing the HTTP status [`103 Early Hints`](https://datatracker.ietf.org/doc/rfc8297/).
 In this case the server sends **one or more HTTP responses for a single request**. The last one must be the traditional `200 OK` that returns the HTML of the page, whereas the first `n` can include a special header `Link` to tell the browser to fetch the asset ahead of time.
