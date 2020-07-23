@@ -707,14 +707,14 @@ RSpec.describe 'Add a book' do
     visit '/books/new'
 
     within 'form#book-form' do
-      fill_in 'Title',  with: 'New book'
+      fill_in 'Title',  with: 'Example book'
       fill_in 'Author', with: 'Some author'
 
       click_button 'Create'
     end
 
     expect(page).to have_current_path('/books')
-    expect(page).to have_content('New book')
+    expect(page).to have_content('Example book')
   end
 end
 ```
