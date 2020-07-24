@@ -76,7 +76,7 @@ In order to use one or more of them, be sure to include the corresponding gem in
 ```ruby
 # Gemfile
 # ...
-gem 'sass'
+gem 'sassc'
 ```
 
 <p class="notice">
