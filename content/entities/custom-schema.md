@@ -25,6 +25,7 @@ class User < Hanami::Entity
     attribute :name,       Types::String
     attribute :email,      Types::String.constrained(format: EMAIL_FORMAT)
     attribute :age,        Types::Int.constrained(gt: 18)
+    attribute :profile,    Types::Entity(Profile)
     attribute :codes,      Types::Collection(Types::Coercible::Int)
     attribute :comments,   Types::Collection(Comment)
     attribute :created_at, Types::Time
