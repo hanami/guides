@@ -362,3 +362,23 @@ RSpec.describe Web::Controllers::Dashboard::Index, type: :action do
   end
 end
 ```
+
+When you want to test if the action made the correct changes to the session, one needs to assert against the exposed session, not the original one:
+
+```ruby
+RSpec.describe Web::Controllers::Sessions::Create, type: :action do
+  let(:session) { {} }
+  let(:params)  { Hash['rack.session' => session] }
+
+  context 'given valid authentication credentials' do
+    it 'records the user ID in the session' do
+      action.call(params)
+
+      # Hanami makes a copy of the session upon entry into the action
+      # Afterwards, it uses the copy and not the original one
+      # Fortunately, the copy is exposed and we can access it like any other exposure
+      expect(action.exposures[:session][:user_id]).to eq(444)
+    end
+  end
+end
+```
