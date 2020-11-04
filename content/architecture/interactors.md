@@ -603,7 +603,7 @@ it delegates its real behavior to our interactor.
 
 The action takes input (from parameters),
 and calls our interactor to actually do its work.
-It's single responsibility is to deal with the web.
+Its single responsibility is to deal with the web.
 Our interactor now deals with our actual business logic.
 
 This is a great relief for our action and its spec.
