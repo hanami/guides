@@ -125,7 +125,7 @@ This is a **huge improvement**, because:
 
 ## Timestamps
 
-To have a track of when a record has been created or updated is important when running a project in production.
+It's important to keep track of when a record was created or updated when running a project in production.
 
 When creating a new table, if we add the following columns, a repository will take care of keeping the values updated.
 
