@@ -93,7 +93,7 @@ class NoParamsFormatter < ::Hanami::Logger::Formatter
 end
 ```
 
-and then just telling logger to use our new formatter for logging
+and then just tell logger to use our new formatter for logging
 
 ```ruby
 logger level: :debug, formatter: NoParamsFormatter.new
