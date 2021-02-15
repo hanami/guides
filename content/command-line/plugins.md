@@ -60,7 +60,7 @@ module Hanami
   end
 end
 
-Hanami::CLI::Commands.before("db migrate"), ->(*) { puts "I am about to migrate database.." }
+Hanami::CLI::Commands.before("db migrate") { puts "I am about to migrate database.." }
 Hanami::CLI::Commands.after "db migrate", Hanami::Database::Analyzer::Stats.new
 ```
 
