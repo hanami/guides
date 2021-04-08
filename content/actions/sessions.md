@@ -61,3 +61,6 @@ module Web
   end
 end
 ```
+### Sharing session values between applications
+
+To share session values, defined in one application, we must provide the same session secret to all the applications where we need those values.
