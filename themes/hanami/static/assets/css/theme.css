@@ -238,6 +238,8 @@ h6,
   background-color: #f7f8f9;
   padding: 1em;
   min-width: 100%;
+  font-size: 1rem;
+  border-radius: 0.25rem;
 }
 
 main p {
