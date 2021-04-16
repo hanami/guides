@@ -244,6 +244,7 @@ h6,
 
 main p {
   min-width: 100%;
+  line-height: inherit;
 }
 
 #secondary-navigation a:link,
