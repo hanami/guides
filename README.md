@@ -7,6 +7,15 @@ Learn Hanami with our extensive guides.
   * [Git](https://git-scm.com/) (`brew install git`)
   * [Hugo](https://gohugo.io/) (`brew install hugo`)
 
+
+## Development
+
+```sh
+hugo server -D
+```
+
+Then visit http://localhost:1313 to see the site.
+
 ## How to contribute
 
   1. Fork the repository.
