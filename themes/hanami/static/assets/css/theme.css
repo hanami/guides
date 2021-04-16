@@ -302,12 +302,14 @@ p.notice {
 
 p.convention {
   border-color: #46E895;
-  background-color: #46E895;
+  /* background-color: #46E895; */
+  background-color: rgba(70, 232, 149, 0.4);
 }
 
 p.warning {
   border-color: #fc7c5f;
-  background-color: #fc7c5f;
+  /* background-color: #fc7c5f; */
+  background-color: rgba(252, 124, 95, 0.4);
 }
 
 p.convention code,
