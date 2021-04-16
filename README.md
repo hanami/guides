@@ -10,8 +10,9 @@ Learn Hanami with our extensive guides.
 
 ## Development
 
+To run the server in development:
 ```sh
-hugo server -D
+bin/server
 ```
 
 Then visit http://localhost:1313 to see the site.
