@@ -9,6 +9,7 @@
 body {
   color: #525f7f;
   position: relative;
+  font-family: var(--font-family-sans-serif);
 }
 
 a:link,
