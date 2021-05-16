@@ -64,3 +64,47 @@ end
 ### Sharing session values between applications
 
 To share session values, defined in one application, we must provide the same session secret to all the applications where we need those values.
+
+```ruby
+# Define ENV variables for development environment
+WEB_SESSIONS_SECRET="123456789"
+ADMIN_SESSIONS_SECRET="123456789"
+```
+
+Set session variable in the first app.
+
+```ruby
+# apps/web/controllers/dashboard/index.rb
+module Web
+  module Controllers
+    module Dashboard
+      class Index
+        include Web::Action
+
+        def call(params)
+          session[:a] = 'foo' # assign
+        end
+      end
+    end
+  end
+end
+```
+
+Read session variable in the second app.
+
+```ruby
+# apps/admin/controllers/dashboard/index.rb
+module Admin
+  module Controllers
+    module Dashboard
+      class Index
+        include Admin::Action
+
+        def call(params)
+          session[:a]         # read => 'foo'
+        end
+      end
+    end
+  end
+end
+```
