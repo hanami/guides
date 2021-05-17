@@ -98,9 +98,9 @@
             <i class="fa fa-cloud-download"></i>
           </a>
         </li>
-        <li class="nav-item">
-          <span class="badge badge-pill badge-primary">v{{ .Site.Params.hanamiversion }}</span>
-        </li>
+        <!-- <li class="nav-item"> -->
+        <!--   <span class="badge badge-pill badge-primary">v{{ .Site.Params.hanamiversion }}</span> -->
+        <!-- </li> -->
       </ul>
     </div>
   </header>
@@ -110,20 +110,22 @@
         <nav class="collapse ct-links" id="ct-docs-nav">
           <!-- Show links for all groups -->
           <div class="ct-toc-item active">
-          {{ range .Site.Params.topics }}
-          {{ $t := title ( . | humanize) }}
-            <span class="ct-toc-link">{{ $t }}</span>
-            <ul class="nav ct-sidenav">
-            {{ range sort (where $.Site.RegularPages "Section" .) ".Params.order" }}
-              {{ if eq .URL $.Page.URL }}
-              <li class="active ct-sidenav-active">
-              {{ else }}
-              <li>
+          {{ range .Site.Sections }}
+            {{ range sort .Sections ".Params.order" }}
+              {{ $t := title ( .Title | humanize) }}
+              <span class="ct-toc-link">{{ $t }}</span>
+              <ul class="nav ct-sidenav">
+              {{ range sort .Pages ".Params.order" }}
+                {{ if eq .URL $.Page.URL }}
+                <li class="active ct-sidenav-active">
+                {{ else }}
+                <li>
+                {{ end }}
+                  <a href="{{ .URL }}">{{ .Title }}</a>
+                </li>
               {{ end }}
-                <a href="{{ .URL }}">{{ .Title }}</a>
-              </li>
+              </ul>
             {{ end }}
-            </ul>
           {{ end }}
           </div>
         </nav>
