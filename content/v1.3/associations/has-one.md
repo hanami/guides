@@ -1,6 +1,8 @@
 ---
 title: Has One
 order: 40
+aliases:
+  - "/associations/has-one"
 ---
 
 Also known as _one-to-one_, is an association between an entity (`User`) associated to one child entity (`Avatar`).

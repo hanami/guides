@@ -1,6 +1,8 @@
 ---
 title: Content Delivery Network (CDN)
 order: 40
+aliases:
+  - "/assets/content-delivery-network"
 ---
 
 ## Content Delivery Network (CDN)

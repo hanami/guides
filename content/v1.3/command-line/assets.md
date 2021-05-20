@@ -1,6 +1,8 @@
 ---
 title: Assets
 order: 50
+aliases:
+  - "/command-line/assets"
 ---
 
 We can manage assets via the command line.

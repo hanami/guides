@@ -1,6 +1,8 @@
 ---
 title: Cookies
 order: 80
+aliases:
+  - "/actions/cookies"
 ---
 
 ## Enable Cookies

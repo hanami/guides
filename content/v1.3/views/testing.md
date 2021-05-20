@@ -1,6 +1,8 @@
 ---
 title: Testing
 order: 80
+aliases:
+  - "/views/testing"
 ---
 
 One of the advantages of views as objects is that we can unit test them.

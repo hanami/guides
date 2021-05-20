@@ -1,6 +1,8 @@
 ---
 title: HTTP/2 Early Hints
 order: 70
+aliases:
+  - "/projects/http2-early-hints"
 ---
 
 A web page may link to external resources such as stylesheets, or images (assets).

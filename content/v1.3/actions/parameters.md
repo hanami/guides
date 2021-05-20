@@ -1,6 +1,8 @@
 ---
 title: Parameters
 order: 30
+aliases:
+  - "/actions/parameters"
 ---
 
 Parameters are taken from the Rack env and passed as an argument to `#call`.

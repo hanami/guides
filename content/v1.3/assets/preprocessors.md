@@ -1,6 +1,8 @@
 ---
 title: Preprocessors
 order: 20
+aliases:
+  - "/assets/preprocessors"
 ---
 
 ## Preprocessors

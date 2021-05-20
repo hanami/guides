@@ -1,6 +1,8 @@
 ---
 title: HTTP Caching
 order: 120
+aliases:
+  - "/actions/http-caching"
 ---
 
 We refer to HTTP caching as the set of techniques for HTTP/1.1 and implemented by browser vendors in order to make faster interactions with the server.

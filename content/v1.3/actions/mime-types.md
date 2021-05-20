@@ -1,6 +1,8 @@
 ---
 title: MIME Types
 order: 70
+aliases:
+  - "/actions/mime-types"
 ---
 
 Actions have advanced features for MIME Type detection, automatic headers, whitelisting etc..

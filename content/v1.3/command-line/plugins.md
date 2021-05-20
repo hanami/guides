@@ -1,6 +1,8 @@
 ---
 title: Plugins
 order: 80
+aliases:
+  - "/command-line/plugins"
 ---
 
 Hanami has a convenient way to load commands from third party gems, so if you want to add a Hanami compatible gem, you only have to add it inside your project's `Gemfile` in the **`:plugins` group**.

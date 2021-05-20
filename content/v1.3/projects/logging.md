@@ -1,6 +1,8 @@
 ---
 title: Logging
 order: 30
+aliases:
+  - "/projects/logging"
 ---
 
 Each project has a global logger available at `Hanami.logger` that can be used like this: `Hanami.logger.debug "Hello"`

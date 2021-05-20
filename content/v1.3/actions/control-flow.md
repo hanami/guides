@@ -1,6 +1,8 @@
 ---
 title: Control Flow
 order: 110
+aliases:
+  - "/actions/control-flow"
 ---
 
 ## Callbacks

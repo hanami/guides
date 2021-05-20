@@ -1,6 +1,8 @@
 ---
 title: Has Many
 order: 20
+aliases:
+  - "/associations/has-many"
 ---
 
 Also known as _one-to-many_, is an association between a single entity (`Author`) and a collection of many other linked entities (`Book`).

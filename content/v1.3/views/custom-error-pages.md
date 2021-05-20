@@ -1,6 +1,8 @@
 ---
 title: Custom Error Pages
 order: 60
+aliases:
+  - "/views/custom-error-pages"
 ---
 
 When an unsuccessful request is returned, there are some special pages that a Hanami application presents to users.

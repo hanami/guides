@@ -1,6 +1,8 @@
 ---
 title: Advanced Usage
 order: 40
+aliases:
+  - "/validations/advanced-usage"
 ---
 
 ## Required and Optional keys

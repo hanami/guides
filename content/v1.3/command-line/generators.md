@@ -1,6 +1,8 @@
 ---
 title: Generators
 order: 20
+aliases:
+  - "/command-line/generators"
 ---
 
 Hanami has convenient code generators to speed up our development process.

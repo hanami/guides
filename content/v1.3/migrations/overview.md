@@ -1,6 +1,8 @@
 ---
 title: Migrations
 order: 10
+aliases:
+  - "/migrations/overview"
 ---
 
 Migrations are a feature that allows to manage database schema via Ruby.

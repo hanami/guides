@@ -1,6 +1,8 @@
 ---
 title: Interactors
 order: 20
+aliases:
+  - "/architecture/interactors"
 ---
 
 ## Overview

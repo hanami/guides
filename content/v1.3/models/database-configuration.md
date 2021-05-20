@@ -1,6 +1,8 @@
 ---
 title: Database Configuration
 order: 20
+aliases:
+  - "/models/database-configuration"
 ---
 
 ## Environment variables

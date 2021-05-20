@@ -1,6 +1,8 @@
 ---
 title: Markup Escape
 order: 70
+aliases:
+  - "/helpers/escape"
 ---
 
 **Views escape automatically the output of their methods.**

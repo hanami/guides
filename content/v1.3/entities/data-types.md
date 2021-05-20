@@ -1,6 +1,8 @@
 ---
 title: Data Types
 order: 30
+aliases:
+  - "/entities/data-types"
 ---
 
 Data types are available for custom [entities schema](/entities/custom-schema), which are *completely optional*.

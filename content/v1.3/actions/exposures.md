@@ -1,6 +1,8 @@
 ---
 title: Exposures
 order: 50
+aliases:
+  - "/actions/exposures"
 ---
 
 For complex use cases we may want to pass data to views in order to present it to our users.

@@ -1,6 +1,8 @@
 ---
 title: Overview
 order: 10
+aliases:
+  - "/models/overview"
 ---
 
 Hanami's model domain is implemented in a way that separates the behavior that we want to express ([entities](/entities/overview)) from the persistence layer ([repositories](/repositories/overview) and database).

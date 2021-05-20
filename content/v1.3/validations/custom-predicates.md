@@ -1,6 +1,8 @@
 ---
 title: Custom Predicates
 order: 30
+aliases:
+  - "/validations/custom-predicates"
 ---
 
 We have seen that built-in predicates as an expressive tool to get our job done with common use cases.

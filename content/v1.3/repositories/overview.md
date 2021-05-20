@@ -1,6 +1,8 @@
 ---
 title: Overview
 order: 10
+aliases:
+  - "/repositories/overview"
 ---
 
 An object that mediates between entities and the persistence layer.

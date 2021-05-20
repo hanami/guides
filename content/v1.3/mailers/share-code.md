@@ -1,6 +1,8 @@
 ---
 title: Share Code
 order: 50
+aliases:
+  - "/mailers/share-code"
 ---
 
 ## Prepare

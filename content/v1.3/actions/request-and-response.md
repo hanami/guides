@@ -1,6 +1,8 @@
 ---
 title: Request & Response
 order: 40
+aliases:
+  - "/actions/request-and-response"
 ---
 
 ## Request

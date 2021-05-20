@@ -1,6 +1,8 @@
 ---
 title: "Basic Usage"
 order: 20
+aliases:
+  - "/actions/basic-usage"
 ---
 
 ## Requests Handling

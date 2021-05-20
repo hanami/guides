@@ -1,6 +1,8 @@
 ---
 title: Routing
 order: 40
+aliases:
+  - "/helpers/routing"
 ---
 
 Routing helpers are made of one **public method** (`#routes`), available for actions, views and templates.

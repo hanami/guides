@@ -1,6 +1,8 @@
 ---
 title: Assets
 order: 50
+aliases:
+  - "/helpers/assets"
 ---
 
 ## Helpers

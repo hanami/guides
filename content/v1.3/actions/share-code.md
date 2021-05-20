@@ -1,6 +1,8 @@
 ---
 title: Share Code
 order: 130
+aliases:
+  - "/actions/share-code"
 ---
 
 Actions as objects have a lot of advantages but they make code sharing less intuitive.

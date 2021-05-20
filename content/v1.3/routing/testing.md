@@ -1,6 +1,8 @@
 ---
 title: Testing
 order: 40
+aliases:
+  - "/routing/testing"
 ---
 
 Hanami has builtin facilities for routing unit tests.

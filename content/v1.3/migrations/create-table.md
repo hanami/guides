@@ -1,6 +1,8 @@
 ---
 title: Create Table
 order: 20
+aliases:
+  - "/migrations/create-table"
 ---
 
 ## Create Table

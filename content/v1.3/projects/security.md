@@ -1,6 +1,8 @@
 ---
 title: Project Security
 order: 60
+aliases:
+  - "/projects/security"
 ---
 
 Modern web development has many challenges, and of those security is both very important and often under-emphasized.

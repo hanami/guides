@@ -1,6 +1,8 @@
 ---
 title: Basic Usage
 order: 20
+aliases:
+  - "/mailers/basic-usage"
 ---
 
 In the [previous section](/mailers/overview), we generated a mailer, let's use it.

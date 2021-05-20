@@ -1,6 +1,8 @@
 ---
 title: RESTful Resource(s)
 order: 30
+aliases:
+  - "/routing/restful-resources"
 ---
 
 Hanami has native [REST](http://en.wikipedia.org/wiki/Representational_state_transfer) support.

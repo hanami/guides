@@ -1,6 +1,8 @@
 ---
 title: Rack Integration
 order: 60
+aliases:
+  - "/actions/rack-integration"
 ---
 
 ## Rack Environment

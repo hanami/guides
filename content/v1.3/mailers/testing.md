@@ -1,6 +1,8 @@
 ---
 title: Testing
 order: 60
+aliases:
+  - "/mailers/testing"
 ---
 
 During development and testing we don't want to accidentally send emails to the real world.

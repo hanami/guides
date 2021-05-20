@@ -1,6 +1,8 @@
 ---
 title: MIME Types
 order: 40
+aliases:
+  - "/views/mime-types"
 ---
 
 A view can handle several MIME Types. Before diving into this subject, please consider to read how actions handle [MIME Types](/actions/mime-types).

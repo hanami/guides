@@ -1,6 +1,8 @@
 ---
 title: Overview
 order: 10
+aliases:
+  - "/assets/overview"
 ---
 
 Hanami supports powerful features for web assets.

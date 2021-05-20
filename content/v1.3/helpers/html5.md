@@ -1,6 +1,8 @@
 ---
 title: HTML5
 order: 20
+aliases:
+  - "/helpers/html5"
 ---
 
 This helper makes available an HTML5 generator that is **template engine independent**.

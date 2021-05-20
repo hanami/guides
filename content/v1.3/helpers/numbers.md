@@ -1,6 +1,8 @@
 ---
 title: Numbers
 order: 80
+aliases:
+  - "/helpers/numbers"
 ---
 
 Hanami offers a helpful way to present numbers via `#format_number`, a **private method** available only in views.

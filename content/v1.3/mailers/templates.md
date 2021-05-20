@@ -1,6 +1,8 @@
 ---
 title: Templates
 order: 30
+aliases:
+  - "/mailers/templates"
 ---
 
 ## Templates

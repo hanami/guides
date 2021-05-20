@@ -1,6 +1,8 @@
 ---
 title: Compressors
 order: 30
+aliases:
+  - "/assets/compressors"
 ---
 
 ## Compressors

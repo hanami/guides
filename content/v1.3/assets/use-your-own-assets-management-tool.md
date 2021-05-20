@@ -1,6 +1,8 @@
 ---
 title: Use Your Own Assets Management
 order: 50
+aliases:
+  - "/assets/use-your-own-assets-management"
 ---
 
 Hanami tries to cover basic use cases for assets management: [(pre)compilation](/assets/overview/#compile-mode), [compression](/assets/compressors), [fingerprinting](/assets/overview/#fingerprint-mode), [Content Delivery Network (CDN)](/assets/content-delivery-network) with [Subresource Integrity](/assets/content-delivery-network/#subresource-integrity).

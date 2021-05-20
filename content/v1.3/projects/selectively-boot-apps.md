@@ -1,6 +1,8 @@
 ---
 title: Selectively boot apps
 order: 80
+aliases:
+  - "/projects/selectively-boot-apps"
 ---
 
 With Hanami you can build your project by following the [Monolith-First](/architecture/overview/#monolith-first) principle.

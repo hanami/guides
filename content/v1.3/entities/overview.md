@@ -1,6 +1,8 @@
 ---
 title: Overview
 order: 10
+aliases:
+  - "/entities/overview"
 ---
 
 An entity is domain object that is defined by its identity.

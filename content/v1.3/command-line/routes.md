@@ -1,6 +1,8 @@
 ---
 title: Routes
 order: 60
+aliases:
+  - "/command-line/routes"
 ---
 
 ## Routes

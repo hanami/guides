@@ -1,6 +1,8 @@
 ---
 title: Custom Helpers
 order: 90
+aliases:
+  - "/helpers/custom-helpers"
 ---
 
 In the [overview](/helpers/overview) section, we introduced the design for helpers.

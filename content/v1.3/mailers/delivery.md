@@ -1,6 +1,8 @@
 ---
 title: Delivery
 order: 40
+aliases:
+  - "/mailers/delivery"
 ---
 
 ## Multipart Delivery

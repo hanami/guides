@@ -1,6 +1,8 @@
 ---
 title: "Overview"
 order: 10
+aliases:
+  - "/architecture/overview"
 ---
 
 Hanami is based on two principles: [Clean Architecture](https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html) and [Monolith First](http://martinfowler.com/bliki/MonolithFirst.html).

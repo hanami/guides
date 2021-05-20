@@ -1,6 +1,8 @@
 ---
 title: Exception Handling
 order: 100
+aliases:
+  - "/actions/exception-handling"
 ---
 
 Actions have an elegant API for exception handling.

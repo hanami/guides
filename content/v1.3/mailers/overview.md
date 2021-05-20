@@ -1,6 +1,8 @@
 ---
 title: Overview
 order: 10
+aliases:
+  - "/mailers/overview"
 ---
 
 A mailer is an object that's responsible to deliver a mail message, by rendering one or more templates.

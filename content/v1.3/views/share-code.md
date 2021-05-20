@@ -1,6 +1,8 @@
 ---
 title: Share Code
 order: 70
+aliases:
+  - "/views/share-code"
 ---
 
 ## Prepare

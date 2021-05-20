@@ -1,6 +1,8 @@
 ---
 title: Has Many Through
 order: 50
+aliases:
+  - "/associations/has-many-through"
 ---
 
 Also known as _many-to-many_, is an association between an entity (`Story`) and a collection of many entities (`User`), passing via an intermediate entity (`Comment`).

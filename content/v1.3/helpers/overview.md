@@ -1,6 +1,8 @@
 ---
 title: Overview
 order: 10
+aliases:
+  - "/helpers/overview"
 ---
 
 ## Principles

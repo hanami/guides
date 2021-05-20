@@ -1,6 +1,8 @@
 ---
 title: "Code Reloading"
 order: 10
+aliases:
+  - "/projects/code-reloading"
 ---
 
 _Code reloading_ allows us to edit code and see the changes with a browser refresh, without needing to stop and restart the [server](/command-line/applications).

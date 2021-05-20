@@ -1,6 +1,8 @@
 ---
 title: Templates
 order: 30
+aliases:
+  - "/views/templates"
 ---
 
 A template is a file that describes the body of a response.

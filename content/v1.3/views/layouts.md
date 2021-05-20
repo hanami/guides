@@ -1,6 +1,8 @@
 ---
 title: Layouts
 order: 50
+aliases:
+  - "/views/layouts"
 ---
 
 Layouts are special views, that render the _"fixed"_ part of the HTML markup.

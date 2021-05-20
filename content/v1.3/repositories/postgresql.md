@@ -1,6 +1,8 @@
 ---
 title: PostgreSQL
 order: 30
+aliases:
+  - "/repositories/postgresql"
 ---
 
 Hanami natively supports PostgreSQL data types.

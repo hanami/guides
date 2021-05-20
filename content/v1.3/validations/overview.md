@@ -1,6 +1,8 @@
 ---
 title: Overview
 order: 10
+aliases:
+  - "/validations/overview"
 ---
 
 `Hanami::Validations` is a mixin that, once included by an object, adds lightweight set of validations to it.

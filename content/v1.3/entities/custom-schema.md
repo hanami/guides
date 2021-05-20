@@ -1,6 +1,8 @@
 ---
 title: Custom Schema
 order: 20
+aliases:
+  - "/entities/custom-schema"
 ---
 
 We can take data integrity a step further: we can **optionally** define our own entity internal schema.

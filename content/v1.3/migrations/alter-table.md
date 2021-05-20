@@ -1,6 +1,8 @@
 ---
 title: Alter Table
 order: 30
+aliases:
+  - "/migrations/alter-table"
 ---
 
 ## Methods

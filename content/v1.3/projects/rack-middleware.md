@@ -1,6 +1,8 @@
 ---
 title: Rack Middleware
 order: 50
+aliases:
+  - "/projects/rack-middleware"
 ---
 
 Hanami exposes a project level [Rack middleware stack](http://www.rubydoc.info/github/rack/rack/master/file/SPEC) to be configured like this:

@@ -1,6 +1,8 @@
 ---
 title: Project
 order: 10
+aliases:
+  - "/command-line/project"
 ---
 
 ## Project

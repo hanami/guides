@@ -1,6 +1,8 @@
 ---
 title: Boolean Logic
 order: 20
+aliases:
+  - "/validations/boolean-logic"
 ---
 
 When we check data, we expect only two outcomes: an input can be valid or not. No grey areas, nor fuzzy results. It’s white or black, 1 or 0, `true` or `false` and _boolean logic_ is the perfect tool to express these two states. Indeed, a Ruby _boolean expression_ can only return `true` or `false`.

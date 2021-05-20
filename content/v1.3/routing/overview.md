@@ -1,6 +1,8 @@
 ---
 title: Overview
 order: 10
+aliases:
+  - "/routing/overview"
 ---
 
 Hanami applications use [Hanami::Router](https://github.com/hanami/router) for routing: a Rack compatible, lightweight and fast HTTP router for Ruby.

@@ -1,6 +1,8 @@
 ---
 title: Initializers
 order: 40
+aliases:
+  - "/projects/initializers"
 ---
 
 A project can **optionally** have one or more custom initializers.

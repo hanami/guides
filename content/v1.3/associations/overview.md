@@ -1,6 +1,8 @@
 ---
 title: Overview
 order: 10
+aliases:
+  - "/associations/overview"
 ---
 
 An association is a logical relationship between two entities.

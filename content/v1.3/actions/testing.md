@@ -1,6 +1,8 @@
 ---
 title: Testing
 order: 140
+aliases:
+  - "/actions/testing"
 ---
 
 Hanami pays a lot of attention to code testability and it offers advanced features to make our lives easier.

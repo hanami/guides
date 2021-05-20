@@ -1,6 +1,8 @@
 ---
 title: Basic Usage
 order: 20
+aliases:
+  - "/routing/basic-usage"
 ---
 
 ## Path matching

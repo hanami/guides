@@ -1,6 +1,8 @@
 ---
 title: Use Your Own ORM
 order: 30
+aliases:
+  - "/models/use-your-own-orm"
 ---
 
 Hanami components are decoupled from each other.

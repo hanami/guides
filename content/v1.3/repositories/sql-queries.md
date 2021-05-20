@@ -1,6 +1,8 @@
 ---
 title: SQL Queries
 order: 20
+aliases:
+  - "/repositories/sql-queries"
 ---
 
 ## Select

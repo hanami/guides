@@ -1,6 +1,8 @@
 ---
 title: Links
 order: 60
+aliases:
+  - "/helpers/links"
 ---
 
 It provides a concise API to generate links.

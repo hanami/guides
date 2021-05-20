@@ -1,6 +1,8 @@
 ---
 title: Rake Tasks
 order: 20
+aliases:
+  - "/projects/rake"
 ---
 
 Hanami ships with default Rake tasks that can be used as _prerequisites_ by developers to build their own tasks.

@@ -1,6 +1,8 @@
 ---
 title: Version
 order: 70
+aliases:
+  - "/command-line/version"
 ---
 
 ## Version

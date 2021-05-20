@@ -1,6 +1,8 @@
 ---
 title: Database
 order: 40
+aliases:
+  - "/command-line/database"
 ---
 
 We can manage our database via the command line.

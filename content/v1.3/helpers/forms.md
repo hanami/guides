@@ -1,6 +1,8 @@
 ---
 title: Forms
 order: 30
+aliases:
+  - "/helpers/forms"
 ---
 
 ## Features

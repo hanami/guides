@@ -1,6 +1,8 @@
 ---
 title: Destroy
 order: 30
+aliases:
+  - "/command-line/destroy"
 ---
 
 Hanami has convenient [code generators](/command-line/generators) to speed up our development process.

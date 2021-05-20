@@ -1,6 +1,8 @@
 ---
 title: Belongs To
 order: 30
+aliases:
+  - "/associations/belongs-to"
 ---
 
 Also known as _many-to-one_, is an association between a one of the entities (`Book`) associated to one parent entity (`Author`).

@@ -1,6 +1,8 @@
 ---
 title: Basic Usage
 order: 20
+aliases:
+  - "/views/basic-usage"
 ---
 
 In the [previous section](/views/overview) we generated a view. Let's use it.

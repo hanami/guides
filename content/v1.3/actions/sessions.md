@@ -1,6 +1,8 @@
 ---
 title: Sessions
 order: 90
+aliases:
+  - "/actions/sessions"
 ---
 
 ## Enable Sessions

@@ -1,6 +1,8 @@
 ---
 title: Overview
 order: 10
+aliases:
+  - "/actions/overview"
 ---
 
 An action is an endpoint that handles incoming HTTP requests for a specific [route](/routing/overview).
