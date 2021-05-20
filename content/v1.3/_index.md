@@ -1,3 +1,3 @@
 ---
-title: v1.3
+version: v1.3
 ---

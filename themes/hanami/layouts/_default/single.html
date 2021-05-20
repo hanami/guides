@@ -110,7 +110,8 @@
         <nav class="collapse ct-links" id="ct-docs-nav">
           <!-- Show links for all groups -->
           <div class="ct-toc-item active">
-          {{ range .Site.Sections }}
+          {{ $hanamiversion := .CurrentSection.FirstSection.Params.version }}
+          {{ range (where .Site.Sections "Params.version" "=" $hanamiversion) }}
             {{ range sort .Sections ".Params.order" }}
               {{ $t := title ( .Title | humanize) }}
               <span class="ct-toc-link">{{ $t }}</span>
