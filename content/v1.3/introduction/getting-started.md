@@ -107,7 +107,7 @@ $ bundle exec hanami server
 And... bask in the glory of your first Hanami project at
 [http://localhost:2300](http://localhost:2300)! We should see a screen similar to this:
 
-<p><img src="/introduction/welcome-page.png" alt="Hanami welcome page" class="img-responsive"></p>
+<p><img src="/v1.3/introduction/welcome-page.png" alt="Hanami welcome page" class="img-responsive"></p>
 
 ## Hanami's Architecture
 
