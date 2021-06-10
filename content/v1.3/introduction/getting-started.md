@@ -45,15 +45,15 @@ Lastly, in this guide, we'll be using an [SQLite](https://sqlite.org/) database.
 If you want to follow along, make sure you have a working installation of Ruby 2.3+ and SQLite 3+ on your system.
 
 <p class="notice">
-  This guide is for the latest release of Hanami: 1.3.
+  This guide is for the latest release of Hanami: v1.3.
 
-  We, the Hanami core team, are working on the next major version of Hanami 2.
+  We, the Hanami core team, are working on the next major version of Hanami: v2.0.
 
   That said, Hanami v1.3 only supports Ruby 2.3–2.7. It does not support Ruby 3.
 
   So, to continue with this guide, you have to be using Ruby 2.
 
-  (Hanami 2 will support Ruby 3, of course.)
+  (Hanami v2.0 will support Ruby 3, of course.)
 </p>
 
 
