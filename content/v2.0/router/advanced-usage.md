@@ -44,3 +44,42 @@ All the HTTP requests to `http://blog.example.com` will be routed to `Blog`.
 ### RESTful Resources
 
 <!-- TODO: Check the v1.3 docs and adapt what's needed. -->
+
+
+### Custom route handlers.
+
+As the router works with any `Rack` compatible object or class, there is a possibility, to write custom route actions if there is a need to do so.
+
+Here are different implementations of the same thing, check it out!
+
+```ruby
+# slices/main/actions/my_custom_action.rb
+
+module Main
+  module Actions
+    module Custom
+      class MyAction # custom action does not use Hanami::Action
+        def self.call(env)
+          [200, {}, ['Hello Hanami, rendered by class-level method']]
+        end
+
+        def call(env)
+          [200, {}, ['Hello Hanami, instance-level method']]
+        end
+      end
+    end
+  end
+end
+
+# /config/routes.rb
+
+Hanami.application.routes do
+  slice :main, at: "/" do
+    root to: "home.show"
+
+    get '/hello', to: ->(env) { [200, {}, ['Hello from Hanami']] }
+    get '/hello2', to: MyCustomAction # implements the self.call
+    get '/hello3', to: 'custom.my_action' # leverages the container usage
+  end
+end
+```
