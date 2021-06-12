@@ -187,7 +187,7 @@ get '/hello',     to: 'greet.index', as: :greeting
 get '/books/:id', to: 'books.show',  as: :book
 ```
 
-> TODO: Add Helper usage to access named paths and URLs. It's not yet ready.
+<!-- TODO: Add Helper usage to access named paths and URLs. It's not yet ready. -->
 
 Absolute URL generation is dependent on `scheme`, `host` and `port` settings in `config/application.rb`.
 

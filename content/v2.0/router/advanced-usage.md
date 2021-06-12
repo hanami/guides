@@ -43,11 +43,4 @@ All the HTTP requests to `http://blog.example.com` will be routed to `Blog`.
 
 ### RESTful Resources
 
-TODO: Check the v1.3 docs and adapt what's needed.
-
-## Contexts
-
-TODO: Document the contexts feature
-
-
-[Refer](https://github.com/hanami/router/blob/unstable/spec/integration/hanami/router/context_spec.rb)
+<!-- TODO: Check the v1.3 docs and adapt what's needed. -->
