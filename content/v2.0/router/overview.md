@@ -12,7 +12,7 @@ Hanami applications use [Hanami::Router](https://github.com/hanami/router) for r
 With your favorite editor open `/config/routes.rb` and add the following line inside of the `main` slice block.
 
 ```ruby
-get '/hello', to: ->(env) { [200, {}, ['Hello from Hanami!']] }
+get "/hello", to: ->(env) { [200, {}, ["Hello from Hanami!"]] }
 ```
 
 So the whole file would look like this:
@@ -24,7 +24,7 @@ Hanami.application.routes do
   slice :main, at: "/" do
     root to: "home.show"
 
-    get '/hello', to: ->(env) { [200, {}, ['Hello from Hanami']] }
+    get "/hello", to: ->(env) { [200, {}, ["Hello from Hanami"]] }
   end
 end
 ```
@@ -33,7 +33,7 @@ Then start the server with `puma config.ru` and visit [http://localhost:3000/hel
 You should see `Hello from Hanami!` in your browser.
 
 Let's explain what we just did.
-We created a **route**; an application can have many routes. By doing this, we told our app, to handle HTTP `get` request under the path: `/hello`, and handle it by calling a `Proc` object, that returns the status: `200`, empty headers, and the `'Hello from Hanami'` body. This response is given back to the browser for rendering.
+We created a **route**; an application can have many routes. By doing this, we told our app, to handle HTTP `get` request under the path: `/hello`, and handle it by calling a `Proc` object, that returns the status: `200`, empty headers, and the `Hello from Hanami"` body. This response is given back to the browser for rendering.
 
 Each route starts with an [HTTP verb](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) declaration, `get` in our case.
 Then we specify a relative URI (`/hello` for us) and the object that is responsible to respond to incoming requests.
@@ -50,8 +50,8 @@ Here is another example of implementing the same thing. If you're interested in 
 Hanami.application.routes do
   slice :main, at: "/" do
     root to: "home.show"
-	
-	get '/hello', to: 'home.index'
+
+    get "/hello", to: "home.index"
   end
 end
 ```
@@ -64,7 +64,7 @@ module Main
     module Home
       class Index < Main::Action
         def handle(req, res)
-          res.body = "<h1>Hello, Hanami!</h1>""
+          res.body = "<h1>Hello, Hanami!</h1>"
         end
       end
     end

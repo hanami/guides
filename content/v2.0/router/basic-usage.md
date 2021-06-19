@@ -13,17 +13,25 @@ In the example [from the previous section](/v2.0/router/overview) we used a `Pro
 A valid endpoint can be an object, a class, an action, or an **application** that responds to `#call` and returns the proper value.
 
 ```ruby
-get '/proc',       to: ->(env) { [200, {}, ['Hello from Hanami!']] }
-get '/action',     to: "home.index"
-get '/middleware', to: Middleware
-get '/rack-app',   to: RackApp.new
-get '/rails',      to: ActionControllerSubclass.action(:new)
+# /config/routes.rb
+
+Hanami.application.routes do
+  get "/proc",       to: ->(env) { [200, {}, ["Hello from Hanami!"]] }
+  get "/action",     to: "home.index"
+  get "/middleware", to: Middleware
+  get "/rack-app",   to: RackApp.new
+  get "/rails",      to: ActionControllerSubclass.action(:new)
+end
 ```
 
 When we use a string, it tries to instantiate a class from it:
 
 ```ruby
-get '/rack-app', to: 'rack_app' # it will map to RackApp.new
+# /config/routes.rb
+
+Hanami.application.routes do
+  get "/rack-app", to: "rack_app" # it will map to RackApp.new
+end
 ```
 
 ## Actions
@@ -36,8 +44,10 @@ This is a really long name to write, that's why Hanami has a **naming convention
 ```ruby
 # /config/routes.rb
 
-slice :main, at: '/' do
+Hanami.application.routes do
+  slice :main, at: "/" do
   root to: "home.index" # => will route to Web::Controllers::Home::Index
+end
 end
 ```
 
@@ -95,15 +105,17 @@ One of the unique Hanami features is how it encourages modularizing your applica
 A slice is an independent piece of application. Think of it as different entry points to your domain.
 
 ```ruby
+# /config/routes.rb
+
 Hanami.application.routes do
   slice :main, at: "/" do
     root to: "home.show"  # slices/main/lib/actions/home/show.rb
-    get '/hello', to: 'hello.index' # slices/main/lib/actions/hello/index.rb
+    get "/hello", to: "hello.index" # slices/main/lib/actions/hello/index.rb
   end
-  
+
   slice :admin, at: "/" do
     root to: "dashboard.show" # slices/admin/lib/actions/dashboard/show.rb
-    get '/users', to: 'users.index' # slices/admin/lib/actions/users/index.rb
+    get "/users", to: "users.index" # slices/admin/lib/actions/users/index.rb
   end
 end
 ```
@@ -125,7 +137,9 @@ If we hit `/foo`, a `404` (Not Found) is returned.
 ```ruby
 # config/routes.rb
 
-get '/dashboard', to: "dashboard.index"
+Hanami.application.routes do
+  get "/dashboard", to: "dashboard.index"
+end
 ```
 
 ### Variables
@@ -134,26 +148,38 @@ When we have dynamic content to serve, we want our URI to be dynamic as well.
 This can be easily achieved via path variables.
 They are defined with a colon, followed by a name (eg. `:id`).
 
-Once an incoming request is forwarded to our endpoint, we can access the current value in our param's action (`params[:id]`).
+Once an incoming request is forwarded to our endpoint, we can access the current value in our param"s action (`params[:id]`).
 
 ```ruby
-get '/books/:id', to: 'books.show'
+# /config/routes.rb
+
+Hanami.application.routes do
+  get "/books/:id", to: "books.show"
+end
 ```
 
 Multiple variables can be used in a path.
 
 ```ruby
-get '/books/:book_id/reviews/:id', to: 'reviews.show'
+# /config/routes.rb
+
+Hanami.application.routes do
+  get "/books/:book_id/reviews/:id", to: "reviews.show"
+end
 ```
 
 ### Variables Constraints
 
-It's possible to specify constraints for each variable.
+It"s possible to specify constraints for each variable.
 The rule MUST be expressed as a regular expression.
-If a request can satisfy all of them, we're good, otherwise, a `404` is returned.
+If a request can satisfy all of them, we"re good, otherwise, a `404` is returned.
 
 ```ruby
-get '/authors/:id', id: /\d+/, to: 'authors.show'
+# /config/routes.rb
+
+Hanami.application.routes do
+  get "/authors/:id", id: /\d+/, to: "authors.show"
+end
 ```
 
 ### Optional Tokens
@@ -163,7 +189,11 @@ It should be expressed between round parentheses.
 If present, it will be available as param in the Rack env, otherwise it will be missing, but the endpoint will be still hit.
 
 ```ruby
-get '/books(.:format)', to: 'books.show'
+# /config/routes.rb
+
+Hanami.application.routes do
+  get "/books(.:format)", to: "books.show"
+end
 ```
 
 ### Wildcard Matching
@@ -174,7 +204,11 @@ It would be impossible to know in advance which files are stored and to prepare 
 To solve this problem, Hanami supports _wildcard matching_.
 
 ```ruby
-get '/files/*', to: 'files.show'
+# /config/routes.rb
+
+Hanami.application.routes do
+  get "/files/*", to: "files.show"
+end
 ```
 
 ### Named Routes
@@ -182,9 +216,13 @@ get '/files/*', to: 'files.show'
 We can specify a unique name for each route, in order to generate paths from the router or to test them.
 
 ```ruby
-root              to: 'home.index'
-get '/hello',     to: 'greet.index', as: :greeting
-get '/books/:id', to: 'books.show',  as: :book
+# /config/routes.rb
+
+Hanami.application.routes do
+  root              to: "home.index"
+  get "/hello",     to: "greet.index", as: :greeting
+  get "/books/:id", to: "books.show",  as: :book
+end
 ```
 
 <!-- TODO: Add Helper usage to access named paths and URLs. It's not yet ready. -->
@@ -197,7 +235,11 @@ Absolute URL generation is dependent on `scheme`, `host` and `port` settings in 
 In the case of legacy routes, we can handle HTTP redirects at the routing level.
 
 ```ruby
-redirect '/old', to: '/new'
+# /config/routes.rb
+
+Hanami.application.routes do
+  redirect "/old", to: "/new"
+end
 ```
 
 ## Scopes
@@ -207,9 +249,13 @@ https://github.com/hanami/router/blob/unstable/spec/integration/hanami/router/sc
 If we want to group a set of resources under a common prefix we can use `scopes`.
 
 ```ruby
-scope 'docs' do
-  get '/installation', to: 'docs.installation'
-  get '/usage',        to: 'docs.usage'
+# /config/routes.rb
+
+Hanami.application.routes do
+  scope "docs" do
+    get "/installation", to: "docs.installation"
+    get "/usage",        to: "docs.usage"
+  end
 end
 
 # This will generate:
