@@ -280,3 +280,19 @@ ul.ct-sidenav {
 .text-align-right {
   text-align: right;
 }
+
+.nav {
+  display: block;
+}
+
+.ct-section-nav {
+  font-size: 84%;
+  display: block;
+  padding: .25rem 1.5rem;
+  color: #4c555a;
+  cursor: pointer;
+}
+
+.ct-subsection-nav {
+  padding: .25rem 1.5rem;
+}
