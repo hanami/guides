@@ -64,7 +64,7 @@ module Main
     module Home
       class Index < Main::Action
         def handle(req, res)
-          res.body = "<h1>Hello, Hanami!</h1>"
+          res.body = "Hello, Hanami!"
         end
       end
     end
