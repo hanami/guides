@@ -193,7 +193,7 @@ end
 
 ## RESTful Resource
 
-You can also use a `resource` helper, to generate routes for singular resource.
+You can also use the `resource` helper, to generate routes for a singular resource.
 
 ```ruby
 # /config/routes.rb
