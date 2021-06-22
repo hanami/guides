@@ -172,7 +172,7 @@ end
 
 It"s possible to specify constraints for each variable.
 The rule MUST be expressed as a regular expression.
-If a request can satisfy all of them, we"re good, otherwise, a `404` is returned.
+If a request can satisfy all of them, we're good, otherwise, a `404` is returned.
 
 ```ruby
 # /config/routes.rb
