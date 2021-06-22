@@ -264,4 +264,4 @@ end
 #   /docs/usage
 ```
 
-That's it for basic usage. If you're keen to expertise this part. Check out the next chapter!
+That's it for basic usage. If you're keen to learn more, check out the advanced usage documentation.
