@@ -148,7 +148,7 @@ When we have dynamic content to serve, we want our URI to be dynamic as well.
 This can be easily achieved via path variables.
 They are defined with a colon, followed by a name (eg. `:id`).
 
-Once an incoming request is forwarded to our endpoint, we can access the current value in our param"s action (`params[:id]`).
+Once an incoming request is forwarded to our endpoint, we can access the current value in our param's action (`params[:id]`).
 
 ```ruby
 # /config/routes.rb
