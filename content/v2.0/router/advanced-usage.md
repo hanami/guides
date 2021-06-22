@@ -39,7 +39,7 @@ All the HTTP requests starting with `/sinatra` will be routed to `SinatraApp`.
 # /config/routes.rb
 
 Hanami.application.routes do
-    mount Blog.new, host: "blog"
+  mount Blog.new, host: "blog"
 end
 ```
 
