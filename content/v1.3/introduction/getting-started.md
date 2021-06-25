@@ -131,7 +131,7 @@ Hanami doesn't want us to [repeat ourselves](https://en.wikipedia.org/wiki/Don%2
 Web applications almost always store and interact with data stored in a database.
 Both our "business logic" and our persistence live in `lib/`.
 
-_(Hanami architecture is heavily inspired by [Clean Architecture](https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html).)_
+_(Hanami architecture is heavily inspired by [Hexagonal architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software))._)
 
 ## Writing Our First Test
 
