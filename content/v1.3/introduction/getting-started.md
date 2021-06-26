@@ -696,15 +696,10 @@ That's enough to make all our tests pass again!
 
 ```shell
 $ bundle exec rake
-Run options: --seed 59133
+......
 
-# Running:
-
-.........
-
-Finished in 0.042065s, 213.9543 runs/s, 380.3633 assertions/s.
-
-6 runs, 7 assertions, 0 failures, 0 errors, 0 skips
+Finished in 0.03745 seconds (files took 1.34 seconds to load)
+10 examples, 0 failures
 ```
 
 ## Building Forms To Create Records
