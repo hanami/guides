@@ -567,8 +567,10 @@ RSpec.describe 'List books' do
 end
 ```
 
-We create the required records in our test and then assert the correct number of book classes on the page.
-When we run this test, it should pass. If it does not pass, a likely reason is that the test database was not migrated.
+We create a single Book record in our test and then assert that the title and author are displayed on the page.
+When we run this test, it will fail.
+This is because we haven't updated our template yet,
+it still has the hard-coded books from earlier.
 
 Now we can change our template and remove the static HTML.
 Our view needs to loop over all available records and render them.
@@ -611,11 +613,12 @@ RSpec.describe Web::Views::Books::Index do
 end
 ```
 
-We specify that our index page will show a simple placeholder message when there are no books to display; when there are, it lists every one of them.
+We specify that our index page will show a simple placeholder message when there are no books to display;
+when there are books, it lists every one of them.
 Note how rendering a view with some data is relatively straight-forward.
 Hanami is designed around simple objects with minimal interfaces that are easy to test in isolation, yet still work great together.
 
-Let's rewrite our template to implement these requirements:
+Now we have 3 failing tests, but we can fix them by rewriting our template to implement these requirements:
 
 ```erb
 # apps/web/templates/books/index.html.erb
@@ -666,7 +669,7 @@ RSpec.describe Web::Controllers::Books::Index do
 end
 ```
 
-Writing tests for controller actions is basically two-fold: you either assert on the response object, which is a Rack-compatible array of status, headers, and content; or on the action itself, which will contain exposures after we've called it.
+Writing tests for controller actions gives you two possible things to test: you either assert on the response object, which is a Rack-compatible array of status, headers, and content; or on the action itself, which will contain exposures after we've called it.
 Now we've specified that the action exposes `:books`, we can implement our action:
 
 ```ruby
