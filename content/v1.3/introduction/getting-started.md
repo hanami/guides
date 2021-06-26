@@ -486,7 +486,9 @@ $ HANAMI_ENV=test bundle exec hanami db prepare
 ### Working With Entities
 
 An entity is something really close to a plain Ruby object.
-We should focus on the behaviors that we want from it and only then, how to save it.
+With them, we model the behavior we want from a concept (a book, in this case).
+They're decoupled from _persistence_ entirely, but they're easy to persist and
+retrieve, we'll soon see.
 
 For now, we need to create a simple entity class:
 
@@ -504,11 +506,14 @@ We can verify it all works as expected with a unit test:
 
 RSpec.describe Book do
   it 'can be initialized with attributes' do
-    book = Book.new(title: 'Refactoring')
+    book = Book.new(title: 'Refactoring', author: 'Martin Fowler')
     expect(book.title).to eq('Refactoring')
+    expect(book.author).to eq('Martin Fowler')
   end
 end
 ```
+
+(Generally we recommend against 'testing the framework' like this, but it's useful here to demonstrate how Entities work in Hanami.)
 
 ### Using Repositories
 
