@@ -847,18 +847,14 @@ This minimal implementation should suffice to make our tests pass.
 
 ```shell
 $ bundle exec rake
-Run options: --seed 63592
+........
 
-# Running:
-
-...............
-
-Finished in 0.081961s, 183.0142 runs/s, 305.0236 assertions/s.
-
-12 runs, 14 assertions, 0 failures, 0 errors, 2 skips
+Finished in 0.07168 seconds (files took 1.4 seconds to load)
+16 examples, 0 failures
 ```
 
 Congratulations!
+We've created a simple web app action to add a book to a databse.
 
 ### Securing Our Form With Validations
 
