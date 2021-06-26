@@ -1001,7 +1001,9 @@ Run your tests again and see they are all passing again!
 
 ### Displaying Validation Errors
 
-Rather than just shoving the user a form under their nose when something has gone wrong, we should give them a hint of what's expected of them. Let's adapt our form to show a notice about invalid fields.
+Rather than just showing the user the same form they entered when something has gone wrong,
+we should give them a hint of what's actually expected of them.
+Let's adapt our form to show a notice about invalid field values.
 
 First, we expect a list of errors to be included in the page when `params` contains errors:
 
