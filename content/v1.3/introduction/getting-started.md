@@ -1062,15 +1062,9 @@ Run your tests again and see they are all passing again!
 
 ```shell
 $ bundle exec rake
-Run options: --seed 59940
-
-# Running:
-
-..................
-
-Finished in 0.078112s, 230.4372 runs/s, 473.6765 assertions/s.
-
-15 runs, 27 assertions, 0 failures, 0 errors, 1 skips
+........
+Finished in 0.07811 seconds (files took 1.35 seconds to load)
+18 examples, 0 failures
 ```
 
 ### Improving Our Use Of The Router
@@ -1115,6 +1109,8 @@ Remember how we built our form using `form_for`?
 # apps/web/templates/books/new.html.erb
 <h2>Add book</h2>
 
+<%# ... %>
+
 <%=
   form_for :book, '/books' do
     # ...
@@ -1128,6 +1124,8 @@ We can use the `routes` helper method that is available in our views and actions
 ```erb
 # apps/web/templates/books/new.html.erb
 <h2>Add book</h2>
+
+<%# ... %>
 
 <%=
   form_for :book, routes.books_path do
