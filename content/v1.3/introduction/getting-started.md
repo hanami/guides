@@ -296,12 +296,12 @@ This test means that when we go to [/books](http://localhost:2300/books),
 we'll see two HTML elements that have class `book`,
 and both will be inside of an HTML element that has an id of `books`.
 
-Our test suite is `Unable to find visible css "#books"`.
+Our test suite shows 1 failure: `Unable to find visible css "#books"`.
 
 Not only are we missing that element,
 we don't even have a page to put that element on!
 
-Let's create a new action to fix that.
+Let's create a new action and a new route to fix that.
 
 ### Hanami Generators
 
@@ -392,8 +392,8 @@ Let's edit `apps/web/templates/application.html.erb` to look like this:
 </html>
 ```
 
-And remove the duplicate lines from the other templates,
-since they're duplicated now.
+And remove the `<h1>Bookshelf</h1>` line from the other template (`apps/web/templates/home/index.html.erb`),
+so it's not duplicated.
 
 A **layout template** is like any other template, but it is used to wrap your regular templates.
 The `yield` line is replaced with the contents of our regular template.
