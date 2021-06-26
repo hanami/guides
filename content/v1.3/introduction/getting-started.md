@@ -1037,10 +1037,14 @@ RSpec.describe 'Add a book' do
 end
 ```
 
+Now we have two failing tests, but that's OK. It's simple to fix them.
+
 In our template, we can loop over `params.error_messages` (if there are any) and display a friendly message.
-Open up `apps/web/templates/books/new.html.erb`:
+Open up `apps/web/templates/books/new.html.erb` and add this between the `<h2>` and the form.
 
 ```erb
+# apps/web/templates/books/new.html.erb, in the middle
+<%# ... $>
 <% unless params.valid? %>
   <div class="errors">
     <h3>There was a problem with your submission</h3>
@@ -1051,6 +1055,7 @@ Open up `apps/web/templates/books/new.html.erb`:
     </ul>
   </div>
 <% end %>
+<%# ... $>
 ```
 
 Run your tests again and see they are all passing again!
