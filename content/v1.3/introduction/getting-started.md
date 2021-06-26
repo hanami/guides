@@ -1150,8 +1150,21 @@ We can use the `routes` helper method that is available in our views and actions
 We can make a similar change in `apps/web/controllers/books/create.rb`:
 
 ```ruby
+...
 redirect_to routes.books_path
+...
 ```
+
+and in `apps/web/templates/books/index.html.erb`:
+
+```erb
+...
+<a href="<%= routes.new_book_path %>">New book</a>
+...
+```
+
+(You could also extend this to the specs if you'd like,
+but changing the path can affect users so you may want to repeat yourself there.)
 
 ## Wrapping Up
 
