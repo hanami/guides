@@ -923,7 +923,7 @@ To make our tests pass, we need to implement validations.
 Although you can add validation rules to the entity, Hanami also allows you to define validation rules as close to the source of the input as possible, i.e., the action.
 Hanami controller actions can use the `params` class method to define acceptable incoming parameters.
 
-This approach both whitelists what `params` are used (others are discarded to prevent mass-assignment vulnerabilities from untrusted user input) _and_ adds rules to define what values are acceptable — in this case, we've specified that the nested attributes for a book's title and author should be present.
+This approach both explicitly declares which `params` are allowed (others are discarded to prevent mass-assignment vulnerabilities from untrusted user input) _and_ it adds rules to define which values are acceptable — in this case, we've specified that the nested attributes for a book's title and author should be non-empty strings.
 
 With our validations in place, we can limit our entity creation and redirection to cases where the incoming `params` are valid:
 
