@@ -523,7 +523,7 @@ Hanami repositories have methods to load one or more entities from our database,
 The repository is also the place where you would define new methods to implement custom queries.
 
 To recap, we've seen how Hanami uses entities and repositories to model our data.
-Entities represent our behavior, while repositories use mappings to translate our entities to our data store.
+Entities represent our behavior, while repositories use mappings to translate our entities to and from our data store.
 We can use migrations to apply changes to our database schema.
 
 ### Displaying Dynamic Data
