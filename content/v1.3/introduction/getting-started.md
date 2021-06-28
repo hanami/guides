@@ -1158,8 +1158,9 @@ and in `apps/web/templates/books/index.html.erb`:
 ...
 ```
 
-(You could also extend this to the specs if you'd like,
-but changing the path can affect users so you may want to repeat yourself there.)
+You could also extend this to the specs if you'd like,
+but changing the path can affect users so you may want to repeat yourself there
+(to make a potentially breaking change for users harder to implement).
 
 ## Wrapping Up
 
