@@ -513,7 +513,9 @@ RSpec.describe Book do
 end
 ```
 
-(Generally we recommend against 'testing the framework' like this, but it's useful here to demonstrate how Entities work in Hanami.)
+<p class="contention">
+  Generally we recommend against "testing the framework" like this in a real app, but it's useful here to demonstrate how Entities work in Hanami.
+</p>
 
 ### Using Repositories
 
