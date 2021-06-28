@@ -1053,11 +1053,12 @@ end
 We now have two failing tests, but that's OK. It's simple to fix them.
 
 In our template, we can loop over `params.error_messages` (if there are any) and display a friendly message.
-Open up `apps/web/templates/books/new.html.erb` and add this between the `<h2>` and the form.
+Open up `apps/web/templates/books/new.html.erb` and update the top of the file, before the `form_for` call, to include this:
 
-```erb
-# apps/web/templates/books/new.html.erb, in the middle
-<%# ... $>
+```diff
+# apps/web/templates/books/new.html.erb, at the top
+<h2>Add book</h2>
+
 <% unless params.valid? %>
   <div class="errors">
     <h3>There was a problem with your submission</h3>
@@ -1068,7 +1069,12 @@ Open up `apps/web/templates/books/new.html.erb` and add this between the `<h2>` 
     </ul>
   </div>
 <% end %>
-<%# ... $>
+
+<%#
+  form_for :book, '/books' do
+    ...
+  end
+%>
 ```
 
 Run your tests again and see they are all passing again!
