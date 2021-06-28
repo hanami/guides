@@ -488,7 +488,7 @@ $ HANAMI_ENV=test bundle exec hanami db prepare
 An entity is something really close to a plain Ruby object.
 With them, we model the behavior we want from a concept (a book, in this case).
 They're decoupled from _persistence_ entirely, but they're easy to persist and
-retrieve, we'll soon see.
+retrieve as we'll soon see.
 
 For now, we need to create a simple entity class:
 
