@@ -486,7 +486,7 @@ $ HANAMI_ENV=test bundle exec hanami db prepare
 ### Working With Entities
 
 An entity is something really close to a plain Ruby object.
-With them, we model the behavior we want from a concept (a book, in this case).
+We use them to model the behavior we want from a concept (a book, in this case).
 They're decoupled from _persistence_ entirely, but they're easy to persist and
 retrieve as we'll soon see.
 
