@@ -867,7 +867,7 @@ Finished in 0.07168 seconds (files took 1.4 seconds to load)
 ```
 
 Congratulations!
-We've created a simple web app action to add a book to a databse.
+We've created a simple web app action to add a book to a database.
 
 ### Securing Our Form With Validations
 
