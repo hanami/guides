@@ -568,10 +568,9 @@ RSpec.describe 'List books' do
 end
 ```
 
-We create a single Book record in our test and then assert that the title and author are displayed on the page.
-When we run this test, it will fail.
-This is because we haven't updated our template yet,
-it still has the hard-coded books from earlier.
+We create a single Book record in our test and then expect that the title and author are displayed on the page.
+This test fails since we haven't updated our template yet,
+and it still includes the hard-coded books from earlier.
 
 Now we can change our template and remove the static HTML.
 Our view needs to loop over all available records and render them.
