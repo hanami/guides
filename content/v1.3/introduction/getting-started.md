@@ -717,7 +717,7 @@ Here's that story expressed in a test:
 require 'features_helper'
 
 RSpec.describe 'Add a book' do
-  after do
+  before do
     BookRepository.new.clear
   end
 
