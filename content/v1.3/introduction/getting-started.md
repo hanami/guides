@@ -504,7 +504,7 @@ We can verify it all works as expected with a unit test:
 ```ruby
 # spec/bookshelf/entities/book_spec.rb
 
-RSpec.describe Book do
+RSpec.describe Book, type: :entity do
   it 'can be initialized with attributes' do
     book = Book.new(title: 'Refactoring', author: 'Martin Fowler')
     expect(book.title).to eq('Refactoring')
@@ -581,7 +581,7 @@ Let's write a test to force this change in our view:
 ```ruby
 # spec/web/views/books/index_spec.rb
 
-RSpec.describe Web::Views::Books::Index do
+RSpec.describe Web::Views::Books::Index, type: :view do
   let(:exposures) { Hash[books: []] }
   let(:template)  { Hanami::View::Template.new('apps/web/templates/books/index.html.erb') }
   let(:view)      { described_class.new(template, exposures) }
@@ -648,7 +648,7 @@ that change:
 ```ruby
 # spec/web/controllers/books/index_spec.rb
 
-RSpec.describe Web::Controllers::Books::Index do
+RSpec.describe Web::Controllers::Books::Index, type: :action do
   let(:action) { described_class.new }
   let(:params) { Hash[] }
   let(:repository) { BookRepository.new }
@@ -811,7 +811,7 @@ Let's express them as unit tests:
 ```ruby
 # spec/web/controllers/books/create_spec.rb
 
-RSpec.describe Web::Controllers::Books::Create do
+RSpec.describe Web::Controllers::Books::Create, type: :action do
   let(:action) { described_class.new }
   let(:params) { Hash[book: { title: 'Confident Ruby', author: 'Avdi Grimm' }] }
   let(:repository) { BookRepository.new }
@@ -886,7 +886,7 @@ Let's specify this behaviour as unit tests:
 ```ruby
 # spec/web/controllers/books/create_spec.rb
 
-RSpec.describe Web::Controllers::Books::Create do
+RSpec.describe Web::Controllers::Books::Create, type: :action do
   let(:action) { described_class.new }
   let(:repository) { BookRepository.new }
 
@@ -1012,7 +1012,7 @@ First, we expect a list of errors to be included in the page when `params` conta
 ```ruby
 # spec/web/views/books/new_spec.rb
 
-RSpec.describe Web::Views::Books::New do
+RSpec.describe Web::Views::Books::New, type: :view do
   let(:params)    { OpenStruct.new(valid?: false, error_messages: ['Title must be filled', 'Author must be filled']) }
   let(:exposures) { Hash[params: params] }
   let(:template)  { Hanami::View::Template.new('apps/web/templates/books/new.html.erb') }
