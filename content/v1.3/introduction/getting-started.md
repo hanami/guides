@@ -44,6 +44,19 @@ You should also be familiar with [Bundler](http://bundler.io), [Rake](http://rak
 Lastly, in this guide, we'll be using an [SQLite](https://sqlite.org/) database.
 If you want to follow along, make sure you have a working installation of Ruby 2.3+ and SQLite 3+ on your system.
 
+<p class="notice">
+  This guide is for the latest release of Hanami: v1.3.
+
+  We, the Hanami core team, are working on the next major version of Hanami: v2.0.
+
+  That said, Hanami v1.3 only supports Ruby 2.3–2.7. It does not support Ruby 3.
+
+  So, to continue with this guide, you have to be using Ruby 2.
+
+  (Hanami v2.0 will support Ruby 3, of course.)
+</p>
+
+
 ## Create a New Hanami Project
 
 To create a new Hanami project, we need to install the Hanami gem from Rubygems.
@@ -107,7 +120,7 @@ $ bundle exec hanami server
 And... bask in the glory of your first Hanami project at
 [http://localhost:2300](http://localhost:2300)! We should see a screen similar to this:
 
-<p><img src="/introduction/welcome-page.png" alt="Hanami welcome page" class="img-responsive"></p>
+<p><img src="/v1.3/introduction/welcome-page.png" alt="Hanami welcome page" class="img-responsive"></p>
 
 ## Hanami's Architecture
 

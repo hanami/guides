@@ -25,5 +25,5 @@ Then visit http://localhost:1313 to see the site.
 
 ## Copyright
 
-Hanami © 2014-2019 Luca Guidi - Released under the [MIT License](https://opensource.org/licenses/MIT).
+Hanami © 2014-2021 Luca Guidi - Released under the [MIT License](https://opensource.org/licenses/MIT).
 The contents of this website are released under [Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/).
