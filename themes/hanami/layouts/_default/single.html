@@ -45,10 +45,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
   </head>
   <body data-spy="scroll" data-target="#secondary-navigation" data-offset="50">
-    <header class="navbar navbar-expand navbar-dark flex-row align-items-md-center ct-navbar">
+    <header class="navbar navbar-dark flex-row align-items-md-center ct-navbar">
       <a class="navbar-brand mr-0 mr-md-2" href="{{ "/" | relURL }}" aria-label="Bootstrap">
         <img src="{{ "/assets/img/brand/white.png" | relURL }}" alt="Hanami guides logo">
       </a>
+      <button class="navbar-toggler d-md-none" type="button" data-toggle="collapse" data-target="#ct-docs-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <ul class="navbar-nav flex-row mr-auto ml-4 d-none d-md-flex">
         <li class="nav-item">
           <form>
