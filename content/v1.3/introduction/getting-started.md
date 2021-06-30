@@ -500,7 +500,7 @@ RSpec.describe Book, type: :entity do
 end
 ```
 
-<p class="contention">
+<p class="convention">
   Generally we recommend against "testing the framework" like this in a real app, but it's useful here to demonstrate how Entities work in Hanami.
 </p>
 
