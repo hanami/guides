@@ -9,6 +9,7 @@
 body {
   color: #525f7f;
   position: relative;
+  font-family: var(--font-family-sans-serif);
 }
 
 a:link,
@@ -22,15 +23,10 @@ a:active {
   text-decoration: underline;
 }
 
-p {
-  font-size: 1.2rem;
-}
-
 code {
-  /* background-color: rgba(70,232,149, 0.5); */
-  background-color: rgba(255,216,66,.5);
+  background-color: rgba(255,216,66,.2);
   color: #525f7f;
-  padding: 0.2em 0.1em;
+  padding: 0.1em 0.1em 0 0.1em;
   font-family: monospace;
   font-size: 1.2em;
 }
@@ -181,15 +177,74 @@ div.highlight > pre {
   padding: 1em;
 }
 
+pre {
+  padding: 1px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6
+{
+    padding-top: 1rem;
+    color: inherit;
+}
+
+h1,
+.h1
+{
+    font-size: 1.5rem;
+}
+
+h2,
+.h2
+{
+    font-size: 1.4rem;
+}
+
+h3,
+.h3
+{
+    font-size: 1.3rem;
+}
+
+h4,
+.h4
+{
+    font-size: 1.2rem;
+}
+
+h5,
+.h5
+{
+    font-size: 1.1rem;
+}
+
+h6,
+.h6
+{
+    font-size: 1rem;
+}
+
 #getting-started-lead {
   background-color: #f7f8f9;
   padding: 1em;
   min-width: 100%;
+  font-size: 1rem;
+  border-radius: 0.25rem;
 }
 
 main p {
   min-width: 100%;
-  text-align: justify;
+  line-height: inherit;
 }
 
 #secondary-navigation a:link,
@@ -245,22 +300,23 @@ p.warning {
 
 p.notice {
   border-color: #35DDFF;
-  background-color: #35DDFF;
+  background-color: rgba(53, 221, 255, 0.4);
 }
 
 p.convention {
   border-color: #46E895;
-  background-color: #46E895;
+  background-color: rgba(70, 232, 149, 0.4);
 }
 
 p.warning {
   border-color: #fc7c5f;
-  background-color: #fc7c5f;
+  background-color: rgba(252, 124, 95, 0.4);
 }
 
+p.notice code,
 p.convention code,
 p.warning code {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(245, 245, 245, 0.8);
 }
 
 span.ct-toc-link {
