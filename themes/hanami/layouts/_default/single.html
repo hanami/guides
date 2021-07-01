@@ -45,175 +45,178 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
   </head>
   <body data-spy="scroll" data-target="#secondary-navigation" data-offset="50">
-    <header class="navbar navbar-expand navbar-dark flex-row align-items-md-center ct-navbar">
+    <header class="navbar navbar-dark flex-row align-items-md-center ct-navbar">
       <a class="navbar-brand mr-0 mr-md-2" href="{{ "/" | relURL }}" aria-label="Bootstrap">
-      <img src="{{ "/assets/img/brand/white.png" | relURL }}" alt="Hanami guides logo">
-    </a>
-    <ul class="navbar-nav flex-row mr-auto ml-4 d-none d-md-flex">
-      <li class="nav-item">
-        <form>
-          <input type="text" placeholder="Search" class="form-control" id="search-input" />
-        </form>
-      </li>
-    </ul>
-    <div class="d-none d-sm-block ml-auto">
-      <ul class="navbar-nav ct-navbar-nav flex-row align-items-center">
+        <img src="{{ "/assets/img/brand/white.png" | relURL }}" alt="Hanami guides logo">
+      </a>
+      <button class="navbar-toggler d-md-none" type="button" data-toggle="collapse" data-target="#ct-docs-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <ul class="navbar-nav flex-row mr-auto ml-4 d-none d-md-flex">
         <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="http://hanamirb.org" target="_blank" title="Hanami website">
-            <i class="ni ni-world"></i>
-          </a>
+          <form>
+            <input type="text" placeholder="Search" class="form-control" id="search-input" />
+          </form>
         </li>
-        <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="{{ .Site.Params.githubrepo }}/edit/{{ getenv "BRANCH" }}/content/{{ .File.Path }}" target="_blank" title="Edit this page">
-            <i class="fa fa-pencil-square-o"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="https://github.com/{{ .Site.Params.github }}" target="_blank" title="Star Hanami on GitHub">
-            <i class="fa fa-github"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="https://twitter.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Twitter">
-            <i class="fa fa-twitter"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="https://www.facebook.com/{{ .Site.Params.twitter }}" target="_blank" title="Like Hanami on Facebook">
-            <i class="fa fa-facebook-square"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="https://www.instagram.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Instagram">
-            <i class="fa fa-instagram"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="http://chat.hanamirb.org/" target="_blank" title="Hanami chat">
-            <i class="ni ni-chat-round"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link nav-link-icon" href="https://github.com/hanami/guides/releases" target="_blank" title="Download Hanami Guides for offline usage">
-            <i class="fa fa-cloud-download"></i>
-          </a>
-        </li>
-        <!-- <li class="nav-item"> -->
-        <!--   <span class="badge badge-pill badge-primary">v{{ .Site.Params.hanamiversion }}</span> -->
-        <!-- </li> -->
       </ul>
-    </div>
-  </header>
-  <div class="container-fluid">
-    <div class="row flex-xl-nowrap">
-      <div class="col-12 col-md-3 col-xl-2 ct-sidebar">
-        <nav class="collapse ct-links" id="ct-docs-nav">
-          <!-- Show links for all groups -->
-          <div class="ct-toc-item active">
-          {{ $hanamiversion := .CurrentSection.FirstSection.Params.version }}
-          {{ range (where .Site.Sections "Params.version" "=" $hanamiversion) }}
-            {{ range sort .Sections ".Params.order" }}
-              {{ $t := title ( .Title | humanize) }}
-              <span class="ct-toc-link">{{ $t }}</span>
-              <ul class="nav ct-sidenav">
-              {{ range sort .Pages ".Params.order" }}
-                {{ if eq .URL $.Page.URL }}
-                <li class="active ct-sidenav-active">
-                {{ else }}
-                <li>
-                {{ end }}
-                  <a href="{{ .URL }}">{{ .Title }}</a>
-                </li>
-              {{ end }}
-              </ul>
-            {{ end }}
-          {{ end }}
-          </div>
-        </nav>
-      </div>
-      <div class="d-none d-xl-block col-xl-2 ct-toc">
-        <ul class="section-nav" id="secondary-navigation">
-        {{ $sections := findRE `<h2.*?>(.|\n)*?</h2>` .Content }}
-        {{ range $sections }}
-          {{ $title := htmlUnescape (. | plainify) }}
-          {{ $anchor := trim (slicestr (index (findRE `id="(.*)"` .) 0) 4) `"` }}
-          <li class="toc-entry toc-h2">
-            <a href="#{{ $anchor }}" class="nav-link">{{ $title }}</a>
+      <div class="d-none d-sm-block ml-auto">
+        <ul class="navbar-nav ct-navbar-nav flex-row align-items-center">
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="http://hanamirb.org" target="_blank" title="Hanami website">
+              <i class="ni ni-world"></i>
+            </a>
           </li>
-        {{ end }}
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{{ .Site.Params.githubrepo }}/edit/{{ getenv "BRANCH" }}/content/{{ .File.Path }}" target="_blank" title="Edit this page">
+              <i class="fa fa-pencil-square-o"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="https://github.com/{{ .Site.Params.github }}" target="_blank" title="Star Hanami on GitHub">
+              <i class="fa fa-github"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="https://twitter.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="https://www.facebook.com/{{ .Site.Params.twitter }}" target="_blank" title="Like Hanami on Facebook">
+              <i class="fa fa-facebook-square"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="https://www.instagram.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Instagram">
+              <i class="fa fa-instagram"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="http://chat.hanamirb.org/" target="_blank" title="Hanami chat">
+              <i class="ni ni-chat-round"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="https://github.com/hanami/guides/releases" target="_blank" title="Download Hanami Guides for offline usage">
+              <i class="fa fa-cloud-download"></i>
+            </a>
+          </li>
+          <!-- <li class="nav-item"> -->
+          <!--   <span class="badge badge-pill badge-primary">v{{ .Site.Params.hanamiversion }}</span> -->
+          <!-- </li> -->
         </ul>
       </div>
-      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 ct-content">
-        <div class="ct-page-title">
-          <h1 class="ct-title" id="content">{{ .Section | humanize | title }}: {{ .Title }}</h1>
-          <div class="avatar-group mt-3">
-          </div>
+    </header>
+    <div class="container-fluid">
+      <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 ct-sidebar">
+          <nav class="collapse ct-links" id="ct-docs-nav">
+            <!-- Show links for all groups -->
+            <div class="ct-toc-item active">
+            {{ $hanamiversion := .CurrentSection.FirstSection.Params.version }}
+            {{ range (where .Site.Sections "Params.version" "=" $hanamiversion) }}
+              {{ range sort .Sections ".Params.order" }}
+                {{ $t := title ( .Title | humanize) }}
+                <span class="ct-toc-link">{{ $t }}</span>
+                <ul class="nav ct-sidenav">
+                {{ range sort .Pages ".Params.order" }}
+                  {{ if eq .URL $.Page.URL }}
+                  <li class="active ct-sidenav-active">
+                  {{ else }}
+                  <li>
+                  {{ end }}
+                    <a href="{{ .URL }}">{{ .Title }}</a>
+                  </li>
+                {{ end }}
+                </ul>
+              {{ end }}
+            {{ end }}
+            </div>
+          </nav>
         </div>
-        <hr>
-        {{ .Content }}
+        <div class="d-none d-xl-block col-xl-2 ct-toc">
+          <ul class="section-nav" id="secondary-navigation">
+          {{ $sections := findRE `<h2.*?>(.|\n)*?</h2>` .Content }}
+          {{ range $sections }}
+            {{ $title := htmlUnescape (. | plainify) }}
+            {{ $anchor := trim (slicestr (index (findRE `id="(.*)"` .) 0) 4) `"` }}
+            <li class="toc-entry toc-h2">
+              <a href="#{{ $anchor }}" class="nav-link">{{ $title }}</a>
+            </li>
+          {{ end }}
+          </ul>
+        </div>
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 ct-content">
+          <div class="ct-page-title">
+            <h1 class="ct-title" id="content">{{ .Section | humanize | title }}: {{ .Title }}</h1>
+            <div class="avatar-group mt-3">
+            </div>
+          </div>
+          <hr>
+          {{ .Content }}
 
-        {{- $counter := 0 -}}
-        {{- $index := -1 -}}
-        {{- $pages := slice -}}
-        {{- range .Site.Params.topics -}}
-          {{- range sort (where $.Site.RegularPages "Section" .) ".Params.order" -}}
-            {{- $counter = add $counter 1 -}}
-            {{- if eq .URL $.Page.URL -}}
-            {{- $index = (sub $counter 1) -}}
+          {{- $counter := 0 -}}
+          {{- $index := -1 -}}
+          {{- $pages := slice -}}
+          {{- range .Site.Params.topics -}}
+            {{- range sort (where $.Site.RegularPages "Section" .) ".Params.order" -}}
+              {{- $counter = add $counter 1 -}}
+              {{- if eq .URL $.Page.URL -}}
+              {{- $index = (sub $counter 1) -}}
+              {{- end -}}
+
+              {{- $pages = $pages | append . -}}
             {{- end -}}
-
-            {{- $pages = $pages | append . -}}
           {{- end -}}
-        {{- end -}}
-        {{- $previousPage := index $pages (sub $index 1) -}}
-        {{- $nextPage := index $pages (add $index 1) -}}
+          {{- $previousPage := index $pages (sub $index 1) -}}
+          {{- $nextPage := index $pages (add $index 1) -}}
 
-        <hr>
-        <div class="container">
-          <div class="row">
-            <div class="col">
-              {{ with $previousPage }}
-              <a href="{{ .URL }}">
-                <button class="btn btn-icon btn-3 btn-outline-primary" type="button">
-                  <span class="btn-inner--icon"><i class="ni ni-bold-left"></i></span>
-                  <span class="btn-inner--text">{{ .Section | humanize }}: {{ .Title }}</span>
-                </button>
-              </a>
-              {{ end }}
-            </div>
-            <div class="col text-align-right">
-              {{ with $nextPage }}
-              <a href="{{ .URL }}">
-                <button class="btn btn-icon btn-3 btn-outline-primary" type="button">
-                  <span class="btn-inner--text">{{ .Section | humanize }}: {{ .Title }}</span>
-                  <span class="btn-inner--icon"><i class="ni ni-bold-right"></i></span>
-                </button>
-              </a>
-              {{ end }}
+          <hr>
+          <div class="container">
+            <div class="row">
+              <div class="col">
+                {{ with $previousPage }}
+                <a href="{{ .URL }}">
+                  <button class="btn btn-icon btn-3 btn-outline-primary" type="button">
+                    <span class="btn-inner--icon"><i class="ni ni-bold-left"></i></span>
+                    <span class="btn-inner--text">{{ .Section | humanize }}: {{ .Title }}</span>
+                  </button>
+                </a>
+                {{ end }}
+              </div>
+              <div class="col text-align-right">
+                {{ with $nextPage }}
+                <a href="{{ .URL }}">
+                  <button class="btn btn-icon btn-3 btn-outline-primary" type="button">
+                    <span class="btn-inner--text">{{ .Section | humanize }}: {{ .Title }}</span>
+                    <span class="btn-inner--icon"><i class="ni ni-bold-right"></i></span>
+                  </button>
+                </a>
+                {{ end }}
+              </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
-  </div>
-  <!-- Core -->
-  <script src="{{ "/assets/vendor/jquery/jquery.min.js" | relURL }}"></script>
-  <script src="{{ "/assets/vendor/popper/popper.min.js" | relURL }}"></script>
-  <script src="{{ "/assets/vendor/bootstrap/bootstrap.min.js" | relURL }}"></script>
-  <script src="{{ "/assets/vendor/headroom/headroom.min.js" | relURL }}"></script>
-  <script src="{{ "/assets/vendor/clipboard/clipboard.min.js" | relURL }}"></script>
-  <!-- Argon JS -->
-  <script src="{{ "/assets/js/argon.js?v=1.0.1" | relURL }}"></script>
-  <script src="{{ "/assets/js/theme.js" | relURL }}"></script>
-  <!-- Search -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
-  <script type="text/javascript"> docsearch({
-    apiKey: '69274449268769eb3878f6a13dd112f9',
-    indexName: 'hanamirb_guides',
-    inputSelector: '#search-input',
-    debug: false // Set debug to true if you want to inspect the dropdown
-  });
-  </script>
-  {{ template "_internal/google_analytics.html" . }}
+    <!-- Core -->
+    <script src="{{ "/assets/vendor/jquery/jquery.min.js" | relURL }}"></script>
+    <script src="{{ "/assets/vendor/popper/popper.min.js" | relURL }}"></script>
+    <script src="{{ "/assets/vendor/bootstrap/bootstrap.min.js" | relURL }}"></script>
+    <script src="{{ "/assets/vendor/headroom/headroom.min.js" | relURL }}"></script>
+    <script src="{{ "/assets/vendor/clipboard/clipboard.min.js" | relURL }}"></script>
+    <!-- Argon JS -->
+    <script src="{{ "/assets/js/argon.js?v=1.0.1" | relURL }}"></script>
+    <script src="{{ "/assets/js/theme.js" | relURL }}"></script>
+    <!-- Search -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+    <script type="text/javascript"> docsearch({
+      apiKey: '69274449268769eb3878f6a13dd112f9',
+      indexName: 'hanamirb_guides',
+      inputSelector: '#search-input',
+      debug: false // Set debug to true if you want to inspect the dropdown
+    });
+    </script>
+    {{ template "_internal/google_analytics.html" . }}
   </body>
 </html>
