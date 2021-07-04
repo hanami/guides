@@ -405,7 +405,7 @@ Let's edit `apps/web/templates/application.html.erb` to look like this:
 </html>
 ```
 
-And remove the `<h1>Bookshelf</h1>` line from the other template (`apps/web/templates/home/index.html.erb`),
+And remove the `<h1>Bookshelf</h1>` line from the other templates (`apps/web/templates/home/index.html.erb`, `apps/web/templates/books/index.html.erb`),
 so it's not duplicated.
 
 A **layout template** is like any other template, but it is used to wrap your regular templates.
