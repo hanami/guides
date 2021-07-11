@@ -9,6 +9,9 @@ pygmentscodefences = true
 pygmentsuseclasses = false
 pygmentsstyle = "monokailight"
 
+[markup.goldmark.renderer]
+  unsafe = true
+
 [permalinks]
   posts = "/:slug/"
 
