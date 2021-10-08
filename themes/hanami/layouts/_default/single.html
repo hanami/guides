@@ -120,13 +120,33 @@
                 <span class="ct-toc-link">{{ $t }}</span>
                 <ul class="nav ct-sidenav">
                 {{ range sort .Pages ".Params.order" }}
-                  {{ if eq .URL $.Page.URL }}
-                  <li class="active ct-sidenav-active">
+
+                  {{ if .IsSection }}
+
+                    <li class="nav ct-section-nav">{{ .Title }}</li>
+                    <ul class="nav ct-sitenav ct-subsection-nav"> <!-- add back ct-sidenav CSS class -->
+                      {{ range sort .Pages ".Params.order" }}
+                        {{ if eq .URL $.Page.URL }}
+                        <li class="active ct-sidenav-active">
+                        {{ else }}
+                        <li>
+                        {{ end }}
+                          <a href="{{ .URL }}">{{ .Title }}</a>
+                        </li>
+                      {{ end }}
+                    </ul>
+
                   {{ else }}
-                  <li>
+
+                    {{ if eq .URL $.Page.URL }}
+                    <li class="active ct-sidenav-active">
+                    {{ else }}
+                    <li>
+                    {{ end }}
+                      <a href="{{ .URL }}">{{ .Title }}</a>
+                    </li>
                   {{ end }}
-                    <a href="{{ .URL }}">{{ .Title }}</a>
-                  </li>
+
                 {{ end }}
                 </ul>
               {{ end }}
@@ -148,7 +168,12 @@
         </div>
         <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 ct-content">
           <div class="ct-page-title">
-            <h1 class="ct-title" id="content">{{ .Section | humanize | title }}: {{ .Title }}</h1>
+            {{ if isset .Params "section" }}
+              <h1 class="ct-title" id="content">{{ .Section | humanize | title }} &mdash; {{ .Params.section }}: {{ .Title }}</h1>
+            {{ else }}
+              <h1 class="ct-title" id="content">{{ .Section | humanize | title }} &mdash; {{ .Title }}</h1>
+            {{ end }}
+
             <div class="avatar-group mt-3">
             </div>
           </div>

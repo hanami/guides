@@ -12,20 +12,19 @@
     $("p.warning").prepend('<span class="alert-inner--icon"><i class="ni ni-notification-70"></i></span>');
 
     // Sidebar menu
-    // var nonActiveMenuSections = $("ul.nav.ct-sidenav:not(:has(>.active))");
-    // nonActiveMenuSections.hide()
-    // console.log(nonActiveMenuSections);
+    var nonActiveMenuSections = $("ul.nav.ct-sidenav:not(:has(.active))");
+    nonActiveMenuSections.hide()
 
-    // $("span.ct-toc-link, li.ct-section-nav").click(function(event){
-    //   event.preventDefault();
-    //   var element = $(this);
-    //   var submenu = element.next("ul.nav.ct-sidenav");
+    $("span.ct-toc-link, li.ct-section-nav").click(function(event){
+      event.preventDefault();
+      var element = $(this);
+      var submenu = element.next("ul.nav.ct-sidenav");
 
-    //   console.log(submenu);
+      console.log(submenu);
 
-    //   nonActiveMenuSections.slideUp();
-    //   submenu.slideDown();
-    // });
+      nonActiveMenuSections.slideUp();
+      submenu.slideDown();
+    });
 
     // Copy & Paste snippets
     $("div.highlight").before('<div class="ct-clipboard"><button class="btn-clipboard" title="" data-original-title="Copy to clipboard">Copy</button></div>');
