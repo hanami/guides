@@ -122,19 +122,24 @@
                 {{ range sort .Pages ".Params.order" }}
 
                   {{ if .IsSection }}
-
-                    <li class="nav ct-section-nav">{{ .Title }}</li>
-                    <ul class="nav ct-sitenav ct-subsection-nav"> <!-- add back ct-sidenav CSS class -->
-                      {{ range sort .Pages ".Params.order" }}
-                        {{ if eq .URL $.Page.URL }}
-                        <li class="active ct-sidenav-active">
-                        {{ else }}
-                        <li>
-                        {{ end }}
-                          <a href="{{ .URL }}">{{ .Title }}</a>
-                        </li>
+                    <li class="nav ct-section-nav">
+                      <span>{{ .Title }}</span>
+                      {{ if eq .URL $.Page.URL }}
+                      <ul class="nav ct-sidenav ct-subsection-nav active">
+                      {{ else }}
+                      <ul class="nav ct-sidenav ct-subsection-nav"> <!-- add back ct-sidenav CSS class -->
                       {{ end }}
-                    </ul>
+                        {{ range sort .Pages ".Params.order" }}
+                          {{ if eq .URL $.Page.URL }}
+                          <li class="active ct-sidenav-active">
+                          {{ else }}
+                          <li>
+                          {{ end }}
+                            <a href="{{ .URL }}">{{ .Title }}</a>
+                          </li>
+                        {{ end }}
+                      </ul>
+                    </li>
 
                   {{ else }}
 
