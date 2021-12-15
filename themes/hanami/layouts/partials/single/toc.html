@@ -1,0 +1,12 @@
+<div class="d-none d-xl-block col-xl-2 ct-toc">
+  <ul class="section-nav" id="secondary-navigation">
+    {{ $sections := findRE `<h2.*?>(.|\n)*?</h2>` .Content }}
+      {{ range $sections }}
+      {{ $title := htmlUnescape (. | plainify) }}
+      {{ $anchor := trim (slicestr (index (findRE `id="(.*)"` .) 0) 4) `"` }}
+      <li class="toc-entry toc-h2">
+        <a href="#{{ $anchor }}" class="nav-link">{{ $title }}</a>
+      </li>
+      {{ end }}
+  </ul>
+</div>

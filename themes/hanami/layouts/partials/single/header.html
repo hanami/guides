@@ -1,0 +1,62 @@
+<header class="navbar navbar-dark flex-row align-items-md-center ct-navbar">
+  <a class="navbar-brand mr-0 mr-md-2" href="{{ "/" | relURL }}" aria-label="Bootstrap">
+    <img src="{{ "/assets/img/brand/white.png" | relURL }}" alt="Hanami guides logo">
+  </a>
+  <button class="navbar-toggler d-md-none" type="button" data-toggle="collapse" data-target="#ct-docs-nav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <ul class="navbar-nav flex-row mr-auto ml-4 d-none d-md-flex">
+    <li class="nav-item">
+      <form>
+        <input type="text" placeholder="Search" class="form-control" id="search-input" />
+      </form>
+    </li>
+  </ul>
+  <div class="d-none d-sm-block ml-auto">
+    <ul class="navbar-nav ct-navbar-nav flex-row align-items-center">
+      <li class="nav-item">
+        <a class="nav-link nav-link-icon" href="http://hanamirb.org" target="_blank" title="Hanami website">
+          <i class="ni ni-world"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link-icon" href="{{ .Site.Params.githubrepo }}/edit/{{ getenv "BRANCH" }}/content/{{ .File.Path }}" target="_blank" title="Edit this page">
+          <i class="fa fa-pencil-square-o"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link-icon" href="https://github.com/{{ .Site.Params.github }}" target="_blank" title="Star Hanami on GitHub">
+          <i class="fa fa-github"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link-icon" href="https://twitter.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Twitter">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link-icon" href="https://www.facebook.com/{{ .Site.Params.twitter }}" target="_blank" title="Like Hanami on Facebook">
+          <i class="fa fa-facebook-square"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link-icon" href="https://www.instagram.com/{{ .Site.Params.twitter }}" target="_blank" title="Follow Hanami on Instagram">
+          <i class="fa fa-instagram"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link-icon" href="http://chat.hanamirb.org/" target="_blank" title="Hanami chat">
+          <i class="ni ni-chat-round"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link-icon" href="https://github.com/hanami/guides/releases" target="_blank" title="Download Hanami Guides for offline usage">
+          <i class="fa fa-cloud-download"></i>
+        </a>
+      </li>
+      <!-- <li class="nav-item"> -->
+      <!--   <span class="badge badge-pill badge-primary">v{{ .Site.Params.hanamiversion }}</span> -->
+      <!-- </li> -->
+    </ul>
+  </div>
+</header>
