@@ -7,28 +7,27 @@ aliases:
 ---
 
 <p id="getting-started-lead" class="lead">
-  Hello. If you're reading this page, it's very likely that you want to learn more about Hanami.
-  That's great, congrats! If you're looking for new ways to build maintainable, secure, faster and testable web applications, you're in good hands.
-  <br><br>
-  <strong>Hanami is built for people like you.</strong>
-  <br><br>
-  I warn you that whether you're a total beginner or an experienced developer <strong>this learning process can be hard</strong>.
-  Over time, we build expectations about how things should be, and it can be painful to change. <strong>But without change, there is no challenge</strong> and without challenge, there is no growth.
-  <br><br>
-  Sometimes a feature doesn't look right, that doesn't mean it's you.
-  It can be a matter of formed habits, a design fallacy or even a bug.
-  <br><br>
-  Myself and the rest of the Community are putting best efforts to make Hanami better every day.
-  <br><br>
-  In this guide we will set up our first Hanami project and build a simple bookshelf web application.
-  We'll touch on all the major components of Hanami framework, all guided by tests.
-  <br><br>
-  <strong>If you feel alone, or frustrated, don't give up, jump in our <a href="http://chat.hanamirb.org">chat</a> and ask for help.</strong>
-  There will be someone more than happy to talk with you.
-  <br><br>
-  Enjoy,<br>
-  Luca Guidi<br>
-  <em>Hanami creator</em>
+  <p>
+    Hi there!
+  </p>
+
+  <p>
+    You're reading the 'Getting Started' guide for Hanami 2.0.
+    It's still in alpha, so this guide is a little rough.
+    An immediate example is that the generator
+    (`bundle exec hanami generate ...`) commands listed below
+    are not implemented yet.
+    Likewise, we'll instruct you to clone a template repository.
+    We'll have a `hanami new` command that will create all these files
+    but that's not done yet either.
+  </p>
+
+  <p>
+    The 'Getting Started' guide generally wants you to follow along,
+    but it might be better to just read through it at this point.
+  </p>
+
+  <!-- TODO: I like this 'letter' but we should write a whole new one for Hanami 2.0 -->
 </p>
 
 <br>
