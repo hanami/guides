@@ -18,8 +18,15 @@ aliases:
     (`bundle exec hanami generate ...`) commands listed below
     are not implemented yet.
     Likewise, we'll instruct you to clone a template repository.
-    We'll have a `hanami new` command that will create all these files
+    We will have a `hanami new` command that will create all these files
     but that's not done yet either.
+  </p>
+
+  <p>
+    It'll have the options you expect for customizing your project:
+    specifying a database engine, specifying a view template engine, etc.
+    Please note that our application template uses `slim` for view templating
+    but Hanami 2 will support [any templating engine](https://github.com/rtomayko/tilt).
   </p>
 
   <p>
@@ -27,7 +34,7 @@ aliases:
     but it might be better to just read through it at this point.
   </p>
 
-  <!-- TODO: I like this 'letter' but we should write a whole new one for Hanami 2.0 -->
+  <!-- TODO: I liked the 'letter' that was here but we should write a whole new one for Hanami 2.0 -->
 </p>
 
 <br>
@@ -51,8 +58,33 @@ If you want to follow along, make sure you have a working installation of Ruby 2
 
 ## Create a New Hanami Project
 
-To create a new Hanami project, we need to install the Hanami gem from Rubygems.
-Then we can use the new `hanami` executable to generate a new project:
+<p class="alpha">
+  The `hanami new` command in this section doesn't exist for Hanami 2 yet.
+
+  Instead run:
+  <code>
+    $ git clone https://github.com/hanami/hanami-2-application-template.git bookshelf
+    $ cd bookshelf
+    $ ./bin/install bookshelf
+    $ mv .env-example .env
+    $ bundle exec rackup
+  </code>
+
+  This runs a 'rack' server using the `config.ru` file.
+
+  You can checkout the running server at: http://localhost:9292/
+
+  This simple rack server doesn't include code reloading,
+  so you'll have to restart the server with each code change.
+  (We'll have a server that has code reloading in development in Hanami 2, just not yet.)
+
+  Then please skip to the next section ("Hanami's Architecture"), dear alpha reader.
+</p>
+
+To create a new Hanami project,
+we need to install the Hanami gem from Rubygems.
+
+Then we can use the `hanami new` command to generate a new project:
 
 ```shell
 $ gem install hanami
@@ -116,6 +148,12 @@ And... bask in the glory of your first Hanami project at
 
 ## Hanami's Architecture
 
+<p class="alpha">
+  This part is more or less the same as the Hanami 1.3 text below, <strong>except</strong>:
+  we now call the separate parts of the application <tt><strong>slices</strong></tt> now.
+  Accordingly, they're located in <tt>slices/</tt> folder now.
+</p>
+
 Hanami's architecture revolves around your project containing many `apps`.
 These all live together in the same codebase, and exist in the same Ruby process.
 
@@ -139,6 +177,26 @@ Both our "business logic" and our persistence live in `lib/`.
 _(Hanami architecture is heavily inspired by [Hexagonal architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)).)_
 
 ## Writing Our First Test
+<p class="alpha">
+  The `hanami-2-application-template` already has this spec included.
+  It likely won't stick around when we move to generating the new application,
+  but you can take a look at the test and run it.
+
+  It's located at: `spec/suite/main/features/home_spec.rb`,
+  and you can run the entire suite (which only currently includes this single spec)
+  with `bundle exec rake`.
+
+  You'll see that the test already passes,
+  because the template already includes a route, action, view, and template for the root path.
+
+  The routes file is located at `config/routes.rb`.
+  The action file is located at `slices/main/actions/home/show.rb`.
+  The view file is located at `slices/main/views/home/show.rb`.
+  The template file is located at `slices/main/templates/home/show.html.slim`.
+
+  Please read through this section <strong>and</strong> the next one ("Following a Request"),
+  but then move on to the "Generating New Actions" section.
+</p>
 
 The opening screen we see when we point our browser at our app is a default page which is displayed when there are no routes defined.
 
@@ -146,7 +204,7 @@ Hanami encourages [Behavior Driven Development](https://en.wikipedia.org/wiki/Be
 To get our first custom page to display, we'll write a high-level feature test:
 
 ```ruby
-# spec/web/features/visit_home_spec.rb
+# spec/suite/main/features/visit_home_spec.rb
 require 'features_helper'
 
 RSpec.describe 'Visit home' do
@@ -188,14 +246,14 @@ Failures:
   1) Visit home is successful
      Failure/Error: expect(page).to have_content('Bookshelf')
        expected to find text "Bookshelf" in "404 - Not Found"
-     # ./spec/web/features/visit_home_spec.rb:7:in `block (2 levels) in <top (required)>'
+     # ./spec/suite/main/features/visit_home_spec.rb:4:in `block (2 levels) in <top (required)>'
 
 Finished in 0.02604 seconds (files took 1.14 seconds to load)
 2 examples, 1 failure
 
 Failed examples:
 
-rspec ./spec/web/features/visit_home_spec.rb:4 # Visit home is successful
+rspec ./spec/suite/main/features/visit_home_spec.rb:4 # Visit home is successful
 ```
 
 Now let's make it pass.
@@ -204,8 +262,19 @@ We'll add the code required to make this test pass, step-by-step.
 The first thing we need to add is a route:
 
 ```ruby
-# apps/web/config/routes.rb
-root to: 'home#index'
+# config/routes.rb
+
+require "hanami/application/routes"
+
+module Bookshelf
+  class Routes < Hanami::Application::Routes
+    define do
+      slice :main, at: "/" do
+        root to: "home.show"
+      end
+    end
+  end
+end
 ```
 
 We pointed our app's root URL to the `index` action of the `home` controller (see the [routing guide](/routing/overview) for more information).
@@ -215,7 +284,7 @@ If we run our tests, we'll get a `Hanami::Routing::EndpointNotFound` error.
 That makes sense because we need to create the `home#index` action.
 
 ```ruby
-# apps/web/controllers/home/index.rb
+# slices/main/actions/home/index.rb
 module Web
   module Controllers
     module Home
@@ -236,7 +305,7 @@ Moreover, each action has a corresponding view, which is also defined by its cla
 This one needs to be added in order to complete the request.
 
 ```ruby
-# apps/web/views/home/index.rb
+# slices/main/views/home/index.rb
 module Web
   module Views
     module Home
@@ -255,7 +324,7 @@ This template is what we need to add, to make our tests pass.
 All we need to do is add the bookshelf heading.
 
 ```erb
-# apps/web/templates/home/index.html.erb
+# slices/main/web/templates/home/index.html.erb
 <h1>Bookshelf</h1>
 ```
 
@@ -272,6 +341,10 @@ This means all our tests pass!
 
 ## Generating New Actions
 
+<p class="alpha">
+  This section has been updated for Hanami 2.
+</p>
+
 Let's use our new knowledge about Hanami __routes__, __actions__, __views__, and __templates__.
 
 The purpose of our sample Bookshelf project is to manage books.
@@ -283,21 +356,24 @@ Our first step is to list out all the books we know about.
 Let's write a new feature test describing what we want to achieve:
 
 ```ruby
-# spec/web/features/list_books_spec.rb
-require 'features_helper'
+# spec/suite/main/features/list_books_spec.rb
+RSpec.describe "List books", :web do
+  it "displays each book on the page" do
+    visit "/books"
 
-RSpec.describe 'List books' do
-  it 'displays each book on the page' do
-    visit '/books'
-
-    within '#books' do
-      expect(page).to have_css('.book', count: 2)
+    within "#books" do
+      expect(page).to have_css(".book", count: 2)
     end
   end
 end
 ```
 
-This test means that when we go to [/books](http://localhost:2300/books),
+The first thing to note is `:web` in the first line of the spec:
+this tells our spec to use our 'web' settings,
+i.e. that it uses a configured Capybara, including its `visit` method.
+You can see that defined in `spec/support/web.rb`.
+
+This test means that when we go to [/books](http://localhost:9292/books),
 we'll see two HTML elements that have class `book`,
 and both will be inside of an HTML element that has an id of `books`.
 
@@ -310,41 +386,73 @@ Let's create a new action and a new route to fix that.
 
 ### Hanami Generators
 
+<p class="alpha">
+  We don't have generators for Hanami 2 yet.
+
+  Instead of running a command that doesn't work,
+  you can get the <em>already completed</em> version of the files with:
+
+  <code>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/actions/books/index.rb -P slices/main/actions/books/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/actions/books/index_spec.rb -P spec/suite/main/actions/books/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/views/books/index.rb -P slices/main/views/books/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/views/books/index_spec.rb -P spec/suite/main/views/books/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/web/templates/books/index.html.erb -P slices/main/web/templates/books
+  </code>
+
+  So, read this section and skip to the 'Layouts' section.
+</p>
+
 Hanami ships with a number of **generators**, which are tools that write some code for you.
 
 In our terminal, let's run:
 
 ```shell
-$ bundle exec hanami generate action web books#index
+$ bundle exec hanami generate action main books#index
 ```
 
 <p class="notice">
   If you're using ZSH and that doesn't work
   (with an error like <tt>zsh: no matches found: books#index</tt>),
-  Hanami lets us write this instead: <tt>hanami generate action web books/index</tt>
+  Hanami lets us write this instead: <tt>hanami generate action main books/index</tt>
 </p>
 
 This does a lot for us:
 
-- Creating an action at `apps/web/controllers/books/index.rb` (and spec for it),
-- Creating a view at `apps/web/views/books/index.rb` (and a spec for it),
-- Creating a template at `apps/web/templates/books/index.html.erb`.
+- Creating an action at `slices/main/controllers/books/index.rb` (and spec for it),
+- Creating a view at `slices/main/views/books/index.rb` (and a spec for it),
+- Creating a template at `slices/main/web/templates/books/index.html.erb`.
 
-_(If you're confused by 'action' vs. 'controller': Hanami only has `action` classes, so a controller is just a module to group several related actions together.)_
+_(If you're confused by 'action' vs. 'controller':
+Hanami only has `action` classes, so a controller is just a module to group several related actions together.)_
 
 These files are all pretty much empty.
 They have some basic code in there, so Hanami knows how to use the class.
 Thankfully we don't have to manually create those five files,
 with that specific code in them.
 
-The generator also adds a new route for us in the `web` app's routes file (`apps/web/config/routes.rb`).
+The generator also adds a new route for us in the routes file (`config/routes.rb`).
 
 ```ruby
-get '/books', to: 'books#index'
+# frozen_string_literal: true
+
+require "hanami/application/routes"
+
+module Bookshelf
+  class Routes < Hanami::Application::Routes
+    define do
+      slice :main, at: "/" do
+        root to: "home.show"
+
+        get "/books", to: "books.index" # This was added by the generator
+      end
+    end
+  end
+end
 ```
 
 To make our tests pass,
-we need to edit our newly generated template file in `apps/web/templates/books/index.html.erb`:
+we need to edit our newly generated template file in `slices/main/web/templates/books/index.html.erb`:
 
 ```html
 <h1>Bookshelf</h1>
@@ -380,8 +488,14 @@ Let's fix that repetition, to show how that works.
 
 ### Layouts
 
+<p class="alpha">
+  The template uses `slim` as the template rending engine, but this guide uses ERB.
+
+  So, delete the `slices/main/web/templates/application.html.slim` file and create the `erb` layout file below.
+</p>
+
 To avoid repeating ourselves in every single template, we can modify our layout template.
-Let's edit `apps/web/templates/application.html.erb` to look like this:
+Let's edit `slices/main/web/templates/application.html.erb` to look like this:
 
 ```rhtml
 <!DOCTYPE html>
@@ -397,7 +511,7 @@ Let's edit `apps/web/templates/application.html.erb` to look like this:
 </html>
 ```
 
-And remove the `<h1>Bookshelf</h1>` line from the other templates (`apps/web/templates/home/index.html.erb`, `apps/web/templates/books/index.html.erb`),
+And remove the `<h1>Bookshelf</h1>` line from the other templates (`slices/main/web/templates/home/index.html.erb`, `slices/main/web/templates/books/index.html.erb`),
 so it's not duplicated.
 
 A **layout template** is like any other template, but it is used to wrap your regular templates.
@@ -406,7 +520,13 @@ It's the perfect place to put our repeating headers and footers.
 
 ## Modeling Our Data With Entities
 
-Hard-coding books in our templates is, admittedly, kind of cheating.
+<p class="alpha">
+  Hanami 2 will ship with [ROM](https://rom-rb.org/) as its model layer.
+
+  The terminology here will corresponsingly change but the rough idea is the same.
+</p>
+
+Hard-coding books in our templates is... well... kind of cheating.
 Let's add some dynamic data to our application!
 
 We'll store books in our database and display them on our page.
@@ -426,16 +546,30 @@ _(We also use repositories to turn the data from the database back into a `Book`
 
 Read more about entities and repositories in the [models guide](/models/overview).
 
+<p class="alpha">
+  Again, no generators exist, so you can run these commands, again, to get the _completed_ version of the file.
+
+  <code>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/repositories/book_repository.rb -P slices/main/repositories
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/repositories/book_repository_spec.rb -P spec/suite/main/main/repositories
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/entities/book.rb -P slices/main/entities
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/entities/book_spec.rb -P spec/suite/main/entities
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/db/migrations/20220107123456_create_books.rb -P db/migrations
+  </code>
+
+  Read along and move on to the next section.
+</p>
+
 Hanami ships with a generator for models,
 so let's use it to create a `Book` entity and its corresponding repository:
 
 ```shell
-$ bundle exec hanami generate model book
-create  lib/bookshelf/entities/book.rb
-create  lib/bookshelf/repositories/book_repository.rb
-create  db/migrations/20181024110038_create_books.rb
-create  spec/bookshelf/entities/book_spec.rb
-create  spec/bookshelf/repositories/book_repository_spec.rb
+$ bundle exec hanami generate model main book
+create  slices/main/entities/book.rb
+create  slices/main/repositories/book_repository.rb
+create  db/migrations/20220107123456_create_books.rb
+create  spec/suite/main/entities/book_spec.rb
+create  spec/suite/main/repositories/book_repository_spec.rb
 ```
 
 The generator gives us an entity, a repository, and their associated test files.
@@ -447,9 +581,9 @@ It also gives a database migration.
 Let's modify the generated migration to include `title` and `author` fields:
 
 ```ruby
-# db/migrations/20181024110038_create_books.rb
+# db/migrations/20220107123456_create_books.rb
 
-Hanami::Model.migration do
+ROM::SQL.migration do
   change do
     create_table :books do
       primary_key :id
@@ -485,8 +619,12 @@ retrieve as we'll soon see.
 For now, we need to create a simple entity class:
 
 ```ruby
-# lib/bookshelf/entities/book.rb
-class Book < Hanami::Entity
+# slices/main/entities/book.rb
+module Main
+  module Entities
+    class Book < Hanami::Entity
+    end
+  end
 end
 ```
 
@@ -494,7 +632,7 @@ This class will generate getters and setters for each attribute we pass to initi
 We can verify it all works as expected with a unit test:
 
 ```ruby
-# spec/bookshelf/entities/book_spec.rb
+# spec/slices/main/entities/book_spec.rb
 
 RSpec.describe Book, type: :entity do
   it 'can be initialized with attributes' do
