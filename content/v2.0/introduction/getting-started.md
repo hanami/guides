@@ -36,24 +36,17 @@ aliases:
 ## Prerequisites
 
 Before we get started, let's get some prerequisites out of the way.
-First, we're going to assume a basic knowledge of developing web applications.
+First, we're going to assume basic knowledge of developing web applications.
 
-You should also be familiar with [Bundler](http://bundler.io), [Rake](http://rake.rubyforge.org), working with a terminal and building apps using the [Model, View, Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) paradigm.
+You should also be familiar with
+[Bundler](http://bundler.io),
+[Rake](http://rake.rubyforge.org),
+working with a terminal,
+and building apps using the
+[Model, View, Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) paradigm.
 
 Lastly, in this guide, we'll be using an [SQLite](https://sqlite.org/) database.
-If you want to follow along, make sure you have a working installation of Ruby 2.3+ and SQLite 3+ on your system.
-
-<p class="notice">
-  This guide is for the latest release of Hanami: v1.3.
-
-  We, the Hanami core team, are working on the next major version of Hanami: v2.0.
-
-  That said, Hanami v1.3 only supports Ruby 2.3–2.7. It does not support Ruby 3.
-
-  So, to continue with this guide, you have to be using Ruby 2.
-
-  (Hanami v2.0 will support Ruby 3, of course.)
-</p>
+If you want to follow along, make sure you have a working installation of Ruby 2.6+ and SQLite 3+ on your system.
 
 
 ## Create a New Hanami Project
