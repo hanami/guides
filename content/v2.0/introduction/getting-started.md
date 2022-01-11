@@ -397,10 +397,11 @@ Let's create a new action and a new route to fix that.
     $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/actions/books/index_spec.rb -P spec/suite/main/actions/books/
     $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/views/books/index.rb -P slices/main/views/books/
     $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/views/books/index_spec.rb -P spec/suite/main/views/books/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/web/templates/books/index.html.erb -P slices/main/web/templates/books
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/web/templates/books/index.html.erb -P slices/main/web/templates/books/
   </code>
 
-  So, read this section and skip to the 'Layouts' section.
+  You'll need to manually edit the `config/routes.rb` file to make it look like the one below.
+  Read the section and pick it up again at the 'Layouts' section.
 </p>
 
 Hanami ships with a number of **generators**, which are tools that write some code for you.
@@ -550,14 +551,14 @@ Read more about entities and repositories in the [models guide](/models/overview
   Again, no generators exist, so you can run these commands, again, to get the _completed_ version of the file.
 
   <code>
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/repositories/book_repository.rb -P slices/main/repositories
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/repositories/book_repository_spec.rb -P spec/suite/main/main/repositories
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/entities/book.rb -P slices/main/entities
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/entities/book_spec.rb -P spec/suite/main/entities
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/db/migrations/20220107123456_create_books.rb -P db/migrations
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/repositories/book_repository.rb -P slices/main/repositories/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/repositories/book_repository_spec.rb -P spec/suite/main/main/repositories/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/entities/book.rb -P slices/main/entities/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/entities/book_spec.rb -P spec/suite/main/entities/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/db/migrations/20220107123456_create_books.rb -P db/migrations/
   </code>
 
-  Read along and move on to the next section.
+  Read along and move on to the "Displaying Dynamic Data" section.
 </p>
 
 Hanami ships with a generator for models,
@@ -633,12 +634,18 @@ We can verify it all works as expected with a unit test:
 
 ```ruby
 # spec/slices/main/entities/book_spec.rb
+require "spec_helper"
+require_relative "../../../slices/main/entities/book" # FIXME: shouldn't be necessary
 
-RSpec.describe Book, type: :entity do
-  it 'can be initialized with attributes' do
-    book = Book.new(title: 'Refactoring', author: 'Martin Fowler')
-    expect(book.title).to eq('Refactoring')
-    expect(book.author).to eq('Martin Fowler')
+module Main
+  module Entities
+    RSpec.describe Book, type: :entity do
+      it 'can be initialized with attributes' do
+        book = Book.new(title: 'Refactoring', author: 'Martin Fowler')
+        expect(book.title).to eq('Refactoring')
+        expect(book.author).to eq('Martin Fowler')
+      end
+    end
   end
 end
 ```
@@ -654,14 +661,14 @@ We can use Hanami's `console` command to launch `irb` with our application pre-l
 
 ```shell
 $ bundle exec hanami console
->> repository = BookRepository.new
+>> repository = Main::Repositories::BookRepository.new
   # => #<BookRepository relations=[:books]>
->> repository.all
+>> repository.books.to_a
   # => []
 >> book = repository.create(title: 'TDD', author: 'Kent Beck')
-  # => #<Book:0x007f9ab61c23b8 @attributes={:id=>1, :title=>"TDD", :author=>"Kent Beck", :created_at=>2018-10-24 11:11:38 UTC, :updated_at=>2018-10-24 11:11:38 UTC}>
->> repository.find(book.id)
-  # => #<Book:0x007f9ab6181610 @attributes={:id=>1, :title=>"TDD", :author=>"Kent Beck", :created_at=>2018-10-24 11:11:38 UTC, :updated_at=>2018-10-24 11:11:38 UTC}>
+  # => #<Bookshelf::Entities::Book id=1 title="TDD" author="Kent Beck" created_at=2022-01-07 12:00:00.12345 -0500 updated_at=2022-01-07 12:00:00.12345 -0500>
+>> repository.books.by_pk(1).one
+  # => #<Bookshelf::Entities::Book id=1 title="TDD" author="Kent Beck" created_at=2022-01-07 12:00:00.12345 -0500 updated_at=2022-01-07 12:00:00.12345 -0500>
 ```
 
 Hanami repositories have methods to load one or more entities from our database, and to create and update existing records.
@@ -677,14 +684,13 @@ With our new experience modeling data, we can get to work displaying dynamic dat
 Let's adjust the feature test we created earlier:
 
 ```ruby
-# spec/web/features/list_books_spec.rb
+# spec/suite/features/list_books_spec.rb
 require 'features_helper'
 
 RSpec.describe 'List books' do
-  let(:repository) { BookRepository.new }
-  before do
-    repository.clear
+  let(:repository) { Main::Slice.container["repositories.book_repository"] }
 
+  before do
     repository.create(title: 'Practical Object-Oriented Design in Ruby', author: 'Sandi Metz')
   end
 
@@ -709,37 +715,38 @@ Our view needs to loop over all available records and render them.
 Let's write a test to force this change in our view:
 
 ```ruby
-# spec/web/views/books/index_spec.rb
+# spec/suite/main/views/books/index_spec.rb
 
-RSpec.describe Web::Views::Books::Index, type: :view do
-  let(:exposures) { Hash[books: []] }
-  let(:template)  { Hanami::View::Template.new('apps/web/templates/books/index.html.erb') }
-  let(:view)      { described_class.new(template, exposures) }
-  let(:rendered)  { view.render }
+require "spec_helper"
 
-  it 'exposes #books' do
-    expect(view.books).to eq(exposures.fetch(:books))
+RSpec.describe Main::Views::Books::Index do
+  let(:view) { Main::Views::Books::Index.new }
+  let(:books) { Array[] }
+  let(:rendered) { view.call(books: books) }
+
+  it "exposes #books" do
+    expect(rendered.locals[:books].value).to eq(books)
   end
 
-  context 'when there are no books' do
-    it 'shows a placeholder message' do
-      expect(rendered).to include('<p class="placeholder">There are no books yet.</p>')
+  describe "when there are no books" do
+    it "shows a placeholder message" do
+      expect(rendered.to_s).to include('<p class="placeholder">There are no books yet.</p>')
     end
   end
 
-  context 'when there are books' do
-    let(:book1)     { Book.new(title: 'Refactoring', author: 'Martin Fowler') }
-    let(:book2)     { Book.new(title: 'Domain Driven Design', author: 'Eric Evans') }
-    let(:exposures) { Hash[books: [book1, book2]] }
+  describe "when there are books" do
+    let(:book1) { Factory.structs[:book, title: "Refactoring", author: "Martin Fowler"] }
+    let(:book2) { Factory.structs[:book, title: "Domain Driven Design", author: "Eric Evans"] }
+    let(:books) { [book1, book2] }
 
-    it 'lists them all' do
-      expect(rendered.scan(/class="book"/).length).to eq(2)
-      expect(rendered).to include('Refactoring')
-      expect(rendered).to include('Domain Driven Design')
+    it "lists them all" do
+      expect(rendered.to_s.scan(/class="book"/).length).to eq(2)
+      expect(rendered.to_s).to include("Refactoring")
+      expect(rendered.to_s).to include("Domain Driven Design")
     end
 
-    it 'hides the placeholder message' do
-      expect(rendered).to_not include('<p class="placeholder">There are no books yet.</p>')
+    it "hides the placeholder message" do
+      expect(rendered.to_s).to_not include('<p class="placeholder">There are no books yet.</p>')
     end
   end
 end
@@ -753,7 +760,7 @@ Hanami is designed around simple objects with minimal interfaces that are easy t
 Now we have 3 failing tests, but we can fix them by rewriting our template to implement these requirements:
 
 ```erb
-# apps/web/templates/books/index.html.erb
+# slices/main/templates/books/index.html.erb
 <h2>All books</h2>
 
 <% if books.any? %>
@@ -772,50 +779,51 @@ Now we have 3 failing tests, but we can fix them by rewriting our template to im
 ```
 
 If we run our feature test now, we'll see it fails — because our controller
-action does not [_expose_](/actions/exposures) the books to our view. We can write a test for
-that change:
+action does not [_expose_](/actions/exposures) the books to our view.
+We can write a test for that change:
 
 ```ruby
-# spec/web/controllers/books/index_spec.rb
+# spec/suite/main/actions/books/index_spec.rb
 
-RSpec.describe Web::Controllers::Books::Index, type: :action do
+RSpec.describe Main::Actions::Books::Index do
   let(:action) { described_class.new }
   let(:params) { Hash[] }
-  let(:repository) { BookRepository.new }
+  let(:repository) { Main::Slice.container["repositories.book_repository"] }
 
   before do
-    repository.clear
-
-    @book = repository.create(title: 'TDD', author: 'Kent Beck')
+    repository.books.delete
   end
 
-  it 'is successful' do
+  let(:book) { repository.create(title: 'TDD', author: 'Kent Beck') }
+
+  it "is successful" do
+    book
     response = action.call(params)
-    expect(response[0]).to eq(200)
+    expect(response.status).to eq(200)
   end
 
-  it 'exposes all books' do
-    action.call(params)
-    expect(action.exposures[:books]).to eq([@book])
+  it "exposes all books" do
+    book
+    response = action.call(params)
+    expect(response.exposures[:books]).to eq([book])
   end
 end
 ```
 
-Writing tests for controller actions gives you two possible things to test: you either assert on the response object, which is a Rack-compatible array of status, headers, and content; or on the action itself, which will contain exposures after we've called it.
-Now we've specified that the action exposes `:books`, we can implement our action:
+Note that we only make expectations of the result of `call`ing the action, which is the `response`.
+Now we've specified that the action should end up exposing `books`, we can implement our action:
 
 ```ruby
-# apps/web/controllers/books/index.rb
-module Web
-  module Controllers
+# slices/main/actions/books/index.rb
+
+module Main
+  module Actions
     module Books
-      class Index
-        include Web::Action
+      class Index < Main::Action
+        include Deps["repositories.book_repository"]
 
-        expose :books
-
-        def call(params)
-          @books = BookRepository.new.all
+        def handle(request, response)
+          response[:books] = book_repository.books.to_a
         end
       end
     end
@@ -823,7 +831,22 @@ module Web
 end
 ```
 
-By using the `expose` method in our action class, we can expose the contents of our `@books` instance variable to the outside world, so that Hanami can pass it to the view.
+By setting a value for `:books` on our response, we are adding a `books` key to our exposures.
+This means our view can access it, but we still need to tell the view to send it to the template.
+
+```ruby
+# slices/main/views/books/index.rb
+
+module Main
+  module Views
+    module Books
+      class Index < View::Base
+        expose :books
+      end
+    end
+  end
+end
+```
 That's enough to make all our tests pass again!
 
 ```shell
@@ -843,46 +866,73 @@ When the user submits the form, we build a new entity, save it, and redirect the
 Here's that story expressed in a test:
 
 ```ruby
-# spec/web/features/add_book_spec.rb
+# spec/suite/main/features/add_book_spec.rb
 require 'features_helper'
 
-RSpec.describe 'Add a book' do
-  before do
-    BookRepository.new.clear
-  end
+RSpec.describe "Add a book", :db do
+  it "can create a new book" do
+    visit "/books/new"
 
-  it 'can create a new book' do
-    visit '/books/new'
+    within "form#book-form" do
+      fill_in "Title",  with: "New book"
+      fill_in "Author", with: "Some author"
 
-    within 'form#book-form' do
-      fill_in 'Title',  with: 'Example book'
-      fill_in 'Author', with: 'Some author'
-
-      click_button 'Create'
+      click_button "Create"
     end
 
-    expect(page).to have_current_path('/books')
-    expect(page).to have_content('Example book')
+    expect(page).to have_current_path("/books")
+    expect(page).to have_content("New book")
+  end
+
+  it "displays list of errors when params contains errors" do
+    visit "/books/new"
+
+    within "form#book-form" do
+      click_button "Create"
+    end
+
+    expect(page).to have_current_path("/books")
+
+    expect(page).to have_content("There was a problem with your submission")
+    expect(page).to have_content("Title must be filled")
+    expect(page).to have_content("Author must be filled")
   end
 end
 ```
 
 ### Laying The Foundations For A Form
 
+<p class="alpha">
+  In the few minutes since you started reading this, we still haven't added generators.
+
+  In the meantime, you can grab what <em>would</em> be generated with these commands:
+
+  <code>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/actions/books/new.rb -P slices/main/actions/books/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/actions/books/new_spec.rb -P spec/suite/main/actions/books/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/views/books/new.rb -P slices/main/views/books/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/views/books/new_spec.rb -P spec/suite/main/views/books/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/web/templates/books/new.html.erb -P slices/main/web/templates/books/
+  </code>
+
+  But you'll need to manually edit `config/routes.rb` to add the route listed below.
+</p>
 By now, we should be familiar with the working of actions, views, and templates.
 
 We'll speed things up a little, so we can quickly get to the good parts.
 First, create a new action for our "New Book" page:
 
 ```shell
-$ bundle exec hanami generate action web books#new
+$ bundle exec hanami generate action main books#new
 ```
 
 This adds a new route to our app:
 
 ```ruby
 # apps/web/config/routes.rb
-get '/books/new', to: 'books#new'
+  ...
+    get '/books/new', to: 'books.new'
+  ...
 ```
 
 The interesting bit will be our new template, because we'll be using Hanami's form builder to construct a HTML form around our `Book` entity.
@@ -923,7 +973,7 @@ To submit our form, we need yet another action.
 Let's create a `Books::Create` action:
 
 ```shell
-$ bundle exec hanami generate action web books#create
+$ bundle exec hanami generate action main books#create
 ```
 
 This adds a new route to our app:
