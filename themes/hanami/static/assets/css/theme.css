@@ -229,7 +229,8 @@ main p {
 /* This corresponds to .alert class from original theme */
 p.notice,
 p.convention,
-p.warning {
+p.warning,
+p.alpha {
   position: relative;
   margin-bottom: 1rem;
   padding: 1rem 1.5rem;
@@ -258,7 +259,44 @@ p.warning {
   background-color: #fc7c5f;
 }
 
+p.alpha {
+  padding-top: 3em;
+  background-color: #b48ead;
+  font-size: 1em;
+  color: white;
+}
+
+p.alpha:before {
+  content: "alpha";
+  padding: 0 1em;
+  text-transform: uppercase;
+  font-size: 1.25em;
+  border-radius: .2em 0 .2em 0;
+  top: 0em;
+  left: 0;
+  letter-spacing: 0.2em;
+  font-weight: bold;
+  background-color: #434c5e;
+  position: absolute;
+  color: #e5e9f0;
+}
+
+p.alpha code {
+  background-color: #eceff4;
+  display: block;
+}
+
+p.alpha a {
+  color: #d8dee9;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 p.convention code,
+p.warning code {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
 p.warning code {
   background-color: rgba(255, 255, 255, 0.8);
 }

@@ -7,32 +7,21 @@ aliases:
 ---
 
 <p id="getting-started-lead" class="lead">
-  <p>
-    Hi there!
-  </p>
-
-  <p>
-    You're reading the 'Getting Started' guide for Hanami 2.0.
-    It's still in alpha, so this guide is a little rough.
-    An immediate example is that the generator
-    (`bundle exec hanami generate ...`) commands listed below
-    are not implemented yet.
-    Likewise, we'll instruct you to clone a template repository.
-    We will have a `hanami new` command that will create all these files
-    but that's not done yet either.
-  </p>
-
-  <p>
-    It'll have the options you expect for customizing your project:
-    specifying a database engine, specifying a view template engine, etc.
-    Please note that our application template uses `slim` for view templating
-    but Hanami 2 will support [any templating engine](https://github.com/rtomayko/tilt).
-  </p>
-
-  <p>
-    The 'Getting Started' guide generally wants you to follow along,
-    but it might be better to just read through it at this point.
-  </p>
+  Hi there! <br/><br/>
+  You're reading the 'Getting Started' guide for Hanami 2.0.
+  It's still in <strong>alpha</strong>, so this guide is a little rough.
+  An obvious example is that the generator
+  (<code>bundle exec hanami generate ...</code>) commands listed below
+  are not implemented yet.<br/><br/>
+  Likewise, we'll instruct you to clone a template repository.
+  We will have a `hanami new` command that will create all these files
+  but that's not done yet either.<br/><br/>
+  It'll have the options you expect for customizing your project:
+  specifying a database engine, specifying a view template engine, etc.
+  Please note that our application template uses `slim` for view templating
+  but Hanami 2 will support <a href="https://github.com/rtomayko/tilt">any templating engine</a>.<br/><br/>
+  The 'Getting Started' guide generally wants you to follow along,
+  but it might be better to just read through it at this point.
 
   <!-- TODO: I liked the 'letter' that was here but we should write a whole new one for Hanami 2.0 -->
 </p>
@@ -59,25 +48,21 @@ If you want to follow along, make sure you have a working installation of Ruby 2
 ## Create a New Hanami Project
 
 <p class="alpha">
-  The `hanami new` command in this section doesn't exist for Hanami 2 yet.
-
-  Instead run:
+  The `hanami new` command in this section doesn't exist for Hanami 2 alpha yet.<br/>
+  Instead run:<br/>
   <code>
-    $ git clone https://github.com/hanami/hanami-2-application-template.git bookshelf
-    $ cd bookshelf
-    $ ./bin/install bookshelf
-    $ mv .env-example .env
+    $ git clone https://github.com/hanami/hanami-2-application-template.git bookshelf<br/>
+    $ cd bookshelf<br/>
+    $ ./bin/install bookshelf<br/>
+    $ mv .env-example .env<br/>
     $ bundle exec rackup
   </code>
-
-  This runs a 'rack' server using the `config.ru` file.
-
-  You can checkout the running server at: http://localhost:9292/
-
+  <br/>
+  This runs a 'rack' server using the `config.ru` file.<br/>
+  You can checkout the running server at: http://localhost:9292/<br/>
   This simple rack server doesn't include code reloading,
   so you'll have to restart the server with each code change.
-  (We'll have a server that has code reloading in development in Hanami 2, just not yet.)
-
+  (We'll have a server that has code reloading in development in Hanami 2, just not yet.)<br/><br/>
   Then please skip to the next section ("Hanami's Architecture"), dear alpha reader.
 </p>
 
@@ -109,12 +94,12 @@ $ tree -L 1
 ├── Gemfile
 ├── README.md
 ├── Rakefile
-├── apps
 ├── config
 ├── config.ru
 ├── db
 ├── lib
 ├── public
+├── slices
 └── spec
 
 #{N} directories, #{Y} files
@@ -125,8 +110,7 @@ Here's what we need to know:
 * `Gemfile` defines our Rubygems dependencies (using Bundler).
 * `README.md` tells us how to set up and use the project.
 * `Rakefile` describes our Rake tasks.
-* `slices` contains one or more web applications compatible with Rack, where we can find the first generated Hanami application called `web`.
-  It's the place where we find our actions, views, routes, templates, repositories, and entities.
+* `slices` contains one or more web applications compatible with Rack, where we can find the first generated Hanami application called `main`. It's the place where we find our actions, views, routes, templates, repositories, and entities.
 * `config` contains configuration files.
 * `config.ru` is for Rack servers.
 * `db` contains our database schema and migrations.
@@ -148,12 +132,6 @@ And... bask in the glory of your first Hanami project at
 
 ## Hanami's Architecture
 
-<p class="alpha">
-  This part is more or less the same as the Hanami 1.3 text below, <strong>except</strong>:
-  we now call the separate parts of the application <tt><strong>slices</strong></tt> now.
-  Accordingly, they're located in <tt>slices/</tt> folder now.
-</p>
-
 Hanami's architecture revolves around your project containing many `slices`.
 These all live together in the same codebase, and (by default) exist in the same Ruby process.
 
@@ -167,7 +145,7 @@ Later (in a real project), we would add other slices, such as an `admin` panel, 
 We could also break our `main` slice into smaller parts, extracting isolated pieces of functionality.
 Hanami fully supports that, too!
 
-Different `apps` represent __delivery mechanisms__.
+Different `slices` represent __delivery mechanisms__.
 That means they're different ways of interacting with the core of your project, or the "business logic".
 
 Hanami doesn't want us to [repeat ourselves](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) therefore "business logic" is shared.
@@ -180,22 +158,18 @@ _(Hanami architecture is heavily inspired by [Hexagonal architecture](https://en
 <p class="alpha">
   The `hanami-2-application-template` already has this spec included.
   It likely won't stick around when we move to generating the new application,
-  but you can take a look at the test and run it.
-
+  but you can take a look at the test and run it., then skip to the next section.<br/><br/>
   It's located at: `spec/suite/main/features/home_spec.rb`,
   and you can run the entire suite (which only currently includes this single spec)
-  with `bundle exec rake`.
-
+  with `bundle exec rake`.<br/><br/>
   You'll see that the test already passes,
-  because the template already includes a route, action, view, and template for the root path.
-
-  The routes file is located at `config/routes.rb`.
-  The action file is located at `slices/main/actions/home/show.rb`.
-  The view file is located at `slices/main/views/home/show.rb`.
-  The template file is located at `slices/main/templates/home/show.html.slim`.
-
+  because the template already includes a route, action, view, and template for the root path.<br/><br/>
+  The routes file is located at `config/routes.rb`.<br/><br/>
+  The action file is located at `slices/main/actions/home/show.rb`.<br/><br/>
+  The view file is located at `slices/main/views/home/show.rb`.<br/><br/>
+  The template file is located at `slices/main/templates/home/show.html.slim`.<br/><br/>
   Please read through this section <strong>and</strong> the next one ("Following a Request"),
-  but then move on to the "Generating New Actions" section.
+  but then move on to the "Generating New Actions" section.<br/><br/>
 </p>
 
 The opening screen we see when we point our browser at our app is a default page which is displayed when there are no routes defined.
@@ -307,8 +281,7 @@ This one needs to be added in order to complete the request.
 module Main
   module Views
     module Home
-      class Index
-        include Web::View
+      class Index < View::Base
       end
     end
   end
@@ -338,10 +311,6 @@ Finished in 0.01394 seconds (files took 1.03 seconds to load)
 This means all our tests pass!
 
 ## Generating New Actions
-
-<p class="alpha">
-  This section has been updated for Hanami 2.
-</p>
 
 Let's use our new knowledge about Hanami __routes__, __actions__, __views__, and __templates__.
 
@@ -385,20 +354,17 @@ Let's create a new action and a new route to fix that.
 ### Hanami Generators
 
 <p class="alpha">
-  We don't have generators for Hanami 2 yet.
-
+  We don't have generators for Hanami 2 alpha yet.</br><br/>
   Instead of running a command that doesn't work,
-  you can get the <em>already completed</em> version of the files with:
-
+  you can get the <em>already completed</em> version of the files with:</br><br/>
   <code>
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/actions/books/index.rb -P slices/main/actions/books/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/actions/books/index_spec.rb -P spec/suite/main/actions/books/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/views/books/index.rb -P slices/main/views/books/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/views/books/index_spec.rb -P spec/suite/main/views/books/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/templates/books/index.html.erb -P slices/main/templates/books/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/actions/books/index.rb -P slices/main/actions/books/</br>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/actions/books/index_spec.rb -P spec/suite/main/actions/books/</br>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/views/books/index.rb -P slices/main/views/books/</br>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/views/books/index_spec.rb -P spec/suite/main/views/books/</br>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/templates/books/index.html.erb -P slices/main/templates/books/</br>
   </code>
-
-  You'll need to manually edit the `config/routes.rb` file to make it look like the one below.
+  You'll need to manually edit the `config/routes.rb` file to make it look like the one below.</br></br>
   Read the section and pick it up again at the 'Layouts' section.
 </p>
 
@@ -481,15 +447,14 @@ and our `home/index.html.erb` template from above,
 we have `<h1>Bookshelf</h1>`.
 
 This is not a huge deal, but in a real application,
-we'll likely have a logo or common navigation shared across all of the pages in our `app`.
+we'll likely have a logo or common navigation shared across all of the pages in our `slice`.
 
 Let's fix that repetition, to show how that works.
 
 ### Layouts
 
 <p class="alpha">
-  The template uses `slim` as the template rending engine, but this guide uses ERB.
-
+  The template uses `slim` as the template rending engine, but this guide uses ERB.<br/><br/>
   So, delete the `slices/main/templates/application.html.slim` file and create the `erb` layout file below.
 </p>
 
@@ -518,10 +483,8 @@ The `yield` line is replaced with the contents of our regular template.
 It's the perfect place to put our repeating headers and footers.
 
 ## Modeling Our Data With Entities
-
 <p class="alpha">
-  Hanami 2 will ship with [ROM](https://rom-rb.org/) as its model layer.
-
+  Hanami 2 will ship with <a href="https://rom-rb.org/">ROM</a> as its model layer.<br/><br/>
   The terminology here will corresponsingly change but the rough idea is the same.
 </p>
 
@@ -546,16 +509,15 @@ _(We also use repositories to turn the data from the database back into a `Book`
 Read more about entities and repositories in the [models guide](/models/overview).
 
 <p class="alpha">
-  Again, no generators exist, so you can run these commands, again, to get the _completed_ version of the file.
-
+  Again, no generators exist, so you can run these commands, again, to get the _completed_ version of the file.<br/><br/>
   <code>
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/repositories/book_repository.rb -P slices/main/repositories/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/repositories/book_repository_spec.rb -P spec/suite/main/main/repositories/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/entities/book.rb -P slices/main/entities/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/entities/book_spec.rb -P spec/suite/main/entities/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/repositories/book_repository.rb -P slices/main/repositories/</br>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/repositories/book_repository_spec.rb -P spec/suite/main/main/repositories/</br>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/entities/book.rb -P slices/main/entities/</br>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/entities/book_spec.rb -P spec/suite/main/entities/</br>
     $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/db/migrations/20220107123456_create_books.rb -P db/migrations/
   </code>
-
+  <br/>
   Read along and move on to the "Displaying Dynamic Data" section.
 </p>
 
@@ -901,21 +863,18 @@ end
 ### Laying The Foundations For A Form
 
 <p class="alpha">
-  In the few minutes since you started reading this, we still haven't added generators.
-
-  In the meantime, you can grab what <em>would</em> be generated with these commands:
-
+  In the few minutes since you started reading this, we still haven't added generators.<br/>
+  In the meantime, you can grab what <em>would</em> be generated with these commands:<br/>
   <code>
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/actions/books/new.rb -P slices/main/actions/books/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/actions/books/new_spec.rb -P spec/suite/main/actions/books/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/views/books/new.rb -P slices/main/views/books/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/views/books/new_spec.rb -P spec/suite/main/views/books/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/actions/books/new.rb -P slices/main/actions/books/<br/>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/actions/books/new_spec.rb -P spec/suite/main/actions/books/<br/>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/views/books/new.rb -P slices/main/views/books/<br/>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/views/books/new_spec.rb -P spec/suite/main/views/books/<br/>
     $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/web/templates/books/new.html.erb -P slices/main/web/templates/books/
   </code>
-
-  But you'll need to manually edit `config/routes.rb` to add the route listed below.
-
-  Also note that these are the _completed_ versions of those files. So, they'll be 'ahead' of the instructions below.
+  <br/>
+  But you'll need to manually edit `config/routes.rb` to add the route listed below.<br/>
+  Also note that these are the _completed_ versions of those files. So, they'll be 'ahead' of the instructions below.<br/>
   Thanks for your patience. (If you weren't patient, you wouldn't be reading an alpha guide. 😉)
 </p>
 
@@ -942,13 +901,10 @@ The interesting bit will be our new template, because we'll be using Hanami's fo
 ### Using Form Helpers
 
 <p class="alpha">
-  Form helpers are still a work-in-progress for Hanami 2.
-
-  If you look at your Gemfile, you'll see that we're using a special branch for Hanami 2 view compatibility.
-
-  The reason for this is that Hanami's view layer is **entirely** new. In fact, it used to be named `dry-view`.
-
-  This means that this area is rougher than the rest. Bear with us! 🐻
+  Form helpers are still a work-in-progress for Hanami 2 alpha.<br/>
+  If you look at your Gemfile, you'll see that we're using a special branch for Hanami 2 view compatibility.<br/>
+  The reason for this is that Hanami's view layer is **entirely** new. In fact, it used to be named `dry-view`.<br/>
+  This means that this area is rougher than the rest. Bear with us! 🐻<br/>
 </p>
 
 Let's use [form helpers](/helpers/forms) to build this form in `slices/main/templates/books/new.html.erb`:
@@ -982,16 +938,14 @@ container `<div>` using Hanami's [HTML builder helper](/helpers/html5).
 ### Submitting Our Form
 
 <p class="alpha">
-  You know the drill by now! Grab these files with:
-
+  You know the drill by now! Grab these files with:<br/>
   <code>
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/actions/books/create.rb -P slices/main/actions/books/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/actions/books/create_spec.rb -P spec/suite/main/actions/books/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/views/books/create.rb -P slices/main/views/books/
-    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/views/books/create_spec.rb -P spec/suite/main/views/books/
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/actions/books/create.rb -P slices/main/actions/books/<br/>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/actions/books/create_spec.rb -P spec/suite/main/actions/books/<br/>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/views/books/create.rb -P slices/main/views/books/<br/>
+    $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/spec/main/views/books/create_spec.rb -P spec/suite/main/views/books/<br/>
     $ wget https://raw.githubusercontent.com/hanami/bookshelf/work-in-progress/upgrade-to-hanami-2/slices/main/web/templates/books/create.html.erb -P slices/main/web/templates/books/
   </code>
-
 </p>
 To submit our form, we need yet another action.
 Let's create a `Books::Create` action:
@@ -1133,11 +1087,8 @@ end
 ```
 
 <p class="alpha">
-  Notice that we also leverage dependency injection here.
-
-  We strongly encourage it in Hanami applications.
-
-  We'll add a section later about it later 🙂
+  Notice that we also leverage dependency injection here.<br/>
+  We strongly encourage it in Hanami applications. We'll add a section later about it later 🙂<br/>
 </p>
 
 Now our tests specify two alternative scenarios: our original happy path, and a new scenario in which validations fail.
@@ -1309,9 +1260,8 @@ Finished in 0.07811 seconds (files took 1.35 seconds to load)
 ### Improving Our Use Of The Router
 
 <p class="alpha">
-  This whole section doesn't work in Hanami 2 alpha yet :)
-
-  It will be completed before launch, but read over it so you can know what to expect
+  This whole section doesn't work in Hanami 2 alpha yet either 😅<br/>
+  It will be completed before launch, but read over it so you can know what to expect.
 </p>
 
 The last improvement we are going to make is in the use of our router.
@@ -1419,6 +1369,10 @@ but changing the path can affect users so you may want to repeat yourself there
 ## Wrapping Up
 
 **Congratulations on completing your first Hanami project!**
+<p class="alpha">
+  Thanks for checking out this Hanami 2 alpha Getting Started guide! We sincerely appreciate it.<br/>
+  Please <a href="https://github.com/hanami/guides">open a PR or Issue</a> for any mistakes you find!
+</p>
 
 Let's review what we've done: we've traced requests through Hanami's major frameworks to understand how they relate to each other; we've seen how we can model our domain using entities and repositories; we've seen solutions for building forms, maintaining our database schema, and validating user input.
 
