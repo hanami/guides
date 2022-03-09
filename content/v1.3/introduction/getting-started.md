@@ -66,6 +66,9 @@ Then we can use the new `hanami` executable to generate a new project:
 $ gem install hanami
 $ hanami new bookshelf
 ```
+<p class="notice">
+  Hanami 1 doesn't support Ruby 3. If you run into problems use Ruby 2.7.
+</p>
 
 <p class="notice">
   By default, the project will be setup to use a SQLite database. For real-world projects, you can specify your engine:
