@@ -272,7 +272,7 @@ To make this test pass, we'll need to create a _persisted_ `Book` instead.
 Edit the `call` method in our `lib/bookshelf/interactors/add_book.rb` interactor:
 
 ```ruby
-def call
+def call(book_attributes)
   @book = BookRepository.new.create(book_attributes)
 end
 ```
