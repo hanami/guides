@@ -7,6 +7,7 @@ Learn Hanami with our extensive guides.
   * [Git](https://git-scm.com/) (`brew install git`)
   * [Hugo](https://gohugo.io/) (`brew install hugo`)
 
+Hanami Guides are incompatible with Hugo versions above `v0.92.3` for now.
 
 ## Development
 
