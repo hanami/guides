@@ -3,7 +3,7 @@ title: "Architecture: Overview"
 order: 10
 ---
 
-Hanami is based on two principles: 
+Hanami is based on two principles:
 - Clean Architecture
 - [Monolith First](http://martinfowler.com/bliki/MonolithFirst.html).
 
@@ -55,7 +55,7 @@ We want to keep this `lib/` folder slim, placing here mostly the general configu
 
 For a persistence purpose you mostly want to store here [relations](/v2.0/persistence/relations), as those are closely tight to the database, not the business logic.
 
-You can find more about the persistance layer in the [persistance section](/v2.0/persistance)
+You can find more about the persistence layer in the [persistence section](/v2.0/persistence)
 
 ### Slices
 
@@ -69,7 +69,7 @@ slices
 └── admin
 ```
 
-This would end up in two micro-applications built into your project, with completely separate components, like assets, views, layouts, and persistance. You can of course extract the shared components into a root `lib` folder if you wish.
+This would end up in two micro-applications built into your project, with completely separate components, like assets, views, layouts, and persistence. You can of course extract the shared components into a root `lib` folder if you wish.
 
 Hanami generates a default "main" slice, which lives under `slices/main`.
 This application **depends** on the core of our product, as it uses entities, repositories and all the other objects defined there.
@@ -115,7 +115,7 @@ You can add different delivery mechanisms, like `api` here too.
 
 Web assets such as javascripts and stylesheets will be automatically served by the application.
 
-Directories such as `main/actions` and `main/views` will contain our [actions](/v2.0/actions/overview), and [views](v2.0/views/overview) for this slice of the application. 
+Directories such as `main/actions` and `main/views` will contain our [actions](/v2.0/actions/overview), and [views](v2.0/views/overview) for this slice of the application.
 
 The [templates](/v2.0/views/templates) are stored in the `web` folder.
 
@@ -139,4 +139,3 @@ This command MUST be run from the root of our project. It will generate a new co
 
 In the late stages of our product life-cycle, we could decide to extract this into a standalone component.
 We would just need to move everything under `apps/admin` into another repository and deploy it separately.
-
