@@ -32,6 +32,3 @@ pygmentsstyle = "monokailight"
 
 [security.funcs]
   getenv = ['^HUGO_', 'BRANCH']
-
-[build.environment]
-  HUGO_VERSION = "v0.92.2"
