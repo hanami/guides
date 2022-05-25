@@ -11,28 +11,31 @@ We have already examined `lib/` and `slices/`, but there are other parts of a ne
 tree -L 1                                                                      
 .
 ├── Brewfile
+├── Brewfile.lock.json
+├── Dockerfile
 ├── Gemfile
 ├── Gemfile.lock
 ├── Guardfile
 ├── Procfile.dev
 ├── Procfile.support
-├── README.app.md
 ├── README.md
 ├── Rakefile
-├── babel.config.js
 ├── bin
 ├── config
 ├── config.ru
 ├── db
+├── docker-compose.yml
 ├── lib
 ├── log
+├── node_modules
+├── package-lock.json
 ├── package.json
 ├── script
 ├── slices
 ├── spec
-└── yarn.lock
+└── tsconfig.json
 
-8 directories, 13 files
+9 directories, 15 files
 ```
 
 Let's quickly introduce them:
@@ -43,7 +46,6 @@ Let's quickly introduce them:
   * `README.md` is there to collect information about your 
   * `README.app.md` tells us how to setup and use the example project.
   * `Rakefile` describes Rake task for our project.
-  * `babel.config.js` contains [configuration](https://babeljs.io/docs/en/configuration) for [babel](https://babeljs.io/docs/en/)
   * `bin` folder contains executable shell scripts.
   * `config/` contains an important file `config/environment.rb`, which is the **entry point** for our project. By requiring it, we'll preload our dependencies (Ruby gems), Hanami frameworks and our code.
   * `config.ru` is a file that describes how a Rack server must run our applications.
