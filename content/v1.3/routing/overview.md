@@ -39,7 +39,7 @@ options '/hello', to: endpoint
 
 ## Rack
 
-Hanami is compatible with [Rack SPEC](http://www.rubydoc.info/github/rack/rack/master/file/SPEC), and so the endpoints that we use MUST be compliant as well.
+Hanami is compatible with [Rack SPEC](https://www.rubydoc.info/github/rack/rack/main/file/SPEC.rdoc), and so the endpoints that we use MUST be compliant as well.
 In the example above we used a `Proc` that was fitting our requirements.
 
 A valid endpoint can be an object, a class, an action, or an **application** that responds to `#call`.
