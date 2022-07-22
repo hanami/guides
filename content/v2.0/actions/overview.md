@@ -81,7 +81,6 @@ The whole action name is `Main::Actions::Dashboard::Index`.
   You should avoid giving your action modules the same name as your slice or app e.g. avoid naming a controller <code>Main</code> in an app or slice named <code>Main</code>. If you're interested in details, check this <a href="/v2.0/extras/overview">reference</a>.
 </p>
 
-
 ### Rendering
 
 Empty action tries to look for a *view object* to render a template, according to a naming convention.
