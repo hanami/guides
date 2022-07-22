@@ -65,7 +65,7 @@ You can find more about the persistence layer in the [persistence section](/v2.0
 
 The other core part of Hanami application is `slices` directory. *Slices* are the fragments of our application that are fairly independent, can implement different processes or different business logic.
 
-Keep as an example a single library application. You can have a part of the application, where people can browse and reserve books, but the other part may be related to the **admin panel**, where you can list reserved books, order new books to the library, manage reservations, etc. Then you cold end up with two slices for your application
+Keep as an example a single library application. You can have a part of the application, where people can browse and reserve books, but the other part may be related to the **admin panel**, where you can list reserved books, order new books to the library, manage reservations, etc. Then you could end up with two slices for your application
 
 ```shell
 slices
