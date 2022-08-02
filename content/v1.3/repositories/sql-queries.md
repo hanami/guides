@@ -89,7 +89,7 @@ class UserRepository < Hanami::Repository
   end
 
   def by_id_min_max(min, max)
-    users.where { id > min || id < max }
+    users.where { id > min | id < max }
   end
 
   def by_not_id(input)
