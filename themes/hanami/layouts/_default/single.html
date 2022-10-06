@@ -120,12 +120,12 @@
                 <span class="ct-toc-link">{{ $t }}</span>
                 <ul class="nav ct-sidenav">
                 {{ range sort .Pages ".Params.order" }}
-                  {{ if eq .URL $.Page.URL }}
+                  {{ if eq .Permalink $.Page.Permalink }}
                   <li class="active ct-sidenav-active">
                   {{ else }}
                   <li>
                   {{ end }}
-                    <a href="{{ .URL }}">{{ .Title }}</a>
+                    <a href="{{ .Permalink }}">{{ .Title }}</a>
                   </li>
                 {{ end }}
                 </ul>
