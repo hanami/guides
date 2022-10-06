@@ -1,5 +1,11 @@
 (function($){
   $(document).ready(function(){
+    // Navigation Documentation Version Select switch
+    $('#navigation-version-switch').change(function (event) {
+      var url = $(event.target).val()
+      window.location.replace(url)
+    })
+
     // Search link
     $("#search-link").click(function(event) {
       event.preventDefault();

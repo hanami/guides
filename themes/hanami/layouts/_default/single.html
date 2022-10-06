@@ -62,6 +62,15 @@
       <div class="d-none d-sm-block ml-auto">
         <ul class="navbar-nav ct-navbar-nav flex-row align-items-center">
           <li class="nav-item">
+            <select id="navigation-version-switch" class="form-control">
+              {{ $currentSection := .Section}}
+              {{ range .Site.Sections }}
+                {{ $title := replace .RelPermalink "/" "" }}
+                <option value="{{ .Permalink }}" {{ if eq .Section $currentSection}}selected{{end}}>{{ $title }}</option>
+              {{ end }}
+            </select>
+          </li>
+          <li class="nav-item">
             <a class="nav-link nav-link-icon" href="http://hanamirb.org" target="_blank" title="Hanami website">
               <i class="ni ni-world"></i>
             </a>
