@@ -12,34 +12,35 @@ It has several advantages in terms of testability and control of a single action
 
 ## A Simple Action
 
-**TODO: Add information about generators when ready**
+To generate an action, you can use the `hanami generate` shell command, passing the action identifier as an argument.
 
-Before we create an action, let's visit our routes and add there a pointer to it.
-
-```ruby
-# apps/web/config/routes.rb
-slice :main, at: "/" do
-  #...
-  define do
-    get 'dashboard', to: 'dashboard.index'
-  end
-end
+```shell
+hanami g action books.index
 ```
 
-Now we have the `/dashboard` path recognized by our application, but it points to non-existing action.
+This will do several things. 
 
-To create an action, create a new file under the `/app/actions`. 
+1. Adds a new route to our `config/routes.rb` 
 
 ```ruby
-# app/actions/dashboard/index.rb
+# config/routes.rb
 
-module Sandbox
+get "/books", to: "books.index"
+```
+
+Now we have the `/books` path recognized by our application, which points to a newly created action.
+
+2. Creates the action file
+
+```ruby
+# app/actions/book/index.rb
+
+module Bookshelf
   module Actions
-    module Dashboard
-      class Index < Action
-        def handle(req, res)
-          res.status = 200
-          res.body = "<h3>Hanami Dashboard!</h3>"
+    module Books
+      class Index < Bookshelf::Action
+        def handle(*, response)
+          response.body = self.class.name
         end
       end
     end
@@ -47,35 +48,40 @@ module Sandbox
 end
 ```
 
-When we visit a `/dashboard` URL, our application will call a newly generated file with request parameters put into it. Check out [router chapter](/v2.0/router/overview) for details on how routing works in Hanami applications.
+3. Creates the sample test file
 
-Now let's examine the newly generated action file:
+Hanami uses RSpec by default, and using the actions generator will automatically set a sample test layout for the newly created action class.
 
 ```ruby
-# app/actions/dashboard/index.rb
+# spec/actions/books/index_spec.rb
 
-module Sandbox
-  module Actions
-    module Dashboard
-      class Index < Action
-      end
-    end
+RSpec.describe Books::Actions::Books::Index do
+  let(:params) { Hash[] }
+
+  it "works" do
+    response = subject.call(params)
+    expect(response).to be_successful
   end
 end
 ```
 
-## Naming
-That file begins with a module declaration which is the name of our app: `Sandbox`.
+With this, if we'll run our server, and check the browser URL, we should see in the response, the `"Bookshelf::Actions::Books::Index"`. Check out [router chapter](/v2.0/router/overview) for details on how routing works in Hanami applications.
 
-### Component Name
+## Anatomy of an action
 
-The second module, `Actions` points to the type of component the action is kind of. Within a single app, Hanami application consists of components, such as *actions*, *views*, *parts*, and so on.
+### Naming
+
+The file begins with a module declaration which is the name of our app or slice: `Bookshelf`. Check out [slices](/v2.0/slices) for more information about the slices
+
+#### Component Name
+
+The second module, `Actions` points to the type of component the action is kind of. Within a single app, Hanami application consists of different components, such as *actions*, *views*, *parts*, *serializers*, and so on.
 
 ### Controller Name
 
-The last bit is `Dashboard`, which is a module grouping several actions related to the same context. Within the same context, we could for example have all CRUD actions like `Dashboard::Create` or `Dashboard::Destroy`.
+The last bit is `Books`, which is a module grouping several actions related to the same context. Within the same context, we could for example have all CRUD actions like `Books::Create` or `Books::Destroy`.
 
-The whole action name is `Main::Actions::Dashboard::Index`.
+The whole action name is `Bookshelf::Actions::Books::Index`.
 
 <p class="warning">
   You should avoid giving your action modules the same name as your slice or app e.g. avoid naming a controller <code>Main</code> in an app or slice named <code>Main</code>. If you're interested in details, check this <a href="/v2.0/extras/overview">reference</a>.
