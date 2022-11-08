@@ -54,7 +54,8 @@ module Bookshelf
         private
 
         def my_error_handler(req, res, exception)
-          halt 500, "You've found a Unicorn!"
+          res.status = 500
+          res.body = "You've found a Unicorn!"
         end
       end
     end
