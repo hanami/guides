@@ -7,8 +7,8 @@ order: 60
 
 Hanami is fully compatible with Rack.
 
-Actions offer a high level API built on top of Rack.
-If we need to access raw data from Rack environment we can use `request.env`.
+Actions offer a high-level API built on top of Rack.
+If we need to access raw data from the Rack environment we can use `request.env`.
 
 ## Rack Middleware
 
@@ -59,4 +59,3 @@ module Main
 end
 ```
 
-## Action Middleware (Not working)
