@@ -648,7 +648,7 @@ bookshelf[test]> Hanami.app["settings"].database_url
 => "postgres://postgres:postgres@localhost:5432/bookshelf_test"
 ```
 
-To ensure the database is cleaned between tests, add the following to a `spec/support/database.rb` file:
+To ensure the database is cleaned between tests, add the following to a `spec/support/database_cleaner.rb` file:
 
 ```ruby
 # spec/support/database_cleaner.rb
