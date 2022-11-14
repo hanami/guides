@@ -915,8 +915,8 @@ module Bookshelf
         include Deps["persistence.rom"]
 
         params do
-          optional(:page).filled(:integer, gt?: 0)
-          optional(:per_page).filled(:integer, gt?: 0, lteq?: 100)
+          optional(:page).value(:integer, gt?: 0)
+          optional(:per_page).value(:integer, gt?: 0, lteq?: 100)
         end
 
         def handle(request, response)
@@ -1096,7 +1096,7 @@ module Bookshelf
         include Deps["persistence.rom"]
 
         params do
-          required(:id).filled(:integer)
+          required(:id).value(:integer)
         end
 
         def handle(request, response)
@@ -1141,7 +1141,7 @@ module Bookshelf
         config.handle_exception ROM::TupleCountMismatchError => :handle_not_found
 
         params do
-          required(:id).filled(:integer)
+          required(:id).value(:integer)
         end
 
         def handle(request, response)
@@ -1205,7 +1205,7 @@ module Bookshelf
         include Deps["persistence.rom"]
 
         params do
-          required(:id).filled(:integer)
+          required(:id).value(:integer)
         end
 
         def handle(request, response)
@@ -1351,8 +1351,8 @@ module Bookshelf
 
         params do
           required(:book).hash do
-            required(:title).filled(:string)
-            required(:author).filled(:string)
+            required(:title).value(:string)
+            required(:author).value(:string)
           end
         end
 
