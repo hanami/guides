@@ -393,7 +393,7 @@ RSpec.describe "GET /books", type: :request do
 
     expect(response_body).to eq([
       { "title" => "Test Driven Development" },
-      { "title" => "Patterns of Enterprise Application Architecture" }
+      { "title" => "Practical Object-Oriented Design in Ruby" }
     ])
   end
 end
@@ -454,7 +454,7 @@ module Bookshelf
         def handle(*, response)
           books = [
             {title: "Test Driven Development"},
-            {title: "Patterns of Enterprise Application Architecture"}
+            {title: "Practical Object-Oriented Design in Ruby"}
           ]
 
           response.format = :json
@@ -746,7 +746,7 @@ RSpec.describe "GET /books", type: [:request, :database] do
   let(:books) { app["persistence.rom"].relations[:books] }
 
   before do
-    books.insert(title: "Refactoring", author: "Martin Fowler")
+    books.insert(title: "Practical Object-Oriented Design in Ruby", author: "Sandi Metz")
     books.insert(title: "Test Driven Development", author: "Kent Beck")
   end
 
@@ -759,7 +759,7 @@ RSpec.describe "GET /books", type: [:request, :database] do
     response_body = JSON.parse(last_response.body)
 
     expect(response_body).to eq([
-      { "title" => "Refactoring", "author" => "Martin Fowler" },
+      { "title" => "Practical Object-Oriented Design in Ruby", "author" => "Sandi Metz" },
       { "title" => "Test Driven Development", "author" => "Kent Beck" }
     ])
   end
@@ -1253,7 +1253,7 @@ RSpec.describe "POST /books", type: [:request, :database] do
 
   context "given valid params" do
     let(:params) do
-      {book: {title: "Refactoring", author: "Martin Fowler"}}
+      {book: {title: "Practical Object-Oriented Design in Ruby", author: "Sandi Metz"}}
     end
 
     it "creates a book" do
