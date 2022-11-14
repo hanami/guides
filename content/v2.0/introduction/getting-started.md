@@ -71,7 +71,7 @@ gem install hanami
 
 Hanami provides a `hanami new` command for generating a new application.
 
-Let's use it to create a new application for managing books called **bookshelf**, which we'll use to explore the framework:
+Let's use it to create a new application for managing books called **bookshelf**:
 
 ```shell
 hanami new bookshelf
@@ -169,7 +169,7 @@ You should see "Hello from Hanami".
 
 ## Adding our first functionality
 
-Let's take a look at Hanami by building an application for managing books on a bookshelf.
+Let's take a look at Hanami by creating the beginnings of a bookshelf application.
 
 In the file `spec/requests/root_spec.rb`, Hanami provides a request spec for the "Hello from Hanami" message we've seen in the browser.
 
@@ -189,7 +189,7 @@ RSpec.describe "Root", type: :request do
 end
 ```
 
-Let's run that spec now to prove that it works:
+We can run that spec now to prove that it works:
 
 ```shell
 bundle exec rspec spec/requests/root_spec.rb
@@ -242,10 +242,6 @@ Failures:
 
 Finished in 0.04572 seconds (files took 0.72148 seconds to load)
 1 example, 1 failure
-
-Failed examples:
-
-rspec ./spec/requests/root_spec.rb:4 # Root is successful
 ```
 
 To fix this, let's open our application's routes file at `config/routes.rb`:
@@ -268,7 +264,7 @@ We'll take a look at adding more routes in a moment, but for now let's get our s
 
 Rather than invoking an action, this route is configured to invoke a block, which returns "Hello from Hanami".
 
-Blocks are convenient, but let's adjust our root route to invoke an action instead:
+Blocks are convenient, but let's adjust our route to invoke an action instead:
 
 ```ruby
 # config/routes.rb
@@ -300,7 +296,7 @@ Finished in 0.01871 seconds (files took 0.62516 seconds to load)
 1 example, 1 failure
 ```
 
-As this error suggests, we need to create the home show action that the route is expecting to be able to call.
+As this error suggests, we need to create the home show action the route is expecting to be able to call.
 
 Hanami provides an action generator we can use to create this action. Running this command will create the home show action:
 
@@ -330,7 +326,7 @@ end
 
 In a Hanami application, every action is an individual class. Actions decide what HTTP response (body, headers and status code) to return for a given request.
 
-Actions define a `#handle` method which accepts a `request`, representing the incoming request, and a `response` object, representing the outgoing response.
+Actions define a `#handle` method which accepts a `request` object, representing the incoming request, and a `response` object, representing the outgoing response.
 
 ```ruby
 def handle(request, response)
@@ -379,7 +375,7 @@ Finished in 0.03029 seconds (files took 0.72932 seconds to load)
 
 As the next step in our bookshelf project, let's add the ability to display an index of all books in the system, delivered as a JSON API.
 
-Let's add a request spec for listing books that expects a successful JSON formatted response, listing two books:
+First we'll create a request spec for listing books that expects a successful JSON formatted response, listing two books:
 
 ```ruby
 # spec/requests/books/index_spec.rb
@@ -424,7 +420,7 @@ module Bookshelf
 end
 ```
 
-If we run our spec again, our expectation for a successfull response is now satisfied, but there's a different failure:
+If we run our spec again, our expectation for a successful response is now satisfied, but there's a different failure:
 
 ```shell
 bundle exec rspec spec/requests/books/index_spec.rb
@@ -435,9 +431,9 @@ GET /books
 Failures:
 
   1) GET /books returns a list of books
-     Failure/Error: expect(last_response.content_type).to eq("application/json")
+     Failure/Error: expect(last_response.content_type).to eq("application/json; charset=utf-8")
 
-       expected: "application/json"
+       expected: "application/json; charset=utf-8"
             got: "text/html; charset=utf-8"
 
        (compared using ==)
@@ -513,7 +509,7 @@ end
   If you do not have Postgres installed, you can install it using <a href="https://brew.sh/">Homebrew</a>,  <a href="https://asdf-vm.com/">asdf</a> or by following the installation instruction on the <a href="https://www.postgresql.org/">PostgreSQL website</a>.
 </p>
 
-With postgres running, create databases for development and test using PostgreSQL's `createdb` command:
+With Postgres running, create databases for development and test using PostgreSQL's `createdb` command:
 
 ```shell
 createdb bookshelf_development
@@ -567,7 +563,7 @@ module Bookshelf
 end
 ```
 
-Settings can be strings, booleans, integers and other types. Each setting can either be optional or required (meaning the app won't boot without them). Defaults for every setting can also be specified.
+Settings can be strings, booleans, integers and other types. Each setting can be either optional or required (meaning the app won't boot without them), and each can also have a default.
 
 Each setting is sourced from an environment variable matching its name. For example `my_flag` will be source from `ENV["MY_FLAG"]`.
 
@@ -1298,6 +1294,7 @@ module Bookshelf
   class Routes < Hanami::Routes
     root to: "home.index"
     get "/books", to: "books.index"
+    get "/books/:id", to: "books.show"
     post "/books", to: "books.create"
   end
 end
