@@ -65,8 +65,10 @@
             <select id="navigation-version-switch" class="form-control">
               {{ $currentSection := .Section}}
               {{ range .Site.Sections }}
-                {{ $title := replace .RelPermalink "/" "" }}
-                <option value="{{ .Permalink }}" {{ if eq .Section $currentSection}}selected{{end}}>{{ $title }}</option>
+                {{ $versionPathPrefix := replace .RelPermalink "/" "" }}
+                {{ $title := $versionPathPrefix }}
+
+                <option value="/{{ $versionPathPrefix }}{{ .Site.Params.startingpage }}" {{ if eq .Section $currentSection}}selected{{end}}>{{ $title }}</option>
               {{ end }}
             </select>
           </li>

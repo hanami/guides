@@ -161,7 +161,7 @@
                 <span class="btn-inner--icon"><i class="fa fa-code"></i></span>
                 <span class="btn-inner--text">Main website</span>
               </a>
-              <a href="{{ (path.Join (printf "/v%s" .Site.Params.hanamiversion) "/introduction/getting-started") | relURL }}" class="btn btn-white btn-icon mb-3 mb-sm-0">
+              <a href="{{ (path.Join (printf "/v%s" .Site.Params.hanamiversion) .Site.Params.startingpage) | relURL }}" class="btn btn-white btn-icon mb-3 mb-sm-0">
                 <span class="btn-inner--icon text-primary"><i class="ni ni-spaceship"></i></span>
                 <span class="btn-inner--text text-primary">Get started</span>
               </a>
@@ -213,7 +213,7 @@
                       </div>
                     </div>
                     <div>
-                      <h6 class="mb-0"><a href="{{ "/introduction/getting-started" | relURL }}"><span class="text-primary">Getting started</span></a></h6>
+                      <h6 class="mb-0"><a href="/v{{ .Site.Params.hanamiversion }}{{ .Site.Params.startingpage | relURL }}"><span class="text-primary">Getting started</span></a></h6>
                     </div>
                   </div>
                 </li>
