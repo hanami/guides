@@ -334,7 +334,7 @@ def handle(request, response)
 end
 ```
 
-In the generated action above, `*` is used for the `request` argument because the action does not currently use the request.
+In the automatically generated home show action above, `*` is used for the `request` argument because the action does not currently use the request.
 
 For more details on actions, see the [Actions guide](/v2.0/actions/overview/).
 
