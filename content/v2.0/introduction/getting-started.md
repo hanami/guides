@@ -57,7 +57,7 @@ To create a Hanami application, you will need Ruby 3.0 or greater. Check your ru
 ruby --version
 ```
 
-If you need to install or upgrade Ruby, follow the instructions on [rubylang.org](https://www.ruby-lang.org/en/documentation/installation/).
+If you need to install or upgrade Ruby, follow the instructions on [ruby-lang.org](https://www.ruby-lang.org/en/documentation/installation/).
 
 ### Installing the gem
 
@@ -67,7 +67,7 @@ In order to create a Hanami application, first install the hanami gem:
 gem install hanami
 ```
 
-### Using the hanami new command
+### Using the application generator
 
 Hanami provides a `hanami new` command for generating a new application.
 
@@ -198,15 +198,11 @@ bundle exec rspec spec/requests/root_spec.rb
 You should see:
 
 ```shell
-Randomized with seed 37065
-
 Root
   is successful
 
 Finished in 0.01986 seconds (files took 0.70103 seconds to load)
 1 example, 0 failures
-
-Randomized with seed 37065
 ```
 
 Let's change the "Hello from Hanami" message to "Welcome to Bookshelf". First, we'll adjust our spec:
@@ -230,8 +226,6 @@ end
 As we expect, when we run the spec again, it fails:
 
 ```shell
-Randomized with seed 65034
-
 Root
   is successful (FAILED - 1)
 
@@ -252,8 +246,6 @@ Finished in 0.04572 seconds (files took 0.72148 seconds to load)
 Failed examples:
 
 rspec ./spec/requests/root_spec.rb:4 # Root is successful
-
-Randomized with seed 65034
 ```
 
 To fix this, let's open our application's routes file at `config/routes.rb`:
@@ -285,7 +277,7 @@ Blocks are convenient, but let's adjust our root route to invoke an action inste
 
 module Bookshelf
   class Routes < Hanami::Routes
-    root to: "home.index"
+    root to: "home.show"
   end
 end
 ```
@@ -299,34 +291,34 @@ Failures:
      Failure/Error: get "/"
 
      Hanami::Routes::MissingActionError:
-       Could not find action with key "actions.home.index" in Bookshelf::App
+       Could not find action with key "actions.home.show" in Bookshelf::App
 
-       To fix this, define the action class Bookshelf::Actions::Home::Index in app/actions/home/index.rb
+       To fix this, define the action class Bookshelf::Actions::Home::Show in app/actions/home/show.rb
      # ./spec/requests/root_spec.rb:5:in `block (2 levels) in <top (required)>'
 
 Finished in 0.01871 seconds (files took 0.62516 seconds to load)
 1 example, 1 failure
 ```
 
-As this error suggests, we need to create the home index action that the route is expecting to be able to call.
+As this error suggests, we need to create the home show action that the route is expecting to be able to call.
 
-Hanami provides an action generator we can use to create this action. Running this command will create the home index action:
+Hanami provides an action generator we can use to create this action. Running this command will create the home show action:
 
 ```shell
-bundle exec hanami generate action home.index
+bundle exec hanami generate action home.show
 ```
 
-We can find this action in our `app` directory at `app/actions/home/index.rb`:
+We can find this action in our `app` directory at `app/actions/home/show.rb`:
 
 ```ruby
-# app/actions/home/index.rb
+# app/actions/home/show.rb
 
 # frozen_string_literal: true
 
 module Bookshelf
   module Actions
     module Home
-      class Index < Bookshelf::Action
+      class Show < Bookshelf::Action
         def handle(*, response)
           response.body = self.class.name
         end
@@ -346,21 +338,21 @@ def handle(request, response)
 end
 ```
 
-In the generated home index action above, `*` is used for the `request` argument because the action does not currently use the request.
+In the generated action above, `*` is used for the `request` argument because the action does not currently use the request.
 
 For more details on actions, see the [Actions guide](/v2.0/actions/overview/).
 
 For now, let's adjust our home action to return our desired "Welcome to Bookshelf" message.
 
 ```ruby
-# app/actions/home/index.rb
+# app/actions/home/show.rb
 
 # frozen_string_literal: true
 
 module Bookshelf
   module Actions
     module Home
-      class Index < Bookshelf::Action
+      class Show < Bookshelf::Action
         def handle(*, response)
           response.body = "Welcome to Bookshelf"
         end
@@ -437,8 +429,6 @@ If we run our spec again, our expectation for a successfull response is now sati
 ```shell
 bundle exec rspec spec/requests/books/index_spec.rb
 
-Randomized with seed 58022
-
 GET /books
   returns a list of books (FAILED - 1)
 
@@ -485,8 +475,6 @@ If we run our spec, it now passes!
 ```shell
 bundle exec rspec spec/requests/books/index_spec.rb
 
-Randomized with seed 16566
-
 GET /books
   returns a list of books
 
@@ -512,8 +500,8 @@ First, add these gems to the Gemfile and run `bundle install`:
 
 ```ruby
 # Gemfile
-gem "rom"
-gem "rom-sql"
+gem "rom", "~> 5.3"
+gem "rom-sql", "~> 3.6"
 gem "pg"
 
 group :test do
@@ -541,16 +529,13 @@ Copy and paste the following provider into a new file at `config/providers/persi
 
 Hanami.app.register_provider :persistence, namespace: true do
   prepare do
-    require "rom-changeset"
     require "rom/core"
     require "rom/sql"
 
     @config = ROM::Configuration.new(:sql, target["settings"].database_url)
 
-    config.plugin(:sql, relations: :auto_restrictions)
-
-    register "config", config
-    register "db", config.gateways[:default].connection
+    register "config", @config
+    register "db", @config.gateways[:default].connection
   end
 
   start do
@@ -689,16 +674,20 @@ require "rom/sql/rake_task"
 
 namespace :db do
   task setup: :environment do
-    Hanami.app.prepare(:persistence)
-    ROM::SQL::RakeSupport.env = ROM.container(Hanami.app["persistence.config"])
+    require "rom/core"
+    rom_config = ROM::Configuration.new(:sql, Hanami.app["settings"].database_url)
+    ROM::SQL::RakeSupport.env = rom_config
   end
 end
 ```
 
+<p class="notice">
+  Hanami's 2.1 release, slated for early 2023, will bring persistence as a first class feature, after which none of the above set up will be required.
+</p>
 
 ### Creating a books table
 
-With that set up out of the way (none of which will be necessary come Hanami 2.1!) we can now create a books table.
+With persistence ready, we can now create a books table.
 
 To create a migration run `bundle exec rake db:create_migration[create_books]`:
 
@@ -752,7 +741,7 @@ end
 
 ## Listing books
 
-With our books table ready to use, let's adapt our books index spec to expect an index of persisted books:
+With our books table ready to go, let's adapt our books index spec to expect an index of persisted books:
 
 ```ruby
 # frozen_string_literal: true
@@ -783,11 +772,11 @@ end
 
 To get this spec to pass, we'll need to update our books index action to return books from the books relation.
 
-To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [containers and components](/v2.0/architecture/containers/) section of the [Architecture guide](/v2.0/architecture/containers/), the Deps mixin gives each of your application's components easy access to the other components it depends on to achieve its work. We'll see this in more detail in a moment.
+To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [containers and components](/v2.0/architecture/containers/) section of the Architecture guide, the Deps mixin gives each of your application's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
 For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make rom-rb available via a `rom` method within our action. The books relation is then available via `rom.relations[:books]`.
 
-To satisy our spec, we need to meet a few requirements. Firstly, we want to render each book's _title_ and _author_, but not its _id_. Secondly we want to return books alphabetically by title. We can achieve these requirements using the `select` and `order` methods offered by the books relation:
+To satisfy our spec, we need to meet a few requirements. Firstly, we want to render each book's _title_ and _author_, but not its _id_. Secondly we want to return books alphabetically by title. We can achieve these requirements using the `select` and `order` methods offered by the books relation:
 
 ```ruby
 # frozen_string_literal: true
@@ -814,7 +803,7 @@ end
 ```
 
 <p class="convention">
-  Accessing relations directly from actions is not a commonly recommended pattern. Instead, a <a href="https://rom-rb.org/5.0/learn/repositories/quick-start/">rom repository</a> should be used. Here, however, the repository is ommitted for brevity.
+  Accessing relations directly from actions is not a commonly recommended pattern. Instead, a <a href="https://rom-rb.org/5.0/learn/repositories/quick-start/">rom repository</a> should be used. Here, however, the repository is ommitted for brevity. Hanami's 2.1 release will offer repositories out of the box.
 </p>
 
 With this action in place, the spec passes once more:
@@ -831,7 +820,7 @@ Finished in 0.05765 seconds (files took 1.36 seconds to load)
 
 ## Parameter validation
 
-Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily rom-rb relations offer pagination support. Let's add pagination with a default page length of 5:
+Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily rom-rb relations offer pagination support. Let's add pagination with a default page size of 5:
 
 ```ruby
 # lib/bookshelf/persistence/relations/books.rb
@@ -1240,8 +1229,6 @@ end
 ```shell
 bundle exec rspec spec/requests/books/show_spec.rb
 
-Randomized with seed 55849
-
 GET /books/:id
   when a book matches the given id
     renders the book
@@ -1263,7 +1250,7 @@ Here's a spec for POST requests to the `/books` path, where it's expected that o
 
 # frozen_string_literal: true
 
-RSpec.describe "POST /books", type: :request do
+RSpec.describe "POST /books", type: [:request, :database] do
   let(:request_headers) do
     {"HTTP_ACCEPT" => "application/json", "CONTENT_TYPE" => "application/json"}
   end
@@ -1397,8 +1384,6 @@ Our request spec now passes!
 
 ```shell
 bundle exec rspec spec/requests/books/create_spec.rb
-
-Randomized with seed 44371
 
 POST /books
   given valid params
