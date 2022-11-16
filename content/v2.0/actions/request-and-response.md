@@ -13,7 +13,7 @@ Here an example of some information that we can introspect.
 
 module Bookshelf
   module Actions
-    module Bookshelf
+    module Books
       class Index < Action
         def handle(request, response)
           puts request.path_info                 # => "/dashboard"
