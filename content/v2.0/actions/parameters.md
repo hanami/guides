@@ -1,11 +1,10 @@
 ---
 title: Parameters
 order: 30
-aliases:
-  - "/actions/parameters"
 ---
 
-Parameters are taken from the Rack env and passed as an argument to `#call`.
+Parameters are taken from the Rack env, wrapped into the `Params` object, and passed as an argument to `#handle` method.
+
 They are similar to a Ruby `Hash`, but they offer an expanded set of features.
 
 ## Sources
@@ -23,11 +22,11 @@ To access the value of a param, we can use the _subscriber operator_ `#[]`.
 ```ruby
 # app/controllers/dashboard/index.rb
 
-module Sandbox
-  module Controllers
-    module Dashboard
+module Bookshelf
+  module Actions
+    module Books
       class Index < Action
-        def def handle(req, res)
+        def handle(req, res)
           req.body = "Query string: #{ req.params[:q] }"
         end
       end
@@ -76,7 +75,8 @@ We use `.params` to map the structure of the (nested) parameters.
 
 ```ruby
 # app/actions/signup/create.rb
-module Sandbox
+
+module Bookshelf
   module Actions
     module Signup
       class Create < Action
@@ -158,7 +158,7 @@ We can coerce the Ruby type, validate if a param is required, determine if it is
 
 ```ruby
 # app/actions/signup/create.rb
-module Sandbox
+module Bookshelf
   module Actions
     module Signup
       class Create < Action
@@ -197,10 +197,10 @@ An alternative is to extract a class and pass it as an argument to `.params`.
 ```ruby
 # app/actions/signup/my_params.rb
 
-module Web
-  module Controllers
+module Bookshelf
+  module Actions
     module Signup
-      class MyParams < Web::Action::Params
+      class MyParams < Hanami::Action::Params
         MEGABYTE = 1024 ** 2
 
         params do
@@ -218,8 +218,7 @@ end
 ```
 
 ```ruby
-# apps/web/controllers/signup/create.rb
-require_relative './my_params'
+# apps/actions/signup/create.rb
 
 module Sandbox
   module Actions
@@ -239,44 +238,6 @@ module Sandbox
   end
 end
 ```
-
-### Inline predicates
-
-In case there is a predicate that is needed only for the current params, you can define inline predicates:
-
-```ruby
-# app/actions/books/create.rb
-
-module Sandbox
-  module Actions
-    module Books
-      class Create < Action
-        params Class.new(Hanami::Action::Params) {
-          predicate(:cool?, message: "is not cool") do |current|
-            current.match(/cool/)
-          end
-
-          validations do
-            required(:book).schema do
-              required(:title) { filled? & str? & cool? }
-            end
-          end
-        }
-
-        def handle(req, res)
-          if req.params.valid?
-            res.body = 'OK'
-          else
-            res.body = params.error_messages.join("\n")
-          end
-        end
-      end
-    end
-  end
-end
-```
-
-
 
 ## Body Parsers
 
@@ -312,9 +273,11 @@ $ curl http://localhost:2300/books      \
 To properly coerce `json` params, you should enable this feature.
 
 ```ruby
-#config.ru
-require "hanami/middleware/body_parser"
-use Hanami::Middleware::BodyParser, :json
+# config/app.rb
+
+class App < Hanami::App
+  config.middleware.use :body_parser, :json
+end
 ```
 
 Now `params.get(:book, :title)` returns `"Hanami"`.
@@ -339,6 +302,7 @@ and subsequently register it:
 ```ruby
 # /config.ru
 
-require "hanami/middleware/body_parser"
-use Hanami::Middleware::BodyParser, FooParser.new
+class App < Hanami::App
+  config.middleware.use :body_parser, FooParser.new
+end
 ```
