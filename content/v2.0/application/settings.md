@@ -3,7 +3,7 @@ title: Settings
 order: 10
 ---
 
-Hanami supports application settings through a `Settings` class, defined in `config/settings.rb`.
+You can define your own settings for your app through a `Settings` class, defined in `config/settings.rb`.
 
 ```ruby
 # config/settings.rb
@@ -19,9 +19,11 @@ module Bookshelf
 end
 ```
 
-Using this class, you can define what settings exist within your application, what types and defaults they have, and whether or not they are required for your application to boot.
+Using this class, you can specify what settings exist within your application, what types and defaults they have, and whether or not they are required for your application to boot.
 
-Each setting is read from an environment variable matching its name. For example, with the following configuration, the Redis URL and Sentry DSN are sourced from the `REDIS_URL` and `SENTRY_DSN` environment variables.
+These "app settings" are unrelated to ["app config"](/v2.0/application/config/), which configure framework behaviours. App settings are your own to define and use.
+
+Each app setting is read from an environment variable matching its name. For example, the Redis URL and Sentry DSN settings below are sourced from `REDIS_URL` and `SENTRY_DSN` environment variables respectively.
 
 
 ```ruby
@@ -79,13 +81,15 @@ Types::Params::Date
 Types::Params::Time
 ```
 
+These types are provided by [dry-types](https://dry-rb.org/gems/dry-types), and the `Types` module is generated for you automatically when you subclass `Hanami::Settings`.
+
 ## Required and optional settings
 
-Whether or not each setting is required for your application to start is determined by its constructor.
+Whether or not each setting is required for your application to boot is determined by its constructor.
 
-If a setting uses a constructor like `Types::String` or `Types::Params::Bool`, then Hanami will raise an exception if the setting is missing, rather than let your application start in a potentially invalid state.
+If a setting uses a constructor like `Types::String` or `Types::Params::Bool`, then Hanami will raise an exception if the setting is missing, rather than let your application boot in a potentially invalid state.
 
-The below settings configuration will result in a `Hanami::Settings::InvalidSettingsError` when `DATABASE_URL` and `ANALYTICS_ENABLED` environment variables are not set:
+The below settings will result in a `Hanami::Settings::InvalidSettingsError` when `DATABASE_URL` and `ANALYTICS_ENABLED` environment variables are not set:
 
 ```ruby
 # config/settings.rb
@@ -112,7 +116,7 @@ max_cart_items: can’t convert nil into Integer
 The same exception will be raised if a setting can't be correctly coerced:
 
 ```shell
-ANALYTICS_ENABLED=true MAX_CART_ITEMS="not coerceable to integer"  bundle exec hanami server
+ANALYTICS_ENABLED=true MAX_CART_ITEMS="not coerceable to integer" bundle exec hanami server
 
 ! Unable to load application: Hanami::Settings::InvalidSettingsError: Could not initialize settings. The following settings were invalid:
 
@@ -154,7 +158,7 @@ end
 
 ## Constraints
 
-To enforce additional contraints on settings, you can use a [dry-types](https://dry-rb.org/gems/dry-types) constraint in your constructor.
+To enforce additional contraints on settings, you can use a [constraint](https://dry-rb.org/gems/dry-types/1.2/constraints/) in your constructor type.
 
 Here, the value of the `session_secret` must be at least 32 characters, while the value of the `from_email` setting must satisfy the EMAIL_FORMAT regular expression:
 
@@ -173,9 +177,9 @@ module Bookshelf
 end
 ```
 
-## Using settings within your application
+## Using settings within your app
 
-Hanami makes settings available within your application through a built-in settings provider.
+Hanami makes your settings available within your app as a `"settings"` component.
 
 ```ruby
 Hanami.app["settings"]
@@ -183,7 +187,7 @@ Hanami.app["settings"]
 
 ### Accessing settings within components
 
-To access settings within one of your components, use Hanami's Deps mixin:
+To access settings within one of your components, use the Deps mixin:
 
 ```ruby
 # app/analytics/send_event.rb
@@ -207,7 +211,7 @@ For more information on components and the Deps mixin, see the [architecture gui
 
 ### Accessing settings within providers
 
-When registering a provider, settings can be access via the `target` method, which exposes the application's container:
+When registering a provider, you can access the app's settings via the `target`, which returns the app's container:
 
 ```ruby
 # config/providers/redis.rb
@@ -244,6 +248,10 @@ module Bookshelf
   end
 end
 ```
+
+<p class="notice">
+  Because settings can be accessed at this early point in the app's boot process, it's important to ensure that the `Settings` class remains self contained, with no dependencies to other code within your app.
+</p>
 
 ## Adding custom methods
 
