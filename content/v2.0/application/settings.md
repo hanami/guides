@@ -333,3 +333,9 @@ Exactly which `.env` files to create and manage is up to you. But we recommend t
 | .env.test.local        | test        | no               | Local overrides of test-specific settings. |
 | .env.test              | test        | yes              | Shared test-specific settings.             |
 | .env                   | development and test | yes     | Shared settings applicable in test and development. |
+
+We do not recommend using dotenv in production environments.
+
+<p class="notice">
+  Hanami will only use the dotenv gem if it is included in your Gemfile. Applications generated using "hanami new" include the gem in development and test by default.
+</p>
