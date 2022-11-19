@@ -54,8 +54,8 @@ We have a safe solution for our problem: `#get`.
 It accepts a list of symbols, where each symbol represents a level in our nested structure.
 
 ```ruby
-params.get(:book, :title)             # => "Hanami"
-params.get(:unknown, :nested, :param) # => nil instead of NoMethodError
+params.dig(:book, :title)             # => "Hanami"
+params.dig(:unknown, :nested, :param) # => nil instead of NoMethodError
 ```
 
 ## Whitelisting
@@ -280,7 +280,7 @@ class App < Hanami::App
 end
 ```
 
-Now `params.get(:book, :title)` returns `"Hanami"`.
+Now `params.dig(:book, :title)` returns `"Hanami"`.
 
 In case there is no suitable body parser for your format in Hanami, it is possible to declare a new one:
 
