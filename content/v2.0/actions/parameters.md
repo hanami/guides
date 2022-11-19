@@ -26,8 +26,8 @@ module Bookshelf
   module Actions
     module Books
       class Index < Action
-        def handle(req, res)
-          req.body = "Query string: #{ req.params[:q] }"
+        def handle(request, response)
+          request.body = "Query string: #{ request.params[:q] }"
         end
       end
     end
@@ -89,12 +89,12 @@ module Bookshelf
           end
         end
     
-        def handle(req, res)
-          puts req.params[:email]             # => "alice@example.org"
-          puts req.params[:password]          # => "secret"
-          puts req.params[:address][:country] # => "Italy"
+        def handle(request, response)
+          puts request.params[:email]             # => "alice@example.org"
+          puts request.params[:password]          # => "secret"
+          puts request.params[:address][:country] # => "Italy"
     
-          puts req.params[:admin]             # => nil
+          puts request.params[:admin]             # => nil
         end
       end
     end
@@ -173,8 +173,8 @@ module Bookshelf
           optional(:avatar).filled(size?: 1..(MEGABYTE * 3))
         end
 
-        def handle(req, res)
-          if req.params.valid?
+        def handle(request, response)
+          if request.params.valid?
             # ...
           else
             # ...
@@ -226,8 +226,8 @@ module Sandbox
       class Create < Action
         params MyParams
 
-        def handle(req, res)
-          if req.params.valid?
+        def handle(request, response)
+          if request.params.valid?
             # ...
           else
             # ...
@@ -253,8 +253,8 @@ module Sandbox
       class Create < Action
         accept :json
 
-        def handle(req, res)
-          res.body = req.params.to_h # => {}
+        def handle(request, response)
+          res.body = request.params.to_h # => {}
         end
       end
     end
