@@ -81,11 +81,11 @@ module Bookshelf
     module Signup
       class Create < Action
         params do
-          required(:email).filled(:str?)
-          required(:password).filled(:str?)
+          required(:email).filled(:string)
+          required(:password).filled(:string)
     
           required(:address).schema do
-            required(:country).filled(:str?)
+            required(:country).filled(:string)
           end
         end
     
@@ -165,12 +165,12 @@ module Bookshelf
         MEGABYTE = 1024 ** 2
 
         params do
-          required(:name).filled(:str?)
-          required(:email).filled(:str?, format?: /@/)
-          required(:password).filled(:str?)
-          required(:terms_of_service).filled(:bool?)
-          required(:age).filled(:int?, included_in?: 18..99)
-          optional(:avatar).filled(size?: 1..(MEGABYTE * 3))
+          required(:name).filled(:string)
+          required(:email).filled(:string, format?: /@/)
+          required(:password).filled(:string)
+          required(:terms_of_service).filled(:bool)
+          required(:age).filled(:integer, included_in?: 18..99)
+          optional(:avatar).filled(:string, size?: 1..(MEGABYTE * 3))
         end
 
         def handle(request, response)
@@ -204,12 +204,12 @@ module Bookshelf
         MEGABYTE = 1024 ** 2
 
         params do
-          required(:name).filled(:str?)
-          required(:email).filled(:str?, format?: /@/)
-          required(:password).filled(:str?)
-          required(:terms_of_service).filled(:bool?)
-          required(:age).filled(:int?, included_in?: 18..99)
-          optional(:avatar).filled(size?: 1..(MEGABYTE * 3)
+          required(:name).filled(:string)
+          required(:email).filled(:string, format?: /@/)
+          required(:password).filled(:string)
+          required(:terms_of_service).filled(:bool)
+          required(:age).filled(:integer, included_in?: 18..99)
+          optional(:avatar).filled(:string, size?: 1..(MEGABYTE * 3)
         end
       end
     end
