@@ -272,3 +272,64 @@ module Bookshelf
   end
 end
 ```
+
+## Using dotenv to manage environment variables
+
+Hanami uses the [dotenv gem](https://github.com/bkeepers/dotenv) to load environment variables from `.env` files.
+
+This allows you to maintain specific sets of per-environment variables for your app settings. Which set is used depends on the current environment, which is determined by `HANAMI_ENV`.
+
+`.env.development` is used if `HANAMI_ENV` is "development":
+
+```shell
+# .env.development
+DATABASE_URL=postgres://localhost:5432/bookshelf_development
+ANALYTICS_ENABLED=true
+```
+
+```shell
+HANAMI_ENV=development bundle exec hanami console
+
+bookshelf[development]> Hanami.app["settings"].database_url
+=> "postgres://localhost:5432/bookshelf_development"
+
+bookshelf[development]> Hanami.app["settings"].analytics_enabled
+=> true
+```
+
+`.env.test` is used if `HANAMI_ENV` is "test":
+
+```shell
+# .env.test
+DATABASE_URL=postgres://localhost:5432/bookshelf_test
+ANALYTICS_ENABLED=false
+```
+
+```shell
+HANAMI_ENV=test bundle exec hanami console
+
+bookshelf[test]> Hanami.app["settings"].database_url
+=> "postgres://localhost:5432/bookshelf_test"
+
+bookshelf[test]> Hanami.app["settings"].analytics_enabled
+=> false
+```
+
+For a given `HANAMI_ENV` environment, the `.env` files are looked up in the following order, which adheres to the recommendations made by the [dotenv gem](https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use):
+
+- .env.{environment}.local
+- .env.local (unless the environment is `test`)
+- .env.{environment}
+- .env
+
+This means a variable in `.env.development.local` will override a variable declared in `.env.development`.
+
+Exactly which `.env` files to create and manage is up to you. But we recommend the following as a reasonable set up for development and test environments in shared projects:
+
+| Filename               | Environment | Checked into git | Purpose                                           |
+|------------------------|-------------|------------------|---------------------------------------------------|
+| .env.development.local | development | no               | Local overrides of development-specific settings. |
+| .env.development       | development | yes              | Shared development-specific settings.             |
+| .env.test.local        | test        | no               | Local overrides of test-specific settings. |
+| .env.test              | test        | yes              | Shared test-specific settings.             |
+| .env                   | development and test | yes     | Shared settings applicable in test and development. |
