@@ -5,29 +5,29 @@ order: 40
 
 Hanami applications support a **prepared** state and a **booted** state.
 
-Whether your app is prepared or booted determines whether its components are **lazily loaded** on demand (prepared stated), or **eagerly loaded** up front (booted state).
+Whether your app is prepared or booted determines whether its components are **lazily loaded** on demand (for a prepared app), or **eagerly loaded** up front (for a booted app).
 
-This difference may not sound like much, but the ability of a prepared app to load _just enough_ of the app to undertake a particular task can be a huge performance advantage when it comes to testing, worker processes and other use cases where your app doesn't need every component to perform the job at hand.
+This difference may not sound like much, but the ability of a prepared app to load _just enough_ of the app to undertake a particular task can be a huge performance advantage when it comes to testing, worker processes and other use cases where your app doesn't need every component to perform the job at hand. A rake task that precompiles assets or migrates the database can execute quickly when is not delayed by loading the entire application.
 
-Conversely, a booted app is fully initialized, with every component ready to do its work. This is ideal whenever you want to incur initialization costs at boot time, such as when serving web requests.
+Conversely, a booted app is fully initialized, with every component loaded and ready to do its work. This is ideal whenever you want to incur initialization costs at boot time, such as when serving web requests.
 
 ## Hanami.prepare
 
 When you call `Hanami.prepare` (or use `require "hanami/prepare"`), Hanami will prepare your app for use.
 
-This process includes defining various Ruby constants required for your app to function, making the Ruby source files in `app/` autoloadable, and making your components (the classes you've added to the `app/` folder) lazily loadable.
+This process makes the Ruby source files in `app/` autoloadable and makes your components (from the same classes defined in `app/`) lazily loadable.
 
 This approach keeps load time to a minimum. As such, it’s the default mode in the Hanami console and when running tests.
 
 <p class="notice">
-  A prepared application is no less able to do its job than a booted one, it will just lazily load only the components it needs to perform a particular task on demand.
+  A prepared application will do everything a booted one can, it will just lazily load only the components it needs to perform a particular task on demand.
 </p>
 
 ## Hanami.boot
 
 When you call `Hanami.boot` (or use `require "hanami/boot"`) Hanami will do everything it does when `Hanami.prepare` is called, but then go further, starting each of your app's providers, while also eagerly loading all of your app's components up front.
 
-This is useful when you want to incur all initialization costs at boot time, such as when preparing an app to serve web requests.
+This is useful when you want to incur all initialization costs at boot time.
 
 Booting is the approach taken in Hanami's standard Puma setup. Thus, in Hanami's `config.ru` file you will see:
 
@@ -123,7 +123,7 @@ irb(main)> Hanami.app.keys
 
 Two components are now present: `settings` and `notifications`.
 
-`notifications` is an instance of `Dry::Monitor::Notifications` that's registered early in the prepare process to support app-wide notifications.
+`notifications` is an instance of `Dry::Monitor::Notifications` that's registered early in the prepare process to support inter-component notifications (for now mostly a framework-internal concern).
 
 The `settings` component has been loaded in order to ensure that necessary settings are present. If a setting wasn't satisfied, the app would have raised an invalid settings error at this point.
 
