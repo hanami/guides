@@ -40,6 +40,7 @@ Slices offer much of the same behaviour and features as Hanami's `app` folder.
 A Hanami slice:
 
 - has its own container
+- imports a number of standard components from the app
 - can have its own providers (e.g. `slices/api/providers/my_provider.rb`)
 - can include actions, routable from the application's router
 - can import and export components from other slices
@@ -142,6 +143,33 @@ We can call the query with a country code:
 bookshelf[development]> API::Slice["queries.countries.show"].call("UA")
 => {:name=>"Ukraine", :flag=>"🇺🇦", :currency=>"UAH"}
 ```
+
+## Standard app components
+
+Since every slice is part of the larger app, a number of standard app components are automatically imported into each slice. These include:
+
+- `"settings"` — the app’s [settings object](/v2.0/application/settings/)
+- `"inflector"` — the app’s [inflector](/v2.0/application/inflector/)
+- `"logger"` — the app’s logger
+- `"routes"` — the app’s routes helper
+
+If you have additional components in your app that you wish to make available to each slice, you can configure these via `config.shared_app_component_keys`:
+
+```ruby
+# config/app.rb
+
+# frozen_string_literal: true
+
+require "hanami"
+
+module Bookshelf
+  class App < Hanami::App
+    config.shared_app_component_keys += ["my_app_component"]
+  end
+end
+```
+
+Think carefully before making components available to every slice, since this can create an undesirable level of coupling between the slices and the app. Instead, you may wish to consider slice imports and exports.
 
 ## Slice imports and exports
 
