@@ -9,6 +9,8 @@ Setting `HANAMI_ENV` allows your code to act differently, depending on the envir
 
 If `HANAMI_ENV` is not set, Hanami will fallback to checking `RACK_ENV`. If neither variable is set, the environment defaults to `:development`.
 
+By convention, Hanami expects `HANAMI_ENV` to be either `development`, `test`, or `production`.
+
 ## Environment helpers
 
 Use the following helpers if your code needs behave differently in different environments.
@@ -36,13 +38,6 @@ Hanami.env
 
 Hanami.env
 => :production
-```
-
-```ruby
-# HANAMI_ENV=my_special_environment
-
-Hanami.env
-=> :my_special_environment
 ```
 
 ### Hanami.env?
@@ -85,6 +80,27 @@ Hanami.env?(:development, :test)
 => false
 ```
 
+## Environment specific app config
+
+Config options that are environment specific can be set on the app class. For example:
+
+```ruby
+# config/app.rb
+
+module Bookshelf
+  class App < Hanami::App
+    environment(:production) do
+      # Production specific config or initialization
+      config.middleware.use ProductionOnlyMiddleware
+    end
+  end
+end
+```
+
+See the app config guide for information on supported config options.
+
 ## Production deployments
 
 When deploying your application to production, set the `HANAMI_ENV` environment variable to `production`.
+
+In production, Hanami logs to standard out by default, using a structured JSON format with a log level of `:info` rather than `:debug`, which is used in development and test. See the [logger guide](/v2.0/application/logger/) for more detail.
