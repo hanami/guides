@@ -35,7 +35,7 @@ If `class Book` was changed to `class Novel` in the above file, the following er
 Zeitwerk::NameError: expected file bookshelf/app/entities/book.rb to define constant Bookshelf::Entities::Book, but didn’t
 ```
 
-Moving the file from `app/entities/book.rb` to `app/entities/movie.rb` would address this error.
+Moving the file from `app/entities/book.rb` to `app/entities/novel.rb` would address this error.
 
 ## Autoloading in the app directory
 
@@ -56,9 +56,28 @@ Assuming an app created via `hanami new bookshelf` (which would have a top-level
 
 None of the above classes or modules need a require statement before use.
 
+It's worth noting that, thanks to Hanami's [component managment system](/v2.0/architecture/containers/), the components you write in `app/` don't commonly need to reference their collaborators using Ruby constants - they instead use the Deps mixin to access their dependencies.
+
+If you are adding a class to the `app/` directory that you want to use an autoloaded Ruby constant to reference, it's very likely that you do not want that class to be registered in your app container. To opt out of registration, use the magic comment `# auto_register: false` or one of the alternative methods discussed in "Opting out of the container" in the [containers and components guide](/v2.0/architecture/containers/).
+
+```ruby
+# auto_register: false
+
+require "dry-struct"
+
+module Bookshelf
+  module Structs
+    class Book < Dry::Struct
+      attribute :title, Types::String
+      attribute :author, Types::String
+    end
+  end
+end
+```
+
 ## Autoloading in the lib directory
 
-Similarly, code placed in `lib/bookshelf` (i.e. `lib/<app_name>`) does not need to be required.
+Code placed in `lib/bookshelf` (i.e. `lib/<app_name>`) does not need to be required.
 
 This `SlackNotifier` class from `lib/bookshelf` for instance can be used in app components without a require statement:
 
@@ -75,12 +94,14 @@ module Bookshelf
 end
 ```
 
-However, code placed in **other directories** within `lib/` **does** need a require statement. The  redis client below needs to be required (via `require "my_client/redis"`) when being used:
+However, code placed in **other directories** within `lib/` **does** need a require statement. Using code from these directories is akin to using a Ruby gem, and so a require statement is necessary.
+
+The custom redis client below, for example, needs to be required (via `require "custom_redis/client"`) when being used:
 
 ```ruby
-# lib/my_redis/client.rb
+# lib/custom_redis/client.rb
 
-module MyRedis
+module CustomRedis
   class Client
   end
 end
@@ -91,9 +112,9 @@ end
 
 Hanami.app.register_provider :redis do
   start do
-    require "my_redis/client"
+    require "custom_redis/client"
 
-    redis = MyRedis::Client.new(url: target["settings"].redis_url)
+    redis = CustomRedis::Client.new(url: target["settings"].redis_url)
 
     register "redis", redis
   end
@@ -104,7 +125,7 @@ end
 | Constant location               | Usage                                      |
 |---------------------------------|--------------------------------------------|
 | lib/bookshelf/slack_notifier.rb | Bookshelf::SlackNotifier                   |
-| lib/my_redis/client.rb          | require "my_redis/client"<br /><br />  MyRedis::Client |
+| lib/custom_redis/client.rb          | require "custom_redis/client"<br /><br />  CustomRedis::Client |
 
 
 ## Requiring gems
