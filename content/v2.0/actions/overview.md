@@ -60,7 +60,6 @@ end
 Topics to cover:
 
 - request and response
-- mime types and format
 - control flow
 - params (including req.ar.to_h) and query string parameters.
 - param validation
