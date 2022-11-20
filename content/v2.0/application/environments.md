@@ -97,7 +97,7 @@ module Bookshelf
 end
 ```
 
-See the app config guide for information on supported config options.
+See the [app config guide](/v2.0/application/config/) for information on supported config options.
 
 ## Production deployments
 

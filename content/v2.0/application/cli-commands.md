@@ -3,14 +3,14 @@ title: CLI commands
 order: 70
 ---
 
-Hanami provides a command line interface powered by the [hanami-cli](https://github.com/hanami/cli) gem, with helpful commands for generating a new application, starting a console, starting a development server, displaying routes and more.
+Hanami provides a command line interface with helpful commands for generating a new application, starting a console, starting a development server, displaying routes and more.
 
 ## Gem commands
 
 After an initial install via `gem install hanami`, hanami offers two commands:
 
-```ruby
-hanami --help
+```shell
+$ hanami --help
 
 Commands:
   hanami new APP         # Generate a new Hanami app
@@ -22,8 +22,8 @@ Commands:
 Generates a Hanami application with the given APP name, in a new directory from the current location.
 
 ```shell
-hanami new bookshelf # generates a new Bookshelf application in ./bookshelf
-hanami new my_app # generates a new MyApp application in ./my_application
+$ hanami new bookshelf # generates a new Bookshelf application in ./bookshelf
+$ hanami new my_app # generates a new MyApp application in ./my_app
 ```
 
 
@@ -32,19 +32,19 @@ hanami new my_app # generates a new MyApp application in ./my_application
 Displays the Hanami version of the currently installed gem.
 
 ```shell
-hanami version
+$ hanami version
 v2.0.0
 ```
 
 
 ## Project commands
 
-When executed from the root of a Hanami project, hanami offers a different set of commands.
+When executed from within a hanami project, hanami offers a different set of commands.
 
 These commands can be listed using the `--help` flag.
 
 ```shell
-bundle exec hanami --help
+$ bundle exec hanami --help
 
 Commands:
   hanami console                              # Start app console (REPL)
@@ -60,7 +60,7 @@ Commands:
 Starts the Hanami console.
 
 ```shell
-bundle exec hanami console
+$ bundle exec hanami console
 
 bookshelf[development]>
 ```
@@ -68,8 +68,8 @@ bookshelf[development]>
 This command accepts an `engine` argument that can start the console using IRB or Pry.
 
 ```shell
-bundle exec hanami console --engine=irb # (the default)
-bundle exec hanami console --engine=pry
+$ bundle exec hanami console --engine=irb # (the default)
+$ bundle exec hanami console --engine=pry
 ```
 
 ## hanami generate
@@ -77,7 +77,7 @@ bundle exec hanami console --engine=pry
 Hanami 2.0 provides two generators, one for actions and one for slices.
 
 ```shell
-bundle exec hanami generate --help
+$ bundle exec hanami generate --help
 
 Commands:
   hanami generate action NAME
@@ -87,8 +87,8 @@ Commands:
 These can be invoked as follows:
 
 ```shell
-hanami generate action books.show
-hanami generate slice api
+$ hanami generate action books.show
+$ hanami generate slice api
 ```
 
 See the [actions](/v2.0/actions/overview/) and [slices](/v2.0/architecture/slices/) guides for example usage.
@@ -98,7 +98,7 @@ See the [actions](/v2.0/actions/overview/) and [slices](/v2.0/architecture/slice
 Displays the Rack middleware stack as currently configured.
 
 ```shell
-bundle exec hanami middleware
+$ bundle exec hanami middleware
 
 /    Dry::Monitor::Rack::Middleware (instance)
 /    Rack::Session::Cookie
@@ -108,7 +108,7 @@ bundle exec hanami middleware
 This command accepts a `--with-arguments` option that will include initialization arguments:
 
 ```shell
-bundle exec hanami middleware --with-arguments
+$ bundle exec hanami middleware --with-arguments
 
 /    Dry::Monitor::Rack::Middleware (instance) args: []
 /    Rack::Session::Cookie args: [{:key=>"my_app.session", :secret=>"secret", :expire_after=>31536000}]
@@ -120,7 +120,7 @@ bundle exec hanami middleware --with-arguments
 Displays your application's routes.
 
 ```shell
-bundle exec hanami routes
+$ bundle exec hanami routes
 
 GET     /                             home.index                    as :root
 GET     /books                        books.index
@@ -131,8 +131,7 @@ POST    /books                        books.create
 By default, routes are displayed in "human friendly" format. Routes can be inspected in csv format via the format option:
 
 ```shell
-
-bundle exec hanami routes --format=csv
+$ bundle exec hanami routes --format=csv
 
 METHOD,PATH,TO,AS,CONSTRAINTS
 GET,/,home.index,:root,""
@@ -146,7 +145,7 @@ POST,/books,books.create,"",""
 Launches hanami's development server for developing against your application locally.
 
 ```shell
-bundle exec hanami server
+$ bundle exec hanami server
 
 14:33:28 - INFO - Using Guardfile at bookshelf/Guardfile.
 14:33:28 - INFO - Puma starting on port 2300 in development environment.
@@ -175,7 +174,6 @@ bundle exec puma -C config/puma.rb
 Prints the version of the installed hanami gem.
 
 ```shell
-bundle exec hanami version
-
+$ bundle exec hanami version
 v2.0.0
 ```
