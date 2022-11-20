@@ -56,7 +56,7 @@ module Bookshelf
   module Actions
     module Books
       class Show < Action
-        before { |req, res| halt 422, req.params.errors.to_h unless req.params.valid? }
+        before { |request, response| halt 422, request.params.errors.to_h unless request.params.valid? }
 
         # ...
       end
