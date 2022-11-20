@@ -3,31 +3,17 @@ title: Parameters
 order: 30
 ---
 
-Parameters are taken from the Rack env, wrapped into the `Params` object, and passed as an argument to `#handle` method.
-
-They are similar to a Ruby `Hash`, but they offer an expanded set of features.
-
-## Sources
-
-Params can come from:
-
-  * [Router variables](/v2.0/router/basic-usage) (eg. `/books/:id`)
-  * Query string (eg. `/books?title=Hanami`)
-  * Request body (eg. a `POST` request to `/books`)
-
-## Access
-
-To access the value of a param, we can use the _subscriber operator_ `#[]`.
+The parameters associated with an incoming request are available via the `#params` method on the `request` object that's passed to the `#handle` method an action when it is invoked.
 
 ```ruby
-# app/controllers/dashboard/index.rb
+# frozen_string_literal: true
 
 module Bookshelf
   module Actions
     module Books
-      class Index < Action
+      class Show < Bookshelf::Action
         def handle(request, response)
-          request.body = "Query string: #{ request.params[:q] }"
+          request.params[:id]
         end
       end
     end
@@ -35,66 +21,163 @@ module Bookshelf
 end
 ```
 
-If we visit `/dashboard?q=foo`, we should see `Query string: foo`.
+## Parameter sources
 
-### Symbol Access
+Parameters for a request come from a number of sources:
 
-Params and nested params can be referenced **only** via symbols.
+- [path variables](/v2.0/routing/overview/) as specified in the route that has matched the request (e.g. `/books/:id`)
+- the request's query string (e.g. `/books?page=2&per_page=10`)
+- the request's body (for example the JSON-formatted body of a `POST` request of Content type `application/json`).
 
 ```ruby
-params[:q]
-params[:book][:title]
+def handle(request, response)
+  # GET /books/1
+  request.params[:id] # => "1"
+
+  # GET /books?category=history&page=2
+  request.params[:category] # => "history"
+  request.params[:page] # => "2"
+
+  # POST /books '{"title": "request body", "author":"json"}', Content-Type application/json
+  request.params[:title] # => "request body"
+  request.params[:author] #=> "json"
+end
 ```
 
-Now, what happens if the parameter `:book` is missing from the request?
-Because `params[:book]` is `nil`, we can't access `:title`.
-In this case Ruby will raise a `NoMethodError`.
+## Accessing parameters
 
-We have a safe solution for our problem: `#get`.
-It accepts a list of symbols, where each symbol represents a level in our nested structure.
+Request parameters are referenced by symbols.
 
 ```ruby
-params.dig(:book, :title)             # => "Hanami"
-params.dig(:unknown, :nested, :param) # => nil instead of NoMethodError
+request.params[:q]
+request.params[:book][:title]
 ```
 
-## Whitelisting
-
-In order to show how whitelisting works, let's create a new action: `app/actions/signup/create`
-
-We want to provide self-registration for our users.
-We build a HTML form which posts to an action that accepts the payload and stores it in the `users` table.
-That table has a boolean column `admin` to indicate whether a person has administration permissions.
-
-A malicious user can exploit this scenario by sending this extra parameter to our application, thereby making themselves an administrator.
-
-We can easily fix this problem by filtering the allowed parameters that are permitted inside our application.
-Please always remember that **params represent untrusted input**.
-
-We use `.params` to map the structure of the (nested) parameters.
+Nested parameters can be safely accessed via the `#dig` method on the `params` object. This method accepts a list of symbols, where each symbol represents a level in our nested structure. If the `:book` param above is missing from the request, using `#dig` avoids a `NoMethodError` when attempting to access `:title`.
 
 ```ruby
-# app/actions/signup/create.rb
+request.params.dig(:book, :title)             # => "Hanami"
+request.params.dig(:deeply, :nested, :param)  # => nil instead of NoMethodError
+```
+
+## Parameter validation
+
+The parameters associated with a web request are untrusted input.
+
+In Hanami actions, params can be validated using a schema specified using a `params` block.
+
+This validation serves several purposes, including allowlisting (ensuring that only allowable params are extracted from a request) and coercion (converting string parameters to boolean, integer, time and other types).
+
+Let's take a look at a books index action that accepts two parameters, `page` and `per_page`.
+
+```ruby
+# app/actions/books/index.rb
+
+# frozen_string_literal: true
 
 module Bookshelf
   module Actions
-    module Signup
-      class Create < Action
+    module Books
+      class Index < Bookshelf::Action
+        params do
+          optional(:page).value(:integer)
+          optional(:per_page).value(:integer)
+        end
+
+        def handle(request, response)
+          request.params[:page]
+          request.params[:per_page]
+        end
+      end
+    end
+  end
+end
+```
+
+The schema in the params block specifies the following:
+
+- `page` and `per_page` are both optional parameters
+- if `page` is present, it must be an integer
+- if `per_page` is present, it must be an integer
+
+With this schema in place, a request with a query string of `/books?page=1&per_page=10` will result in:
+
+```ruby
+request.params[:page] # => 1
+request.params[:per_page] # => 10
+```
+
+Note that, due to the `params` block, 1 and 10 have been coerced to integer values (with this they would otherwise be strings).
+
+Additional rules can be added to apply further contraints. The following params block specifies that, when present, `page` and `per_page` be greater than or equal to 1, and also that `per_page` be less than or equal to 100.
+
+```ruby
+params do
+  optional(:page).value(:integer, gte?: 1)
+  optional(:per_page).value(:integer, gte?: 1, lteq?: 100)
+end
+```
+
+Importantly, now that our params block is doing more than just type coercion, we need to explicitly check for and handle our parameters being invalid.
+
+The `#valid?` method on the params allows the action to check the parameters in order halt and return a `422 Unprocessable` response.
+
+```ruby
+# app/actions/books/index.rb
+
+# frozen_string_literal: true
+
+module Bookshelf
+  module Actions
+    module Books
+      class Index < Bookshelf::Action
+        params do
+          optional(:page).value(:integer, gte?: 1)
+          optional(:per_page).value(:integer, gte?: 1, lteq?: 100)
+        end
+
+        def handle(request, response)
+          halt 422 unless request.params.valid?
+
+          # At this point, we know the params are valid
+          request.params[:page]
+          request.params[:per_page]
+        end
+      end
+    end
+  end
+end
+```
+
+Here's a further example, this time for an action to create a user.
+
+```ruby
+# app/actions/users/create.rb
+
+# frozen_string_literal: true
+
+module Bookshelf
+  module Actions
+    module Users
+      class Create < Bookshelf::Action
         params do
           required(:email).filled(:string)
           required(:password).filled(:string)
-    
+
           required(:address).schema do
+            required(:street).filled(:string)
             required(:country).filled(:string)
           end
         end
-    
+
         def handle(request, response)
-          puts request.params[:email]             # => "alice@example.org"
-          puts request.params[:password]          # => "secret"
-          puts request.params[:address][:country] # => "Italy"
-    
-          puts request.params[:admin]             # => nil
+          halt 422 unless request.params.valid?
+
+          request.params[:email]             # => "alice@example.org"
+          request.params[:password]          # => "secret"
+          request.params[:address][:country] # => "Italy"
+
+          request.params[:admin]             # => nil
         end
       end
     end
@@ -102,82 +185,71 @@ module Bookshelf
 end
 ```
 
-Even if `admin` is sent inside the body of the request, it isn't accessible from `params`.
+The `params` block in this action specifies that:
 
-## Validations & Coercion
+- `email`, `password` and `address` parameters are required to be present.
+- `address` has `street` and `country` as nested parameters, which are also required.
+- each of `email`, `password`, `street` and `country` must be filled (non-blank) strings.
 
-### Use Cases
+The errors associated with a failed parameter validation are available via `request.params.errors`.
 
-In our example (called _"Signup"_), we want to make `password` a required param.
-
-Imagine we introduce a second feature: _"Invitations"_.
-An existing user can ask someone to join.
-Because the invitee will decide a password later on, we want to persist that `User` record without that value.
-
-If we put `password` validation in `User`, we need to handle these two use cases with a conditional.
-But in the long term this approach is painful from a maintenance perspective.
+Assuming that the users create action was part of a JSON API, we could render these errors by passing a body when calling `halt`:
 
 ```ruby
-# Example of poor style for validations
-class User
-  attribute :password, presence: { if: :password_required? }
-
-  private
-  
-  def password_required?
-     !invited_user? && !admin_password_reset?
-  end
-end
+halt 422, {errors: request.params.errors}.to_json unless request.params.valid?
 ```
 
-We can see validations as the set of rules for data correctness that we want for **a specific use case**.
-For us, a `User` can be persisted with or without a password, **depending on the workflow** and the route through
-which the `User` is persisted.
+For an empty `POST` request with an empty address object, this action would render:
 
-### Boundaries
-
-The second important aspect is that we use validations to prevent invalid inputs to propagate in our system.
-In an MVC architecture, the model layer is the **farthest** from the input.
-It's expensive to check the data right before we create a record in the database.
-
-If we **consider correct data as a precondition** before starting our workflow, we should stop unacceptable inputs as soon as possible.
-
-Think of the following method.
-We don't want to continue if the data is invalid.
-
-```ruby
-def expensive_computation(argument)
-  return if argument.nil?
-  # ...
-end
+```json
+{
+    "errors": {
+        "email": [
+            "is missing"
+        ],
+        "password": [
+            "is missing"
+        ],
+        "address": {
+            "street": [
+                "is missing"
+            ],
+            "country": [
+                "is missing"
+            ]
+        }
+    }
+}
 ```
 
-### Usage
+Action validations use the [dry-validation](https://dry-rb.org/gems/dry-validation/) gem, which provides a powerful DSL for defining schemas.
 
-We can coerce the Ruby type, validate if a param is required, determine if it is within a range of values, etc..
+Consult the [dry-validation](https://dry-rb.org/gems/dry-validation/) and [dry-schema](https://dry-rb.org/gems/dry-schema/) gems for further documentation.
+
+## Using concrete classes
+
+In addition to specifying parameter validations "inline" in a `params` block, actions can also hand their validation responsibilities to a separate class.
+
+This makes action validations reusable and easier to test independently of the action.
+
+For example:
 
 ```ruby
-# app/actions/signup/create.rb
+# app/actions/users/params/create.rb
+
 module Bookshelf
   module Actions
-    module Signup
-      class Create < Action
-        MEGABYTE = 1024 ** 2
+    module Users
+      module Params
+        class Create < Hanami::Action::Params
+          params do
+            required(:email).filled(:string)
+            required(:password).filled(:string)
 
-        params do
-          required(:name).filled(:string)
-          required(:email).filled(:string, format?: /@/)
-          required(:password).filled(:string)
-          required(:terms_of_service).filled(:bool)
-          required(:age).filled(:integer, included_in?: 18..99)
-          optional(:avatar).filled(:string, size?: 1..(MEGABYTE * 3))
-        end
-
-        def handle(request, response)
-          if request.params.valid?
-            # ...
-          else
-            # ...
+            required(:address).schema do
+              required(:street).filled(:string)
+              required(:country).filled(:string)
+            end
           end
         end
       end
@@ -186,52 +258,17 @@ module Bookshelf
 end
 ```
 
-Parameter validations are delegated, under the hood, to [Hanami::Validations](https://github.com/hanami/validations).
-Please check the related documentation for a complete list of options and how to share code between validations.
-
-## Concrete Classes
-
-The params DSL is really quick and intuitive but it has the drawback that it can be visually noisy and makes it hard to unit test.
-An alternative is to extract a class and pass it as an argument to `.params`.
-
 ```ruby
-# app/actions/signup/my_params.rb
+# app/actions/users/create.rb
 
 module Bookshelf
   module Actions
-    module Signup
-      class MyParams < Hanami::Action::Params
-        MEGABYTE = 1024 ** 2
-
-        params do
-          required(:name).filled(:string)
-          required(:email).filled(:string, format?: /@/)
-          required(:password).filled(:string)
-          required(:terms_of_service).filled(:bool)
-          required(:age).filled(:integer, included_in?: 18..99)
-          optional(:avatar).filled(:string, size?: 1..(MEGABYTE * 3)
-        end
-      end
-    end
-  end
-end
-```
-
-```ruby
-# apps/actions/signup/create.rb
-
-module Sandbox
-  module Actions
-    module Signup
-      class Create < Action
-        params MyParams
+    module Users
+      class Create < Bookshelf::Action
+        params Params::Create
 
         def handle(request, response)
-          if request.params.valid?
-            # ...
-          else
-            # ...
-          end
+          # ...
         end
       end
     end
@@ -239,22 +276,29 @@ module Sandbox
 end
 ```
 
-## Body Parsers
+## Validations at the HTTP layer
 
-Rack ignores request bodies unless they come from a form submission.
-If we have a JSON endpoint, the payload isn't available in `params`.
+Validating parameters in actions is useful for validating parameter structure, performing parameter coercion and type validations.
+
+More complex domain-specific validations, or validations concerned with things such as uniqueness, however, are usually better performed at layers deeper than your HTTP actions.
+
+For example, verifying a that an email address has been provided is something an action parameter validation should reasonably do, but checking that a user with that email address doen't already exist is unlikely to be a good responsibility for a HTTP action to have. That validation might instead be peformed by a create user operation, which can perform a check against a user store.
+
+## Body parsers
+
+Rack ignores request bodies unless they come from a form submission. This means that, if we have a JSON endpoint, the payload isn't automatically available in `params`.
 
 ```ruby
-# apps/web/controllers/books/create.rb
+# app/actions/users/create.rb
 
-module Sandbox
+module Bookshelf
   module Actions
-    module Books
-      class Create < Action
+    module Users
+      class Create < Bookshelf::Action
         accept :json
 
         def handle(request, response)
-          res.body = request.params.to_h # => {}
+          request.params.to_h # => {}
         end
       end
     end
@@ -270,7 +314,7 @@ $ curl http://localhost:2300/books      \
     -X POST
 ```
 
-To properly coerce `json` params, you should enable this feature.
+To enable params from JSON request bodies, use Hanami's body parsing middleware via your app config:
 
 ```ruby
 # config/app.rb
@@ -280,9 +324,9 @@ class App < Hanami::App
 end
 ```
 
-Now `params.dig(:book, :title)` returns `"Hanami"`.
+Now `params.dig(:book, :title)` will return `"Hanami"`.
 
-In case there is no suitable body parser for your format in Hanami, it is possible to declare a new one:
+If there is no suitable body parser for your format in Hanami, you can declare a new one:
 
 ```ruby
 # lib/foo_parser.rb
@@ -296,8 +340,6 @@ class FooParser
   end
 end
 ```
-
-and subsequently register it:
 
 ```ruby
 # /config.ru
