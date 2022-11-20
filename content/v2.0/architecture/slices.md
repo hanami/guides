@@ -286,7 +286,48 @@ module CDN
 end
 ```
 
-Under construction - the remainder of slices, including:
+## Slice settings
 
-- conditional slice loading
-- per slice settings
+Every slice having automatic access to the app's `"settings"` component is convenient, but for large apps this may lead to those settings becoming unwieldy: the list of settings can become long, and many settings will not be relevant to large portions of your app.
+
+You can instead elect to define settings within specific slices. To do this, create a `config/settings.rb` within your slice directory.
+
+```ruby
+# slices/cdn/config/settings.rb
+
+module CDN
+  class Settings < Hanami::Settings
+    setting :cdn_api_key, Types::String
+  end
+end
+```
+
+With this in place, the `"settings"` component within your slice will be an instance of this slice-specific settings object.
+
+```
+CDN_API_KEY=xyz bundle exec hanami console
+
+bookshelf[development]> CDN::Slice["settings"].cdn_api_key # => "xyz"
+```
+
+You can then include the slice settings via the Deps mixin within your slice.
+
+```ruby
+# slices/cdn/book_covers/purge.rb
+
+module CDN
+  module BookCovers
+    class Purge
+      include Deps["settings"]
+
+      def call(book_cover_path)
+        # use settings.cdn_api_key here
+      end
+    end
+  end
+end
+```
+
+Slice settings are loaded from environment variables just like the app settings, so take care to ensure you have no naming clashes between your slice and app settings.
+
+See the [settings guide](/v2.0/application/config/) for more information on settings.
