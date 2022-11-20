@@ -35,7 +35,7 @@ slices
 
 ## Features of a slice
 
-Slices offer much of the same behaviour and features as Hanami's `app` folder.
+Slices offer much of the same behaviour and features as the Hanami app.
 
 A Hanami slice:
 
