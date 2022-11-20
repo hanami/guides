@@ -8,7 +8,7 @@ aliases:
 ## Callbacks
 
 If we want to execute some logic before and/or after `#handle` is executed, we can use a callback.
-Callbacks are useful to declutter code for common tasks like checking if a user is signed in, set a record, handle 404 responses or tidy up the response.
+Callbacks are useful to declutter code for common tasks like checking if a user is signed in, handling 404 responses or tidying up the response.
 
 The corresponding DSL methods are `before` and `after`.
 These methods each accept a symbol that is the name of the method that we want to call, or an anonymous proc.
@@ -16,12 +16,12 @@ These methods each accept a symbol that is the name of the method that we want t
 ### Methods
 
 ```ruby
-# apps/actions/books/show.rb
+# app/actions/books/show.rb
 
 module Bookshelf
   module Actions
     module Books
-      class Index < Action
+      class Show < Action
         before :validate_params
         
         params do
@@ -40,7 +40,7 @@ module Bookshelf
 end
 ```
 
-With the code above, we are validating and coercing URL `:id` parameter, making sure it will always be integer. Otherwise, we stop request processing, immediately returning error to the browser.
+With the code above, we are validating and coercing URL `:id` parameter, making sure it will always be an integer. Otherwise, we stop request processing, immediately returning the error to the browser.
 
 Because it isn't strictly related to our business logic, we move it to a callback.
 
@@ -69,13 +69,13 @@ A callback proc takes the `request` and `response` arguments, the same as `handl
 
 <p class="warning">
 Don't use callbacks for model domain logic operations like sending emails.
-This is an antipattern that causes a lot of problems for code maintenance, testability and accidental side effects.
+This is an antipattern that causes a lot of problems with code maintenance, testability, and accidental side effects.
 </p>
 
 ## Halt
 
 Using exceptions for control flow is expensive for the Ruby VM.
-There is a lightweight alternative that our language supports: **signals** (see `throw` and `catch`).
+Our language supports a lightweight alternative: **signals** (see `throw` and `catch`).
 
 Hanami takes advantage of this mechanism to provide **faster control flow** in our actions via `#halt`.
 
@@ -86,14 +86,14 @@ module Bookshellf
   module Actions
     module Books
       class Index < Action
-        def handle(req, res)
-          halt 401 unless authenticated?(req)
+        def handle(request, response)
+          halt 401 unless authenticated?(request)
           # ...
         end
 
         private
         
-        def authenticated?(req)
+        def authenticated?(request)
           # ...
         end
       end
@@ -102,7 +102,7 @@ module Bookshellf
 end
 ```
 
-When used, this API **interrupts the flow**, and returns the control to the framework.
+When used, this API **interrupts the flow** and returns the control to the framework.
 Subsequent instructions will be entirely skipped.
 
 <p class="warning">
@@ -120,7 +120,7 @@ module Bookshelf
       class Index < Action
         before :authenticate!
 
-        def handle(req, res)
+        def handle(request, response)
           # ...
         end
 
@@ -147,7 +147,7 @@ module Bookshelf
   module Actions
     module Books
       class Index < Action
-        def handle(req, res)
+        def handle(request, response)
           halt 404, "These aren't the droids you're looking for"
         end
       end
@@ -178,8 +178,8 @@ module Bookshelf
   module Actions
     module Books
       class Index < Action
-        def handle(req, res)
-          res.redirect_to routes.path(:root), status: 302
+        def handle(request, response)
+          response.redirect_to routes.path(:root), status: 302
           raise "This line will never be executed"
         end
       end
