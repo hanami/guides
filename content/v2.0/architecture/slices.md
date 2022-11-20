@@ -56,8 +56,6 @@ For example, suppose our Bookshelf application, which catalogues international b
 ```ruby
 # slices/api/actions/countries/show.rb
 
-# frozen_string_literal: true
-
 require "countries"
 
 module API
@@ -95,8 +93,6 @@ If the code is valid, the action calls the countries show query (aliased here as
 
 ```ruby
 # slices/api/queries/countries/show.rb
-
-# frozen_string_literal: true
 
 require "countries"
 
@@ -157,8 +153,6 @@ If you have additional components in your app that you wish to make available to
 
 ```ruby
 # config/app.rb
-
-# frozen_string_literal: true
 
 require "hanami"
 
