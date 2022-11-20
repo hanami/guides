@@ -47,6 +47,13 @@ module Bookshelf
           response.cookies[:b]         # read
           response.cookies[:a] = 'foo' # assign
           response.cookies[:c] = nil   # remove
+          
+          # overrides options
+          response.cookies[:d] = { 
+            value: 'foo', 
+            path: '/books', 
+            max_age: 100 
+          }
         end
       end
     end
@@ -54,4 +61,5 @@ module Bookshelf
 end
 ```
 
-When setting a value, a cookie can accept a `String`
+When setting a value, a cookie can accept a `String` or a `Hash` to specify inline options.
+General settings are applied automatically but these options can be used to override values case by case.
