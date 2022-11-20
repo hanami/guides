@@ -73,8 +73,6 @@ Let's take a look at a books index action that accepts two parameters, `page` an
 ```ruby
 # app/actions/books/index.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   module Actions
     module Books
@@ -125,8 +123,6 @@ The `#valid?` method on the params allows the action to check the parameters in 
 ```ruby
 # app/actions/books/index.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   module Actions
     module Books
@@ -153,8 +149,6 @@ Here's a further example, this time for an action to create a user.
 
 ```ruby
 # app/actions/users/create.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   module Actions
