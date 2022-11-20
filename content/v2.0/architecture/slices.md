@@ -325,3 +325,31 @@ end
 Slice settings are loaded from environment variables just like the app settings, so take care to ensure you have no naming clashes between your slice and app settings.
 
 See the [settings guide](/v2.0/application/config/) for more information on settings.
+
+## Slice loading
+
+Hanami will load all slices when your app boots. However, for certain workloads of your app, you may elect to load only a specified list of slices.
+
+Loading specific slices brings the benefit of stronger code isolation, faster boot time and reduced memory usage. If your app had a background worker that processed jobs from one slice only, then it would make sense to load only that slice for the worker's process.
+
+To do this, set the `HANAMI_SLICES` environment variable with a comma-separated list of slice names.
+
+```ruby
+$ HANAMI_SLICES=cdn,other_slice_here bundle exec your_hanami_command
+```
+
+Setting this environment variable is a shortcut for setting `config.slices` in your app class.
+
+```ruby
+# config/app.rb
+
+require "hanami"
+
+module Bookshelf
+  class App < Hanami::App
+    config.slices = ["cdn"]
+  end
+end
+```
+
+You may find the `HANAMI_SLICES` environment variable more convenient since it will not disturb slice loading for all other processes running your app.
