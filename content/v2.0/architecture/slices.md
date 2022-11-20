@@ -173,7 +173,9 @@ Images can be updated in one of two ways: the publisher of the book can sign in 
 
 In our bookshelf app, an `Admin` slice supports the latter functionality, and a `Publisher` slice the former. Both these slices want to trigger a CDN purge when a book cover is updated, but neither slice needs to know exactly how that's achieved. Instead, a `CDN` slice can manage this operation.
 
-```ruby title="slices/cdn/book_covers/purge.rb"
+```ruby
+# slices/cdn/book_covers/purge.rb
+
 module CDN
   module BookCovers
     class Purge
