@@ -3,13 +3,13 @@ title: Inflector
 order: 30
 ---
 
-Hanami includes an inflector that supports pluralization, singularization, camelization, humanization and other features. This inflector is a [Dry::Inflector](https://dry-rb.org/gems/dry-inflector) instance.
+Hanami includes an inflector that supports the pluralization, singularization and humanization of English words, as well as other transformations. This inflector is a [Dry::Inflector](https://dry-rb.org/gems/dry-inflector) instance.
 
 Hanami uses the inflector internally for a variety of purposes, but it's also available to use in your own code via the `"inflector"` component.
 
 ## Configuring the inflector
 
-To customize how particular words are inflected, use the `config.inflections` config in your app class.
+To customize how particular words are inflected, use `config.inflections` in your app class.
 
 ```ruby
 # config/app.rb
@@ -28,14 +28,14 @@ module Bookshelf
 end
 ```
 
-A common reason for customization is to configure inflections to support desired constants. For example, the `WNBA` acronym above supports constants like `Games::WNBA` instead of `Games::Wnba`. See the [autoloading guide](/v2.0/application/autoloading/) for more detail.
+A common reason for customization is to configure inflections to support desired class names and other constants. For example, the `WNBA` acronym above supports constants like `Games::WNBA` instead of `Games::Wnba`. See the [autoloading guide](/v2.0/application/autoloading/) for more detail.
 
 
 ## Using the inflector in a component
 
 Like `"settings"` and `"logger"`, the inflector is available in your app and slice containers as an `"inflector"` component.
 
-Use it in your components via the Deps mixin through `include Deps["inflector"]`.
+Use it in your own classes via the Deps mixin through `include Deps["inflector"]`.
 
 ```ruby
 # app/my_component.rb
@@ -71,7 +71,7 @@ end
 
 ## Replacing the inflector
 
-If needed, you can replace the inflector by providing your own.
+If needed, you can replace the inflector by providing your own. Your replacement inflector should be another `Dry::Inflector` instance or provide the same interface.
 
 ```ruby
 # config/app.rb
