@@ -14,18 +14,18 @@ Every action in your Hanami application is an individual class. Actions define a
 Modifying the response object allows you to control how your application responds to a request.
 
 ```ruby
-# app/actions/books/show.rb
+# app/actions/home/show.rb
 
 # frozen_string_literal: true
 
 module Bookshelf
   module Actions
-    module Books
+    module Home
       class Show < Bookshelf::Action
         def handle(request, response)
-          id = request.params[:id]
+          name = request.params[:name]
 
-          response.body = "You requested book #{id}"
+          response.body = "Welcome to Bookshelf #{name}!"
         end
       end
     end
@@ -33,42 +33,19 @@ module Bookshelf
 end
 ```
 
-Let's take a deeper look.
+As the code above suggests, the `request` object provides access to the parameters associated with the incoming request through a `#params` method.
 
-## Parameters
-
-The parameters associated with an incoming request are available via the `#params` method on the `request` object.
-
-Available parameters are surfaced from variables specified in the router (`/books/:id`), query strings (`/books?page=2`), and request bodies (for example a `POST` request to `/books` from a form submission).
-
-```ruby
-def handle(request, response)
-  # GET /books/1
-  request.params[:id] # => "1"
-
-  # GET /books?category=history&page=2
-  request.params[:category] # => "history"
-  request.params[:page] # => "2"
-end
-```
-
-**Remainder of parameters under construction**
-
+Let's start by taking a look at action [parameters](/v2.0/actions/parameters/).
 
 ## Under construction
 
 Topics to cover:
 
-- request and response
-- mime types and format
 - control flow
-- params (including req.ar.to_h) and query string parameters.
-- param validation
 - request headers
 - response headers
 - redirects
 - halt
-- exception handling
 - HTTP caching
 - inheritence
 - Testing

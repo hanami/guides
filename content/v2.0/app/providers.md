@@ -1,6 +1,6 @@
 ---
 title: Providers
-order: 20
+order: 30
 ---
 
 Providers are a way to register components with your containers, outside of the automatic registration mechanism detailed in [containers and components](/docs/application-architecture/containers).
