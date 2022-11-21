@@ -1,44 +1,41 @@
 ---
-title: MIME Types and formats
+title: Formats and MIME types
 order: 70
 ---
 
-Hanami actions provide support for MIME type detection and request and response formats, including the ability to configure formats for specific actions, base actions, or across your entire application.
+Hanami maps [over 50 of the most common MIME types][built-in-formats] to simple **format** names for you to use when configuring your actions.
 
-## Request format introspection
+[built-in-formats]: https://github.com/hanami/controller/blob/dc5bb2a1db48b0ccf3faf52aac20eaef0fd135a3/lib/hanami/action/mime.rb#L15-L69
 
-Actions use the `Accept` header of incoming requests to determine an acceptable format.
+Configuring one or more formats for your actions will:
 
-An `#accept?` method on `request` can be used to check whether a particular MIME type is acceptable to the client.
+- Ensure the actions accept only appropriate requests based on their `Accept` or `Content-Type` headers
+- Set an appropriate `Content-Type` header on responses
+- For certain formats, enable automatic parsing of request bodies
+
+## Configuring a format for all actions
+
+To configure a format for all actions, use `config.actions.format` in your app class.
 
 ```ruby
-# app/actions/books/index.rb
+# config/app.rb
 
 module Bookshelf
-  module Actions
-    module Books
-      class Index < Bookshelf::Action
-        def handle(request, response)
-          # GET /books, { Accept => "application/json" }
-          request.accept?("application/json") # => true
-          request.accept?("text/html")        # => false
-        end
-      end
-    end
+  class App < Hanami::App
+    config.actions.format :json
   end
 end
 ```
 
-## Response formats
+You can also configure actions to use multiple formats:
 
-Actions automatically return a `Content-Type` response header based on the requested MIME type and charset of the incoming request.
+```ruby
+config.actions.format :json, :html
+```
 
-For example, if a request's `Accept` header is `"text/html,application/xhtml+xml,application/xml;q=0.9"`, the action will return a content type of `"text/html; charset=utf-8"`, assuming that the action is configured such that `"text/html"` is an acceptable format.
+## Configuring a format for particular actions
 
-
-### Format allowlisting
-
-The formats that an action is willing to accept can be restricted using the action's format method. The action below will return `406 Not Acceptable` for incoming requests unwilling to accept either json or xml.
+You can also configure a format on any action class. `format` in an action class is analogous to `config.actions.format` in your app class, just as `config` in an action is analogous to `config.actions` in your app.
 
 ```ruby
 # app/actions/books/index.rb
@@ -47,7 +44,7 @@ module Bookshelf
   module Actions
     module Books
       class Index < Bookshelf::Action
-        format :json, :xml
+        format :json # or `config.format :json`
 
         def handle(request, response)
           # ...
@@ -58,76 +55,7 @@ module Bookshelf
 end
 ```
 
-Setting a single format ensures that an action will return only that format (as long as the format is acceptable to the client).
-
-```ruby
-module Bookshelf
-  module Actions
-    module Books
-      class Index < Bookshelf::Action
-        format :json
-
-        def handle(request, response)
-          response.body = {result: "OK"}.to_json
-        end
-      end
-    end
-  end
-end
-```
-
-### Setting format on the response object
-
-To force a particular content type on a response, you can also use the `#format=` method on the response object.
-
-```ruby
-# app/actions/books/index.rb
-
-module Bookshelf
-  module Actions
-    module Books
-      class Index < Bookshelf::Action
-        format :html, :json
-
-        def handle(request, response)
-          response.format = :json # or response.format = "application/json"
-          response.body = {result: "OK"}.to_json
-        end
-      end
-    end
-  end
-end
-```
-
-### Default character set
-
-The default chartset for actions is `utf-8`. This can be adjusted on a per-action basis, or as an application-wide setting.
-
-```ruby
-module Bookshelf
-  module Actions
-    module Books
-      class Index < Bookshelf::Action
-        config.default_charset "koi8-r"
-      end
-    end
-  end
-end
-```
-
-```ruby
-# config/app.rb
-
-module Bookshelf
-  class App < Hanami::App
-    config.actions.default_charset = 'koi8-r'
-  end
-end
-```
-
-## Configuring format in base actions
-
-You can configure format on a base action from which other actions inherit. This below configuration will apply to any action that inherits from `Bookshelf::Action`.
+If you configure a format on a base action class, then it will be inherited by all its subclasses.
 
 ```ruby
 # app/action.rb
@@ -139,9 +67,36 @@ module Bookshelf
 end
 ```
 
-## Configuring format at an application level
+## Request restriction
 
-An application wide format can be configured on your app class.
+Once you've configured a format, your actions will reject certain requests that do not match the format.
+
+The following kinds of requests will be allowed:
+
+- No `Accept` or `Content-Type` headers
+- `Accept` header that includes the format's MIME type
+- No `Accept` header, but a `Content-Type` header that matches the format's MIME type
+
+Whereas these kinds of requests will be rejected:
+
+- `Accept` does not include the format's MIME type, rejected as `406 Not acceptable`
+- No `Accept` header, but a `Content-Type` header is present and does not match the format's MIME type, rejected as `415 Unsupported media type`
+
+For example, if you configure `format :json`, then requests with these headers will be allowed:
+
+- `Accept: application/json`
+- `Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"` (courtesy of the `*/*`)
+- `Content-Type: application/json`
+
+While requests with these headers will be rejected:
+
+- `Accept: text/html`
+- `Accept: text/html,application/xhtml+xml,application/xml;q=0.9`
+- `Content-Type: application/x-www-form-urlencoded`
+
+## Parsing JSON request bodies
+
+If you configure `:json` as your action format in the app, then any requests with `Content-Type: application/json` will have their request bodies parsed and made available as request params.
 
 ```ruby
 # config/app.rb
@@ -152,9 +107,8 @@ module Bookshelf
   end
 end
 ```
-## Parsing JSON request bodies
 
-If your actions need to accept requests of `Content-Type: application/json` with a request body which should be parsed and made available as request params, remember to enable the body parser middleware.
+You can also enable the body parser manually if required.
 
 ```ruby
 # config/app.rb
@@ -166,9 +120,68 @@ module Bookshelf
 end
 ```
 
+## Response format
+
+Actions set a `Content-Type` response header based on your configured formats and MIME type and charset of the incoming request.
+
+For example, if a request's `Accept` header is `"text/html,application/xhtml+xml,application/xml;q=0.9"`, the action will return a content type of `"text/html; charset=utf-8"`, assuming that the action is configured with the `:html` format.
+
+You can also assign a particular format directly on the response inside your action.
+
+```ruby
+# app/actions/books/index.rb
+
+module Bookshelf
+  module Actions
+    module Books
+      class Index < Bookshelf::Action
+        def handle(request, response)
+          response.format = :json # or response.format = "application/json"
+          response.body = {result: "OK"}.to_json
+        end
+      end
+    end
+  end
+end
+```
+
+## Default character set
+
+The default character set for actions is `utf-8`. This is included in your response's `Content-Type` header:
+
+```
+Content-Type: application/json; charset=utf-8
+```
+
+You can configure this app-wide or on a per-action basis.
+
+```ruby
+# config/app.rb
+
+module Bookshelf
+  class App < Hanami::App
+    config.actions.default_charset = 'koi8-r'
+  end
+end
+```
+
+```ruby
+# app/actions/books/index.rb
+
+module Bookshelf
+  module Actions
+    module Books
+      class Index < Bookshelf::Action
+        config.default_charset "koi8-r"
+      end
+    end
+  end
+end
+```
+
 ## Registering additional MIME Types
 
-Hanami knows about more than 100 of the most common MIME types. However, you can add additional types like so:
+If you need your actions to work with additional MIME types, you can configure these like so:
 
 ```ruby
 # config/app.rb
@@ -180,20 +193,18 @@ module Bookshelf
 end
 ```
 
-Setting `format :custom` on an action will now set `Content-Type: application/custom` on responses.
+This will add the `:custom` format for the `"application/custom"` MIME type and also configure your actions to use this format.
+
+You can also configure a format to map to multiple MIME types:
 
 ```ruby
-module Bookshelf
-  module Actions
-    module Books
-      class Index < Bookshelf::Action
-        format :custom
+# config/app.rb
 
-        def handle(request, response)
-          # ...
-        end
-      end
-    end
+module Bookshelf
+  class App < Hanami::App
+    config.actions.formats.add :json, ["application/json+scim", "application/json"]
   end
 end
 ```
+
+In this case, requests for both these MIME types will be accepted.
