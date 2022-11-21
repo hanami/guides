@@ -1,15 +1,15 @@
 ---
-title: Exception Handling
+title: Exception handling
 order: 100
 ---
 
-Actions have an elegant API for exception handling. You can define the exception handling per action, using app/slice configuration.
+When a request crashes with an exception, you want to handle it in a graceful manner. In order to do this, you can use the `handle_exception` action API.
 
-## Default behavior
+Actions do not handle exceptions raised by your application by default. To handle exceptions, you need to define how a specific exception type should be translated into an HTTP response.
 
-By default, actions do not handle errors risen by the app, and to handle them, you need to define the error mapping to the handler.
+An exception handler can be a HTTP status code (eg. `500`, `401`), or a symbol that represents a method on the action.
 
-An exception handler can be a valid HTTP status code (eg. `500`, `401`), or a `Symbol` that represents an action method.
+## Status codes
 
 ```ruby
 # app/actions/books/index.rb
@@ -19,8 +19,8 @@ module Bookshelf
       class Index < Bookshelf::Action
         handle_exception StandardError => 500
 
-        def handle(*, response)
-          raise
+        def handle(request, response)
+          raise "error"
         end
       end
     end
@@ -28,34 +28,34 @@ module Bookshelf
 end
 ```
 
-`handle_exception` accepts a Hash where the key is the exception to handle, and the value is the corresponding HTTP status code.
-In our example, when `StandardError` is raised, it will be handled as a `500` (Server Error).
+In the above action, when `StandardError` is raised in the `#handle` method, a `500 Internal Server Error` will be returned.
+
+<p><img src="/v2.0/actions/default-error-response.png" alt="Default error response"></p>
 
 
-![[default-error-response.png]]
+## Custom method handlers
 
-## Custom error handlers
+To do more with an exception than simply rendering a particular status code, call a method by providing a symbol with the method's name:
 
-If the mapping with a custom HTTP status doesn't fit our needs, we can specify a custom handler and manage the exception by ourselves.
-
-If you'll pass a symbol instead of the HTTP status code, the action will look for the method with the same name.
 
 ```ruby
 module Bookshelf
   module Actions
     module Books
       class Index < Bookshelf::Action
-        handle_exception StandardError => :my_error_handler
+        handle_exception RecordNotFound => 404
+        handle_exception StandardError => :handle_standard_error
 
         def handle(*, response)
-          raise
+          raise "error"
         end
 
         private
 
-        def my_error_handler(req, res, exception)
-          res.status = 500
-          res.body = "You've found a Unicorn!"
+        def handle_standard_error(request, response, exception)
+          response.status = 500
+          response.format = :json
+          response.body = {error: "Sorry, something went wrong handling your request"}.to_json
         end
       end
     end
@@ -63,32 +63,48 @@ module Bookshelf
 end
 ```
 
-![[customized-error-response.png]]
+This time, when `StandardError` is raised, the `#handle_standard_error` will render a json response.
 
-In the example above we changed the default message delivered to the client.
+Methods used for exception handling accept three arguments: the `request`, the `response` and the `exception` being handled.
 
-This time, when `StandardError` will be raised, it'll be handled by our method.
+## Handling exceptions in base actions
 
-<p class="warning">
-When specifying a custom exception handler, it MUST accept a request, response, and <code>exception</code> argument.
-</p>
+Rather than configure exception handling in every action, it's usually convenient to configure it once, either in your app's base action, or in the base action of a slice.
 
-## App/slice - level exception handling
-
-Instead of configuring errors per-action, there is a chance you'll want to define the error mapping once per the whole application, or per slice.
-
-You can do it, by configuring the base action for the given slice, or for the whole application.
+If you use an error reporting service like Bugsnag or Sentry, you can report on exceptions here too.
 
 ```ruby
-# /app/action.rb
+# app/action.rb
 
 require "hanami/action"
 
 module Bookshelf
   class Action < Hanami::Action
-    handle_exception StandardError => 500
+    include Deps["sentry"]
+
+    handle_exception StandardError => :handle_standard_error
+
+    private
+
+    def handle_standard_error(request, response, exception)
+      sentry.capture_exception(exception)
+
+      response.status = 500
+      response.body = "Sorry, something went wrong handling your request"
+    end
   end
 end
 ```
 
-The behavior remains the same as described above, it just makes your code more DRY.
+In development, where seeing a stack trace can be useful, reraise exceptions in order to make them visible in your browser.
+
+```ruby
+def handle_standard_error(request, response, exception)
+  if Hanami.env?(:development)
+    raise exception
+  else
+    response.status = 500
+    response.body = "Sorry, something went wrong handling your request"
+  end
+end
+```
