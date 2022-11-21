@@ -72,9 +72,9 @@ Sets the base URL for the app's web server. This is used when building URLs for 
 
 ### `middleware`
 
-Configures the Rack middleware stack to be used by the app's router.
+Configures the Rack middleware stack to be used by the app's router. Defaults to an empty middleware stack.
 
-Use `use` to append a middleware.
+Add a middleware with `use`:
 
 ```ruby
 # config/app.rb
@@ -88,7 +88,7 @@ Use the `before:` or `after:` options to insert a middleware at a particular poi
 config.middleware.use MyMiddleware, before: AlreadyAddedMiddleware
 ```
 
-Defaults to an empty middleware stack. If you configure actions to use the `:json` format, then `Hanami::Middleware::BodyParser` will be added automatically and configured to parse JSON request bodies.
+If you configure actions to use the `:json` format, then `Hanami::Middleware::BodyParser` will be added automatically and configured to parse JSON request bodies.
 
 ## Actions
 
