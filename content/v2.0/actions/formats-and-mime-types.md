@@ -149,7 +149,7 @@ end
 
 The default character set for actions is `utf-8`. This is included in your response's `Content-Type` header:
 
-```
+```text
 Content-Type: application/json; charset=utf-8
 ```
 
