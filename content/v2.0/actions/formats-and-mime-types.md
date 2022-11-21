@@ -67,7 +67,7 @@ module Bookshelf
 end
 ```
 
-## Request restriction
+## Request acceptance
 
 Once you've configured a format, your actions will reject certain requests that do not match the format.
 
