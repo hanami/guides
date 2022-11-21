@@ -3,7 +3,7 @@ title: Parameters
 order: 30
 ---
 
-The parameters associated with an incoming request are available via the `#params` method on the `request` object that's passed to the `#handle` method an action when it is invoked.
+The parameters associated with an incoming request are available via the `#params` method on the `request` object that's passed to the `#handle` method of an action when it is invoked.
 
 ```ruby
 # frozen_string_literal: true
