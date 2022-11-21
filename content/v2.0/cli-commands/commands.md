@@ -1,5 +1,5 @@
 ---
-title: CLI commands
+title: Commands
 order: 50
 ---
 
