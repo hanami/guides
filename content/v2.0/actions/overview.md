@@ -41,7 +41,6 @@ Let's start by taking a look at action [parameters](/v2.0/actions/parameters/).
 
 Topics to cover:
 
-- mime types and format
 - control flow
 - request headers
 - response headers
