@@ -300,7 +300,7 @@ end
 
 With this in place, the `"settings"` component within your slice will be an instance of this slice-specific settings object.
 
-```
+```ruby
 CDN_API_KEY=xyz bundle exec hanami console
 
 bookshelf[development]> CDN::Slice["settings"].cdn_api_key # => "xyz"
@@ -336,7 +336,7 @@ Loading specific slices brings the benefit of stronger code isolation, faster bo
 
 To do this, set the `HANAMI_SLICES` environment variable with a comma-separated list of slice names.
 
-```ruby
+```shell
 $ HANAMI_SLICES=cdn,other_slice_here bundle exec your_hanami_command
 ```
 
