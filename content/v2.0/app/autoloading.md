@@ -1,6 +1,6 @@
 ---
 title: Autoloading
-order: 50
+order: 40
 ---
 
 Hanami uses the [Zeitwerk](https://github.com/fxn/zeitwerk) code loader to support autoloading.
@@ -56,9 +56,9 @@ Assuming an app created via `hanami new bookshelf` (which would have a top-level
 
 None of the above classes or modules need a require statement before use.
 
-It's worth noting that, thanks to Hanami's [component managment system](/v2.0/architecture/containers/), the components you write in `app/` don't commonly need to reference their collaborators using Ruby constants - they instead use the Deps mixin to access their dependencies.
+It's worth noting that, thanks to Hanami's [component managment system](/v2.0/app/container-and-components/), the components you write in `app/` don't commonly need to reference their collaborators using Ruby constants - they instead use the Deps mixin to access their dependencies.
 
-If you are adding a class to the `app/` directory that you want to use an autoloaded Ruby constant to reference, it's very likely that you do not want that class to be registered in your app container. To opt out of registration, use the magic comment `# auto_register: false` or one of the alternative methods discussed in "Opting out of the container" in the [containers and components guide](/v2.0/architecture/containers/).
+If you are adding a class to the `app/` directory that you want to use an autoloaded Ruby constant to reference, it's very likely that you do not want that class to be registered in your app container. To opt out of registration, use the magic comment `# auto_register: false` or one of the alternative methods discussed in "Opting out of the container" in the [containers and components guide](/v2.0/app/container-and-components/).
 
 ```ruby
 # auto_register: false

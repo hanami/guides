@@ -1,6 +1,6 @@
 ---
 title: CLI commands
-order: 70
+order: 50
 ---
 
 Hanami provides a command line interface with helpful commands for generating a new application, starting a console, starting a development server, displaying routes and more.
@@ -91,7 +91,7 @@ $ hanami generate action books.show
 $ hanami generate slice api
 ```
 
-See the [actions](/v2.0/actions/overview/) and [slices](/v2.0/architecture/slices/) guides for example usage.
+See the [actions](/v2.0/actions/overview/) and [slices](/v2.0/app/slices/) guides for example usage.
 
 ## hanami middleware
 

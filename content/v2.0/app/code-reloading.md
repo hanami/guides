@@ -1,6 +1,6 @@
 ---
 title: Code reloading
-order: 60
+order: 90
 ---
 
 Hanami offers fast code reloading in development via the [hanami-reloader](https://github.com/hanami/reloader) gem.
@@ -30,7 +30,7 @@ Hanami takes an "outside the framework" approach to code reloading. This has sev
 - Hanami internals are free from code reloading awareness.
 - if the hanami-reloader gem is not present (which is true in production), code reloading logic is eliminated.
 
-Thanks to [Zeitwerk](/v2.0/application/autoloading/) and [lazy loading](/v2.0/application/booting/), code reloading is also very fast.
+Thanks to [Zeitwerk](/v2.0/app/autoloading/) and [lazy loading](/v2.0/app/booting/), code reloading is also very fast.
 
 ### Reloading in the console
 
