@@ -71,7 +71,7 @@ end
 
 Once you've configured a format, your actions will reject certain requests that do not match the format.
 
-The following kinds of requests will be allowed:
+The following kinds of requests will be accepted:
 
 - No `Accept` or `Content-Type` headers
 - `Accept` header that includes the format's MIME type
@@ -82,7 +82,7 @@ Whereas these kinds of requests will be rejected:
 - `Accept` does not include the format's MIME type, rejected as `406 Not acceptable`
 - No `Accept` header, but a `Content-Type` header is present and does not match the format's MIME type, rejected as `415 Unsupported media type`
 
-For example, if you configure `format :json`, then requests with these headers will be allowed:
+For example, if you configure `format :json`, then requests with these headers will be accepted:
 
 - `Accept: application/json`
 - `Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"` (courtesy of the `*/*`)
