@@ -74,11 +74,11 @@ Sets the base URL for the app's web server. This is used when building URLs for 
 
 Configures the Rack middleware stack to be used by the app's router.
 
-Use `use` to append a middlware.
+Use `use` to append a middleware.
 
 ```ruby
 # config/app.rb
-config.middlware.use MyMiddleware, "middlware", "args", "here"
+config.middleware.use MyMiddleware, "middleware", "args", "here"
 ```
 
 Use the `before:` or `after:` options to insert a middleware at a particular point in the stack:
