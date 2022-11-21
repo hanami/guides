@@ -37,27 +37,6 @@ As the code above suggests, the `request` object provides access to the paramete
 
 Let's start by taking a look at action [parameters](/v2.0/actions/parameters/).
 
-
-## Parameters
-
-The parameters associated with an incoming request are available via the `#params` method on the `request` object.
-
-Available parameters are surfaced from variables specified in the router (`/books/:id`), query strings (`/books?page=2`), and request bodies (for example a `POST` request to `/books` from a form submission).
-
-```ruby
-def handle(request, response)
-  # GET /books/1
-  request.params[:id] # => "1"
-
-  # GET /books?category=history&page=2
-  request.params[:category] # => "history"
-  request.params[:page] # => "2"
-end
-```
-
-**Remainder of parameters under construction**
-
-
 ## Under construction
 
 Topics to cover:
