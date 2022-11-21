@@ -23,7 +23,7 @@ a:active {
 }
 
 p {
-  font-size: 1.2rem;
+  font-size: 1.0rem;
 }
 
 code {
@@ -31,7 +31,7 @@ code {
   color: #525f7f;
   padding: 0.2em 0.1em;
   font-family: monospace;
-  font-size: 1.2em;
+  font-size: 1.0em;
 }
 
 #search-form {
