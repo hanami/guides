@@ -3,7 +3,7 @@ title: Exception handling
 order: 100
 ---
 
-When a request crashes with an exception, you want to handle it in a graceful manner. In order to do this, you can use the `handle_exception` action API.
+When a request crashes with an exception, you may want to handle it in a graceful manner. To do this, you can use `handle_exception` in your actions.
 
 Actions do not handle exceptions raised by your application by default. To handle exceptions, you need to define how a specific exception type should be translated into an HTTP response.
 
