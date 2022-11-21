@@ -13,7 +13,7 @@ Callbacks allow logic to be executed either before or after an action's `#handle
 
 A callback can be added using the `before` or `after` methods. These methods accept either a symbol representing the name of a method to be called, or a proc.
 
-Like the `#handle` method, callback methods receive the request and response as arguments.
+Like the `#handle` method, callbacks receive the request and response as arguments.
 
 ### Method callbacks
 
