@@ -160,7 +160,7 @@ You can configure this app-wide or on a per-action basis.
 
 module Bookshelf
   class App < Hanami::App
-    config.actions.default_charset = 'koi8-r'
+    config.actions.default_charset = "koi8-r"
   end
 end
 ```
