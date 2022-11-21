@@ -122,7 +122,7 @@ end
 
 ## Response format
 
-Actions set a `Content-Type` response header based on your configured formats and MIME type and charset of the incoming request.
+Actions set a `Content-Type` response header based on your configured formats along with the MIME type and charset of the incoming request.
 
 For example, if a request's `Accept` header is `"text/html,application/xhtml+xml,application/xml;q=0.9"`, the action will return a content type of `"text/html; charset=utf-8"`, assuming that the action is configured with the `:html` format.
 
