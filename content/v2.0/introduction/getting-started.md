@@ -7,28 +7,19 @@ aliases:
 ---
 
 <p id="getting-started-lead" class="lead">
-  Hello. If you're reading this page, it's very likely that you want to learn more about Hanami.
-  That's great, congrats! If you're looking for new ways to build maintainable, secure, faster and testable web applications, you're in good hands.
+  Hello. If you're reading this page, it's likely you want to learn more about Hanami. This is great, and we're excited to have you here!
   <br><br>
-  <strong>Hanami is built for people like you.</strong>
+  If you're looking for new ways to build maintainable, secure, faster and testable Ruby applications, you're in for a treat. <strong>Hanami is built for people like you.</strong>
   <br><br>
-  I warn you that whether you're a total beginner or an experienced developer <strong>this learning process can be hard</strong>.
-  Over time, we build expectations about how things should be, and it can be painful to change. <strong>But without change, there is no challenge</strong> and without challenge, there is no growth.
+  Whether you're a total beginner or an experienced developer, <strong>this learning process may still be hard</strong>. Over time, we become used to certain things, and it can be painful to change. <strong>But without change, there is no challenge</strong> and without challenge, there is no growth.
   <br><br>
-  Sometimes a feature doesn't look right, that doesn't mean it's you.
-  It can be a matter of formed habits, a design fallacy or even a bug.
+  In this guide we'll set up our first Hanami project and build a simple web app. We'll touch on all the major components of the Hanami framework, guided by tests at each stage.
   <br><br>
-  Myself and the rest of the Community are putting best efforts to make Hanami better every day.
-  <br><br>
-  In this guide we will set up our first Hanami project and build a simple bookshelf web application.
-  We'll touch on all the major components of Hanami framework, all guided by tests.
-  <br><br>
-  <strong>If you feel alone, or frustrated, don't give up, jump in our <a href="http://chat.hanamirb.org">chat</a> and ask for help.</strong>
-  There will be someone more than happy to talk with you.
+  <strong>If you feel alone or frustrated, don't give up, jump into our <a href="https://discourse.hanamirb.org">forum</a> and ask for help.</strong> We and the rest of our community are putting in our best efforts to make Hanami better every day.
   <br><br>
   Enjoy,<br>
-  Luca Guidi<br>
-  <em>Hanami creator</em>
+  Luca, Peter and Tim<br>
+  <em>Hanami core team</em>
 </p>
 
 <br>
@@ -516,7 +507,7 @@ createdb bookshelf_development
 createdb bookshelf_test
 ```
 
-In Hanami, [providers](/v2.0/architecture/providers/) offer a mechanism for configuring and using dependencies, like databases, within your application.
+In Hanami, [providers](/v2.0/app/providers/) offer a mechanism for configuring and using dependencies, like databases, within your application.
 
 Copy and paste the following provider into a new file at `config/providers/persistence.rb`:
 
@@ -567,7 +558,7 @@ Settings can be strings, booleans, integers and other types. Each setting can be
 
 Each setting is sourced from an environment variable matching its name. For example `my_flag` will be source from `ENV["MY_FLAG"]`.
 
-You can read more about Hanami's settings in the [Application guide](/v2.0/application/settings/).
+You can read more about Hanami's settings in the [Application guide](/v2.0/app/settings/).
 
 Let's add `database_url` and make it a required setting by using the `Types::String` constructor:
 
@@ -768,7 +759,7 @@ end
 
 To get this spec to pass, we'll need to update our books index action to return books from the books relation.
 
-To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [containers and components](/v2.0/architecture/containers/) section of the Architecture guide, the Deps mixin gives each of your application's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
+To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [containers and components](/v2.0/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your application's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
 For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make rom-rb available via a `rom` method within our action. The books relation is then available via `rom.relations[:books]`.
 
@@ -1401,4 +1392,4 @@ So far we've seen how to create a new Hanami application, explored some of the b
 
 Still, we've barely touched the surface of what Hanami offers.
 
-From here you might want to look in more detail at [routing](/v2.0/routing/overview/) and [actions](/v2.0/actions/overview/), or explore Hanami's [application architecture](/v2.0/architecture/containers/), starting with its [component management](/v2.0/architecture/containers/) and [dependency injection](/v2.0/architecture/containers/) systems.
+From here you might want to look in more detail at [routing](/v2.0/routing/overview/) and [actions](/v2.0/actions/overview/), or explore Hanami's [application architecture](/v2.0/app/container-and-components/), starting with its [component management](/v2.0/app/container-and-components/) and [dependency injection](/v2.0/app/container-and-components/) systems.

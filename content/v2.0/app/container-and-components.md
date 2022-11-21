@@ -1,6 +1,6 @@
 ---
-title: Containers and components
-order: 10
+title: Container and components
+order: 20
 ---
 
 In Hanami, the application code you add to your `app` directory is automatically organised into a **container**, which forms the basis of a **component management system**.
