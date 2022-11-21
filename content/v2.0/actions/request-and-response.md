@@ -3,7 +3,7 @@ title: Request and response
 order: 40
 ---
 
-When a Hanami action is invoked, the incoming HTTP request and outgoing HTTP response are represented by the `request` and `response` objects provided as arguments to the action's `#handle` method.
+When a Hanami action is called, the incoming HTTP request and outgoing HTTP response are represented by the `request` and `response` objects provided to the action's `#handle` method.
 
 ```ruby
 module Bookshelf
