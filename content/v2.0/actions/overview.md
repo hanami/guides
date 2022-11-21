@@ -45,7 +45,7 @@ Topics to cover:
 - response headers
 - redirects
 - halt
-- HTTP caching
+- exception handling
 - inheritence
 - Testing
 
