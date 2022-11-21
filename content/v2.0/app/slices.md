@@ -41,7 +41,7 @@ A Hanami slice:
 
 - has its own container
 - imports a number of standard components from the app
-- can have its own providers (e.g. `slices/api/providers/my_provider.rb`)
+- can have its own providers (e.g. `slices/api/config/providers/my_provider.rb`)
 - can include actions, routable from the application's router
 - can import and export components from other slices
 - can be prepared and booted independently of other slices
