@@ -105,9 +105,9 @@ request.params[:page] # => 1
 request.params[:per_page] # => 10
 ```
 
-Note that, due to the `params` block, 1 and 10 have been coerced to integer values (with this they would otherwise be strings).
+Notice that thanks to the defined params schema with types, `"1"` and `"10"` are coerced to their integer representations `1` and `10`.
 
-Additional rules can be added to apply further contraints. The following params block specifies that, when present, `page` and `per_page` be greater than or equal to 1, and also that `per_page` be less than or equal to 100.
+Additional rules can be added to apply further constraints. The following params block specifies that, when present, `page` and `per_page` must be greater than or equal to 1, and also that `per_page` must be less than or equal to 100.
 
 ```ruby
 params do
@@ -116,7 +116,7 @@ params do
 end
 ```
 
-Importantly, now that our params block is doing more than just type coercion, we need to explicitly check for and handle our parameters being invalid.
+Importantly, now that our params schema is doing more than just type coercion, we need to explicitly check for and handle our parameters being invalid.
 
 The `#valid?` method on the params allows the action to check the parameters in order halt and return a `422 Unprocessable` response.
 
@@ -158,7 +158,7 @@ module Bookshelf
           required(:email).filled(:string)
           required(:password).filled(:string)
 
-          required(:address).schema do
+          required(:address).hash do
             required(:street).filled(:string)
             required(:country).filled(:string)
           end
@@ -183,7 +183,7 @@ The `params` block in this action specifies that:
 
 - `email`, `password` and `address` parameters are required to be present.
 - `address` has `street` and `country` as nested parameters, which are also required.
-- each of `email`, `password`, `street` and `country` must be filled (non-blank) strings.
+- `email`, `password`, `street` and `country` must be filled (non-blank) strings.
 
 The errors associated with a failed parameter validation are available via `request.params.errors`.
 
@@ -222,7 +222,7 @@ Consult the [dry-validation](https://dry-rb.org/gems/dry-validation/) and [dry-s
 
 ## Using concrete classes
 
-In addition to specifying parameter validations "inline" in a `params` block, actions can also hand their validation responsibilities to a separate class.
+In addition to specifying parameter validations "inline" in a `params` block, actions can also hand over their validation responsibilities to a separate class.
 
 This makes action validations reusable and easier to test independently of the action.
 
@@ -240,7 +240,7 @@ module Bookshelf
             required(:email).filled(:string)
             required(:password).filled(:string)
 
-            required(:address).schema do
+            required(:address).hash do
               required(:street).filled(:string)
               required(:country).filled(:string)
             end
@@ -276,7 +276,7 @@ Validating parameters in actions is useful for validating parameter structure, p
 
 More complex domain-specific validations, or validations concerned with things such as uniqueness, however, are usually better performed at layers deeper than your HTTP actions.
 
-For example, verifying a that an email address has been provided is something an action parameter validation should reasonably do, but checking that a user with that email address doen't already exist is unlikely to be a good responsibility for a HTTP action to have. That validation might instead be peformed by a create user operation, which can perform a check against a user store.
+For example, verifying that an email address has been provided is something an action parameter validation should reasonably do, but checking that a user with that email address doesn't already exist is unlikely to be a good responsibility for an HTTP action to have. That validation might instead be performed by a create user operation, which can perform a check against a user store.
 
 ## Body parsers
 
