@@ -1,6 +1,6 @@
 ---
 title: Inflector
-order: 30
+order: 80
 ---
 
 Hanami includes an inflector that supports the pluralization, singularization and humanization of English words, as well as other transformations. This inflector is a [Dry::Inflector](https://dry-rb.org/gems/dry-inflector) instance.
@@ -28,7 +28,7 @@ module Bookshelf
 end
 ```
 
-A common reason for customization is to configure inflections to support desired class names and other constants. For example, the `WNBA` acronym above supports constants like `Games::WNBA` instead of `Games::Wnba`. See the [autoloading guide](/v2.0/application/autoloading/) for more detail.
+A common reason for customization is to configure inflections to support desired class names and other constants. For example, the `WNBA` acronym above supports constants like `Games::WNBA` instead of `Games::Wnba`. See the [autoloading guide](/v2.0/app/autoloading/) for more detail.
 
 
 ## Using the inflector in a component

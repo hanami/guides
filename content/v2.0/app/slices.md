@@ -1,6 +1,6 @@
 ---
 title: Slices
-order: 30
+order: 900
 ---
 
 In addition to the `app` directory, Hanami also supports organising your application code into **slices**.
@@ -144,8 +144,8 @@ bookshelf[development]> API::Slice["queries.countries.show"].call("UA")
 
 Since every slice is part of the larger app, a number of standard app components are automatically imported into each slice. These include:
 
-- `"settings"` — the app’s [settings object](/v2.0/application/settings/)
-- `"inflector"` — the app’s [inflector](/v2.0/application/inflector/)
+- `"settings"` — the app’s [settings object](/v2.0/app/settings/)
+- `"inflector"` — the app’s [inflector](/v2.0/app/inflector/)
 - `"logger"` — the app’s logger
 - `"routes"` — the app’s routes helper
 
@@ -326,7 +326,7 @@ end
 
 Slice settings are loaded from environment variables just like the app settings, so take care to ensure you have no naming clashes between your slice and app settings.
 
-See the [settings guide](/v2.0/application/config/) for more information on settings.
+See the [settings guide](/v2.0//app/app-config/) for more information on settings.
 
 ## Slice loading
 

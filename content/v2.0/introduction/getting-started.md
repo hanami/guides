@@ -516,7 +516,7 @@ createdb bookshelf_development
 createdb bookshelf_test
 ```
 
-In Hanami, [providers](/v2.0/architecture/providers/) offer a mechanism for configuring and using dependencies, like databases, within your application.
+In Hanami, [providers](/v2.0/app/providers/) offer a mechanism for configuring and using dependencies, like databases, within your application.
 
 Copy and paste the following provider into a new file at `config/providers/persistence.rb`:
 
@@ -567,7 +567,7 @@ Settings can be strings, booleans, integers and other types. Each setting can be
 
 Each setting is sourced from an environment variable matching its name. For example `my_flag` will be source from `ENV["MY_FLAG"]`.
 
-You can read more about Hanami's settings in the [Application guide](/v2.0/application/settings/).
+You can read more about Hanami's settings in the [Application guide](/v2.0/app/settings/).
 
 Let's add `database_url` and make it a required setting by using the `Types::String` constructor:
 
@@ -768,7 +768,7 @@ end
 
 To get this spec to pass, we'll need to update our books index action to return books from the books relation.
 
-To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [containers and components](/v2.0/architecture/containers/) section of the Architecture guide, the Deps mixin gives each of your application's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
+To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [containers and components](/v2.0/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your application's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
 For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make rom-rb available via a `rom` method within our action. The books relation is then available via `rom.relations[:books]`.
 
@@ -1401,4 +1401,4 @@ So far we've seen how to create a new Hanami application, explored some of the b
 
 Still, we've barely touched the surface of what Hanami offers.
 
-From here you might want to look in more detail at [routing](/v2.0/routing/overview/) and [actions](/v2.0/actions/overview/), or explore Hanami's [application architecture](/v2.0/architecture/containers/), starting with its [component management](/v2.0/architecture/containers/) and [dependency injection](/v2.0/architecture/containers/) systems.
+From here you might want to look in more detail at [routing](/v2.0/routing/overview/) and [actions](/v2.0/actions/overview/), or explore Hanami's [application architecture](/v2.0/app/container-and-components/), starting with its [component management](/v2.0/app/container-and-components/) and [dependency injection](/v2.0/app/container-and-components/) systems.
