@@ -35,11 +35,12 @@ slices
 
 ## Features of a slice
 
-Slices offer much of the same behaviour and features as Hanami's `app` folder.
+Slices offer much of the same behaviour and features as the Hanami app.
 
 A Hanami slice:
 
 - has its own container
+- imports a number of standard components from the app
 - can have its own providers (e.g. `slices/api/providers/my_provider.rb`)
 - can include actions, routable from the application's router
 - can import and export components from other slices
@@ -54,8 +55,6 @@ For example, suppose our Bookshelf application, which catalogues international b
 
 ```ruby
 # slices/api/actions/countries/show.rb
-
-# frozen_string_literal: true
 
 require "countries"
 
@@ -94,8 +93,6 @@ If the code is valid, the action calls the countries show query (aliased here as
 
 ```ruby
 # slices/api/queries/countries/show.rb
-
-# frozen_string_literal: true
 
 require "countries"
 
@@ -143,6 +140,31 @@ bookshelf[development]> API::Slice["queries.countries.show"].call("UA")
 => {:name=>"Ukraine", :flag=>"🇺🇦", :currency=>"UAH"}
 ```
 
+## Standard app components
+
+Since every slice is part of the larger app, a number of standard app components are automatically imported into each slice. These include:
+
+- `"settings"` — the app’s [settings object](/v2.0/application/settings/)
+- `"inflector"` — the app’s [inflector](/v2.0/application/inflector/)
+- `"logger"` — the app’s logger
+- `"routes"` — the app’s routes helper
+
+If you have additional components in your app that you wish to make available to each slice, you can configure these via `config.shared_app_component_keys`:
+
+```ruby
+# config/app.rb
+
+require "hanami"
+
+module Bookshelf
+  class App < Hanami::App
+    config.shared_app_component_keys += ["my_app_component"]
+  end
+end
+```
+
+Think carefully before making components available to every slice, since this can create an undesirable level of coupling between the slices and the app. Instead, you may wish to consider slice imports and exports.
+
 ## Slice imports and exports
 
 Suppose that our bookshelf application uses a content delivery network (CDN) to serve book covers. While this makes these images fast to download, it does mean that book covers need to be purged from the CDN when they change, in order for freshly updated images to take their place.
@@ -151,7 +173,9 @@ Images can be updated in one of two ways: the publisher of the book can sign in 
 
 In our bookshelf app, an `Admin` slice supports the latter functionality, and a `Publisher` slice the former. Both these slices want to trigger a CDN purge when a book cover is updated, but neither slice needs to know exactly how that's achieved. Instead, a `CDN` slice can manage this operation.
 
-```ruby title="slices/cdn/book_covers/purge.rb"
+```ruby
+# slices/cdn/book_covers/purge.rb
+
 module CDN
   module BookCovers
     class Purge
@@ -258,7 +282,76 @@ module CDN
 end
 ```
 
-Under construction - the remainder of slices, including:
+## Slice settings
 
-- conditional slice loading
-- per slice settings
+Every slice having automatic access to the app's `"settings"` component is convenient, but for large apps this may lead to those settings becoming unwieldy: the list of settings can become long, and many settings will not be relevant to large portions of your app.
+
+You can instead elect to define settings within specific slices. To do this, create a `config/settings.rb` within your slice directory.
+
+```ruby
+# slices/cdn/config/settings.rb
+
+module CDN
+  class Settings < Hanami::Settings
+    setting :cdn_api_key, Types::String
+  end
+end
+```
+
+With this in place, the `"settings"` component within your slice will be an instance of this slice-specific settings object.
+
+```ruby
+CDN_API_KEY=xyz bundle exec hanami console
+
+bookshelf[development]> CDN::Slice["settings"].cdn_api_key # => "xyz"
+```
+
+You can then include the slice settings via the Deps mixin within your slice.
+
+```ruby
+# slices/cdn/book_covers/purge.rb
+
+module CDN
+  module BookCovers
+    class Purge
+      include Deps["settings"]
+
+      def call(book_cover_path)
+        # use settings.cdn_api_key here
+      end
+    end
+  end
+end
+```
+
+Slice settings are loaded from environment variables just like the app settings, so take care to ensure you have no naming clashes between your slice and app settings.
+
+See the [settings guide](/v2.0/application/config/) for more information on settings.
+
+## Slice loading
+
+Hanami will load all slices when your app boots. However, for certain workloads of your app, you may elect to load only a specified list of slices.
+
+Loading specific slices brings the benefit of stronger code isolation, faster boot time and reduced memory usage. If your app had a background worker that processed jobs from one slice only, then it would make sense to load only that slice for the worker's process.
+
+To do this, set the `HANAMI_SLICES` environment variable with a comma-separated list of slice names.
+
+```shell
+$ HANAMI_SLICES=cdn,other_slice_here bundle exec your_hanami_command
+```
+
+Setting this environment variable is a shortcut for setting `config.slices` in your app class.
+
+```ruby
+# config/app.rb
+
+require "hanami"
+
+module Bookshelf
+  class App < Hanami::App
+    config.slices = ["cdn"]
+  end
+end
+```
+
+You may find the `HANAMI_SLICES` environment variable more convenient since it will not disturb slice loading for all other processes running your app.

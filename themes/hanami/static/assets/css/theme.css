@@ -1,19 +1,20 @@
 /*
  * cyan: 35DDFF
- * purple: 8E43E8
+ * purple: 685D9F
  * red: FF6886
  * green: 46E895
  * yellow: FFD842
  */
 
 body {
-  color: #525f7f;
+  color: #37383b;
   position: relative;
+  font-weight: 300;
 }
 
 a:link,
 a:visited {
-  color: #8E43E8;
+  color: #685D9F;
   font-weight: 500;
 }
 
@@ -23,16 +24,15 @@ a:active {
 }
 
 p {
-  font-size: 1.2rem;
+  font-size: 1.0rem;
 }
 
 code {
-  /* background-color: rgba(70,232,149, 0.5); */
-  background-color: rgba(255,216,66,.5);
+  background-color: rgba(245, 247, 255, 0.8);
   color: #525f7f;
   padding: 0.2em 0.1em;
   font-family: monospace;
-  font-size: 1.2em;
+  font-size: 1.0em;
 }
 
 #search-form {
@@ -45,12 +45,12 @@ code {
 }
 
 .headroom--not-top {
-  background-color: #8E43E8 !important;
+  background-color: #685D9F !important;
 }
 
 .section-shaped .shape-hanami
 {
-    background: linear-gradient(150deg, #8E43E8 15%, #35DDFF 70%, #46E895 94%);
+    background: linear-gradient(150deg, #685D9F 15%, #35DDFF 70%, #46E895 94%);
 }
 .section-shaped .shape-hanami :nth-child(1)
 {
@@ -85,7 +85,7 @@ code {
 
 .text-primary
 {
-    color: #8E43E8 !important;
+    color: #685D9F !important;
 }
 
 a.text-primary:hover,
@@ -135,8 +135,8 @@ a.text-primary:focus
 }
 
 .btn-outline-primary {
-  color: #8E43E8;
-  border-color: #8E43E8;
+  color: #685D9F;
+  border-color: #685D9F;
 }
 
 .btn-outline-primary:hover,
@@ -145,8 +145,8 @@ a.text-primary:focus
 .btn-outline-primary:not(:disabled):not(.disabled).active,
 .show > .btn-outline-primary.dropdown-toggle {
   color: #fff;
-  border-color: #8E43E8;
-  background-color: #8E43E8;
+  border-color: #685D9F;
+  background-color: #685D9F;
 }
 
 .badge-primary
@@ -157,7 +157,7 @@ a.text-primary:focus
 
 .badge-secondary
 {
-    color: #8E43E8;
+    color: #685D9F;
     background-color: rgba(70,232,149,.5);
 }
 .badge-secondary[href]:hover,
@@ -174,7 +174,7 @@ a.text-primary:focus
 }
 
 header.navbar {
-  background-color: #8E43E8;
+  background-color: #685D9F
 }
 
 div.highlight > pre {
@@ -200,29 +200,29 @@ main p {
 .ct-sidebar .nav > li > a:active,
 #secondary-navigation a:hover,
 #secondary-navigation a:active {
-  color: #8E43E8;
+  color: #685D9F;
 }
 
 .nav-link.active {
   font-weight: 500;
   padding-left: 1.5rem;
-  color: #8E43E8 !important;
+  color: #685D9F !important;
   background-color: transparent;
-  border-left: 1px solid #8E43E8;
+  border-left: 1px solid #685D9F;
 }
 
 .ct-page-title {
-  border-left: 2px solid #8E43E8;
+  border-left: 2px solid #685D9F;
 }
 
 .ct-sidebar .nav > .active > a,
 .ct-sidebar .nav > .active > a:hover,
 .ct-sidebar .nav > .active > a:active {
-  color: #8E43E8;
+  color: #685D9F;
 }
 
 .ct-sidebar .nav>.active>a:before {
-  background-color: #8E43E8;
+  background-color: #685D9F;
 }
 
 /* This corresponds to .alert class from original theme */
@@ -238,13 +238,11 @@ p.warning {
   padding: 1rem 1.5rem;
   border: 0;
   border-radius: .25rem;
-  font-weight: 400;
   color: #333;
 }
 
 p.notice {
-  border-color: #35DDFF;
-  background-color: #35DDFF;
+  background-color: rgb(53, 221, 255, 0.3);
 }
 
 p.convention {
@@ -273,7 +271,7 @@ ul.ct-sidenav {
 
 .btn-clipboard,
 .btn-clipboard:hover {
-  background-color: #8E43E8;
+  background-color: #685D9F;
 }
 
 .text-align-right {
