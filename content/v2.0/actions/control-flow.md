@@ -158,7 +158,7 @@ end
 
 ## Redirects
 
-To redirect a request to another location, call the `#redirect_to` method on the `request` object.
+To redirect a request to another location, call the `#redirect_to` method on the `response` object.
 
 When `redirect_to` is invoked, control flow is stopped and subsequent code in the action is not executed.
 
