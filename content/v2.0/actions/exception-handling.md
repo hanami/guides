@@ -63,7 +63,7 @@ module Bookshelf
 end
 ```
 
-This time, when `StandardError` is raised, the `#handle_standard_error` will render a json response.
+Here, when `StandardError` is raised, `#handle_standard_error` will prepare a JSON response.
 
 Methods used for exception handling accept three arguments: the `request`, the `response` and the `exception` being handled.
 
