@@ -160,7 +160,7 @@ end
 
 To redirect a request to another location, call the `#redirect_to` method on the `response` object.
 
-When `redirect_to` is invoked, control flow is stopped and subsequent code in the action is not executed.
+When you call `redirect_to`, control flow is stopped and subsequent code in the action is not executed.
 
 `redirect_to` accepts a url and an optional HTTP status, which defaults to `302`.
 
