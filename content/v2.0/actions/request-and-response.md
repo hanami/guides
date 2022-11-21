@@ -1,12 +1,30 @@
 ---
-title: Request & Response
+title: Request and response
 order: 40
 ---
 
+When a Hanami action is invoked, the incoming HTTP request and outgoing HTTP response are represented by the `request` and `response` objects provided as arguments to the action's `#handle` method.
+
+```ruby
+module Bookshelf
+  module Actions
+    module Books
+      class Index < Bookshelf::Action
+        def handle(request, response)
+        end
+      end
+    end
+  end
+end
+```
+
 ## Request
 
-In order to access the metadata coming from a HTTP request, an action has a private object `request` that derives from `Rack::Request`.
-Here an example of some information that we can introspect.
+The `request` object provides details about the incoming request. Use it to query information about the request, such as params and headers.
+
+The object inherits from [Rack::Request](https://www.rubydoc.info/gems/rack/Rack/Request), which provides a range of methods like `#path_info`, `#content_type` and `#get_header`.
+
+Here are some of the methods you can call on `request`:
 
 ```ruby
 # app/actions/books/index.rb
@@ -14,17 +32,18 @@ Here an example of some information that we can introspect.
 module Bookshelf
   module Actions
     module Books
-      class Index < Action
+      class Index < Bookshelf::Action
         def handle(request, response)
-          puts request.path_info                 # => "/dashboard"
-          puts request.request_method            # => "GET"
-          puts request.get?                      # => true
-          puts request.post?                     # => false
-          puts request.xhr?                      # => false
-          puts request.referer                   # => "http://example.com/"
-          puts request.user_agent                # => "Mozilla/5.0 Macintosh; ..."
-          puts request.ip                        # => "127.0.0.1"
-          puts request.env['HTTP_AUTHORIZATION'] # => "Basic abc123"
+          request.path_info                        # => "/books"
+          request.request_method                   # => "GET"
+          request.get?                             # => true
+          request.post?                            # => false
+          request.xhr?                             # => false
+          request.referer                          # => "http://example.com/"
+          request.user_agent                       # => "Mozilla/5.0 Macintosh; ..."
+          request.ip                               # => "127.0.0.1"
+          request.get_header("HTTP_AUTHORIZATION") # => "Basic abc123"
+          request.env["HTTP_AUTHORIZATION"]        # => "Basic abc123"
         end
       end
     end
@@ -34,54 +53,37 @@ end
 
 ## Response
 
-As an addition to a request, we have a `response` object to our disposal, which derives from `Rack::Response`
+The `response` object represents your action's outgoing HTTP response.
+
+Use it to control how your action responds to a request by setting an outgoing status, body or headers.
 
 ```ruby
-# app/actions/books/index.rb
-
-module Bookself
-  module Actions
-    module Books
-      class Index < Action
-        def call(params)
-          response.session # => {}
-          response.renderable? # => true
-          response.charset # => utf-8
-          response.format # =>
-          response.action # => sandbox.actions.books.index
-          response.env # => { [[RACK ENV]] }
-          response.exposures # => {}
-          response.format # =>
-          response.cookies # => #<Hanami::Action::CookieJar:0x00007fdda29a3878>
-          response.charset # => utf-8
-          response.flash # => #<Hanami::Action::Flash:0x00007fdda29a32d8>
-          response.allow_redirect? # => true
-        end
-      end
-    end
-  end
-end
-```
-
-It has private accessors to explicitly set status, headers, body and more:
-
-```ruby
-# app/actions/books/index.rb
+# app/actions/books/create.rb
 
 module Bookshelf
   module Actions
     module Books
-      class Index < Action
-    
-        def handle(req, res)
-          res.status = 201
-          res.body   = 'Your resource has been created'
-          res.headers.merge!({ 'X-Custom' => 'OK' })
+      class Create < Bookshelf::Action
+        def handle(request, response)
+          response.status = 201
+          response.body = "Your resource has been created"
+          response.headers["My-Header"] = "value"
+          response.format = :json
         end
       end
     end
   end
 end
-
-# It will return [201, { "X-Custom" => "OK" }, ["Your resource has been created"]]
 ```
+
+The `response` object inherits from [Rack::Response](https://www.rubydoc.info/gems/rack/Rack/Response).
+
+### Response status
+
+By default, the response status is `200`. Setting the response status via `response.status` is useful when setting statuses like `200 OK`, `201 Created` and `404 Not Found`.
+
+In situations where you want an action to halt, for example to return a `401 Unauthorized` response, use the action's `halt` method. To return a redirect, use `response.redirect_to("/path")`. See [Control flow](/v2.0/actions/control-flow/) for details.
+
+### Response format
+
+The value set using `response.format` can either be a format name (`:json`) or a content type string (`"application/json"`). Consult [MIME types and formats](/v2.0/actions/mime-types-and-formats/) for more information about setting response formats.
