@@ -11,7 +11,7 @@ You can tweak its configuration in your `App` class, but typically, the defaults
 - In `test` environment logger logs to `logs/test.log` in `:debug` mode
 - In `production` environment logger logs to `$stdout` in `:info` mode using `:json` formatter
 
-# Changing default config
+### Changing default config
 
 The logger configuration is namespaced as `config.logger` and you can access it in your `App` class. If you change these settings, they will be set *for all environments by default*.
 
@@ -46,7 +46,7 @@ module Bookshelf
 end
 ```
 
-# Log filters
+### Log filters
 
 In order to avoid having sensitive information leak to your log streams, Hanami configures log filtering to filter out the following keys:
 
@@ -68,7 +68,7 @@ module Bookshelf
 end
 ```
 
-# Colorized output
+### Colorized output
 
 If you want colorized log levels in your output, you can do so via `colorize` option:
 
@@ -106,7 +106,7 @@ module Bookshelf
 end
 ```
 
-# Customizing logging destinations
+### Customizing logging destinations
 
 You may want to handle certain type of log entries in a special way. One example of this could be logging unexpected crashes to a special file to be able to see them more easily when running tests. You can achieve this by adding a dedicated logging backend.
 

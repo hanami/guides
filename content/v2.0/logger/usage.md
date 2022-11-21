@@ -7,7 +7,7 @@ Hanami logger is compatible with the stdlib `Logger` but it supports structured 
 
 In non-production environments, structured logs are turned into easy read text log entries, but the underlying log entries are represented as struct-like objects, even if you pass a text message to your logger.
 
-# Basic usage
+### Basic usage
 
 To log a text entry, simply use a logger method with a name corresponding to the log level that you want to use. Let's say you want to log an entry with `INFO` level:
 
@@ -31,7 +31,7 @@ The following logging methods are available:
 - `error`
 - `fatal`
 
-# Logging data
+### Logging data
 
 In addition to plain text logging, you can log arbitrary data by passing a log entry *payload* to a log method:
 
@@ -49,7 +49,7 @@ bookshelf[development]> app["logger"].info text: "Hello World", component: "admi
 
 Notice that the default development log formatting turns our payload into a `key=value` representation. It's easy to read or even parse programatically, but please remember that in any environment where logs are parsed and post-processing **using JSON** format is the recommended way, and this is how Hanami configures its logger in `production` environment by default.
 
-# Logging exceptions
+### Logging exceptions
 
 Hanami logger supports logging exceptions out of the box without the need to write custom formatters. Simply rescue from an exception and pass it to the `error` log method:
 
