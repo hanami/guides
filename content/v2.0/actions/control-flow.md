@@ -5,7 +5,7 @@ aliases:
   - "/actions/control-flow"
 ---
 
-Actions offer callbacks, halting and redirects to support control flow.
+Actions support control flow through callbacks, halting and redirects.
 
 ## Callbacks
 
