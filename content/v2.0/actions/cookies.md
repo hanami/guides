@@ -19,7 +19,7 @@ module Bookshelf
 end
 ```
 
-Cookies subsequently sent by the browser can be read from the request.
+Cookies subsequently sent by the browser can be read from the `request`.
 
 ```ruby
 module Bookshelf
