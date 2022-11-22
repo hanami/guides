@@ -73,7 +73,7 @@ end
 
 For example, for a conditional `GET` request, there is a two-step workflow:
 
-1. The response to an initial request includes a “validator” in its headers, either the date of last modification for the resource (a Last-Modified response header and a subsequent If-Modified-Since request header), or an string identifying the version of the resource (an ETag  response header and a subsequent If-None-Match request header)
+1. The response to an initial request includes a “validator” in its headers, either the date of last modification for the resource (a Last-Modified response header and a subsequent If-Modified-Since request header), or an string identifying the version of the resource (an ETag response header and a subsequent If-None-Match request header)
 2. On the next request, the client sends its counterpart request header, and if the server determines the client's cache is fresh, it can return a `304 Not Modified` response allowing the client to use its cached resource
 
 For more detail on conditional requests, see the [MDN documentation][mdn-conditional-requests].
