@@ -140,14 +140,3 @@ Hanami.app.register_provider(:uploads_bucket) do
   end
 end
 ```
-
-## Default providers
-
-Under construction:
-
-- settings
-- logger
-- inflector
-- notifications
-- routes
-- rack.monitor

@@ -410,8 +410,22 @@ When you call `Hanami.boot` (or use `require "hanami/boot"`) Hanami will go one 
 
 This is useful in contexts where you want to incur initialization costs at boot time, such as when preparing your application to serve web requests. It's the default when running via Hanami's puma setup (see `config.ru`).
 
-## What's next?
+## Standard components
 
-Reading the above examples, you may have wondered where the `"email_client"` component came from, given it wasn't defined in the `app` directory.
+Hanami provides several standard app components for you to use.
 
-Hanami offers a mechanism called **providers** for adding components to a container outside of the auto-registration process. We'll look at providers next.
+### `"settings"`
+
+These are your settings defined in `config/settings.rb`. See the [settings guide](/v2.0/app/settings) for more detail.
+
+### `"logger"`
+
+The app's standard logger. See the [logger guide](/v2.0/logger/usage) for more detail.
+
+### `"inflector"`
+
+The app's inflector. See the [inflector guide](/v2.0/app/inflector) for more detail.
+
+### `"routes"`
+
+An object providing URL helpers for your named routes. See the [routing guide](/v2.0/routing/overview/#named-routes) for more detail.
