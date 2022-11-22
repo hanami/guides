@@ -512,22 +512,23 @@ Copy and paste the following provider into a new file at `config/providers/persi
 
 Hanami.app.register_provider :persistence, namespace: true do
   prepare do
-    require "rom/core"
-    require "rom/sql"
+    require "rom"
 
-    @config = ROM::Configuration.new(:sql, target["settings"].database_url)
+    config = ROM::Configuration.new(:sql, target["settings"].database_url)
 
-    register "config", @config
-    register "db", @config.gateways[:default].connection
+    register "config", config
+    register "db", config.gateways[:default].connection
   end
 
   start do
-    @config.auto_registration(
+    config = target["persistence.config"]
+
+    config.auto_registration(
       target.root.join("lib/bookshelf/persistence"),
       namespace: "Bookshelf::Persistence"
     )
 
-    register "rom", ROM.container(@config)
+    register "rom", ROM.container(config)
   end
 end
 ```
@@ -653,13 +654,17 @@ Finally, enable rom-rb's rake tasks for database migrations by appending the fol
 ```ruby
 # Rakefile
 
-require "rom/sql/rake_task"
+require 'rom/sql/rake_task'
+
+task :environment do
+  require_relative "config/app"
+  require "hanami/prepare"
+end
 
 namespace :db do
   task setup: :environment do
-    require "rom/core"
-    rom_config = ROM::Configuration.new(:sql, Hanami.app["settings"].database_url)
-    ROM::SQL::RakeSupport.env = rom_config
+    Hanami.app.prepare(:persistence)
+    ROM::SQL::RakeSupport.env = Hanami.app["persistence.config"]
   end
 end
 ```
@@ -1347,7 +1352,7 @@ module Bookshelf
 
         def handle(request, response)
           if request.params.valid?
-            book = rom.relations[:books].changeset(request.params[:book]).commit
+            book = rom.relations[:books].changeset(:create, request.params[:book]).commit
 
             response.status = 201
             response.body = book.to_json
