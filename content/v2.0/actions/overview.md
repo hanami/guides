@@ -36,18 +36,3 @@ end
 As the code above suggests, the `request` object provides access to the parameters associated with the incoming request through a `#params` method.
 
 Let's start by taking a look at action [parameters](/v2.0/actions/parameters/).
-
-## Under construction
-
-Topics to cover:
-
-- request headers
-- response headers
-- redirects
-- halt
-- HTTP caching
-- inheritence
-
-Relevant PRs:
-
-[https://github.com/hanami/guides/pull/101](https://github.com/hanami/guides/pull/101)
