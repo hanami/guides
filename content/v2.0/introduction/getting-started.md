@@ -654,7 +654,7 @@ Finally, enable rom-rb's rake tasks for database migrations by appending the fol
 ```ruby
 # Rakefile
 
-require 'rom/sql/rake_task'
+require "rom/sql/rake_task"
 
 task :environment do
   require_relative "config/app"
