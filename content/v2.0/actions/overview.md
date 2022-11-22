@@ -47,7 +47,6 @@ Topics to cover:
 - halt
 - HTTP caching
 - inheritence
-- Testing
 
 Relevant PRs:
 
