@@ -727,7 +727,7 @@ end
 
 To get this spec to pass, we'll need to update our books index action to return books from the books relation.
 
-To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [containers and components](/v2.0/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your application's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
+To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [container and components](/v2.0/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your application's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
 For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make rom-rb available via a `rom` method within our action. The books relation is then available via `rom.relations[:books]`.
 

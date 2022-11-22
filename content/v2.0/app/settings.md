@@ -19,7 +19,7 @@ end
 
 Using this class, you can specify what settings exist within your application, what types and defaults they have, and whether or not they are required for your application to boot.
 
-These "app settings" are unrelated to ["app configs"](/v2.0//app/app-config/), which configure framework behaviours. App settings are your own to define and use.
+These "app settings" are unrelated to ["app configs"](/v2.0/app/app-config/), which configure framework behaviours. App settings are your own to define and use.
 
 Each app setting is read from an environment variable matching its name. For example, the Redis URL and Sentry DSN settings below are sourced from the `REDIS_URL` and `SENTRY_DSN` environment variables respectively.
 
