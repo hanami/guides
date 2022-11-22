@@ -837,7 +837,9 @@ RSpec.describe "GET /books pagination", type: [:request, :database] do
   let(:books) { app["persistence.rom"].relations[:books] }
 
   before do
-    10.times { |n| books.insert(title: "Book #{n}", author: "Author #{n}") }
+    10.times do |n|
+      books.insert(title: "Book #{n}", author: "Author #{n}")
+    end
   end
 
   context "given valid page and per_page params" do
@@ -1338,20 +1340,17 @@ module Bookshelf
 
         params do
           required(:book).hash do
-            required(:title).value(:string)
-            required(:author).value(:string)
+            required(:title).filled(:string)
+            required(:author).filled(:string)
           end
         end
 
         def handle(request, response)
           if request.params.valid?
-            book = request.params[:book]
-
-            rom.relations[:books].insert(
-              title: book[:title], author: book[:author]
-            )
+            book = rom.relations[:books].changeset(request.params[:book]).commit
 
             response.status = 201
+            response.body = book.to_json
           else
             response.status = 422
             response.format = :json
