@@ -79,9 +79,9 @@ module Admin
 end
 ```
 
-These base class can be a useful place to put any config or behavior that you want for every action in your app or slice.
+These base classes can be a useful place to put any config or behavior that you want for every action in your app or slice.
 
-## Leveraging inheratance
+## Leveraging action inheritance
 
 Since actions are just regular Ruby classes, you can also use all the standard Ruby techniques to share behaviour across various subsets of your actions.
 
@@ -131,7 +131,7 @@ module Bookshelf
 end
 ```
 
-With this, any action requiring authentication could include the module.
+With this, any action requiring authentication can include the module.
 
 ```ruby
 module Bookshelf
