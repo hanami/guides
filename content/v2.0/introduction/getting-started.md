@@ -25,10 +25,6 @@ aliases:
 <br>
 <hr>
 
-<p class="notice">
-Please note: These guides are a work in progress for Hanami 2.0. Some sections are incomplete.
-</p>
-
 ## Getting started
 
 Hanami is a Ruby framework designed to create software that is well-architected, maintainable and a pleasure to work on.
