@@ -66,7 +66,7 @@ RSpec.describe Bookshelf::Actions::Books::Show do
     response = subject.call(id: "23", "HTTP_ACCEPT" => "application/json")
 
     expect(response).to be_successful
-    expect(response.headers["Content-Type"]).to eq("#{ format }; charset=utf-8")
+    expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
     expect(JSON.parse(response.body)).to eq("id" => "23")
   end
 end
