@@ -27,12 +27,16 @@ p {
   font-size: 1.0rem;
 }
 
-code {
-  background-color: rgba(245, 247, 255, 0.8);
+p > code {
+  background-color: #fafafa;
+  padding: 0.25rem 0.15rem;
+}
+
+code, code[class*=language-] {
+  background-color: #fafafa;
   color: #525f7f;
-  padding: 0.2em 0.1em;
   font-family: monospace;
-  font-size: 1.0em;
+  font-size: 1.25rem;
 }
 
 #search-form {
@@ -234,7 +238,6 @@ p.warning {
   padding: 1rem 1.5rem;
   border: .0625rem solid transparent;
   border-radius: .25rem;
-  font-size: .875rem;
   padding: 1rem 1.5rem;
   border: 0;
   border-radius: .25rem;

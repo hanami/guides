@@ -12,8 +12,6 @@ Which directories are watched can be configured in the `Guardfile` of your proje
 ```ruby
 # Guardfile
 
-# frozen_string_literal: true
-
 group :server do
   guard "puma", port: ENV["HANAMI_PORT"] || 2300 do
     watch(%r{config/*})

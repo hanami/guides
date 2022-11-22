@@ -16,8 +16,6 @@ Modifying the response object allows you to control how your application respond
 ```ruby
 # app/actions/home/show.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   module Actions
     module Home
@@ -36,18 +34,3 @@ end
 As the code above suggests, the `request` object provides access to the parameters associated with the incoming request through a `#params` method.
 
 Let's start by taking a look at action [parameters](/v2.0/actions/parameters/).
-
-## Under construction
-
-Topics to cover:
-
-- request headers
-- response headers
-- redirects
-- halt
-- inheritence
-- Testing
-
-Relevant PRs:
-
-[https://github.com/hanami/guides/pull/101](https://github.com/hanami/guides/pull/101)

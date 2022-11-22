@@ -16,8 +16,6 @@ Providers should be placed in the `config/providers` directory. Here's an exampl
 ```ruby
 # config/providers/email_client.rb
 
-# frozen_string_literal: true
-
 Hanami.app.register_provider(:email_client) do
   prepare do
     require "acme_email/client"
@@ -40,8 +38,6 @@ The registered dependency can now become a dependency for other components, via 
 
 ```ruby
 # app/operations/send_welcome_email.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   module Operations
@@ -72,8 +68,6 @@ To register an item with the container, providers call `register`, which takes t
 
 ```ruby
 # config/providers/my_provider.rb
-
-# frozen_string_literal: true
 
 Hanami.app.register_provider(:my_provider) do
   start do
