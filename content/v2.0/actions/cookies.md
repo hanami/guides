@@ -62,7 +62,7 @@ module Bookshelf
 end
 ```
 
-This configuration can be overridden on an as needs basis passing a hash, which has a `value` key representing the value of the cookie, and any properties to override.
+This configuration can be overridden within an action passing a hash, which has a `value` key representing the value of the cookie, and any properties to override.
 
 ```ruby
 module Bookshelf
