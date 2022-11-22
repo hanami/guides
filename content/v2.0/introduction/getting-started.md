@@ -651,11 +651,10 @@ end
 
 With persistence ready, we can now create a books table.
 
-To create a migration run `bundle exec rake db:create_migration[create_books]`:
+To create a migration run:
 
 ```shell
 bundle exec rake db:create_migration[create_books]
-<= migration file created db/migrate/20221113050928_create_books.rb
 ```
 
 Edit the migration file in order to create a books table with title and author columns and a primary key:
