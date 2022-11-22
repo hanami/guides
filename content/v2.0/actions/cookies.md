@@ -3,28 +3,41 @@ title: Cookies
 order: 80
 ---
 
-## Enable Cookies
-
-Hanami applies _"batteries included, but not installed"_ philosophy.
-Cookies are a feature that is present but needs to be activated.
-
-In our application settings there is a line to uncomment.
+Actions can set [cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies) on outgoing requests via the `response` object.
 
 ```ruby
-# config/app.rb
-
 module Bookshelf
-  class Application < Hanami::Application
-    config.actions.cookies = { max_age: 300 }
+  module Actions
+    module Books
+      class Index < Bookshelf::Action
+        def handle(request, response)
+          response.cookies["tasty_cookie"] = "strawberry"
+        end
+      end
+    end
   end
 end
 ```
 
-From now on, cookies are automatically sent for each response.
+Cookies subsequently sent by the browser can be read from the request.
 
-## Settings
+```ruby
+module Bookshelf
+  module Actions
+    module Books
+      class Index < Bookshelf::Action
+        def handle(request, response)
+          request.cookies["tasty_cookie"] # => "strawberry"
+        end
+      end
+    end
+  end
+end
+```
 
-With that configuration we can specify options that will be set for all cookies we send from our application.
+## Cookie configuration
+
+You can set one or more of the following options for cookies issued by actions using the action cookies config on your app.
 
   * `:domain` - `String` (`nil` by default), the domain
   * `:path` - `String` (`nil` by default), a relative URL
@@ -32,27 +45,36 @@ With that configuration we can specify options that will be set for all cookies 
   * `:secure` - `Boolean` (`true` by default if using SSL), restrict cookies to secure connections
   * `:httponly` - `Boolean` (`true` by default), restrict JavaScript access to cookies
 
-## Usage
-
-Cookies behave like a `Hash`: we can read, assign and remove values.
 
 ```ruby
-# app/actions/books/index.rb
+# config/app.rb
 
+module Bookshelf
+  class App < Hanami::App
+    config.actions.cookies = {
+      domain: "hanami.example.com",
+      secure: true,
+      httponly: true,
+      path: "/foo",
+      max_age: 300
+    }
+  end
+end
+```
+
+This configuration can be overridden on an as needs basis passing a hash, which has a `value` key representing the value of the cookie, and any properties to override.
+
+```ruby
 module Bookshelf
   module Actions
     module Books
       class Index < Bookshelf::Action
         def handle(request, response)
-          response.cookies[:b]         # read
-          response.cookies[:a] = 'foo' # assign
-          response.cookies[:c] = nil   # remove
-          
-          # overrides options
-          response.cookies[:d] = { 
-            value: 'foo', 
-            path: '/books', 
-            max_age: 100 
+          response.cookies["tasty_cookie"] = "strawberry"
+
+          response.cookies["longer_lived_cookie"] = {
+            value: "anzac_biscuit",
+            max_age: 604800
           }
         end
       end
@@ -61,5 +83,24 @@ module Bookshelf
 end
 ```
 
-When setting a value, a cookie can accept a `String` or a `Hash` to specify inline options.
-General settings are applied automatically but these options can be used to override values case by case.
+## Removing cookies
+
+To remove a cookie, assign it the value `nil`.
+
+```ruby
+response.cookies["tasty_cookie"] = nil
+```
+
+## Disabling cookies
+
+To prevent cookies from being set in your actions, provide the following config to your app:
+
+```ruby
+# config/app.rb
+
+module Bookshelf
+  class App < Hanami::App
+    config.actions.cookies = nil
+  end
+end
+```
