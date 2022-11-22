@@ -512,22 +512,23 @@ Copy and paste the following provider into a new file at `config/providers/persi
 
 Hanami.app.register_provider :persistence, namespace: true do
   prepare do
-    require "rom/core"
-    require "rom/sql"
+    require "rom"
 
-    @config = ROM::Configuration.new(:sql, target["settings"].database_url)
+    config = ROM::Configuration.new(:sql, target["settings"].database_url)
 
-    register "config", @config
-    register "db", @config.gateways[:default].connection
+    register "config", config
+    register "db", config.gateways[:default].connection
   end
 
   start do
-    @config.auto_registration(
+    config = target["persistence.config"]
+
+    config.auto_registration(
       target.root.join("lib/bookshelf/persistence"),
       namespace: "Bookshelf::Persistence"
     )
 
-    register "rom", ROM.container(@config)
+    register "rom", ROM.container(config)
   end
 end
 ```
@@ -655,11 +656,15 @@ Finally, enable rom-rb's rake tasks for database migrations by appending the fol
 
 require "rom/sql/rake_task"
 
+task :environment do
+  require_relative "config/app"
+  require "hanami/prepare"
+end
+
 namespace :db do
   task setup: :environment do
-    require "rom/core"
-    rom_config = ROM::Configuration.new(:sql, Hanami.app["settings"].database_url)
-    ROM::SQL::RakeSupport.env = rom_config
+    Hanami.app.prepare(:persistence)
+    ROM::SQL::RakeSupport.env = Hanami.app["persistence.config"]
   end
 end
 ```
@@ -837,7 +842,9 @@ RSpec.describe "GET /books pagination", type: [:request, :database] do
   let(:books) { app["persistence.rom"].relations[:books] }
 
   before do
-    10.times { |n| books.insert(title: "Book #{n}", author: "Author #{n}") }
+    10.times do |n|
+      books.insert(title: "Book #{n}", author: "Author #{n}")
+    end
   end
 
   context "given valid page and per_page params" do
@@ -1338,20 +1345,17 @@ module Bookshelf
 
         params do
           required(:book).hash do
-            required(:title).value(:string)
-            required(:author).value(:string)
+            required(:title).filled(:string)
+            required(:author).filled(:string)
           end
         end
 
         def handle(request, response)
           if request.params.valid?
-            book = request.params[:book]
-
-            rom.relations[:books].insert(
-              title: book[:title], author: book[:author]
-            )
+            book = rom.relations[:books].changeset(:create, request.params[:book]).commit
 
             response.status = 201
+            response.body = book.to_json
           else
             response.status = 422
             response.format = :json
