@@ -67,7 +67,7 @@ RSpec.describe Bookshelf::Actions::Books::Show do
 
     expect(response).to be_successful
     expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
-    expect(JSON.parse(response.body)).to eq("id" => "23")
+    expect(JSON.parse(response.body[0])).to eq("id" => "23")
   end
 end
 ```
@@ -81,10 +81,10 @@ module Bookshelf
   module Actions
     module Users
       class Show < Action
-        # Presuming `config.actions.format :json` is set in config/app.rb
+        format :json
 
         def handle(request, response)
-          response.body = {id: request.params[:id]}
+          response.body = {id: request.params[:id]}.to_json
         end
       end
     end
@@ -122,7 +122,7 @@ RSpec.describe Bookshelf::Actions::Books::Create do
     response = action.call(book: book_params)
 
     expect(response).to be_successful
-    expect(response.body).to eql(book_params.to_json)
+    expect(response.body[0]).to eq(book_params.to_json)
   end
 end
 ```
@@ -164,7 +164,7 @@ Use test doubles only when the side effects are difficult to handle in a test en
 
 Action tests are helpful for setting expectations on an action's low-level behavior. However, for many actions, testing end-to-end behavior may be more useful.
 
-For this, you can write request specs using [rack-test][rack-test], which comes included with your  Hanami app.
+For this, you can write request specs using [rack-test][rack-test], which comes included with your Hanami app.
 
 ```ruby
 # spec/requests/root_spec.rb
@@ -175,7 +175,7 @@ RSpec.describe "Root", type: :request do
     get "/"
 
     expect(last_response).to be_successful
-    expect(last_response.body).to eql("Hello from Hanami")
+    expect(last_response.body).to eq("Hello from Hanami")
   end
 end
 ```
@@ -185,5 +185,5 @@ In many cases, you can rely on request tests and skip low-level action testing. 
 </p>
 
 <p class="notice">
-Avoid test doubles< when writing request tests, since we want to verify that the whole stack is behaving as expected.
+Avoid test doubles when writing request tests, since we want to verify that the whole stack is behaving as expected.
 </p>
