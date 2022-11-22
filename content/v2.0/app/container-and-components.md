@@ -32,8 +32,6 @@ Sketching out a send welcome email operation component:
 ```ruby
 # app/operations/send_welcome_email.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   module Operations
     class SendWelcomeEmail
@@ -49,8 +47,6 @@ And a welcome email renderer component:
 
 ```ruby
 # app/renderers/welcome_email.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   module Renderers
@@ -118,8 +114,6 @@ To illustrate, here's an example of a send welcome email operation which **doesn
 ```ruby
 # app/operations/send_welcome_email.rb
 
-# frozen_string_literal: true
-
 require "acme_email/client"
 
 module Bookshelf
@@ -151,8 +145,6 @@ To make this send welcome email operation more resuable and easier to test, we c
 
 ```ruby
 # app/operations/send_welcome_email.rb
-
-# frozen_string_literal: true
 
 require "acme_email/client"
 
@@ -186,8 +178,6 @@ Hanami makes this style of dependency injection simple through its `Deps` mixin.
 
 ```ruby
 # app/operations/send_welcome_email.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   module Operations
@@ -287,8 +277,6 @@ Sometimes you want to use a dependency under another name, either because two de
 This can be done by using the `Deps` mixin like so:
 
 ```ruby title="app/operations/send_welcome_email.rb"
-# frozen_string_literal: true
-
 module Bookshelf
   module Operations
     class SendWelcomeEmail
@@ -326,8 +314,6 @@ For once-off exclusions like this Hanami supports a magic comment: `# auto_regis
 
 ```ruby
 # auto_register: false
-# frozen_string_literal: true
-
 require "hanami/action"
 
 module Bookshelf
@@ -342,8 +328,6 @@ Here for example, the `app/structs` directory is excluded, meaning nothing in th
 
 ```ruby
 # config/app.rb
-
-# frozen_string_literal: true
 
 require "hanami"
 
@@ -372,8 +356,6 @@ end
 
 ```ruby
 # app/operations/send_welcome_email.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   module Operations

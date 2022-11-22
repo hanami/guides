@@ -158,8 +158,6 @@ If you need to configure acronyms like "DB" or "WNBA", add them to the infector 
 ```ruby
 # config/app.rb
 
-# frozen_string_literal: true
-
 require "hanami"
 
 module Bookshelf

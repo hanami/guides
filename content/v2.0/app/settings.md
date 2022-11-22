@@ -8,8 +8,6 @@ You can define your own settings for your app through a `Settings` class, define
 ```ruby
 # config/settings.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   class Settings < Hanami::Settings
     # Define your app settings here, for example:
@@ -29,8 +27,6 @@ Each app setting is read from an environment variable matching its name. For exa
 ```ruby
 # config/settings.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   class Settings < Hanami::Settings
     setting :redis_url, constructor: Types::String
@@ -47,8 +43,6 @@ You can coerce settings to these types by specifying the relevant constructor. F
 
 ```ruby
 # config/settings.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   class Settings < Hanami::Settings
@@ -94,8 +88,6 @@ The below settings will result in a `Hanami::Settings::InvalidSettingsError` whe
 ```ruby
 # config/settings.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   class Settings < Hanami::Settings
     setting :analytics_enabled, constructor: Types::Params::Bool
@@ -128,8 +120,6 @@ To make a setting optional, use `optional` to allow `nil` values:
 ```ruby
 # config/settings.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   class Settings < Hanami::Settings
     setting :analytics_enabled, constructor: Types::Params::Bool.optional
@@ -144,8 +134,6 @@ Settings can also specify defaults to be used in the absence of the relevant env
 
 ```ruby
 # config/settings.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   class Settings < Hanami::Settings
@@ -164,8 +152,6 @@ Here, the value of the `session_secret` must be at least 32 characters, while th
 
 ```ruby
 # config/settings.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   class Settings < Hanami::Settings
@@ -216,8 +202,6 @@ When registering a provider, you can access the app's settings via the `target`,
 ```ruby
 # config/providers/redis.rb
 
-# frozen_string_literal: true
-
 Hanami.app.register_provider :redis do
   start do
     require "redis"
@@ -259,8 +243,6 @@ One benefit of using a concrete `Settings` class is that you can add methods to 
 
 
 ```ruby
-# frozen_string_literal: true
-
 module Bookshelf
   class Settings < Hanami::Settings
     setting :analytics_enabled, default: false, constructor: Types::Params::Bool

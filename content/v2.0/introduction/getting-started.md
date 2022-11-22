@@ -163,8 +163,6 @@ In the file `spec/requests/root_spec.rb`, Hanami provides a request spec for the
 ```ruby
 # spec/requests/root_spec.rb
 
-# frozen_string_literal: true
-
 RSpec.describe "Root", type: :request do
   it "is successful" do
     get "/"
@@ -196,8 +194,6 @@ Let's change the "Hello from Hanami" message to "Welcome to Bookshelf". First, w
 
 ```ruby
 # spec/requests/root_spec.rb
-
-# frozen_string_literal: true
 
 RSpec.describe "Root", type: :request do
   it "is successful" do
@@ -236,8 +232,6 @@ To fix this, let's open our application's routes file at `config/routes.rb`:
 ```ruby
 # config/routes.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   class Routes < Hanami::Routes
     root { "Hello from Hanami" }
@@ -255,8 +249,6 @@ Blocks are convenient, but let's adjust our route to invoke an action instead:
 
 ```ruby
 # config/routes.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   class Routes < Hanami::Routes
@@ -296,8 +288,6 @@ We can find this action in our `app` directory at `app/actions/home/show.rb`:
 ```ruby
 # app/actions/home/show.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   module Actions
     module Home
@@ -329,8 +319,6 @@ For now, let's adjust our home action to return our desired "Welcome to Bookshel
 
 ```ruby
 # app/actions/home/show.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   module Actions
@@ -367,8 +355,6 @@ First we'll create a request spec for listing books that expects a successful JS
 ```ruby
 # spec/requests/books/index_spec.rb
 
-# frozen_string_literal: true
-
 RSpec.describe "GET /books", type: :request do
   it "returns a list of books" do
     get "/books"
@@ -397,8 +383,6 @@ bundle exec hanami generate action books.index
 In addition to generating an action at `app/actions/books/index.rb`, the generator has also added a route in `config/routes.rb`:
 
 ```ruby
-# frozen_string_literal: true
-
 module Bookshelf
   class Routes < Hanami::Routes
     root to: "home.index"
@@ -431,8 +415,6 @@ Our response doesn't have the expected format. Let's adjust our action to return
 
 ```ruby
 # app/actions/books/index.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   module Actions
@@ -508,8 +490,6 @@ In Hanami, [providers](/v2.0/app/providers/) offer a mechanism for configuring a
 Copy and paste the following provider into a new file at `config/providers/persistence.rb`:
 
 ```ruby
-# frozen_string_literal: true
-
 Hanami.app.register_provider :persistence, namespace: true do
   prepare do
     require "rom"
@@ -540,8 +520,6 @@ Settings in Hanami are defined by a `Settings` class in `config/settings.rb`:
 ```ruby
 # config/settings.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   class Settings < Hanami::Settings
     # Define your app settings here, for example:
@@ -561,8 +539,6 @@ Let's add `database_url` and make it a required setting by using the `Types::Str
 
 ```ruby
 # config/settings.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   class Settings < Hanami::Settings
@@ -621,8 +597,6 @@ To ensure the database is cleaned between tests, add the following to a `spec/su
 
 ```ruby
 # spec/support/database_cleaner.rb
-
-# frozen_string_literal: true
 
 require "database_cleaner-sequel"
 
@@ -689,8 +663,6 @@ Edit the migration file in order to create a books table with title and author c
 ```ruby
 # db/migrate/20221113050928_create_books.rb
 
-# frozen_string_literal: true
-
 ROM::SQL.migration do
   change do
     create_table :books do
@@ -714,8 +686,6 @@ Lastly, let's add a rom-rb relation to allow our application to interact with ou
 ```ruby
 # lib/bookshelf/persistence/relations/books.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   module Persistence
     module Relations
@@ -732,8 +702,6 @@ end
 With our books table ready to go, let's adapt our books index spec to expect an index of persisted books:
 
 ```ruby
-# frozen_string_literal: true
-
 RSpec.describe "GET /books", type: [:request, :database] do
   let(:books) { app["persistence.rom"].relations[:books] }
 
@@ -767,8 +735,6 @@ For now however, it's enough to know that we can use `include Deps["persistence.
 To satisfy our spec, we need to meet a few requirements. Firstly, we want to render each book's _title_ and _author_, but not its _id_. Secondly we want to return books alphabetically by title. We can achieve these requirements using the `select` and `order` methods offered by the books relation:
 
 ```ruby
-# frozen_string_literal: true
-
 module Bookshelf
   module Actions
     module Books
@@ -813,8 +779,6 @@ Of course, returning _every_ book in the database when a visitor makes a request
 ```ruby
 # lib/bookshelf/persistence/relations/books.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   module Persistence
     module Relations
@@ -835,8 +799,6 @@ Let's add a request spec verifying pagination:
 
 ```ruby
 # spec/requests/books/index/pagination_spec.rb
-
-# frozen_string_literal: true
 
 RSpec.describe "GET /books pagination", type: [:request, :database] do
   let(:books) { app["persistence.rom"].relations[:books] }
@@ -870,8 +832,6 @@ In our action class, we can use the request object to extract the relevant param
 ```ruby
 # app/actions/books/index.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   module Actions
     module Books
@@ -899,8 +859,6 @@ Accepting parameters from the internet without validation is never a good idea h
 
 ```ruby
 # app/actions/books/index.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   module Actions
@@ -979,8 +937,6 @@ Let's specify a `/books/:id` request that renders a book for a given id, or retu
 
 ```ruby
 # spec/requests/books/show_spec.rb
-
-# frozen_string_literal: true
 
 RSpec.describe "GET /books/:id", type: [:request, :database] do
   let(:books) { app["persistence.rom"].relations[:books] }
@@ -1065,8 +1021,6 @@ If you inspect `config/routes.rb` you will see the generator has automatically a
 ```ruby
 # config/routes.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   class Routes < Hanami::Routes
     root to: "home.index"
@@ -1080,8 +1034,6 @@ We can now edit the new action at `app/actions/books/show.rb` to add the require
 
 ```ruby
 # app/actions/books/show.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   module Actions
@@ -1121,8 +1073,6 @@ Taking this approach allows our handle method to concern itself only with the ha
 
 ```ruby
 # app/actions/books/show.rb
-
-# frozen_string_literal: true
 
 require "rom"
 
@@ -1166,8 +1116,6 @@ This exception handling behaviour can also be moved into the base `Bookshelf::Ac
 # app/action.rb
 
 # auto_register: false
-# frozen_string_literal: true
-
 require "hanami/action"
 
 module Bookshelf
@@ -1189,8 +1137,6 @@ With its base action configured to handle `ROM::TupleCountMismatchError` excepti
 
 ```ruby
 # app/actions/books/show.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   module Actions
@@ -1238,8 +1184,6 @@ Here's a spec for POST requests to the `/books` path, where it's expected that o
 ```ruby
 # spec/requests/books/create_spec.rb
 
-# frozen_string_literal: true
-
 RSpec.describe "POST /books", type: [:request, :database] do
   let(:request_headers) do
     {"HTTP_ACCEPT" => "application/json", "CONTENT_TYPE" => "application/json"}
@@ -1282,8 +1226,6 @@ bundle exec hanami generate action books.create
 The application's routes now include the expected route - invoking the `books.create` action for `POST` requests to `/books`:
 
 ```ruby
-# frozen_string_literal: true
-
 module Bookshelf
   class Routes < Hanami::Routes
     root to: "home.index"
@@ -1298,8 +1240,6 @@ And Hanami has generated an action at `app/actions/books/create.rb`:
 
 ```ruby
 # app/actions/books/create.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   module Actions
@@ -1319,8 +1259,6 @@ To enable convenient parsing of params from JSON request bodies, Hanami includes
 ```ruby
 # config/app.rb
 
-# frozen_string_literal: true
-
 require "hanami"
 
 module Bookshelf
@@ -1335,8 +1273,6 @@ With this parser in place, the `book` key from the JSON body will be available i
 We can now complete our create action by inserting a record into the books relation if the posted params are valid:
 
 ```ruby
-# frozen_string_literal: true
-
 module Bookshelf
   module Actions
     module Books

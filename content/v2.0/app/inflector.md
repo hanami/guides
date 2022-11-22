@@ -14,8 +14,6 @@ To customize how particular words are inflected, use `config.inflections` in you
 ```ruby
 # config/app.rb
 
-# frozen_string_literal: true
-
 require "hanami"
 
 module Bookshelf
@@ -39,8 +37,6 @@ Use it in your own classes via the Deps mixin through `include Deps["inflector"]
 
 ```ruby
 # app/my_component.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   class MyComponent
@@ -75,8 +71,6 @@ If needed, you can replace the inflector by providing your own. Your replacement
 
 ```ruby
 # config/app.rb
-
-# frozen_string_literal: true
 
 require "hanami"
 require "my_inflector"

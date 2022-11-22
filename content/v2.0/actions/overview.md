@@ -16,8 +16,6 @@ Modifying the response object allows you to control how your application respond
 ```ruby
 # app/actions/home/show.rb
 
-# frozen_string_literal: true
-
 module Bookshelf
   module Actions
     module Home

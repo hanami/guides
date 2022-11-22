@@ -89,8 +89,6 @@ end
 You can also customize text log template to use custom colors:
 
 ```ruby
-# frozen_string_literal: true
-
 require "hanami"
 
 module Bookshelf

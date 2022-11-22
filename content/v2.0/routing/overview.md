@@ -12,8 +12,6 @@ Hanami provides a fast, simple [router](https://github.com/hanami/router) for ha
 Your application's routes are defined within the `Routes` class in `config/routes.rb`
 
 ```ruby
-# frozen_string_literal: true
-
 module Bookshelf
   class Routes < Hanami::Routes
     root { "Hello from Hanami" }
@@ -50,8 +48,6 @@ bundle exec hanami generate action books.destroy
 ```
 
 ```ruby
-# frozen_string_literal: true
-
 module Bookshelf
   class Routes < Hanami::Routes
     root { "Hello from Hanami" }
@@ -71,8 +67,6 @@ end
 A `root` method allows you to define a root route for handling `GET` requests to `"/"`. In a newly generated application, the root path calls a block which returns "Hello from Hanami". You can instead choose to invoke an action by specifying `root to: "my_action"`. For example, with the following configuration, the router will invoke the `home` action:
 
 ```ruby
-# frozen_string_literal: true
-
 module Bookshelf
   class Routes < Hanami::Routes
     root to: "home"
@@ -202,8 +196,6 @@ Hanami.app["routes"].path(:book, id: 1)
 To set a base URL for the `url` helper, configure it in `config/app.rb`:
 
 ```ruby title="config/app.rb"
-# frozen_string_literal: true
-
 require "hanami"
 
 module Bookshelf
@@ -223,8 +215,6 @@ Hanami.app["routes"].url(:book, id: 1)
 To nest a series of routes under a particular namespace, you can use a scope:
 
 ```ruby
-# frozen_string_literal: true
-
 module Bookshelf
   class Routes < Hanami::Routes
     scope "about" do

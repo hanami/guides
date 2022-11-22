@@ -32,8 +32,6 @@ This is useful when you want to incur all initialization costs at boot time.
 Booting is the approach taken in Hanami's standard Puma setup. Thus, in Hanami's `config.ru` file you will see:
 
 ```ruby
-# frozen_string_literal: true
-
 require "hanami/boot"
 
 run Hanami.app
@@ -47,8 +45,6 @@ Assuming we have run `hanami new bookshelf` to generate a new app (see [Getting 
 
 ```ruby
 # app/hello_world.rb
-
-# frozen_string_literal: true
 
 module Bookshelf
   class HelloWorld
