@@ -33,6 +33,7 @@ p > code {
 }
 
 code, code[class*=language-] {
+  background-color: #fafafa;
   color: #525f7f;
   font-family: monospace;
   font-size: 1.25rem;
