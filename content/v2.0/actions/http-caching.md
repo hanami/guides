@@ -3,7 +3,7 @@ title: HTTP Caching
 order: 120
 ---
 
-Actions provide several features to help you take advantage of [HTTP caching][mdn-http-caching].
+Actions provide several features to help you make use of [HTTP caching][mdn-http-caching].
 
 [mdn-http-caching]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching
 
@@ -19,7 +19,7 @@ module Bookshelf
     module Books
       class Index < Bookshelf::Action
         def handle(request, response)
-          # Sets a `Cache-Control: public, max-age: 600` header
+          # Sets `Cache-Control: public, max-age: 600`
           response.cache_control :public, max_age: 600
         end
       end
@@ -46,24 +46,20 @@ The `cache_control` method accepts one or more of the following [Cache-Control d
 
 ## Expires
 
-The [Expires response header][mdn-expires] contains the date and time after which the response is considered expired. You can use the `#expires` method on your action's response object to set this header.
+The [Expires response header][mdn-expires] sets the date and time after which the response is considered expired. The Expires header is an older standard, and Cache-Control is preferred by modern browsers.
 
-Hanami's solution for _expire_ combines support for all the browsers by sending both the headers.
+You can use the `#expires` method on your action's response object to set this header along with a matching Cache-Control header.
 
 ```ruby
 # app/actions/books/index.rb
-require 'hanami/action/cache'
 
 module Bookshelf
   module Actions
     module Books
       class Index < Bookshelf::Action
-        include Hanami::Action::Cache
-
         def handle(request, response)
+          # Sets `Expires: Sun, 20 Nov 2022 17:47:02 GMT, Cache-Control: public, max-age=600`
           response.expires 60, :public, max_age: 600
-            # => Expires: Sun, 20 Nov 2022 17:47:02 GMT, Cache-Control: public, max-age=600
-          # ...
         end
       end
     end
@@ -71,42 +67,88 @@ module Bookshelf
 end
 ```
 
-## Conditional GET
+## Conditional requests
 
-_Conditional GET_ is a two step workflow to inform browsers that a resource hasn't changed since the last visit.
-At the end of the first request, the response includes special HTTP response headers that the browser will use next time it comes back.
-If the header matches the value that the server calculates, then the resource is still cached and a `304` status (Not Modified) is returned.
+[HTTP conditional requests][mdn-conditional-requests] are an interaction between the server and a client wherein the result of a request can be changed by comparing the related server resource with the value of a validator. These requests can be useful to validate the content of a client's cache for the given resource.
 
-### ETag
+For example, for a conditional `GET` request, there is a two-step workflow:
 
-The first way to match a resource freshness is to use an identifier (usually an MD5 token).
-Let's specify it with `fresh etag:`.
+1. The response to an initial request includes a “validator” in its headers, either the date of last modification for the resource (a Last-Modified response header and a subsequent If-Modified-Since request header), or an string identifying the version of the resource (an ETag  response header and a subsequent If-None-Match request header)
+2. On the next request, the client sends its counterpart request header, and if the server determines the client's cache is fresh, it can return a `304 Not Modified` response allowing the client to use its cached resource
 
-If the given identifier does NOT match the `If-None-Match` request header, the request will return a `200` with an `ETag` response header with that value.
-If the header does match, the action will be halted and a `304` will be returned.
+For more detail on conditional requests, see the [MDN documentation][mdn-conditional-requests].
+
+You can use the `#fresh` method on your action's response object to set the Last-Modified or ETag validator headers, as well as short circuit action execution when these are included in the request.
+
+[mdn-conditional-requests]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests
+
+### Last Modified
+
+Use the `#fresh` response method with a `last_modified_at:` option to return a Last-Modified response header and validate a conditional request by its If-Modified-Since header.
+
+In the below example:
+
+1. The first request to the action (or a request with a stale cache) will see the action handle the request in full before returning its response with a Last-Modified header.
+2. A subsequent request with a matching If-Modified-Since header will receive a `304 Not Modified` response, and the action will halt before its processing logic.
+
+For more detail on action halting, see the [control flow guide](/v2.0/actions/control-flow).
 
 ```ruby
 # app/actions/books/show.rb
-require 'hanami/action/cache'
+
+module Bookshelf
+  module Actions
+    module Show
+      class Index < Bookshelf::Action
+        include Deps['repositories.users']
+
+        def handle(request, response)
+          user = users.find(params[:id])
+
+          response.fresh last_modified: user.updated_at
+
+          # <request processing logic here>
+        end
+      end
+    end
+  end
+end
+
+# Case 1 (missing or non-matching Last-Modified)
+# GET /users/23
+#  => 200, Last-Modified: Tue, 22 Nov 2022 10:04:30 GMT
+
+# Case 2 (matching Last-Modified)
+# GET /users/23, If-Modified-Since: Tue, 22 Nov 2022 10:04:30 GMT
+#  => 304
+```
+
+### ETag
+
+Use the `#fresh` response method with an `etag:` option to return an ETag response header and validate a conditional request by its If-None-Match header.
+
+In the below example:
+
+1. The firsts request to the action (or a request with a stale cache) will see the action handle the request in full before returning its response with an ETag header.
+2. A subsequent request with a matching If-None-Match header will receive a `304 Not Modified` response, and the action will halt before its processing logic.
+
+For more detail on action halting, see the [control flow guide](/v2.0/actions/control-flow).
+
+```ruby
+# app/actions/books/show.rb
 
 module Bookshelf
   module Actions
     module Books
       class Show < Bookshelf::Action
-        include Hanami::Action::Cache
-        include Deps['repositories.users']
+        include Deps["user_repo"]
 
         def handle(request, response)
-          user = users.find(params[:id])
-          fresh etag: etag(user)
+          user = user_repo.find(params[:id])
+
+          response.fresh etag: "#{user.id}-#{user.updated_at}"
 
           # ...
-        end
-
-        private
-
-        def etag(user)
-          "#{ user.id }-#{ user.updated_at }"
         end
       end
     end
@@ -119,43 +161,5 @@ end
 
 # Case 2 (matching If-None-Match)
 # GET /users/23, If-None-Match: 84e037c89f8d55442366c4492baddeae
-#  => 304
-```
-
-### Last Modified
-
-The second way is to use a timestamp via `fresh last_modified:`.
-
-If the given timestamp does NOT match `If-Modified-Since` request header, it will return a `200` and set the `Last-Modified` response header with the timestamp value.
-If the timestamp does match, the action will be halted and a `304` will be returned.
-
-```ruby
-# app/actions/books/show.rb
-require 'hanami/action/cache'
-
-module Bookshelf
-  module Actions
-    module Show
-      class Index < Bookshelf::Action
-        include Hanami::Action::Cache
-        include Deps['repositories.users']
-
-        def handle(request, response)
-          user = users.find(params[:id])
-          fresh last_modified: user.updated_at
-
-          # ...
-        end
-      end
-    end
-  end
-end
-
-# Case 1 (missing or non-matching Last-Modified)
-# GET /users/23
-#  => 200, Last-Modified: Mon, 18 May 2015 10:04:30 GMT
-
-# Case 2 (matching Last-Modified)
-# GET /users/23, If-Modified-Since: Mon, 18 May 2015 10:04:30 GMT
 #  => 304
 ```
