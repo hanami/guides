@@ -3,29 +3,24 @@ title: HTTP Caching
 order: 120
 ---
 
-We refer to HTTP caching as the set of techniques for HTTP/1.1 and implemented by browser vendors in order to make faster interactions with the server.
-There are a few headers that, if sent, will enable these HTTP caching mechanisms.
+Actions provide several features to help you take advantage of [HTTP caching][mdn-http-caching].
 
-## Cache Control
+[mdn-http-caching]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching
 
-We can control cache by setting a special header `Cache-Control` on the action response.
+## Cache control
 
-The first argument is a cache response directive like `:public` or `"must-revalidate"`, while the second argument is a set of options like `:max_age`.
+The [Cache-Control response header][mdn-cache-control] is the main way to control HTTP caching behavior. You can use the `#cache_control` method on your action's response object to set this header.
 
 ```ruby
 # app/actions/books/index.rb
-require 'hanami/action/cache'
 
 module Bookshelf
   module Actions
     module Books
       class Index < Bookshelf::Action
-        include Hanami::Action::Cache
-
         def handle(request, response)
+          # Sets a `Cache-Control: public, max-age: 600` header
           response.cache_control :public, max_age: 600
-          # => Cache-Control: public, max-age: 600
-          # ...
         end
       end
     end
@@ -33,10 +28,25 @@ module Bookshelf
 end
 ```
 
+The `cache_control` method accepts one or more of the following [Cache-Control directives][mdn-cache-control-directives] as its arguments.
+
+- `:public`
+- `:private`
+- `:no_cache`
+- `:no_store`
+- `:must_validate`
+- `:proxy_revalidate`
+- `max_age: N` (`N` here and below should be an integer representing a period in seconds)
+- `s_maxage: N`
+- `min_fresh: N`
+- `max_stale: N`
+
+[mdn-cache-control]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+[mdn-cache-control-directives]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#cache_directives
+
 ## Expires
 
-Another HTTP caching special header is `Expires`.
-It can be used for retrocompatibility with old browsers which don't understand `Cache-Control`.
+The [Expires response header][mdn-expires] contains the date and time after which the response is considered expired. You can use the `#expires` method on your action's response object to set this header.
 
 Hanami's solution for _expire_ combines support for all the browsers by sending both the headers.
 
@@ -51,7 +61,7 @@ module Bookshelf
         include Hanami::Action::Cache
 
         def handle(request, response)
-          response.expires 60, :public, max_age: 600 
+          response.expires 60, :public, max_age: 600
             # => Expires: Sun, 20 Nov 2022 17:47:02 GMT, Cache-Control: public, max-age=600
           # ...
         end
@@ -85,7 +95,7 @@ module Bookshelf
       class Show < Bookshelf::Action
         include Hanami::Action::Cache
         include Deps['repositories.users']
-        
+
         def handle(request, response)
           user = users.find(params[:id])
           fresh etag: etag(user)
@@ -129,7 +139,7 @@ module Bookshelf
       class Index < Bookshelf::Action
         include Hanami::Action::Cache
         include Deps['repositories.users']
-        
+
         def handle(request, response)
           user = users.find(params[:id])
           fresh last_modified: user.updated_at
