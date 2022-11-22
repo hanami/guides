@@ -71,7 +71,7 @@ module API
         end
 
         def handle(request, response)
-          response.format = format(:json)
+          response.format = :json
 
           halt 422, {error: "Unprocessable country code"}.to_json unless request.params.valid?
 
@@ -326,7 +326,7 @@ end
 
 Slice settings are loaded from environment variables just like the app settings, so take care to ensure you have no naming clashes between your slice and app settings.
 
-See the [settings guide](/v2.0//app/app-config/) for more information on settings.
+See the [settings guide](/v2.0/app/settings/) for more information on settings.
 
 ## Slice loading
 
