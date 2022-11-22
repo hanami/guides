@@ -3,9 +3,11 @@ title: Testing
 order: 140
 ---
 
-Hanami pays a lot of attention to code testability and it offers advanced features to make our lives easier. The framework supports RSpec (default) and Minitest.
+Hanami actions are designed to be easy to test via a range of techniques.
 
-## Testing Actions
+The examples on this page use [RSpec](http://rspec.info), the test framework installed when you generate a new Hanami app.
+
+## Testing actions
 
 Actions are standalone objects with an interface that's easy to test. You can simply instantiate an action as your object under test and exercise its functionality.
 
@@ -22,30 +24,35 @@ RSpec.describe Bookshelf::Actions::Books::Index do
     expect(response).to be_successful
   end
 end
-
 ```
 
-In the example above, `action` is an instance of `Bookshelf::Actions::Books::Index`. We can simply call it with an empty parameters hash. The [return value](/actions/rack-integration) is a serialized Rack response. We're asserting that the returned response is successful (status is in `2XX` range).
+In this example, `action` is an instance of `Bookshelf::Actions::Books::Index`. To make a request to the action, we can call it with an empty parameters hash. The return value is a serialized [Rack] response. In this test we're asserting that the returned response is successful (status is in `2XX` range).
+
+[rack]: https://github.com/rack/rack
 
 ## Running Tests
 
-We can run the entire test suite or a single file.
+To test your action, run `bundle exec rspec` with the path to your action's test file:
 
-```ruby
-# Run the whole tests suite
-bundle exec rspec
-
-# Run all tests from the single file
-bundle exec rspec spec/actions/books/index_spec.rb
+```shell
+$ bundle exec rspec spec/actions/books/index_spec.rb
 ```
 
-When we run tests, only minimal number of files are loaded to process the test. All the required dependencies and the application code (actions, repositories, etc..) are loaded on-demand, which makes it very fast to re-run individual tests during development cycles.
+When you run the tests for a single action, Hanami will load only the smallest set of files required to run the test. The action's dependencies and any related app code is loaded on demand, which makes it very fast to run and re-run individual tests as part of your development flow.
 
-## Params
+Your action tests will also be included when you run the whole test suite:
 
-When testing an action, we can easily simulate parameters and headers coming from a request by passing them as a Hash. Headers for Rack env such as `HTTP_ACCEPT` can be mixed with params like `:id`.
+```shell
+$ bundle exec rspec
+```
 
-The following test example uses both.
+## Providing params and headers
+
+When testing an action, you can simulate the parameters and headers coming from a request by passing them as a hash.
+
+Rack expects the headers to be uppercased, underscored strings prefixed by `HTTP_` (like `"HTTP_ACCEPT" => "application/json"`), while your other request params can be regular keyword arguments.
+
+The following test combines both params and headers.
 
 ```ruby
 # spec/actions/books/show_spec.rb
@@ -59,13 +66,13 @@ RSpec.describe Bookshelf::Actions::Books::Show do
     response = subject.call(id: "23", "HTTP_ACCEPT" => "application/json")
 
     expect(response).to be_successful
-    expect(response.headers['Content-Type']).to eql("#{ format }; charset=utf-8")
-    expect(JSON.parse(response.body)).to eql({"id" => "23"})
+    expect(response.headers["Content-Type"]).to eq("#{ format }; charset=utf-8")
+    expect(JSON.parse(response.body)).to eq("id" => "23")
   end
 end
 ```
 
-Here's an example action class that would make this test pass:
+Here's the example action that would make this test pass.
 
 ```ruby
 # app/actions/books/show.rb
@@ -74,7 +81,7 @@ module Bookshelf
   module Actions
     module Users
       class Show < Action
-        format :json
+        # Presuming `config.actions.format :json` is set in config/app.rb
 
         def handle(request, response)
           response.body = {id: request.params[:id]}
@@ -85,42 +92,43 @@ module Bookshelf
 end
 ```
 
-<p class="notice">
-Simulating request params and headers is simple for Hanami actions. We pass them as a <code>Hash</code> and they are transformed into an instance of <code>Hanami::Action::Params</code>.
-</p>
-
 ## Mocking action dependencies
 
-During testing, we may want to use mocks to avoid any unwanted side-effects. Because we can instantiate actions during tests, we can specify which collaborators we want to use via _dependency injection_.
+You may wish to provide test doubles (also known as “mock objects”) to your actions under test to control their environment or avoid unwanted side effects.
 
-Let's rewrite the test for an action that fetches a user so that it does not hit the database.
+Since we directly instantiate our actions in our tests, we can provide these test doubles via _dependency injection._
+
+Let's write the test for an action that creates a book such that it does not hit the database.
 
 ```ruby
 # spec/actions/books/create_spec.rb
 
 RSpec.describe Bookshelf::Actions::Books::Create do
   subject(:action) do
-    Bookshelf::Actions::Books::Create.new(mailer: mailer)
+    Bookshelf::Actions::Books::Create.new(user_repo: user_repo)
   end
 
-  let(:mailer) do
-    instance_double(Bookshelf::Mailer, notify_users: book)
+  let(:user_repo) do
+    instance_double(Bookshelf::UserRepo)
   end
 
-  let(:book) do
+  let(:book_params) do
     {title: "Hanami Guides"}
   end
 
   it "returns a successful response when valid book params are provided" do
-    response = action.call(book: book)
+    expect(user_repo).to receive(:create).with(book_params).and_return(book_params)
+
+    response = action.call(book: book_params)
 
     expect(response).to be_successful
-    expect(response.body).to eql(book.to_json)
+    expect(response.body).to eql(book_params.to_json)
   end
 end
 ```
 
-We have injected the mailer dependency which is a mock in our case. Here's how you can adapt your action.
+We've injected the `user_repo` dependency with an RSpec test double. This would replace the default `"user_repo"` component for the following action.
+
 
 ```ruby
 # app/actions/books/create.rb
@@ -129,7 +137,7 @@ module Bookshelf
   module Actions
     module Books
       class Create < Action
-        include Deps["user_repo", "mailer"]
+        include Deps["user_repo"]
 
         params do
           required(:book).hash do
@@ -139,7 +147,6 @@ module Bookshelf
 
         def handle(request, response)
           book = user_repo.create(request.params[:book])
-          mailer.notify_users(book)
 
           response.body = book.to_json
         end
@@ -150,23 +157,23 @@ end
 ```
 
 <p class="warning">
-It is recommended to use mocks only when the side-effects are difficult to handle in a test environment. Please also remember to only <strong>mock your own interfaces</strong> and <strong>always use verified doubles</strong>.
+Use test doubles only when the side effects are difficult to handle in a test environment. Remember to <strong>mock only your own interfaces</strong> and <strong>always use verified doubles</strong>.
 </p>
 
-## Requests Tests
+## Testing requests
 
-Action tests are a great tool to assert that low level interfaces work as expected. We always advise combining them with request tests as they exercise the entire stack.
+Action tests are helpful for setting expectations on an action's low-level behavior. However, for many actions, testing end-to-end behavior may be more useful.
 
-In case of Hanami web applications, you can write features (aka acceptance tests) with Capybara, but what do we use when we are building HTTP APIs? The tool that we suggest is `rack-test`.
+For this, you can write request specs using [rack-test][rack-test], which comes included with your  Hanami app.
 
 ```ruby
 # spec/requests/root_spec.rb
 
 RSpec.describe "Root", type: :request do
   it "is successful" do
+    # Find me in `config/routes.rb`
     get "/"
 
-    # Find me in `config/routes.rb`
     expect(last_response).to be_successful
     expect(last_response.body).to eql("Hello from Hanami")
   end
@@ -174,9 +181,9 @@ end
 ```
 
 <p class="notice">
-In many cases, you can rely on request tests and skip low level action testing. Action tests only make sense when action logic becomes complex and you need to exercise many scenarios.
+In many cases, you can rely on request tests and skip low-level action testing. Action tests only make sense when action logic becomes complex and you need to exercise many scenarios.
 </p>
 
 <p class="notice">
-It is recommended to avoid <em>test doubles</em> when writing full integration tests, as we want to verify that the whole stack is behaving as expected.
+Avoid test doubles< when writing request tests, since we want to verify that the whole stack is behaving as expected.
 </p>
