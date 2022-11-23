@@ -37,7 +37,7 @@ end
 Any class that inherits from this will:
 
 - Have the `authenticator` object available to its instance methods
-- Expect JSON requests and return JSON respnses
+- Expect JSON requests and return JSON responses
 - Ensure that requests are authenticated based on the `X-API-Token` and return a 401 error if not
 
 Courtesty of the inheritance, subclasses gain all this behavior without any additional code.
