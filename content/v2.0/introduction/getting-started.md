@@ -657,6 +657,14 @@ To create a migration run:
 bundle exec rake db:create_migration[create_books]
 ```
 
+<p class="notice">
+  Please note if your $SHELL is zsh you will need to escape the square brackets:
+</p>
+
+```shell
+bundle exec rake db:create_migration\[create_books\]
+```
+
 Edit the migration file in order to create a books table with title and author columns and a primary key:
 
 ```ruby
