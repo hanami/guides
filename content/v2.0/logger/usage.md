@@ -19,7 +19,7 @@ bookshelf[development]> app["logger"].info "Hello World"
 If you wanted to log an error:
 
 ```ruby
-bookshelf[development]> app["logger"].info "Something's wrong"
+bookshelf[development]> app["logger"].error "Something's wrong"
 # [bookshelf] [ERROR] [2022-11-20 13:48:05 +0100] Something's wrong
 ```
 
