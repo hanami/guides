@@ -380,12 +380,13 @@ Let's fix that by generating an action for a books index:
 bundle exec hanami generate action books.index
 ```
 
-In addition to generating an action at `app/actions/books/index.rb`, the generator has also added a route in `config/routes.rb`:
+In addition to generating an action at `app/actions/books/index.rb`, the generator has also added a route in `config/routes.rb`. The route `get "/home/:id", to: "home.show"` was generated when the generator to create the action home.show was run earlier. :
 
 ```ruby
 module Bookshelf
   class Routes < Hanami::Routes
     root to: "home.index"
+    get "/home/:id", to: "home.show"
     get "/books", to: "books.index"
   end
 end
