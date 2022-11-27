@@ -531,7 +531,7 @@ end
 
 Settings can be strings, booleans, integers and other types. Each setting can be either optional or required (meaning the app won't boot without them), and each can also have a default.
 
-Each setting is sourced from an environment variable matching its name. For example `my_flag` will be source from `ENV["MY_FLAG"]`.
+Each setting is sourced from an environment variable matching its name. For example `my_flag` will be sourced from `ENV["MY_FLAG"]`.
 
 You can read more about Hanami's settings in the [Application guide](/v2.0/app/settings/).
 
