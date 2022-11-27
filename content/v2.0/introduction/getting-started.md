@@ -405,10 +405,10 @@ Failures:
      Failure/Error: expect(last_response.content_type).to eq("application/json; charset=utf-8")
 
        expected: "application/json; charset=utf-8"
-            got: "text/html; charset=utf-8"
+            got: "application/octet-stream; charset=utf-8"
 
        (compared using ==)
-     # ./spec/requests/books/index_spec.rb:8:in `block (2 levels) in <top (required)>'
+     # ./spec/requests/books/index_spec.rb:7:in `block (2 levels) in <top (required)>'
 ```
 
 Our response doesn't have the expected format. Let's adjust our action to return a JSON formatted response using `response.format = :json`. We'll also set the response body to what our test expects:
