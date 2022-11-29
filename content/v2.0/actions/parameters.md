@@ -330,6 +330,10 @@ class FooParser
   def parse(body)
     # manually parse body
   end
+  
+  def empty?
+    false
+  end
 end
 ```
 
