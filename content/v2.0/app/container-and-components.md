@@ -15,7 +15,7 @@ Let's take a look at how this works in practice!
 
 Imagine we want our Bookshelf application to send welcome emails to new users. Assuming that we're already handling user sign ups, our task is now to create an operation for sending the welcome email. We're going to use an external mail delivery service, while sending email in both html and plain text.
 
-To acheive this, we first add two new components to our application: a _send welcome email operation_, and a _welcome email renderer_.
+To achieve this, we first add two new components to our application: a _send welcome email operation_, and a _welcome email renderer_.
 
 On the file system, this looks like:
 
