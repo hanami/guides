@@ -55,8 +55,10 @@ end
 We can see this in action in the Hanami console:
 
 ```shell
-ANALYTICS_ENABLED=true MAX_CART_ITEMS=100 bundle exec hanami console
+$ ANALYTICS_ENABLED=true MAX_CART_ITEMS=100 bundle exec hanami console
+```
 
+```ruby
 bookshelf[development]> Hanami.app["settings"].analytics_enabled
 => true
 
@@ -97,7 +99,7 @@ end
 ```
 
 ```shell
-bundle exec hanami server
+$ bundle exec hanami server
 
 ! Unable to load application: Hanami::Settings::InvalidSettingsError: Could not initialize settings. The following settings were invalid:
 
@@ -108,7 +110,7 @@ max_cart_items: can’t convert nil into Integer
 The same exception will be raised if a setting can't be correctly coerced:
 
 ```shell
-ANALYTICS_ENABLED=true MAX_CART_ITEMS="not coerceable to integer" bundle exec hanami server
+$ ANALYTICS_ENABLED=true MAX_CART_ITEMS="not coerceable to integer" bundle exec hanami server
 
 ! Unable to load application: Hanami::Settings::InvalidSettingsError: Could not initialize settings. The following settings were invalid:
 
@@ -241,7 +243,6 @@ end
 
 One benefit of using a concrete `Settings` class is that you can add methods to the settings class. This allows you to encapsulate settings-related logic and provides you with a way to a design the best interface into your settings.
 
-
 ```ruby
 module Bookshelf
   class Settings < Hanami::Settings
@@ -265,13 +266,15 @@ This allows you to maintain specific sets of per-environment variables for your 
 
 ```shell
 # .env.development
-DATABASE_URL=postgres://localhost:5432/bookshelf_development
+$ DATABASE_URL=postgres://localhost:5432/bookshelf_development
 ANALYTICS_ENABLED=true
 ```
 
 ```shell
-HANAMI_ENV=development bundle exec hanami console
+$ HANAMI_ENV=development bundle exec hanami console
+```
 
+```ruby
 bookshelf[development]> Hanami.app["settings"].database_url
 => "postgres://localhost:5432/bookshelf_development"
 
@@ -283,13 +286,15 @@ bookshelf[development]> Hanami.app["settings"].analytics_enabled
 
 ```shell
 # .env.test
-DATABASE_URL=postgres://localhost:5432/bookshelf_test
+$ DATABASE_URL=postgres://localhost:5432/bookshelf_test
 ANALYTICS_ENABLED=false
 ```
 
 ```shell
-HANAMI_ENV=test bundle exec hanami console
+$ HANAMI_ENV=test bundle exec hanami console
+```
 
+```ruby
 bookshelf[test]> Hanami.app["settings"].database_url
 => "postgres://localhost:5432/bookshelf_test"
 

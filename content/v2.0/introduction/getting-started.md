@@ -41,7 +41,7 @@ Ideally, you already have some familiarity with web applications and the [Ruby l
 To create a Hanami application, you will need Ruby 3.0 or greater. Check your ruby version:
 
 ```shell
-ruby --version
+$ ruby --version
 ```
 
 If you need to install or upgrade Ruby, follow the instructions on [ruby-lang.org](https://www.ruby-lang.org/en/documentation/installation/).
@@ -51,7 +51,7 @@ If you need to install or upgrade Ruby, follow the instructions on [ruby-lang.or
 In order to create a Hanami application, first install the hanami gem:
 
 ```shell
-gem install hanami
+$ gem install hanami
 ```
 
 ### Using the application generator
@@ -61,14 +61,14 @@ Hanami provides a `hanami new` command for generating a new application.
 Let's use it to create a new application for managing books called **bookshelf**:
 
 ```shell
-hanami new bookshelf
+$ hanami new bookshelf
 ```
 
 Running this command has created a new `bookshelf` directory in our current location. Here's what it contains:
 
 ```shell
-cd bookshelf
-tree .
+$ cd bookshelf
+$ tree .
 .
 ├── Gemfile
 ├── Gemfile.lock
@@ -120,7 +120,7 @@ We'll see this structure in more detail as this guide progresses.
 For now let's get our new application running. In the bookshelf directory, run:
 
 ```shell
-hanami server
+$ hanami server
 ```
 
 If all has gone well, you should see output similar to:
@@ -146,7 +146,7 @@ Use Ctrl-C to stop
 Visit your application in the browser at [http://localhost:2300](http://localhost:2300)
 
 ```shell
-open http://localhost:2300
+$ open http://localhost:2300
 ```
 
 You should see "Hello from Hanami".
@@ -177,7 +177,7 @@ end
 We can run that spec now to prove that it works:
 
 ```shell
-bundle exec rspec spec/requests/root_spec.rb
+$ bundle exec rspec spec/requests/root_spec.rb
 ```
 
 You should see:
@@ -209,6 +209,8 @@ end
 As we expect, when we run the spec again, it fails:
 
 ```shell
+$ bundle exec rspec spec/requests/root_spec.rb
+
 Root
   is successful (FAILED - 1)
 
@@ -260,6 +262,8 @@ end
 If we run our test again, we'll see a `Hanami::Routes::MissingActionError`:
 
 ```shell
+$ bundle exec rspec spec/requests/root_spec.rb
+
 Failures:
 
   1) Root is successful
@@ -280,7 +284,7 @@ As this error suggests, we need to create the home show action the route is expe
 Hanami provides an action generator we can use to create this action. Running this command will create the home show action:
 
 ```shell
-bundle exec hanami generate action home.show
+$ bundle exec hanami generate action home.show
 ```
 
 We can find this action in our `app` directory at `app/actions/home/show.rb`:
@@ -336,7 +340,7 @@ end
 With this change, our root spec will now pass:
 
 ```shell
-bundle exec rspec spec/requests/root_spec.rb
+$ bundle exec rspec spec/requests/root_spec.rb
 
 
 Root
@@ -377,7 +381,7 @@ If you run this test, you'll see that it fails because our application currently
 Let's fix that by generating an action for a books index:
 
 ```shell
-bundle exec hanami generate action books.index
+$ bundle exec hanami generate action books.index
 ```
 
 In addition to generating an action at `app/actions/books/index.rb`, the generator has also added a route in `config/routes.rb`:
@@ -394,7 +398,7 @@ end
 If we run our spec again, our expectation for a successful response is now satisfied, but there's a different failure:
 
 ```shell
-bundle exec rspec spec/requests/books/index_spec.rb
+$ bundle exec rspec spec/requests/books/index_spec.rb
 
 GET /books
   returns a list of books (FAILED - 1)
@@ -438,7 +442,7 @@ end
 If we run our spec, it now passes!
 
 ```shell
-bundle exec rspec spec/requests/books/index_spec.rb
+$ bundle exec rspec spec/requests/books/index_spec.rb
 
 GET /books
   returns a list of books
@@ -481,8 +485,8 @@ end
 With Postgres running, create databases for development and test using PostgreSQL's `createdb` command:
 
 ```shell
-createdb bookshelf_development
-createdb bookshelf_test
+$ createdb bookshelf_development
+$ createdb bookshelf_test
 ```
 
 In Hanami, [providers](/v2.0/app/providers/) offer a mechanism for configuring and using dependencies, like databases, within your application.
@@ -574,7 +578,7 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/bookshelf_test
 To confirm that the `database_url` setting is working as expected, you can run `bundle exec hanami console` to start a console, then call the `database_url` method on your application's settings object.
 
 ```shell
-bundle exec hanami console
+$ bundle exec hanami console
 ```
 
 ```ruby
@@ -585,7 +589,7 @@ bookshelf[development]> Hanami.app["settings"].database_url
 And in test:
 
 ```shell
-HANAMI_ENV=test bundle exec hanami console
+$ HANAMI_ENV=test bundle exec hanami console
 ```
 
 ```ruby
@@ -654,7 +658,7 @@ With persistence ready, we can now create a books table.
 To create a migration run:
 
 ```shell
-bundle exec rake db:create_migration[create_books]
+$ bundle exec rake db:create_migration[create_books]
 ```
 
 Edit the migration file in order to create a books table with title and author columns and a primary key:
@@ -676,8 +680,8 @@ end
 Migrate both the development and test databases:
 
 ```shell
-bundle exec rake db:migrate
-HANAMI_ENV=test bundle exec rake db:migrate
+$ bundle exec rake db:migrate
+$ HANAMI_ENV=test bundle exec rake db:migrate
 ```
 
 Lastly, let's add a rom-rb relation to allow our application to interact with our books table. Create the following file at `lib/bookshelf/persistence/relations/books.rb`:
@@ -762,7 +766,7 @@ end
 With this action in place, the spec passes once more:
 
 ```shell
-bundle exec rspec spec/requests/books/index_spec.rb
+$ bundle exec rspec spec/requests/books/index_spec.rb
 
 GET /books
   returns a list of books
@@ -979,6 +983,8 @@ end
 Because there's no matching route yet, this spec immediately fails:
 
 ```shell
+$ bundle exec rspec spec/requests/books/show_spec.rb
+
 GET /books/:id
   when a book matches the given id
     renders the book (FAILED - 1)
@@ -1012,7 +1018,7 @@ Finished in 0.05427 seconds (files took 0.88631 seconds to load)
 We can use Hanami's action generator to create both a route and an action. Run:
 
 ```shell
-bundle exec hanami generate action books.show
+$ bundle exec hanami generate action books.show
 ```
 
 If you inspect `config/routes.rb` you will see the generator has automatically added a new `get "/books/:id", to: "books.show"` route:
@@ -1162,7 +1168,7 @@ end
 ```
 
 ```shell
-bundle exec rspec spec/requests/books/show_spec.rb
+$ bundle exec rspec spec/requests/books/show_spec.rb
 
 GET /books/:id
   when a book matches the given id
@@ -1219,7 +1225,7 @@ Executing this spec, we get the message `Method Not Allowed`, because there's no
 Hanami's action generator can add these for us:
 
 ```shell
-bundle exec hanami generate action books.create
+$ bundle exec hanami generate action books.create
 ```
 
 The application's routes now include the expected route - invoking the `books.create` action for `POST` requests to `/books`:
@@ -1306,7 +1312,7 @@ end
 Our request spec now passes!
 
 ```shell
-bundle exec rspec spec/requests/books/create_spec.rb
+$ bundle exec rspec spec/requests/books/create_spec.rb
 
 POST /books
   given valid params
