@@ -39,12 +39,12 @@ get "/my-lambda", to: ->(env) { [200, {}, ["A Rack compatible response"]] }
 To add a full set of routes for viewing and managing books, you can either manually add the required routes to your `config/routes.rb` file, or use Hanami's action generator, which will generate actions in addition to adding routes for you.
 
 ```shell
-bundle exec hanami generate action books.index
-bundle exec hanami generate action books.show
-bundle exec hanami generate action books.new
-bundle exec hanami generate action books.create
-bundle exec hanami generate action books.update
-bundle exec hanami generate action books.destroy
+$ bundle exec hanami generate action books.index
+$ bundle exec hanami generate action books.show
+$ bundle exec hanami generate action books.new
+$ bundle exec hanami generate action books.create
+$ bundle exec hanami generate action books.update
+$ bundle exec hanami generate action books.destroy
 ```
 
 ```ruby
@@ -243,7 +243,9 @@ redirect "/old", to: "/temporary-new", code: 302
 
 Hanami provides a `hanami routes` command to inspect your application's routes. Run `bundle exec hanami routes` on the command line to view current routes:
 
-```shell title="bundle exec hanami routes"
+```shell
+$ bundle exec hanami routes
+
 GET     /                             home                          as :root
 GET     /books                        books.index
 GET     /books/:id                    books.show

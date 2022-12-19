@@ -16,7 +16,7 @@ Hanami provides a slice generator. To create an API slice, run `bundle exec hana
 This creates a directory in `slices`, adding some slice-specific classes like actions:
 
 ```shell
-bundle exec hanami generate slice api
+$ bundle exec hanami generate slice api
 
 slices
 └── api
@@ -27,7 +27,7 @@ slices
 Simply creating a new directory in `slices` will also create a slice:
 
 ```shell
-mkdir -p slices/admin
+$ mkdir -p slices/admin
 
 slices
 └── admin

@@ -166,7 +166,7 @@ $ bundle exec hanami server
 This server is for local development only. In production, use the following to start your application serving web requests with Puma:
 
 ```shell
-bundle exec puma -C config/puma.rb
+$ bundle exec puma -C config/puma.rb
 ```
 
 ## hanami version
