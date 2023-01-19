@@ -12,7 +12,7 @@ The examples on this page use [RSpec](http://rspec.info), the test framework ins
 Actions are standalone objects with an interface that's easy to test. You can simply instantiate an action as your object under test and exercise its functionality.
 
 ```ruby
-# spec/app/actions/books/index_spec.rb
+# spec/actions/books/index_spec.rb
 
 RSpec.describe Bookshelf::Actions::Books::Index do
   subject(:action) do
