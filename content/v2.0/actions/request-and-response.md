@@ -86,4 +86,4 @@ In situations where you want an action to halt, for example to return a `401 Una
 
 ### Response format
 
-The value set using `response.format` can either be a format name (`:json`) or a content type string (`"application/json"`). Consult [MIME types and formats](/v2.0/actions/mime-types-and-formats/) for more information about setting response formats.
+The value set using `response.format` can either be a format name (`:json`) or a content type string (`"application/json"`). Consult [MIME types and formats](/v2.0/actions/formats-and-mime-types/) for more information about setting response formats.
