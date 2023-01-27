@@ -109,8 +109,8 @@ Additional rules can be added to apply further constraints. The following params
 
 ```ruby
 params do
-  optional(:page).value(:integer, gte?: 1)
-  optional(:per_page).value(:integer, gte?: 1, lteq?: 100)
+  optional(:page).value(:integer, gteq?: 1)
+  optional(:per_page).value(:integer, gteq?: 1, lteq?: 100)
 end
 ```
 
@@ -126,8 +126,8 @@ module Bookshelf
     module Books
       class Index < Bookshelf::Action
         params do
-          optional(:page).value(:integer, gte?: 1)
-          optional(:per_page).value(:integer, gte?: 1, lteq?: 100)
+          optional(:page).value(:integer, gteq?: 1)
+          optional(:per_page).value(:integer, gteq?: 1, lteq?: 100)
         end
 
         def handle(request, response)
