@@ -46,7 +46,7 @@ The `cache_control` method accepts one or more of the following [Cache-Control d
 
 ## Expires
 
-The [Expires response header][mdn-expires] sets the date and time after which the response is considered expired. The Expires header is an older standard, and Cache-Control is preferred by modern browsers.
+The [Expires response header](mdn-expires) sets the date and time after which the response is considered expired. The Expires header is an older standard, and Cache-Control is preferred by modern browsers.
 
 You can use the `#expires` method on your action's response object to set this header along with a matching Cache-Control header.
 
