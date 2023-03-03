@@ -164,7 +164,7 @@ Use test doubles only when the side effects are difficult to handle in a test en
 
 Action tests are helpful for setting expectations on an action's low-level behavior. However, for many actions, testing end-to-end behavior may be more useful.
 
-For this, you can write request specs using [rack-test][rack-test], which comes included with your Hanami app.
+For this, you can write request specs using [rack-test](https://github.com/rack/rack-test), which comes included with your Hanami app.
 
 ```ruby
 # spec/requests/root_spec.rb
