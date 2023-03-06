@@ -30,14 +30,14 @@ p {
 p > code {
   background-color: #fafafa;
   padding: 0.25rem 0.15rem;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
 
 code, code[class*=language-] {
   background-color: #fafafa;
   color: #525f7f;
   font-family: monospace;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
 
 #search-form {
