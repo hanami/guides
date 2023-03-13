@@ -355,3 +355,62 @@ end
 ```
 
 You may find the `HANAMI_SLICES` environment variable more convenient since it will not disturb slice loading for all other processes running your app.
+
+## Slice routing
+
+
+By generating an action for a slice, the code generator will add the new corresponding route to `config/routes.rb`.
+
+If you need per slice Rack Middleware, you can add within the slice block:
+
+```ruby
+# frozen_string_literal: true
+
+require "omniauth/builder"
+require "omniauth-google-oauth2"
+
+module MyApp
+  class Routes < Hanami::Routes
+    root { "Hello from Hanami" }
+
+    slice :admin, at: "/admin" do
+      use OmniAuth::Builder do
+        provider :google_oauth2 # ...
+      end
+
+      get "/users", to: "users.index"
+    end
+  end
+end
+```
+
+If you want to separate the routes of your slice from those of the application, you can cut the routes from `config/routes.rb` and create a new file under the slice directory: `slices/admin/config/routes.rb`
+
+```ruby
+# frozen_string_literal: true
+
+module MyApp
+  class Routes < Hanami::Routes
+    root { "Hello from Hanami" }
+
+    slice :admin, at: "/admin"
+  end
+end
+```
+
+```ruby
+# frozen_string_literal: true
+
+require "omniauth/builder"
+require "omniauth-google-oauth2"
+
+module Admin
+  class Routes < Hanami::Routes
+    use OmniAuth::Builder do
+      provider :google_oauth2 # ...
+    end
+
+    get "/users", to: "users.index"
+  end
+end
+```
