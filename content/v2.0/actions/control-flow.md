@@ -173,8 +173,8 @@ When you call `redirect_to`, control flow is stopped and subsequent code in the 
 `redirect_to` accepts a url and an optional HTTP status, which defaults to `302`.
 
 ```ruby
-request.redirect_to("/sign-in")
-request.redirect_to("https://hanamirb.org", status: 301)
+response.redirect_to("/sign-in")
+response.redirect_to("https://hanamirb.org", status: 301)
 ```
 
 This action below shows an example of redirecting unauthenticated users to a sign in page:
