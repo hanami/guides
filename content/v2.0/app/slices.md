@@ -293,7 +293,7 @@ You can instead elect to define settings within specific slices. To do this, cre
 
 module CDN
   class Settings < Hanami::Settings
-    setting :cdn_api_key, Types::String
+    setting :cdn_api_key, constructor: Types::String
   end
 end
 ```
