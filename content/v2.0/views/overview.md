@@ -3,19 +3,22 @@ title: Overview
 order: 10
 ---
 
-Hanami provides a complete view system that offers everything you need to render responses in HTML, JSON and other formats through your application's views.
+Hanami provides a complete system for rendering HTML, JSON and other formats using views.
 
-The view system is designed to allow you to write well-factored view code that's as considered as the other parts of your application.
+In addition to templates and helpers, view features such as exposures, parts and contexts allow you to write view code that's as thoughtfully designed as the rest of your application.
 
-In addition to templates and helpers, features such as view exposures, view parts and the view context are available as you need them.
-
-For a guided walk-through of using views be sure to check out the [Getting Started Guide](/introduction/getting-started).
-
+For a guided walk-through with some example use of views, be sure to check out the [Getting Started Guide](/introduction/getting-started).
 ## A simple view
 
-Let's take a look at a simple view for rendering a home page in HTML.
+Let's see what's required to render a HTML home page.
 
-In a Hanami application, views live in the `app/views` directory (or in the `slices/my-slice/views` directory if you're using a slice).
+Two of the key concepts in Hanami's view layer are views and templates.
+
+A view represents a view in its entirety. Amongst other responsibilities, a view decides what template to render, as well as what data to expose to that template.
+
+A template - for example a `*.html.erb` or `*.html.slim` file - contains the markup to be renderd to generate the view's output.
+
+By convention, views are placed in the `app/views` directory, while templates are placed in `app/templates`.
 
 Here's what a simple home show view looks like within a `Bookshelf` application:
 
@@ -32,27 +35,19 @@ module Bookshelf
 end
 ```
 
-When it renders, this view will use the template at `app/templates/home/show.html.erb` for its content.
+By convention, when this view renders it will use the template at `app/templates/home/show.html.erb`:
 
 ```text
 <h1>Welcome to Bookshelf</h1>
 ```
 
-It will also use the layout at `app/templates/layouts/app.html.erb`.
+With a root route configured to call a home show action as below, we have all we need to render the home page in response to a HTTP request.
 
-```text
-<html>
-  <body>
-    <%= yield %>
-  </body>
-</html>
-```
-
-To see the result of our view, let's have our home show action invoke it in response to a HTTP request.
-
-Assuming a route to have requests to the root handled by a home show action is configured in `config/routes.rb`:
+By convention, this home show action will automatically render the matching home show view.
 
 ```ruby
+# config/routes.rb
+
 module Bookshelf
   class Routes < Hanami::Routes
     root to: "home.show"
@@ -60,7 +55,6 @@ module Bookshelf
 end
 ```
 
-Then the following home show action will, by convention, automatically invoke the home show view, rendering the expected response.
 
 ```ruby
 # app/actions/home/show.rb
@@ -70,6 +64,7 @@ module Bookshelf
     module Home
       class Show < Bookshelf::Action
         def handle(*, response)
+          # this Home::Show action will automatically render its matching Home::Show view
         end
       end
     end
@@ -79,8 +74,8 @@ end
 
 <p><img src="/v2.0/views/welcome-to-bookshelf.png" alt="Welcome to Bookshelf" class="img-responsive"></p>
 
-To achieve the same result, we could also have made the connection between the action and the view explicit, by passing the view to the response object's `#render` method, as below.
 
+Should we choose, we can also make the connection between the action and the view explicit. To do this, we include the home show view via Hanami's Deps mixin and pass it to the `#render` method of the response object.
 
 ```ruby
 # app/actions/home/show.rb
@@ -91,7 +86,7 @@ module Bookshelf
       class Show < Bookshelf::Action
         include Deps[view: "views.home.show"]
 
-        def handle(request, response)
+        def handle(*, response)
           response.render view
         end
       end
@@ -100,7 +95,28 @@ module Bookshelf
 end
 ```
 
-Views can also render decoupled from the request and response cycle, making them highly flexible for situations that call for background rendering (such as rendering emails or composing instant messages), as well as for testing.
+
+Using this same approach, we could choose to render a different view.
+
+```ruby
+# app/actions/home/show.rb
+
+module Bookshelf
+  module Actions
+    module Home
+      class Show < Bookshelf::Action
+        include Deps[view: "views.home.experiment_b.show"]
+
+        def handle(*, response)
+          response.render view
+        end
+      end
+    end
+  end
+end
+```
+
+It's important to note that views can also be rendered outside of the request and response cycle. This means they can be used to render emails, instant messages or other content in background processes. It also means they're readily testable.
 
 We can see this in action in the Hanami console:
 
@@ -110,5 +126,21 @@ bundle exec hanami console
 bookshelf[development]> Hanami.app["views.home.show"].call.to_s
 => "<html><body><h1>Welcome to Bookshelf</h1></body></html>"
 ```
+
+Or in an RSpec example:
+
+```ruby
+RSpec.describe Views::Home::Show, "#call" do
+  subject(:view) { described_class.new }
+
+  let(:output) { view.call }
+
+  it "contains a welcome heading" do
+    expect(output).to have_selector "h1", text: "Welcome to Bookshelf"
+  end
+end
+```
+
+TODO: check the above spec works :)
 
 ## Key concepts in Hanami view
