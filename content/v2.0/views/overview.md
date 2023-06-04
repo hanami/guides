@@ -5,12 +5,11 @@ order: 10
 
 Hanami provides a complete system for rendering HTML, JSON and other formats using views.
 
-In addition to templates and helpers, view features such as exposures, parts and contexts allow you to write view code that's as thoughtfully designed as the rest of your application.
+In addition to templates and helpers, features such as exposures, parts and contexts allow you to write views that are as thoughtfully designed as the rest of your application.
 
 For a guided walk-through with some example use of views, be sure to check out the [Getting Started Guide](/introduction/getting-started).
-## A simple view
+## Introduction
 
-Let's see what's required to render a HTML home page.
 
 Two of the key concepts in Hanami's view layer are views and templates.
 
@@ -20,7 +19,7 @@ A template - for example a `*.html.erb` or `*.html.slim` file - contains the mar
 
 By convention, views are placed in the `app/views` directory, while templates are placed in `app/templates`.
 
-Here's what a simple home show view looks like within a `Bookshelf` application:
+Here's what a simple home show view for rendering a HTML home page looks like within a `Bookshelf` application.
 
 ```ruby
 # app/views/home/show.rb
@@ -75,7 +74,9 @@ end
 <p><img src="/v2.0/views/welcome-to-bookshelf.png" alt="Welcome to Bookshelf" class="img-responsive"></p>
 
 
-Should we choose, we can also make the connection between the action and the view explicit. To do this, we include the home show view via Hanami's Deps mixin and pass it to the `#render` method of the response object.
+Should we choose, we can also make the connection between the action and the view explicit rather than automatic.
+
+To do this, we include the home show view via Hanami's Deps mixin and pass it to the `#render` method of the response object.
 
 ```ruby
 # app/actions/home/show.rb
@@ -96,7 +97,7 @@ end
 ```
 
 
-Using this same approach, we could choose to render a different view.
+Using this approach, we can choose to render a different view.
 
 ```ruby
 # app/actions/home/show.rb
@@ -130,13 +131,15 @@ bookshelf[development]> Hanami.app["views.home.show"].call.to_s
 Or in an RSpec example:
 
 ```ruby
-RSpec.describe Views::Home::Show, "#call" do
+RSpec.describe Views::Home::Show do
   subject(:view) { described_class.new }
 
-  let(:output) { view.call }
+  describe "#call" do
+    subject(:output) { view.call }
 
-  it "contains a welcome heading" do
-    expect(output).to have_selector "h1", text: "Welcome to Bookshelf"
+    it "renders a welcome heading" do
+      expect(output.to_s).to have_selector "h1", text: "Welcome to Bookshelf"
+    end
   end
 end
 ```
@@ -144,3 +147,6 @@ end
 TODO: check the above spec works :)
 
 ## Key concepts in Hanami view
+
+
+TODO: list and link to each section.
