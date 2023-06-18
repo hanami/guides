@@ -5,19 +5,21 @@ order: 10
 
 Hanami provides a complete system for rendering HTML, JSON and other formats using views.
 
-In addition to templates and helpers, features such as exposures, parts and contexts allow you to write views that are as thoughtfully designed as the rest of your application.
+In addition to templates and helpers, features such as exposures, parts and contexts provide the tools needed to write well-architected view code.
 
-For a guided walk-through with some example use of views, be sure to check out the [Getting Started Guide](/introduction/getting-started).
+<p class="notice">
+  For a guided walk-through of Hanami with some example use of views, be sure to check out the <a href="/v2.0/introduction/getting-started/">Getting Started Guide</a>.
+</p>
+
 ## Introduction
 
+When rendering content, the key class to reach for in Hanami is a view. A view represents a view in its entirety. It decides what template to render, as well as what data to expose to that template.
 
-Two of the key concepts in Hanami's view layer are views and templates.
+A template - for example a `*.html.erb` or `*.html.slim` file - contains the markup that will be used to render the view's output.
 
-A view represents a view in its entirety. Amongst other responsibilities, a view decides what template to render, as well as what data to expose to that template.
+By convention, views are placed in the `app/views` directory, with templates placed in `app/templates`.
 
-A template - for example a `*.html.erb` or `*.html.slim` file - contains the markup to be renderd to generate the view's output.
-
-By convention, views are placed in the `app/views` directory, while templates are placed in `app/templates`.
+### Rendering a simple home page
 
 Here's what a simple home show view for rendering a HTML home page looks like within a `Bookshelf` application.
 
@@ -34,7 +36,7 @@ module Bookshelf
 end
 ```
 
-By convention, when this view renders it will use the template at `app/templates/home/show.html.erb`:
+This view will use the template at `app/templates/home/show.html.erb`, which might look like:
 
 ```text
 <h1>Welcome to Bookshelf</h1>
@@ -63,7 +65,7 @@ module Bookshelf
     module Home
       class Show < Bookshelf::Action
         def handle(*, response)
-          # this Home::Show action will automatically render its matching Home::Show view
+          # This Home::Show action will automatically render a matching Home::Show view
         end
       end
     end
@@ -73,6 +75,8 @@ end
 
 <p><img src="/v2.0/views/welcome-to-bookshelf.png" alt="Welcome to Bookshelf" class="img-responsive"></p>
 
+
+### Rendering views explicitly
 
 Should we choose, we can also make the connection between the action and the view explicit rather than automatic.
 
@@ -148,5 +152,20 @@ TODO: check the above spec works :)
 
 ## Key concepts in Hanami view
 
-
 TODO: list and link to each section.
+
+
+Views
+
+ - Exposures
+
+Parts
+
+Helpers
+ - form helpers
+
+Templates
+
+Formats
+
+HTML escaping
