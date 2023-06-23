@@ -11,9 +11,11 @@ In addition to templates and helpers, features such as exposures, parts and cont
   For a guided walk-through of Hanami with some example use of views, be sure to check out the <a href="/v2.0/introduction/getting-started/">Getting Started Guide</a>.
 </p>
 
-## Introduction
+## Introduction: views and templates
 
-When rendering content, the key class to reach for in Hanami is a view. A view represents a view in its entirety. It decides what template to render, as well as what data to expose to that template.
+When rendering content, the key class to reach for in Hanami is a view.
+
+A view represents a view in its entirety. It decides which template to render, as well as what data to expose to that template.
 
 A template - for example a `*.html.erb` or `*.html.slim` file - contains the markup that will be used to render the view's output.
 
@@ -36,15 +38,14 @@ module Bookshelf
 end
 ```
 
-This view will use the template at `app/templates/home/show.html.erb`, which might look like:
+The view will use the template at `app/templates/home/show.html.erb`, which could look like:
 
 ```text
 <h1>Welcome to Bookshelf</h1>
 ```
 
-With a root route configured to call a home show action as below, we have all we need to render the home page in response to a HTTP request.
+This view and template are all that's needed to render the home page in response to a HTTP request, assuming the following route and action are defined:
 
-By convention, this home show action will automatically render the matching home show view.
 
 ```ruby
 # config/routes.rb
@@ -75,12 +76,17 @@ end
 
 <p><img src="/v2.0/views/welcome-to-bookshelf.png" alt="Welcome to Bookshelf" class="img-responsive"></p>
 
+### Automatic view rendering
 
-### Rendering views explicitly
+By convention, Hanami actions will automatically render a corresponding view.
 
-Should we choose, we can also make the connection between the action and the view explicit rather than automatic.
+For instance, a `Books::Index` (`app/actions/books/index.rb`) action will render a `Books::Index` view (`app/views/books/index.rb`), should one exist. A `Pages::Contact` action will render a `Pages::Contact` view, and so on.
 
-To do this, we include the home show view via Hanami's Deps mixin and pass it to the `#render` method of the response object.
+### Explicit view rendering
+
+Should you choose, you can make the connection between the action and the view explicit rather than automatic.
+
+To do this, use the Deps mixin to pass a view object to the `#render` method of the response object. This will assign the result of the view rendering to the body of the outgoing response.
 
 ```ruby
 # app/actions/home/show.rb
@@ -100,8 +106,7 @@ module Bookshelf
 end
 ```
 
-
-Using this approach, we can choose to render a different view.
+Using this approach, you can choose to render a different view.
 
 ```ruby
 # app/actions/home/show.rb
