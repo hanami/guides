@@ -10,16 +10,15 @@ One of the key responsibilities of a view is to source any data required by its 
 Imagine the following ERB template for showing a book, located at `app/templates/books/show.html.erb`:
 
 ```text
-<h1><%= book[:title] %></h1>
-<p><%= book[:description] %></p>
+<h1><%= book.title %></h1>
+<p><%= book.description %></p>
 ```
 
-To render, this template requires a book object. The view can provide that book object to the template using an __exposure__.
-
+To render, this template requires a book object. The books show view can provide that book object to the template using an __exposure__.
 
 ## Exposures
 
-Exposures are the mechanism that allow values to be passed from views to templates. They are defined using the `#expose` method, which accepts a symbol specifying the exposure's name. Here, the exposed book is a hash with a title and description:
+Exposures are the mechanism that allow values to be passed from views to templates. They are defined using the `#expose` method, which accepts a symbol specifying the exposure's name. Here the exposed book is a struct with a title and description:
 
 ```ruby
 # app/views/books/show.rb
@@ -28,8 +27,10 @@ module Bookshelf
   module Views
     module Books
       class Show < Bookshelf::View
+        Book = Struct.new(:title, :description, keyword_init: true)
+
         expose :book do
-          {title: "Pride and Prejudice", description: "The 1813 Jane Austen classic."}
+          Book.new(title: "Pride and Prejudice", description: "The 1813 Jane Austen classic.")
         end
       end
     end
@@ -39,18 +40,21 @@ end
 
 When called, the books show view will now render:
 
-```ruby
-bundle exec hanami console
+```shell
+$ curl http://localhost:2300/books/1
 
-bookshelf[development]> Bookshelf::App["views.books.show"].call.to_s
-=> "<html><body><h1>Pride and Prejudice</h1><p>The 1813 Jane Austen classic.</p></body></html>"
+<html>
+  <body>
+    <h1>Pride and Prejudice</h1>
+    <p>The 1813 Jane Austen classic.</p>
+  </body>
+</html>
 ```
-
 ## View input
 
-Of course in a real application you may want to source book information from a database, and render the specific book requested.
+To render a specific book from a data store, the view needs to know what book to render. A specific id or a slug can be passed to the view as view input.
 
-Assuming the books show action services a route like `GET /books/:id`, the requested book id can be passed from the action to the view as view input:
+For example, assuming the books show action services a route like `GET /books/:id`, the requested book id can be passed from the action to view as an argument to the view:
 
 ```ruby
 # app/actions/books/show.rb
@@ -68,9 +72,8 @@ module Bookshelf
 end
 ```
 
-Within the view itself, inputs are available as keyword arguments to exposure blocks.
+Within the view, inputs are available as keyword arguments to exposure blocks:
 
-Now that `id` is provided as input, the view can expose the right book to its template using a book repository that fetches from the database:
 
 ```ruby
 # app/views/books/show.rb
@@ -89,6 +92,9 @@ module Bookshelf
   end
 end
 ```
+
+Now that `id` is provided as input, the view can expose the requested book to its template using a book repository that fetches from the database.
+
 
 ### Exposing input to the template
 
@@ -112,10 +118,7 @@ end
 <p>You are searching for <%= query %></p>
 ```
 
-
-
-
-### Providing input defaults
+### Specifying input defaults
 
 For optional input data, you can provide a default values (either `nil` or something more meaningful). A books index view might have defaults for page and per_page:
 
@@ -140,7 +143,9 @@ end
 
 ### Depending on other exposures
 
-Sometimes one exposure will depend on value of another. You can depend on another exposure by naming it as a positional argument for your exposure block. Below, the author exposure depends on the book exposure, allowing the author to be fetched based on the book's `author_id`.
+Sometimes one exposure will depend on value of another. You can depend on another exposure by naming it as a positional argument in your exposure block.
+
+Below, the author exposure depends on the book exposure, allowing the author to be fetched based on the book's `author_id`.
 
 ```ruby
 # app/views/books/show.rb
@@ -166,3 +171,52 @@ module Bookshelf
   end
 end
 ```
+
+## Private exposures
+
+You can create private exposures that are not passed to the template. This is helpful if you have an exposure that other exposures will depend on, but is not otherwise needed in the template.
+
+Here, only the author's name is exposed:
+
+```ruby
+# app/views/authors/show.rb
+
+module Bookshelf
+  module Views
+    module Authors
+      class Show < Bookshelf::View
+        include Deps["repositories.author_repo"]
+
+        private_expose :author do |author_id:|
+          author_repo.get!(author_id)
+        end
+
+        expose :author_name do |author|
+          author.name
+        end
+      end
+    end
+  end
+end
+```
+
+## Layout exposures
+
+
+Exposure values are made available only to the template by default. To make an exposure available to the [layout](/v2.0/views/templates-and-partials/), use the `layout: true` option:
+
+
+```ruby
+expose :recommended_books, layout: true do
+  book_repo.recommended_listing
+end
+```
+
+## Undecorated exposures
+
+By default, exposures are decorated by a [part](/v2.0/views/parts/). To opt out of part decoration use the `decorate: false` option. This may be helpful when you are exposing a "primitive" object that requires no extra behaviour, like a number or a string.
+
+```ruby
+expose :page_number, decorate: false
+```
+
