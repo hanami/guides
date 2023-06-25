@@ -5,7 +5,7 @@ order: 15
 
 Each view in a Hanami application starts with a view class. In the same way that actions inherit from a base action class, views inherit from a base view class at (defined in `app/view.rb`).
 
-One of the key responsibilities of a view is to source any data required by its template.
+One of the key responsibilities of a view is to source any data required by its template. To know what data to surface, a view might need some input such as the `id` of an item to render, or what page of results from a collection to display.
 
 Imagine the following ERB template for showing a book, located at `app/templates/books/show.html.erb`:
 
@@ -14,11 +14,11 @@ Imagine the following ERB template for showing a book, located at `app/templates
 <p><%= book.description %></p>
 ```
 
-To render, this template requires a book object. The books show view can provide that book object to the template using an __exposure__.
+To render, this template requires a book object. A view can provide that book object to the template using an __exposure__.
 
 ## Exposures
 
-Exposures are the mechanism that allow values to be passed from views to templates. They are defined using the `#expose` method, which accepts a symbol specifying the exposure's name. Here the exposed book is a struct with a title and description:
+Exposures are the mechanism that allow values to be passed from views to templates. They are defined using the `#expose` method, which accepts a symbol specifying the exposure's name. Here, as an example, the exposed book is a struct with a title and description:
 
 ```ruby
 # app/views/books/show.rb
@@ -38,7 +38,7 @@ module Bookshelf
 end
 ```
 
-When called, the books show view will now render:
+When called from an action, the books show view will now render:
 
 ```shell
 $ curl http://localhost:2300/books/1
@@ -52,9 +52,9 @@ $ curl http://localhost:2300/books/1
 ```
 ## View input
 
-To render a specific book from a data store, the view needs to know what book to render. A specific id or a slug can be passed to the view as view input.
+To render a specific book from a data store, the view needs to know what book to render. A specific id or a slug can be passed to the view as __view input__.
 
-For example, assuming the books show action services a route like `GET /books/:id`, the requested book id can be passed from the action to view as an argument to the view:
+For example, assuming the books show action services a route like `GET /books/:id`, the requested book id can be passed from the action below to view as an argument to the view:
 
 ```ruby
 # app/actions/books/show.rb
@@ -95,30 +95,44 @@ end
 
 Now that `id` is provided as input, the view can expose the requested book to its template using a book repository that fetches from the database.
 
+## Using the response object to provide input
 
-### Exposing input to the template
-
-View inputs can be exposed to templates directly:
+An alternative way to provide view input is to set properties on the response object. The following two actions are equivalent:
 
 ```ruby
-# app/views/books/search.rb
+# app/actions/books/index.rb
 
 module Bookshelf
-  module Views
+  module Actions
     module Books
-      class Search < Bookshelf::View
-        expose :query
+      class Index < Bookshelf::Action
+        def handle(*, response)
+          response.render view, page: request.params[:page], per_page: request.params[:per_page]
+        end
       end
     end
   end
 end
 ```
 
-```text
-<p>You are searching for <%= query %></p>
+```ruby
+# app/actions/books/index.rb
+
+module Bookshelf
+  module Actions
+    module Books
+      class Index < Bookshelf::Action
+        def handle(request, response)
+          response[:page] = request.params[:page]
+          response[:per_page] = request.params[:per_page]
+        end
+      end
+    end
+  end
+end
 ```
 
-### Specifying input defaults
+## Specifying input defaults
 
 For optional input data, you can provide a default values (either `nil` or something more meaningful). A books index view might have defaults for page and per_page:
 
@@ -141,7 +155,29 @@ module Bookshelf
 end
 ```
 
-### Depending on other exposures
+## Exposing input to the template
+
+View inputs can be exposed to templates directly:
+
+```ruby
+# app/views/books/search.rb
+
+module Bookshelf
+  module Views
+    module Books
+      class Search < Bookshelf::View
+        expose :query
+      end
+    end
+  end
+end
+```
+
+```text
+<p>You are searching for <%= query %></p>
+```
+
+## Depending on other exposures
 
 Sometimes one exposure will depend on value of another. You can depend on another exposure by naming it as a positional argument in your exposure block.
 
@@ -176,7 +212,7 @@ end
 
 You can create private exposures that are not passed to the template. This is helpful if you have an exposure that other exposures will depend on, but is not otherwise needed in the template.
 
-Here, only the author's name is exposed:
+Here only the author's name is exposed:
 
 ```ruby
 # app/views/authors/show.rb

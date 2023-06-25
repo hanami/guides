@@ -3,11 +3,11 @@ title: Action integration
 order: 20
 ---
 
-Hanami actions are designed to work seamlessly with Hanami views, with features like automatic view rendering and support for a context object that offers views access to the current request.
+Hanami actions are designed to work seamlessly with Hanami views, with features like automatic view rendering and support for a context object that gives views access to details like the current request.
 
 ### Automatic view rendering
 
-By convention, Hanami actions will automatically render a corresponding view, should that view exist.
+By convention, Hanami actions will automatically render a corresponding view (assuming that view exists).
 
 For example, this `Pages::Contact` action will render a `Pages::Contact` view:
 

@@ -190,15 +190,15 @@ module Bookshelf
   module Views
     module Books
       class Index < Bookshelf::View
-        config.template = "books/index" # which template to render
-        config.layout = "app" # which layout to use. Set to false or nil to use no layout
+        config.template = "books/index" # configure which template to render
+        config.layout = "app" # configure which layout to use. Set to false or nil to use no layout
       end
     end
   end
 end
 ```
 
-See more in Configuration.
+See more in [configuration](/v2.0/views/configuration/).
 
 ### Stand-alone rendering
 
@@ -237,12 +237,11 @@ end
 
 TODO: list and link to each section.
 
-
 Input and exposures
 
 Action integration
 
-Partials
+Templates and partials
 
 Helpers
 
@@ -250,7 +249,6 @@ Parts
 
 Context
 
-Formats <- templates?
 
 
 
