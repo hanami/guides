@@ -1,0 +1,317 @@
+// Variables
+
+$color-cyan: #35DDFF;
+$color-purple: #685D9F;
+$color-orange: #fc7c5f;
+$color-red: #FF6886;
+$color-mid-red: #ae2323;
+$color-green: #46E895;
+$color-yellow: #FFD842;
+$color-blue: #525f7f;
+
+// Mixins
+
+@mixin disabled {
+  color: #fff;
+  border-color: #CC3553;
+  background-color: #CC3553;
+}
+
+// Explicit Element Styling
+
+body {
+  color: $color-blue;
+  position: relative;
+}
+
+a {
+
+  &:link,
+  &:visited {
+    color: $color-purple;
+    font-weight: 400;
+  }
+
+  &:hover,
+  &:active {
+    text-decoration: underline;
+  }
+
+  &.text-primary {
+
+    &:hover,
+    &:focus {
+      color: #79BD8F !important;
+    }
+  }
+}
+
+code {
+  color: $color-mid-red;
+  padding: 0.2em 0.1em;
+  font-family: monospace;
+}
+
+main p {
+  min-width: 100%;
+  font-weight: 400; // Override Argon's 300
+}
+
+.notice,
+.convention,
+.warning,
+.alert {
+  border-radius: .25rem;
+  border: 0;
+  color: #333;
+  font-size: .875rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  padding: 1rem 1.5rem;
+  position: relative;
+
+  code {
+    background-color: rgba(#f5f7ff, 0.8);
+    color: $color-blue;
+    padding: 0.3em 0.1em;
+  }
+}
+
+.notice {
+  border-color: $color-cyan;
+  background-color: rgba($color-cyan, 0.3);
+}
+
+.convention {
+  border-color: $color-green;
+  background-color: rgba($color-green, 0.3);
+}
+
+.warning {
+  border-color: $color-orange;
+  background-color: rgba($color-orange, 0.3);
+}
+
+header.navbar {
+  background-color: $color-purple;
+}
+
+div.highlight>pre {
+  padding: 1em;
+}
+
+.img-responsive {
+  width: 100%;
+  height: 100%;
+}
+
+// Classes
+
+.headroom--not-top {
+  background-color: $color-purple !important;
+}
+
+.section-shaped .shape-hanami {
+  &:nth-child(1) {
+    background: linear-gradient(150deg, $color-purple 15%, $color-cyan 70%, $color-green 94%);
+  }
+
+  &:nth-child(2),
+  &:nth-child(3),
+  &:nth-child(4),
+  &:nth-child(5) {
+    background: $color-cyan;
+  }
+
+  &:nth-child(6) {
+    background: $color-cyan;
+  }
+}
+
+.icon-shape-primary {
+  color: #FF6138;
+  background-color: rgba($color-purple, 0.5);
+}
+
+.bg-gradient-learn-more {
+  background: linear-gradient(87deg, $color-green 0, $color-cyan 100%) !important;
+}
+
+// Badges
+
+.badge-primary {
+  color: #FFFF9D;
+  background-color: rgba($color-green, .8);
+}
+
+.badge-secondary {
+  color: $color-purple;
+  background-color: rgba($color-green, .5);
+}
+
+.badge-secondary[href]:hover,
+.badge-secondary[href]:focus {
+  text-decoration: none;
+
+  color: #212529;
+  background-color: #d6dae2;
+}
+
+// Buttons
+
+.btn-wrapper a {
+  color: #FFF;
+}
+
+.btn-clipboard,
+.btn-clipboard:hover {
+  background-color: $color-purple;
+
+  &:hover {
+    background-color: darken($color-purple, 10%);
+  }
+}
+
+.btn-primary {
+  color: #fff;
+  border-color: $color-red;
+  background-color: $color-red;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
+
+  &:hover {
+    color: #fff;
+    border-color: #FF7997;
+    background-color: #FF7997;
+  }
+
+  &:focus,
+  .focus {
+    box-shadow:
+      0 4px 6px rgba(50, 50, 93, .11),
+      0 1px 3px rgba(0, 0, 0, .08),
+      0 0 0 0 rgba(94, 114, 228, .5);
+  }
+
+  &:disabled,
+  .disabled {
+    @include disabled;
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    @include disabled;
+  }
+
+  &:not(:disabled):not(.disabled):active:focus,
+  &:not(:disabled):not(.disabled).active:focus {
+    box-shadow: none, 0 0 0 0 rgba(94, 114, 228, .5);
+  }
+}
+
+.show>.btn-primary {
+  .dropdown-toggle {
+    @include disabled;
+
+    &:focus {
+      box-shadow: none, 0 0 0 0 rgba(94, 114, 228, .5);
+    }
+  }
+}
+
+.btn-outline-primary {
+  color: $color-purple;
+  border-color: $color-purple;
+
+  &:hover,
+  &:active,
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    color: #fff;
+    border-color: $color-purple;
+    background-color: $color-purple;
+  }
+}
+
+// Navigation
+
+#secondary-navigation {
+  a {
+
+    &:link,
+    &:visited {
+      color: #99979c;
+    }
+
+    &:hover,
+    &:active {
+      color: $color-purple;
+    }
+  }
+}
+
+.nav-link.active {
+  font-weight: 500;
+  padding-left: 1.5rem;
+  color: $color-purple !important;
+  background-color: transparent;
+}
+
+.ct-content {
+  .ct-page-title {
+    border-left: 5px solid $color-purple;
+  }
+}
+
+.ct-sidebar {
+  .ct-links {
+    .ct-toc-item {
+      .active {
+        a {
+          color: $color-purple;
+
+          &:hover,
+          &:active {
+            color: lighten($color-purple, 10%);
+          }
+
+          &:before {
+            background-color: $color-purple;
+          }
+        }
+      }
+
+      .ct-toc-link {
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 500;
+      }
+
+      .ct-sidenav {
+        margin-left: 0.5em;
+      }
+    }
+  }
+}
+
+// Text
+
+.text-align-right {
+  text-align: right;
+}
+
+.text-primary {
+  color: lighten($color-purple, 10%) !important;
+}
+
+// IDs
+
+#search-form {
+  display: none;
+}
+
+#getting-started-lead {
+  background-color: #f7f8f9;
+  font-size: 1.1em;
+  padding: 1em;
+  min-width: 100%;
+}

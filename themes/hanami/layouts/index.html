@@ -34,7 +34,15 @@
     <link href="{{ "/assets/vendor/font-awesome/css/font-awesome.min.css" | relURL }}" rel="stylesheet">
     <!-- Argon CSS -->
     <link type="text/css" href="{{ "/assets/css/argon.css?v=1.0.1" | relURL }}" rel="stylesheet">
-    <link type="text/css" href="{{ "/assets/css/theme.css" | relURL }}" rel="stylesheet">
+
+    {{ $sass := resources.Get "scss/main.scss" }}
+    {{ $style := $sass | resources.ToCSS | resources.Fingerprint }}
+    <link rel="stylesheet"
+      href="{{ $style.Permalink }}"
+      integrity="{{ $style.Data.Integrity }}"
+    >
+
+    <!-- <link type="text/css" href="{{ "/assets/css/theme.css" | relURL }}" rel="stylesheet"> -->
     <!-- Docs CSS -->
     <link type="text/css" href="{{ "/assets/css/docs.min.css" | relURL }}" rel="stylesheet">
     <!-- Search CSS -->
