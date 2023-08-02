@@ -12,14 +12,14 @@ In non-production environments, structured logs are turned into easy read text l
 To log a text entry, simply use a logger method with a name corresponding to the log level that you want to use. Let's say you want to log an entry with `INFO` level:
 
 ```ruby
-bookshelf[development]> app["logger"].info "Hello World"
+bookshelf[development]> App["logger"].info "Hello World"
 # [bookshelf] [INFO] [2022-11-20 13:47:13 +0100] Hello World
 ```
 
 If you wanted to log an error:
 
 ```ruby
-bookshelf[development]> app["logger"].error "Something's wrong"
+bookshelf[development]> App["logger"].error "Something's wrong"
 # [bookshelf] [ERROR] [2022-11-20 13:48:05 +0100] Something's wrong
 ```
 
@@ -36,14 +36,14 @@ The following logging methods are available:
 In addition to plain text logging, you can log arbitrary data by passing a log entry *payload* to a log method:
 
 ```ruby
-bookshelf[development]> app["logger"].info "Hello World", component: "admin"
+bookshelf[development]> App["logger"].info "Hello World", component: "admin"
 # [bookshelf] [INFO] [2022-11-20 13:50:43 +0100] Hello World component="admin"
 ```
 
 The text message argument *is not mandatory*, which means that you can only provide the *payload*:
 
 ```ruby
-bookshelf[development]> app["logger"].info text: "Hello World", component: "admin"
+bookshelf[development]> App["logger"].info text: "Hello World", component: "admin"
 # [bookshelf] [INFO] [2022-11-20 13:51:40 +0100] text="Hello World" component="admin"
 ```
 
@@ -57,7 +57,7 @@ Hanami logger supports logging exceptions out of the box without the need to wri
 bookshelf[development]> begin
 bookshelf[development]>   raise "OH NOEZ!"
 bookshelf[development]> rescue => e
-bookshelf[development]>   app["logger"].error(e)
+bookshelf[development]>   App["logger"].error(e)
 bookshelf[development]> end
 # [bookshelf] [ERROR] [2022-11-20 13:54:55 +0100]
 #   OH NOEZ! (RuntimeError)
@@ -71,7 +71,7 @@ You can also pass in any additional information that should be helpful in a payl
 bookshelf[development]> begin
 bookshelf[development]>   raise "OH NOEZ!"
 bookshelf[development]> rescue => e
-bookshelf[development]>   app["logger"].error(e, component: "admin")
+bookshelf[development]>   App["logger"].error(e, component: "admin")
 bookshelf[development]> end
 # [bookshelf] [ERROR] [2022-11-20 13:56:36 +0100] component="console"
 #   OH NOEZ! (RuntimeError)
