@@ -67,6 +67,8 @@ module Bookshelf
 end
 ```
 
+[mdn-expires]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expires
+
 ## Conditional requests
 
 [HTTP conditional requests][mdn-conditional-requests] are an interaction between the server and a client wherein the result of a request can be changed by comparing the related server resource with the value of a validator. These requests can be useful to validate the content of a client's cache for the given resource.
