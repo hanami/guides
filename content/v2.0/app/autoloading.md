@@ -153,7 +153,7 @@ end
 
 ## Inflections
 
-If you need to configure acronyms like "DB" or "WNBA", add them to the infector configuration in the app class:
+If you need to configure acronyms like "DB" or "WNBA", add them to the inflector configuration in the app class:
 
 ```ruby
 # config/app.rb
