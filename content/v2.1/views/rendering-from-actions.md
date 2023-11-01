@@ -26,11 +26,11 @@ module Bookshelf
 end
 ```
 
-When automatically rendering a view, the request's params hash will be passed directly to the view as its arguments.
+When automatically rendering a view, the request's params hash will be passed directly to the view as its [input](/v2.1/views/input-and-exposures/).
 
 ## Explicit view rendering
 
-In many cases, you'll want to exercise greater control over the arguments you pass to your view. To do this, pass those arguments (along with the view itself) to `response.render`:
+In many cases, you'll want to exercise greater control over the input you pass to your view. To do this, pass your input (along with the view itself) to `response.render`:
 
 ```ruby
 # app/actions/pages/contact.rb
