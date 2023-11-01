@@ -107,6 +107,15 @@ Actions named according to RESTful conventions will automatically look for an al
 
 This allows you to reuse such views across both their relevant RESTful actions. For example, you can use a single `Books::New` view from both `Books::New` and `Books::Create` actions, with the latter action likely to re-render the `Books::New` view in the case of an invalid form submission.
 
+## Accessing request details
+
+Views rendered from actions make the action's current request available in their [context](/v2.1/views/context/). This means you can use the following methods inside your templates, parts and scopes:
+
+- `#request`
+- `#session`
+- `#flash`
+- `#csrf_token`
+
 ## Disabling automatic view rendering
 
 To disable automatic rendering from actions, define an `#auto_render?(response)` method in the action that returns false:
