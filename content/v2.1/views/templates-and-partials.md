@@ -5,7 +5,7 @@ order: 40
 
 Every view has a template, which is given the values from the view's [exposures](/v2.1/views/input-and-exposures) and then used to render the view's output.
 
-Templates in Hanami are kept the `templates/` directory in the root of `app/` and each slice directory.
+Templates are kept the `templates/` directory in the root of `app/` and each slice directory.
 
 Each view looks for a template that matches its name. For example, given a `Books::Show` view, a template named `books/show` will be located within the templates directory.
 
