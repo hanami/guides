@@ -7,7 +7,7 @@ order: 20
 
 `escape_html` (also aliased as `h`) returns an escaped string that is [safe to include in HTML templates](/v2.1/views/templates/). Use this helper when including any untrusted user input in HTML content, particularly within other helpers that mix untrusted input among HTML tags.
 
-This helper marks the escaped string marked as HTML-safe, ensuring it will not be escaped again. If the given string is already marked as HTML-safe, then it will be returned without escaping.
+This helper marks the escaped string marked as HTML safe, ensuring it will not be escaped again. If the given string is already marked as HTML safe, then it will be returned without escaping.
 
 ```ruby
 escape_html("Safe content")
@@ -22,7 +22,7 @@ escape_html(raw("<p>Not escaped</p>"))
 
 ## Bypassing HTML escaping
 
-`raw` returns the given string marked as HTML-safe (regardless of its content), meaning it will not be escaped when included in your view's HTML.
+`raw` returns the given string marked as HTML safe (regardless of its content), meaning it will not be escaped when included in your view's HTML.
 
 **This is NOT recommended if the string is coming from untrusted user input. Use at your own peril.**
 
