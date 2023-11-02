@@ -9,7 +9,7 @@ Parts are fully integrated into the view rendering environment, which means that
 
 This means you can move much of your view logic out of templates and into parts. This makes your templates simpler and easier to follow, and puts your view logic into a place where it can be reused and refactored using typical object oriented approaches, as well as tested in isolation.
 
-## Defining parts
+## Defining part classes
 
 Parts are kept in the `Views::Parts` namespace within your app or slice. For example:
 
@@ -21,7 +21,7 @@ Parts are kept in the `Views::Parts` namespace within your app or slice. For exa
 module Bookshelf
   module Views
     module Parts
-      class Book < Bookshelf::View::Part
+      class Book < Bookshelf::Views::Part
       end
     end
   end
@@ -176,9 +176,8 @@ You can access the [context](/v2.1/views/context/) for the view's current render
 
 ```ruby
 class Book < Bookshelf::Views::Part
-  def word_count
-  # TODO
-    value.cover_url || context.assets["book-cover-default.png"].url
+  def path
+    context.routes.path(:book, id)
   end
 end
 ```
@@ -203,7 +202,7 @@ decorate :author, as: :person
 
 ## Memoizing methods
 
-A part object lives for the entirety of a single view rendering, so you can memoize expensive operations to ensure they on run once:
+A part object lives for the entirety of a single view rendering, so you can memoize expensive operations to ensure they only run once:
 
 ```ruby
 class Book < Bookshelf::Views::Part
