@@ -238,8 +238,7 @@ end
 
 ## Layout exposures
 
-
-Exposure values are made available only to the template by default. To make an exposure available to the [layout](/v2.0/views/templates-and-partials/), use the `layout: true` option:
+Exposure values are made available only to the template by default. To make an exposure also available to the [layout](/v2.0/views/templates-and-partials/), use the `layout: true` option:
 
 
 ```ruby
