@@ -238,7 +238,7 @@ end
 
 ## Layout exposures
 
-Exposure values are made available only to the template by default. To make an exposure also available to the [layout](/v2.0/views/templates-and-partials/), use the `layout: true` option:
+Exposure values are made available only to the template by default. To make an exposure also available to the [layout](/v2.1/views/templates-and-partials/), use the `layout: true` option:
 
 
 ```ruby
@@ -249,7 +249,7 @@ end
 
 ## Undecorated exposures
 
-By default, exposures are decorated by a [part](/v2.0/views/parts/). To opt out of part decoration use the `decorate: false` option. This may be helpful when you are exposing a "primitive" object that requires no extra behaviour, like a number or a string.
+By default, exposures are decorated by a [part](/v2.1/views/parts/). To opt out of part decoration use the `decorate: false` option. This may be helpful when you are exposing a "primitive" object that requires no extra behaviour, like a number or a string.
 
 ```ruby
 expose :page_number, decorate: false

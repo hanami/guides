@@ -8,7 +8,7 @@ Hanami provides a complete view system for rendering HTML, JSON and other format
 In addition to helpers, templates and partials, features like exposures, parts and contexts provide a comprehensive toolset for well-architected view code.
 
 <p class="notice">
-  For a guided walk-through of Hanami with some example use of views, be sure to check out the <a href="/v2.0/introduction/getting-started/">Getting Started Guide</a>.
+  For a guided walk-through of Hanami with some example use of views, be sure to check out the <a href="/v2.1/introduction/getting-started/">Getting Started Guide</a>.
 </p>
 
 ## Introduction
@@ -93,7 +93,7 @@ end
 Requests for the root will now render a home page:
 
 
-<p><img src="/v2.0/views/welcome-to-bookshelf.png" alt="Welcome to Bookshelf" class="img-responsive"></p>
+<p><img src="/v2.1/views/welcome-to-bookshelf.png" alt="Welcome to Bookshelf" class="img-responsive"></p>
 
 ### Understanding views
 
@@ -198,7 +198,7 @@ module Bookshelf
 end
 ```
 
-See more in [configuration](/v2.0/views/configuration/).
+See more in [configuration](/v2.1/views/configuration/).
 
 ### Stand-alone rendering
 
