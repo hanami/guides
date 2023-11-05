@@ -7,7 +7,7 @@ Now that we've [created our app](/v2.1/introduction/getting-started/), let's tur
 
 ## Adding our first functionality
 
-Let's take a look at Hanami by creating the beginnings of a bookshelf application.
+Let's take a look at Hanami by creating the beginnings of a bookshelf app.
 
 In the file `spec/requests/root_spec.rb`, Hanami provides a request spec for the "Hello from Hanami" message we've seen in the browser.
 
@@ -80,7 +80,7 @@ Finished in 0.04572 seconds (files took 0.72148 seconds to load)
 1 example, 1 failure
 ```
 
-To fix this, let's open our application's routes file at `config/routes.rb`:
+To fix this, let's open our app's routes file at `config/routes.rb`:
 
 ```ruby
 # config/routes.rb
@@ -92,7 +92,7 @@ module Bookshelf
 end
 ```
 
-This `Bookshelf::Routes` class contains the configuration for our application's router. Routes in Hanami are comprised of a HTTP method, a path, and an endpoint to be invoked, which is usually a Hanami action. (See the [Routing guide](/v2.1/routing/overview/) for more information).
+This `Bookshelf::Routes` class contains the configuration for our app's router. Routes in Hanami are comprised of a HTTP method, a path, and an endpoint to be invoked, which is usually a Hanami action. (See the [Routing guide](/v2.1/routing/overview/) for more information).
 
 We'll take a look at adding more routes in a moment, but for now let's get our spec to pass. The above `Bookshelf::Routes` class contains only one route, the `root` route, which handles `GET` requests for `"/"`.
 
@@ -156,7 +156,7 @@ module Bookshelf
 end
 ```
 
-In a Hanami application, every action is an individual class. Actions decide what HTTP response (body, headers and status code) to return for a given request.
+In a Hanami app, every action is an individual class. Actions decide what HTTP response (body, headers and status code) to return for a given request.
 
 Actions define a `#handle` method which accepts a `request` object, representing the incoming request, and a `response` object, representing the outgoing response.
 
@@ -215,7 +215,7 @@ RSpec.describe "GET /books", type: :request do
     get "/books"
 
     expect(last_response).to be_successful
-    expect(last_response.content_type).to eq("application/json; charset=utf-8")
+    expect(last_response.content_type).to eq("app/json; charset=utf-8")
 
     response_body = JSON.parse(last_response.body)
 
@@ -227,7 +227,7 @@ RSpec.describe "GET /books", type: :request do
 end
 ```
 
-If you run this test, you'll see that it fails because our application currently returns a 404 response for the `/books` route.
+If you run this test, you'll see that it fails because our app currently returns a 404 response for the `/books` route.
 
 Let's fix that by generating an action for a books index:
 
@@ -257,10 +257,10 @@ GET /books
 Failures:
 
   1) GET /books returns a list of books
-     Failure/Error: expect(last_response.content_type).to eq("application/json; charset=utf-8")
+     Failure/Error: expect(last_response.content_type).to eq("app/json; charset=utf-8")
 
-       expected: "application/json; charset=utf-8"
-            got: "application/octet-stream; charset=utf-8"
+       expected: "app/json; charset=utf-8"
+            got: "app/octet-stream; charset=utf-8"
 
        (compared using ==)
      # ./spec/requests/books/index_spec.rb:7:in `block (2 levels) in <top (required)>'
@@ -340,7 +340,7 @@ $ createdb bookshelf_development
 $ createdb bookshelf_test
 ```
 
-In Hanami, [providers](/v2.1/app/providers/) offer a mechanism for configuring and using dependencies, like databases, within your application.
+In Hanami, [providers](/v2.1/app/providers/) offer a mechanism for configuring and using dependencies, like databases, within your app.
 
 Copy and paste the following provider into a new file at `config/providers/persistence.rb`:
 
@@ -388,7 +388,7 @@ Settings can be strings, booleans, integers and other types. Each setting can be
 
 Each setting is sourced from an environment variable matching its name. For example `my_flag` will be sourced from `ENV["MY_FLAG"]`.
 
-You can read more about Hanami's settings in the [Application guide](/v2.1/app/settings/).
+You can read more about Hanami's settings in the [app guide](/v2.1/app/settings/).
 
 Let's add `database_url` and make it a required setting by using the `Types::String` constructor:
 
@@ -406,7 +406,7 @@ module Bookshelf
 end
 ```
 
-Our bookshelf application will now raise an invalid settings error when it boots, unless a `DATABASE_URL` environment variable is present.
+Our bookshelf app will now raise an invalid settings error when it boots, unless a `DATABASE_URL` environment variable is present.
 
 In development and test environments, Hanami uses the [dotenv gem](https://github.com/bkeepers/dotenv) to load environment variables from `.env` files.
 
@@ -426,7 +426,7 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/bookshelf_test
   You might need to adjust these connection strings based on your local postgres configuration.
 </p>
 
-To confirm that the `database_url` setting is working as expected, you can run `bundle exec hanami console` to start a console, then call the `database_url` method on your application's settings object.
+To confirm that the `database_url` setting is working as expected, you can run `bundle exec hanami console` to start a console, then call the `database_url` method on your app's settings object.
 
 ```shell
 $ bundle exec hanami console
@@ -543,7 +543,7 @@ $ bundle exec rake db:migrate
 $ HANAMI_ENV=test bundle exec rake db:migrate
 ```
 
-Lastly, let's add a rom-rb relation to allow our application to interact with our books table. Create the following file at `lib/bookshelf/persistence/relations/books.rb`:
+Lastly, let's add a rom-rb relation to allow our app to interact with our books table. Create the following file at `lib/bookshelf/persistence/relations/books.rb`:
 
 ```ruby
 # lib/bookshelf/persistence/relations/books.rb
@@ -576,7 +576,7 @@ RSpec.describe "GET /books", type: [:request, :database] do
     get "/books"
 
     expect(last_response).to be_successful
-    expect(last_response.content_type).to eq("application/json; charset=utf-8")
+    expect(last_response.content_type).to eq("app/json; charset=utf-8")
 
     response_body = JSON.parse(last_response.body)
 
@@ -590,7 +590,7 @@ end
 
 To get this spec to pass, we'll need to update our books index action to return books from the books relation.
 
-To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [container and components](/v2.1/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your application's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
+To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [container and components](/v2.1/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
 For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make rom-rb available via a `rom` method within our action. The books relation is then available via `rom.relations[:books]`.
 
@@ -812,7 +812,7 @@ RSpec.describe "GET /books/:id", type: [:request, :database] do
       get "/books/#{book_id}"
 
       expect(last_response).to be_successful
-      expect(last_response.content_type).to eq("application/json; charset=utf-8")
+      expect(last_response.content_type).to eq("app/json; charset=utf-8")
 
       response_body = JSON.parse(last_response.body)
 
@@ -827,7 +827,7 @@ RSpec.describe "GET /books/:id", type: [:request, :database] do
       get "/books/#{books.max(:id).to_i + 1}"
 
       expect(last_response).to be_not_found
-      expect(last_response.content_type).to eq("application/json; charset=utf-8")
+      expect(last_response.content_type).to eq("app/json; charset=utf-8")
 
       response_body = JSON.parse(last_response.body)
 
@@ -860,9 +860,9 @@ Failures:
      # ./spec/support/database_cleaner.rb:14:in `block (2 levels) in <top (required)>'
 
   2) GET /books/:id when no book matches the given id returns not found
-     Failure/Error: expect(last_response.content_type).to eq("application/json; charset=utf-8")
+     Failure/Error: expect(last_response.content_type).to eq("app/json; charset=utf-8")
 
-       expected: "application/json; charset=utf-8"
+       expected: "app/json; charset=utf-8"
             got: nil
 
        (compared using ==)
@@ -1050,7 +1050,7 @@ Here's a spec for POST requests to the `/books` path, where it's expected that o
 
 RSpec.describe "POST /books", type: [:request, :database] do
   let(:request_headers) do
-    {"HTTP_ACCEPT" => "application/json", "CONTENT_TYPE" => "application/json"}
+    {"HTTP_ACCEPT" => "app/json", "CONTENT_TYPE" => "app/json"}
   end
 
   context "given valid params" do
@@ -1087,7 +1087,7 @@ Hanami's action generator can add these for us:
 $ bundle exec hanami generate action books.create --skip-view
 ```
 
-The application's routes now include the expected route - invoking the `books.create` action for `POST` requests to `/books`:
+The app's routes now include the expected route - invoking the `books.create` action for `POST` requests to `/books`:
 
 ```ruby
 module Bookshelf
@@ -1188,9 +1188,9 @@ In addition to validating title and author are present, the `params` block in th
 
 ## What's next
 
-So far we've seen how to create a new Hanami application, explored some of the basics of how an application is structured, and seen how we can list, display and create a simple book entity while validating user input.
+So far we've seen how to create a new Hanami app, explored some of the basics of how an app is structured, and seen how we can list, display and create a simple book entity while validating user input.
 
 Still, we've barely touched the surface of what Hanami offers.
 
-From here you might want to look in more detail at [routing](/v2.1/routing/overview/) and [actions](/v2.1/actions/overview/), or explore Hanami's [application architecture](/v2.1/app/container-and-components/), starting with its [component management](/v2.1/app/container-and-components/) and [dependency injection](/v2.1/app/container-and-components/) systems.
+From here you might want to look in more detail at [routing](/v2.1/routing/overview/) and [actions](/v2.1/actions/overview/), or explore Hanami's [app architecture](/v2.1/app/container-and-components/), starting with its [component management](/v2.1/app/container-and-components/) and [dependency injection](/v2.1/app/container-and-components/) systems.
 
