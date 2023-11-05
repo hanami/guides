@@ -28,7 +28,7 @@ end
 We can run that spec now to prove that it works:
 
 ```shell
-$ bundle exec rspec spec/requests/root_spec.rbconfig.include_context "Hanami app", :web
+$ bundle exec rspec spec/requests/root_spec.rb
 ```
 
 You should see:
