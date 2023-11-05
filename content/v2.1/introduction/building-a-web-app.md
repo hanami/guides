@@ -379,7 +379,7 @@ $ createdb bookshelf_development
 $ createdb bookshelf_test
 ```
 
-In Hanami, [providers](/v2.1/app/providers/) offer a mechanism for configuring and using dependencies, like databases, within your application.
+In Hanami, [providers](/v2.1/app/providers/) offer a mechanism for configuring and using dependencies, like databases, within your app.
 
 Copy and paste the following provider into a new file at `config/providers/persistence.rb`:
 
@@ -427,7 +427,7 @@ Settings can be strings, booleans, integers and other types. Each setting can be
 
 Each setting is sourced from an environment variable matching its name. For example `my_flag` will be sourced from `ENV["MY_FLAG"]`.
 
-You can read more about Hanami's settings in the [Application guide](/v2.1/app/settings/).
+You can read more about Hanami's settings in the [App guide](/v2.1/app/settings/).
 
 Let's add `database_url` and make it a required setting by using the `Types::String` constructor:
 
@@ -445,7 +445,7 @@ module Bookshelf
 end
 ```
 
-Our bookshelf application will now raise an invalid settings error when it boots, unless a `DATABASE_URL` environment variable is present.
+Our bookshelf app will now raise an invalid settings error when it boots, unless a `DATABASE_URL` environment variable is present.
 
 In development and test environments, Hanami uses the [dotenv gem](https://github.com/bkeepers/dotenv) to load environment variables from `.env` files.
 
@@ -465,7 +465,7 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/bookshelf_test
   You might need to adjust these connection strings based on your local postgres configuration.
 </p>
 
-To confirm that the `database_url` setting is working as expected, you can run `bundle exec hanami console` to start a console, then call the `database_url` method on your application's settings object.
+To confirm that the `database_url` setting is working as expected, you can run `bundle exec hanami console` to start a console, then call the `database_url` method on your app's settings object.
 
 ```shell
 $ bundle exec hanami console
@@ -582,7 +582,7 @@ $ bundle exec rake db:migrate
 $ HANAMI_ENV=test bundle exec rake db:migrate
 ```
 
-Lastly, let's add a rom-rb relation to allow our application to interact with our books table. Create the following file at `lib/bookshelf/persistence/relations/books.rb`:
+Lastly, let's add a rom-rb relation to allow our app to interact with our books table. Create the following file at `lib/bookshelf/persistence/relations/books.rb`:
 
 ```ruby
 # lib/bookshelf/persistence/relations/books.rb
@@ -1069,7 +1069,7 @@ Let's also generate a matching create action:
 $ bundle exec hanami generate action books.create
 ```
 
-The application's routes now include the expected routes - invoking the `books.new` action for GET requests to `/books/new`, and the `books.create` action for `POST` requests to `/books`:
+The app's routes now include the expected routes - invoking the `books.new` action for GET requests to `/books/new`, and the `books.create` action for `POST` requests to `/books`:
 
 ```ruby
 module Bookshelf
@@ -1261,8 +1261,8 @@ Finished in 0.12918 seconds (files took 0.53517 seconds to load)
 
 ## What's next
 
-So far we've seen how to create a new Hanami application, explored some of the basics of how an application is structured, and seen how we can list, display and create a simple book entity while validating user input.
+So far we've seen how to create a new Hanami app, explored some of the basics of how an app is structured, and seen how we can list, display and create a simple book entity while validating user input.
 
 Still, we've barely touched the surface of what Hanami offers.
 
-From here you might want to look in more detail at [routing](/v2.1/routing/overview/) and [actions](/v2.1/actions/overview/), or explore Hanami's [application architecture](/v2.1/app/container-and-components/), starting with its [component management](/v2.1/app/container-and-components/) and [dependency injection](/v2.1/app/container-and-components/) systems. Or you may want to head straight to the front end and learn more about Hanami's [views](/v2.1/views/overview/) and [assets management](/v2.1/assets/overview/)
+From here you might want to look in more detail at [routing](/v2.1/routing/overview/) and [actions](/v2.1/actions/overview/), or explore Hanami's [app architecture](/v2.1/app/container-and-components/), starting with its [component management](/v2.1/app/container-and-components/) and [dependency injection](/v2.1/app/container-and-components/) systems. Or you may want to head straight to the front end and learn more about Hanami's [views](/v2.1/views/overview/) and [assets management](/v2.1/assets/overview/)
