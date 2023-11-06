@@ -33,7 +33,7 @@ $ bundle exec rspec spec/requests/root_spec.rb
 
 You should see:
 
-```
+```shell
 Root
   is not found
 
