@@ -426,6 +426,10 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/bookshelf_test
   You might need to adjust these connection strings based on your local postgres configuration.
 </p>
 
+<p class="notice">
+  See <a href="/v2.1/app/settings/#using-dotenv-to-manage-environment-variables">Using dotenv to manage environment variables</a> for recommendations on handling these files.
+</p>
+
 To confirm that the `database_url` setting is working as expected, you can run `bundle exec hanami console` to start a console, then call the `database_url` method on your app's settings object.
 
 ```shell
