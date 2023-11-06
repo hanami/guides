@@ -37,7 +37,6 @@ You should see:
 Root
   is not found
 
-Finished in 0.01986 seconds (files took 0.70103 seconds to load)
 1 example, 0 failures
 ```
 
@@ -70,7 +69,6 @@ Failures:
      Failure/Error: expect(last_response.body).to include "Welcome to Bookshelf"
        expected "Not Found" to include "Welcome to Bookshelf"
 
-Finished in 0.0153 seconds (files took 0.19682 seconds to load)
 1 example, 1 failure
 ```
 
@@ -231,8 +229,6 @@ This new test should also pass:
 
 ```shell
 $ bundle exec rspec spec/features/home_spec.rb
-
-Randomized with seed 17230
 
 Home
   visiting the home page shows a welcome message
@@ -1136,8 +1132,6 @@ At this point, running the test hints at our next step:
 ```shell
 $ bundle exec rspec spec/features/books/create_spec.rb
 
-Randomized with seed 61697
-
 Creating books
   creates a book when given valid attributes (FAILED - 1)
   shows errors and does not create the book when given invalid attributes (FAILED - 2)
@@ -1270,7 +1264,6 @@ Creating books
   shows errors and does not create the book when given invalid attributes
   creates a book when given valid attributes
 
-Finished in 0.12918 seconds (files took 0.53517 seconds to load)
 2 examples, 0 failures
 ```
 
