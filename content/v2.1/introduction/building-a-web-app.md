@@ -111,11 +111,10 @@ Failures:
      Failure/Error: get "/"
 
      Hanami::Routes::MissingActionError:
-       Could not find action with key "actions.home.show" in Hrc1::App
+       Could not find action with key "actions.home.show" in Bookshelf::App
 
        To fix this, define the action class Bookshelf::Actions::Home::Show in /Users/jane/bookshelf/actions/home/show.rb
 
-Finished in 0.01871 seconds (files took 0.62516 seconds to load)
 1 example, 1 failure
 ```
 
@@ -189,7 +188,6 @@ $ bundle exec rspec spec/requests/root_spec.rb
 Root
   is successful
 
-Finished in 0.03029 seconds (files took 0.72932 seconds to load)
 1 example, 0 failures
 ```
 
@@ -209,10 +207,6 @@ Add the following to a `spec/support/capybara.rb` file:
 require "capybara/rspec"
 
 Capybara.app = Hanami.app
-
-RSpec.configure do |config|
-  config.include_context "Hanami app", type: :feature
-end
 ```
 
 And append the following line to `spec/spec_helper.rb`:
@@ -243,7 +237,6 @@ Randomized with seed 17230
 Home
   visiting the home page shows a welcome message
 
-Finished in 0.05206 seconds (files took 0.60124 seconds to load)
 1 example, 0 failures
 ```
 
@@ -266,7 +259,7 @@ RSpec.feature "Books index" do
 end
 ```
 
-If you run this test, you'll see that it fails because our app currently returns a 404 response for the `/books` route.
+If you run this test, you'll see that it fails because the page doesn't have the expected content. This is because our app currently returns a 404 error page for the `/books` route.
 
 Let's fix that by generating an action for a books index:
 
@@ -300,7 +293,6 @@ Failures:
        expected to find css "li" but there were no matches
      # ./spec/features/books/index_spec.rb:5:in `block (2 levels) in <top (required)>'
 
-Finished in 0.08434 seconds (files took 0.53008 seconds to load)
 1 example, 1 failure
 ```
 
@@ -347,13 +339,12 @@ $ bundle exec rspec spec/features/books/index_spec.rb
 Books index
   shows a list of books
 
-Finished in 0.05982 seconds (files took 0.53317 seconds to load)
 1 example, 0 failures
 ```
 
-### Adding persistence using rom-rb
+### Adding persistence using ROM
 
-Let's add just enough rom-rb to get persistence working using Postgres.
+Let's add just enough ROM to get persistence working using Postgres.
 
 First, add these gems to the Gemfile and run `bundle install`:
 
@@ -379,7 +370,7 @@ $ createdb bookshelf_development
 $ createdb bookshelf_test
 ```
 
-In Hanami, [providers](/v2.1/app/providers/) offer a mechanism for configuring and using dependencies, like databases, within your app.
+In Hanami, [providers](/v2.1/app/providers/) offer a mechanism for configuring and using complex dependencies, like database connections, within your app.
 
 Copy and paste the following provider into a new file at `config/providers/persistence.rb`:
 
@@ -472,7 +463,7 @@ $ bundle exec hanami console
 ```
 
 ```ruby
-bookshelf[development]> Hanami.app["settings"].database_url
+bookshelf[development]> app["settings"].database_url
 => "postgres://postgres:postgres@localhost:5432/bookshelf_development"
 ```
 
@@ -517,7 +508,7 @@ And then append the following line to `spec/spec_helper.rb`:
 require_relative "support/database_cleaner"
 ```
 
-Finally, enable rom-rb's rake tasks for database migrations by appending the following to the `Rakefile`:
+Finally, enable ROM's rake tasks for database migrations by appending the following to the `Rakefile`:
 
 ```ruby
 # Rakefile
@@ -556,7 +547,7 @@ $ bundle exec rake db:create_migration[create_books]
 </p>
 
 ```shell
-bundle exec rake db:create_migration\[create_books\]
+$ bundle exec rake db:create_migration\[create_books\]
 ```
 
 Edit the migration file in order to create a books table with title and author columns and a primary key:
@@ -582,7 +573,7 @@ $ bundle exec rake db:migrate
 $ HANAMI_ENV=test bundle exec rake db:migrate
 ```
 
-Lastly, let's add a rom-rb relation to allow our app to interact with our books table. Create the following file at `lib/bookshelf/persistence/relations/books.rb`:
+Lastly, let's add a ROM relation to allow our app to interact with our books table. Create the following file at `lib/bookshelf/persistence/relations/books.rb`:
 
 ```ruby
 # lib/bookshelf/persistence/relations/books.rb
@@ -603,8 +594,10 @@ end
 With our books table ready to go, let's adapt our books index spec to expect an index of persisted books:
 
 ```ruby
+# spec/features/books/index_spec.rb
+
 RSpec.feature "Books index" do
-  let(:books) { app["persistence.rom"].relations[:books] }
+  let(:books) { Hanami.app["persistence.rom"].relations[:books] }
 
   before do
     books.insert(title: "Practical Object-Oriented Design in Ruby", author: "Sandi Metz")
@@ -624,7 +617,7 @@ To get this spec to pass, we'll need to update our books index view to return bo
 
 To access the books relation within the view, we can use Hanami's "Deps mixin". Covered in detail in the [container and components](/v2.1/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
-For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make rom-rb available via a `rom` method within our action. The books relation is then available via `rom.relations[:books]`.
+For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make ROM available via a `rom` method within our view. The books relation is then available via `rom.relations[:books]`.
 
 To satisfy our spec, we need to meet a few requirements. Firstly, we want to render each book's _title_ and _author_. Secondly we want to return books alphabetically by title. We can achieve these requirements by querying for books in our exposure, and using the `select` and `order` methods offered by the books relation:
 
@@ -648,7 +641,7 @@ end
 ```
 
 <p class="convention">
-  Accessing relations directly from actions is not a commonly recommended pattern. Instead, a <a href="https://rom-rb.org/5.0/learn/repositories/quick-start/">ROM repository</a> should be used. Here, however, the repository is ommitted for brevity. Hanami's 2.2 release will offer repositories out of the box.
+  Accessing relations directly from app components like views and actions is not a commonly recommended pattern. Instead, a <a href="https://rom-rb.org/5.0/learn/repositories/quick-start/">ROM repository</a> should be used. Here, however, the repository is ommitted for brevity. Hanami's 2.2 release will offer repositories out of the box.
 </p>
 
 Then we can update our template to include the author:
@@ -668,18 +661,17 @@ Then we can update our template to include the author:
 With this action in place, the spec passes once more:
 
 ```shell
-$ bundle exec rspec spec/requests/books/index_spec.rb
+$ bundle exec rspec spec/features/books/index_spec.rb
 
 Books index
   shows a list of books
 
-Finished in 0.08143 seconds (files took 0.72424 seconds to load)
 1 example, 0 failures
 ```
 
 ## Using request parameters
 
-Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily, rom-rb relations offer pagination support. Let's add pagination with a default page size of 5:
+Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily, ROM relations offer pagination support. Let's add pagination with a default page size of 5:
 
 ```ruby
 # lib/bookshelf/persistence/relations/books.rb
@@ -703,10 +695,10 @@ This will enable our books index to vary based on `page` and `per_page` params.
 Let's add a request spec verifying pagination:
 
 ```ruby
-# spec/requests/books/index/pagination_spec.rb
+# spec/features/books/index/pagination_spec.rb
 
 RSpec.feature "Books index pagination" do
-  let(:books) { app["persistence.rom"].relations[:books] }
+  let(:books) { Hanami.app["persistence.rom"].relations[:books] }
 
   before do
     10.times do |n|
@@ -776,6 +768,15 @@ end
 
 This alows our spec to pass!
 
+```shell
+$ bundle exec rspec spec/features/books/index/pagination_spec.rb
+
+Books index pagination
+  returns the correct page of books
+
+1 example, 0 failures
+```
+
 ## Showing a book
 
 In addition to our books index, we also want to provide an endpoint for viewing the details of a particular book.
@@ -783,31 +784,29 @@ In addition to our books index, we also want to provide an endpoint for viewing 
 Let's specify a `/books/:id` request that renders a book for a given ID, or returns 404 if there's no book for with the given ID.
 
 ```ruby
-# spec/requests/books/show_spec.rb
+# spec/features/books/show_spec.rb
 
-RSpec.describe "GET /books/:id", type: [:request, :database] do
-  let(:books) { app["persistence.rom"].relations[:books] }
+RSpec.feature "Showing a book" do
+  let(:books) { Hanami.app["persistence.rom"].relations[:books] }
 
   context "when a book matches the given ID" do
     let!(:book_id) do
       books.insert(title: "Test Driven Development", author: "Kent Beck")
     end
 
-    it "renders the book" do
-      get "/books/#{book_id}"
+    it "shows the book" do
+      visit "/books/#{book_id}"
 
-      expect(last_response).to be_successful
-
-      expect(last_response.body).to include "Test Driven Development"
-      expect(last_response.body).to include "Kent Beck"
+      expect(page).to have_content "Test Driven Development"
+      expect(page).to have_content "Kent Beck"
     end
   end
 
   context "when no book matches the given ID" do
     it "returns not found" do
-      get "/books/#{books.max(:id).to_i + 1}"
+      visit "/books/#{books.max(:id).to_i + 1}"
 
-      expect(last_response).to be_not_found
+      expect(page.status_code).to eq 404
     end
   end
 end
@@ -816,7 +815,7 @@ end
 Because there's no matching route yet, the “happy path” side of this spec immediately fails.
 
 ```shell
-$ bundle exec rspec spec/requests/books/show_spec.rb
+$ bundle exec rspec spec/features/books/show_spec.rb
 
 Showing a book
   when no book matches the given ID
@@ -831,7 +830,6 @@ Failures:
        expected to find text "Test Driven Development" in "Not Found"
      # ./spec/features/books/show_spec.rb:12:in `block (3 levels) in <top (required)>'
 
-Finished in 0.05029 seconds (files took 0.74405 seconds to load)
 2 examples, 1 failure
 ```
 
@@ -865,7 +863,7 @@ module Bookshelf
     module Books
       class Show < Bookshelf::Action
         def handle(request, response)
-          response.render(view, id: params[:id])
+          response.render(view, id: request.params[:id])
         end
       end
     end
@@ -904,13 +902,13 @@ Lastly, we can populate the template.
 With this, our happy path test passes, but the test for our 404 now fails:
 
 ```shell
-$ bundle exec rspec spec/requests/books/show_spec.rb
+$ bundle exec rspec spec/features/books/show_spec.rb
 
 Showing a book
-  when no book matches the given ID
-    returns not found (FAILED - 1)
   when a book matches the given ID
     shows the book
+  when no book matches the given ID
+    returns not found (FAILED - 1)
 
 Failures:
 
@@ -919,16 +917,26 @@ Failures:
 
      NoMethodError:
        undefined method `[]' for nil:NilClass
-     # ./app/templates/books/show.html.erb:1:in `__tilt_8360'
-     # ./app/actions/books/show.rb:12:in `handle'
+     # ./app/templates/books/show.html.erb:1:in `__tilt_8300'
+     # ./app/actions/books/show.rb:8:in `handle'
+     # ./spec/features/books/show_spec.rb:19:in `block (3 levels) in <top (required)>'
 
-Finished in 0.06868 seconds (files took 0.53673 seconds to load)
 2 examples, 1 failure
 ```
 
 This is because our relation's `#one` method returns `nil` if there's no book with the requisite ID, leading to this "undefined method on NilClass" error from the template.
 
-However, in addition to `#one`, rom-rb relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
+However, in addition to `#one`, ROM relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
+
+Let's make that change in our view now:
+
+```ruby
+# app/views/books/show.rb
+
+expose :book do |id:|
+  rom.relations[:books].by_pk(id).one!
+end
+```
 
 We can use this to handle 404s via Hanami's action exception handling: `handle_exception`, which takes the name of a method to invoke when a particular exception occurs.
 
@@ -962,7 +970,20 @@ module Bookshelf
     end
   end
 end
+```
 
+With this, our spec fully passes:
+
+```shell
+$ bundle exec rspec spec/features/books/show_spec.rb
+
+Showing a book
+  when no book matches the given ID
+    returns not found
+  when a book matches the given ID
+    shows the book
+
+2 examples, 0 failures
 ```
 
 This exception handling behavior can also be moved into the base `Bookshelf::Action` class at `app/action.rb`, meaning that any action inheriting from `Bookshelf::Action` will handle `ROM::TupleCountMismatchError` in the same way.
@@ -1007,19 +1028,6 @@ module Bookshelf
 end
 ```
 
-```shell
-$ bundle exec rspec spec/requests/books/show_spec.rb
-
-Showing a book
-  when no book matches the given ID
-    returns not found
-  when a book matches the given ID
-    shows the book
-
-Finished in 0.07035 seconds (files took 0.55631 seconds to load)
-2 examples, 0 failures
-```
-
 ## Creating a book
 
 Now that our visitors can list and view books, let's allow them to create books too.
@@ -1055,7 +1063,7 @@ RSpec.feature "Creating books" do
 end
 ```
 
-Running this spec, we get about "new" being an "invalid input syntax for type integer". This is because we have no specific route for this new book page, so "new" is being interpreted as an id for the books show action.
+Running this spec, we get a database-level error about "new" being an "invalid input syntax for type integer". This is because we have no specific route for this new book page, so "new" is being interpreted as an ID for the books show action.
 
 Hanami's action generator can take care of this for us:
 
@@ -1142,13 +1150,12 @@ Failures:
        expected to find text "Could not create book" in "New book\nTitle\nAuthor\nCreate"
      # ./spec/features/books/create_spec.rb:19:in `block (2 levels) in <top (required)>'
 
-Finished in 0.08017 seconds (files took 0.74508 seconds to load)
 2 examples, 2 failures
 ```
 
 The form submission appears to be proceeding, and now we need to handle what happens afterwards.
 
-Our plan here is to use request flash messages for displaying the the notices about successful or failed book creation. To support these, we first need to enable cookie sessions for our app. To do this, add this to `config/app.rb`:
+Our plan here is to use flash messages for displaying the the notices about successful or failed book creation. To support these, we first need to enable cookie sessions for our app. To do this, add this to `config/app.rb`:
 
 ```ruby
 # config/app.rb
@@ -1202,7 +1209,7 @@ Next we can update the app layout to show the flash messages, if there are any:
       <p><%= flash[:alert] %></p>
     <% end %>
     <% if flash[:notice] %>
-      <p><%= flash[:notice]</p> %>
+      <p><%= flash[:notice] %></p>
     <% end %>
 
     <%= yield %>

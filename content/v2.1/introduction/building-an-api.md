@@ -309,12 +309,12 @@ Of course, returning a static list of books is not particularly useful.
 Let's address this by retrieving books from a database.
 
 <p class="notice">
-  Integrated support for persistence based on <a href="https://rom-rb.org/">rom-rb</a> is coming in Hanami's 2.1 release. For now, we can bring our own simple rom-rb configuration to allow us to store books in a database.
+  Integrated support for persistence based on <a href="https://rom-rb.org/">ROM</a> is coming in Hanami's 2.1 release. For now, we can bring our own simple ROM configuration to allow us to store books in a database.
 </p>
 
-### Adding persistence using rom-rb
+### Adding persistence using ROM
 
-Let's add just enough rom-rb to get persistence working using Postgres.
+Let's add just enough ROM to get persistence working using Postgres.
 
 First, add these gems to the Gemfile and run `bundle install`:
 
@@ -478,7 +478,7 @@ And then append the following line to `spec/spec_helper.rb`:
 require_relative "support/database_cleaner"
 ```
 
-Finally, enable rom-rb's rake tasks for database migrations by appending the following to the `Rakefile`:
+Finally, enable ROM's rake tasks for database migrations by appending the following to the `Rakefile`:
 
 ```ruby
 # Rakefile
@@ -543,7 +543,7 @@ $ bundle exec rake db:migrate
 $ HANAMI_ENV=test bundle exec rake db:migrate
 ```
 
-Lastly, let's add a rom-rb relation to allow our app to interact with our books table. Create the following file at `lib/bookshelf/persistence/relations/books.rb`:
+Lastly, let's add a ROM relation to allow our app to interact with our books table. Create the following file at `lib/bookshelf/persistence/relations/books.rb`:
 
 ```ruby
 # lib/bookshelf/persistence/relations/books.rb
@@ -592,7 +592,7 @@ To get this spec to pass, we'll need to update our books index action to return 
 
 To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [container and components](/v2.1/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
-For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make rom-rb available via a `rom` method within our action. The books relation is then available via `rom.relations[:books]`.
+For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make ROM available via a `rom` method within our action. The books relation is then available via `rom.relations[:books]`.
 
 To satisfy our spec, we need to meet a few requirements. Firstly, we want to render each book's _title_ and _author_, but not its _id_. Secondly we want to return books alphabetically by title. We can achieve these requirements using the `select` and `order` methods offered by the books relation:
 
@@ -636,7 +636,7 @@ Finished in 0.05765 seconds (files took 1.36 seconds to load)
 
 ## Parameter validation
 
-Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily rom-rb relations offer pagination support. Let's add pagination with a default page size of 5:
+Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily ROM relations offer pagination support. Let's add pagination with a default page size of 5:
 
 ```ruby
 # lib/bookshelf/persistence/relations/books.rb
@@ -929,7 +929,7 @@ module Bookshelf
 end
 ```
 
-In addition to the `#one` method, which will return `nil` if there's no book with the requisite id, rom-rb relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
+In addition to the `#one` method, which will return `nil` if there's no book with the requisite id, ROM relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
 
 We can use this to handle 404s via Hanami's action exception handling: `config.handle_exception`. This action configuration takes the name of a method to invoke when a particular exception occurs.
 
