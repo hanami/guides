@@ -726,8 +726,6 @@ module Bookshelf
   module Actions
     module Books
       class Index < Bookshelf::Action
-        include Deps["persistence.rom"]
-
         def handle(request, response)
           response.render(
             view,
