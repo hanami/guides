@@ -41,7 +41,7 @@ This will render HTML as shown below:
 </form>
 ```
 
-As you can see, all the fields had been prefixed with the form's name, which is a string `book`, passed as a first argument.
+All the fields had been prefixed with the form's name (`"book"`) passed as a first argument.
 
 To show CSRF meta tags, you need to have [sessions enabled](/v2.0/actions/sessions). Without that, you won't have the `csrf_token` hidden input field available.
 
