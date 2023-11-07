@@ -52,7 +52,7 @@ If you don't want to use the form name, skip it, and pass a URL as a first argum
 ```ruby
 <%= form_for("/books", class: "form-horizontal") do |f| %>
   <div>
-    <%= f.label "books.title" %>
+    <%= f.label "book.title" %>
     <%= f.text_field "books.title", class: "form-control" %>
   </div>
 
