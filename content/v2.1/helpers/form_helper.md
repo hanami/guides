@@ -60,7 +60,7 @@ If you don't want to use the form name, skip it, and pass a URL as a first argum
 <% end %>
 ```
 
-This way you get a full control over naming each of the form's element
+This way you get a full control over naming each of the form's element.
 
 ```html
 <form action="/books" method="POST" accept-charset="utf-8" class="form-horizontal">
@@ -120,8 +120,10 @@ The value in the `song-title` test field had been filled in from the passed in p
 ```
 
 ## Building blocks
+
 Below you can see a range of convenient methods for building the fields within an HTML form, integrating with request params and template locals to populate the fields with appropriate values.
 ### input
+
 Generates an input tag without any special handling. For more convenience and other advanced features, see specific field type descriptions in this section.
 
 **Basic usage**
@@ -144,7 +146,9 @@ Returns CSRF meta tags for use via unobtrusive JavaScript (UJS) libraries.
 ```
 
 To show CSRF meta tags, you need to have [sessions enabled](/v2.0/actions/sessions). Without that, you won't have the `csrf_token` hidden input field available.
+
 ### fields_for
+
 Applies the base input name to all fields within the given block.
 
 This can be helpful when generating a set of nested fields.
@@ -245,6 +249,7 @@ You can get access to the index number and the collection item value, by yieldin
 ```
 
 ### label
+
 Returns a label tag for the given field name, with a humanized version of the field name as the tag's content.
 
 **Usage**
@@ -288,6 +293,7 @@ You may also provide the content's value in the block, which allows you to inclu
 </label>
 ```
 ### fieldset
+
 Returns a fieldset tag. It is useful to group related items together.
 
 ```ruby
@@ -309,6 +315,7 @@ Returns a fieldset tag. It is useful to group related items together.
 
 Keep in mind that this is only a visual improvement and does not affect the data structure being sent to the server.
 ### check_box
+
 Returns the tags for a checkbox.
 
 When editing a resource, the form automatically assigns the `checked` HTML attribute for the checkbox tag.
@@ -400,6 +407,7 @@ f.check_box("book.languages", name: "book[languages][]", value: "english", id: n
 ```
 
 ### color_field
+
 Returns a color input HTML tag.
 
 ```ruby
@@ -417,6 +425,7 @@ This helper accepts HTML attributes as well, like most of other building blocks 
 ```
 
 ### date_field
+
 Returns a date input tag.
 
    ```ruby
@@ -433,6 +442,7 @@ f.date_field("user.birth_date", class: "form-control")
 
 
 ### datetime_field
+
 Returns a datetime input tag.
 
 ```ruby
@@ -446,6 +456,7 @@ f.datetime_field("delivery.delivered_at", class: "form-control")
 <input type="datetime" name="delivery[delivered_at]" id="delivery-delivered-at" value="" class="form-control">
 ```
 ### datetime_local_field
+
 Returns a datetime-local input tag.
 
 ```ruby
@@ -460,6 +471,7 @@ f.datetime_local_field("delivery.delivered_at", class: "form-control")
 ```
 
 ### time_field
+
 Returns a time input tag.
 
 ```ruby
@@ -472,7 +484,9 @@ f.time_field("book.release_hour", class: "form-control")
 # =>
 <input type="time" name="book[release_hour]" id="book-release-hour" value="" class="form-control">
 ```
+
 ### month_field
+
 Returns a month input tag.
 
 ```ruby
@@ -485,7 +499,9 @@ f.month_field("book.release_month", class: "form-control")
 # =>
 <input type="month" name="book[release_month]" id="book-release-month" value="" class="form-control">
 ```
+
 ### week_field
+
    Returns a week input tag.
 
 ```ruby
@@ -499,7 +515,9 @@ f.week_field("book.release_week", class: "form-control")
 # =>
 <input type="week" name="book[release_week]" id="book-release-week" value="" class="form-control">
 ```
+
 ### email_field
+
 Returns an email input tag.
 
 ```ruby
@@ -512,7 +530,9 @@ f.email_field("user.email", class: "form-control")
 # =>
 <input type="email" name="user[email]" id="user-email" value="" class="form-control">
 ```
+
 ### url_field
+
 
 Returns a URL input tag.
 
@@ -526,7 +546,9 @@ f.url_field("user.website", class: "form-control")
 # =>
 <input type="url" name="user[website]" id="user-website" value="" class="form-control">
 ```
+
 ### tel_field
+
 Returns a telephone input tag.
 
    ```ruby
@@ -541,6 +563,7 @@ f.tel_field("user.telephone", class: "form-control")
 ```
 
 ### hidden_field
+
 Returns a hidden input tag, not visible in the rendered page but only in the source code.
 
 ```ruby
@@ -550,7 +573,9 @@ f.hidden_field("delivery.customer_id")
 ```
 
 There is hardly a need to pass HTML attributes to this one, but you can of course do this as with any other input field.
+
 ### file_field
+
 Returns a file input tag. It allows you to upload a file and accepts two special attributes:
 
 ```ruby
@@ -566,7 +591,7 @@ f.file_field("user.avatar", class: "avatar-upload")
 
 **Specifying accepted MIME Types**
 
-You can control what MIME Types your input allow by passing in the additional option `:accepted`. This can be a `String`, where types are separated by coma, or an `Array`.
+You can control what MIME Types your input allow by passing in the additional option `:accepted`. This can be a `String`, where types are separated by comma, or an `Array`.
 
 ```ruby
 f.file_field("user.resume", accept: "application/pdf,application/ms-word")
@@ -587,7 +612,9 @@ f.file_field("user.resume", multiple: true)
 # =>
 <input type="file" name="user[resume]" id="user-resume" multiple="multiple">
 ```
+
 ### number_field
+
 Returns a number input tag.
 
 ```ruby
@@ -602,7 +629,9 @@ f.number_field("book.percent_read", min: 1, max: 100, step: 1)
 # =>
 <input type="number" name="book[percent_read]" id="book-precent-read" value="" min="1" max="100" step="1">
 ```
+
 ### range_field
+
 Returns a range input tag.
 
 ```ruby
@@ -618,7 +647,9 @@ f.range_field("book.discount_percentage", min: 1, max: 1, step: 1)
 # =>
 <input type="range" name="book[discount_percentage]" id="book-discount-percentage" value="" min="1" max="100" step="1">
 ```
+
 ### text_area
+
 Returns a textarea tag.
 
 ```ruby
@@ -640,7 +671,9 @@ f.text_area "user.hobby", "Football"
 # =>
 <textarea name="user[hobby]" id="user-hobby">Football</textarea>
 ```
+
 ### text_field
+
 Returns a text input tag.
 
 ```ruby
@@ -653,7 +686,9 @@ f.text_field("user.first_name", class: "form-control")
 # =>
 <input type="text" name="user[first_name]" id="user-first-name" value="" class="form-control">
 ```
+
 ### search_field
+
 Returns a search input tag.
 
 ```ruby
@@ -666,7 +701,9 @@ f.search_field("search.q", class: "form-control")
 # =>
 <input type="search" name="search[q]" id="search-q" value="" class="form-control">
 ```
+
 ### radio_button
+
 Returns a radio input tag.
 
 ```ruby
@@ -699,14 +736,18 @@ f.radio_button("book.category", "Non-Fiction")
 <input type="radio" name="book[category]" value="Fiction">
 <input type="radio" name="book[category]" value="Non-Fiction" checked="checked">
 ```
+
 ### password_field
+
 Returns a password input tag in which content is hidden by default.
 
 ```ruby
 f.password_field("signup.password")
 => <input type="password" name="signup[password]" id="signup-password" value="">
 ```
+
 ### select
+
 Returns a select input tag containing option tags for the given values.
 
 The values should be an enumerable of pairs of content (the displayed text for the option)
@@ -776,7 +817,6 @@ f.select("book.store", values, options: {prompt: "Select a store"}, class: "form
   <option value="it">Italy</option>
   <option value="au">Australia</option>
 </select>
-
 ```
 
 **Forcing Selected options**
@@ -842,7 +882,9 @@ f.select("book.stores", values)
   <option value="zw">Zimbabwe</option>
 </select>
 ```
+
 ### datalist
+
 Returns a datalist input tag together with the text input field being bind together.
 
 It accepts a Hash or Array of values as a second argument. The third parameter is a `list` HTML tag input name and the ID of the datalist.
@@ -887,7 +929,9 @@ f.datalist "book.stores", values, "books", class: 'text-class', datalist: {class
   <option value="Australia" class="form-control"></option>
 </datalist>
 ```
+
 ### button
+
 Returns a button tag with the given content.
 
 ```ruby
@@ -915,6 +959,7 @@ You may pass in content in a block, which allows you to nest the HTML elements.
 ```
 
 ### image_button
+
 Returns an image input tag, to be used as a visual button for the form.
 
 **For security reasons, you should use the absolute URL of the given image.**
@@ -930,7 +975,9 @@ f.image_button("https://hanamirb.org/assets/button.png", name: "image", width: "
 # =>
 <input name="image" width="50" type="image" src="https://hanamirb.org/assets/button.png">
 ```
+
 ### submit
+
 Returns a submit button tag with the given content.
 
 
