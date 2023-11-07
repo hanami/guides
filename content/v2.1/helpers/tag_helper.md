@@ -1,6 +1,6 @@
 ---
 title: Tag Helper
-order: 20
+order: 30
 ---
 
 This helper makes accessible all the HTML-related tags.
