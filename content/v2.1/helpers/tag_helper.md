@@ -5,7 +5,7 @@ order: 20
 
 This helper makes accessible all the HTML-related tags.
 
-### Usage
+## Usage
 
 Here is how you can use it **in templates**:
 
@@ -71,7 +71,7 @@ Then in the template you can just access the part:
 <%= book.content %>
 ```
 
-### Features
+## Features
 
 Here are lists of features with the corresponding examples:
 
@@ -130,7 +130,7 @@ tag.custom_tag("hello") # => <custom-tag>hello</custom-tag>
 ```
 
 
-### Escaping HTML input
+## Escaping HTML input
 
 The tag contents are automatically escaped for security reasons:
 
@@ -147,11 +147,9 @@ tag.p("<em>safe content</em>".html_safe)  # => <p><em>safe content</em></p>
 
 ## link_to helper
 
-For anchors, we've a dedicated wrapper `link_to` on `tag.a`, that share all the features with the [tag helpers](/v2.1/helpers/overview#tag-helper).
+For anchors, we have a dedicated wrapper `link_to` on `tag.a`, that shares all the features with the [tag helpers](/v2.1/helpers/overview#tag-helper).
 
 Returns an anchor tag for the given contents and URL.
-
-
 ### Usage
 
 The difference is, that you may pass `url` as a second argument, right after the content.
@@ -173,7 +171,7 @@ link_to("Home", "/", class: "button") %>
 # => <a href="/" class="button">Home</a>
 ```
 
-#### Automatic escaping
+### Automatic escaping
 
 The tag's contents are automatically escaped (unless marked as HTML safe).
 
