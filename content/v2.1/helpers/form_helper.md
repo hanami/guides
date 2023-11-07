@@ -6,7 +6,6 @@ order: 30
 
 Yields a form builder for constructing an HTML form and returns the resulting form string.
 
-Please read this section for the methods for building the form's fields.
 
 ## form_for
 
