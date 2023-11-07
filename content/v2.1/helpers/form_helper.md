@@ -53,7 +53,7 @@ If you don't want to use the form name, skip it, and pass a URL as a first argum
 <%= form_for("/books", class: "form-horizontal") do |f| %>
   <div>
     <%= f.label "book.title" %>
-    <%= f.text_field "books.title", class: "form-control" %>
+    <%= f.text_field "book.title", class: "form-control" %>
   </div>
 
   <%= f.submit "Create" %>
