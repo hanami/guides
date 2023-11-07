@@ -44,7 +44,7 @@ This will render HTML as shown below:
 All the fields had been prefixed with the form's name (`"book"`) passed as a first argument.
 
 <p class="notice">
-  To show `csrf_token` hidden field you need to have [sessions enabled](/v2.0/actions/sessions).
+To show `csrf_token` hidden field you need to have [sessions enabled](/v2.0/actions/sessions).
 </p>
 
 **Skipping the form name**
@@ -562,7 +562,7 @@ There is hardly a need to pass HTML attributes to this one, but you can of cours
 
 ### file_field
 
-Returns a file input tag. It allows you to upload a file and accepts two special attributes:
+Returns a file input tag. It allows you to upload a file or multiple files.
 
 ```ruby
 f.file_field("user.avatar")
@@ -591,7 +591,7 @@ f.file_field("user.resume", accept: ["application/pdf", "application/ms-word"])
 
 **Multiple file uploads**
 
-You can control whether to accept multiple file uploads by passing in the `:multiple` option argument:
+You can control whether to accept multiple file uploads by passing in the `:multiple` option argument. Setting this flag will add the `multipart` attribute to the `<form>` tag`:
 
 ```ruby
 f.file_field("user.resume", multiple: true)
