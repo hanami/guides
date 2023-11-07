@@ -44,8 +44,8 @@ module Bookshelf
   module Views
     module Books
       class Show < Bookshelf::View
-        expose :fancy_header do
-          "Fancy header"
+        expose :book do
+          Book.new(title: "Hanami")
         end
       end
     end
@@ -56,14 +56,14 @@ end
 Then you can have the part with the helper used.
 
 ```ruby
-# app/views/parts/fancy_header.rb
+# app/views/parts/book.rb
 
 module Bookshelf
   module Views
     module Parts
-      module FancyHeader
+      module Book
         def content
-          helpers.tag.h1(value)
+          helpers.tag.h1(value.title)
         end
       end
     end
@@ -76,7 +76,7 @@ Then in the template you can just access the part:
 ```ruby
 # app/templates/books/show.html.erb
 
-<%= fancy_header %>
+<%= book.content %>
 ```
 
 ### Features
@@ -151,25 +151,6 @@ To bypass it use `html_safe` on the given content
 
 ```ruby
 tag.p("<em>safe content</em>".html_safe)  # => <p><em>safe content</em></p>
-```
-
-### Standalone use hanami-view
-
-When using hanami-view standalone, include this module directly in your base part and scope
-
-```ruby
-class BasePart < Hanami::View::Part
-  include Hanami::View::Helpers::TagHelper
-end
-
-class BaseScope < Hanami::View::Scope
-  include Hanami::View::Helpers::TagHelper
-end
-
-class BaseView < Hanami::View
-  config.part_class = BasePart
-  config.scope_class = BaseScope
-end
 ```
 
 ## link_to helper
