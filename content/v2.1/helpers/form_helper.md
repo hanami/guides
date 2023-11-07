@@ -43,7 +43,9 @@ This will render HTML as shown below:
 
 All the fields had been prefixed with the form's name (`"book"`) passed as a first argument.
 
-To show CSRF meta tags, you need to have [sessions enabled](/v2.0/actions/sessions). Without that, you won't have the `csrf_token` hidden input field available.
+<p class="notice">
+  To show `csrf_token` hidden field you need to have [sessions enabled](/v2.0/actions/sessions).
+</p>
 
 **Skipping the form name**
 
@@ -131,22 +133,6 @@ Generates an input tag without any special handling. For more convenience and ot
 f.input(type: :text, name: "book[title]", id: "book-title", value: book.title)
 => <input type="text" name="book[title]" id="book-title" value="Hanami book">
 ```
-### csrf_meta_tags
-Returns CSRF meta tags for use via unobtrusive JavaScript (UJS) libraries.
-
-**Usage**
-
-```ruby
-# /app/templates/layouts/app.html.erb
-
-<%== csrf_meta_tags %>
-
-# => <meta name="csrf-param" content="_csrf_token">
-# => <meta name="csrf-token" content="4a038be85b7603c406dcbfad4b9cdf91ec6ca138ed6441163a07bb0fdfbe25b5">
-```
-
-To show CSRF meta tags, you need to have [sessions enabled](/v2.0/actions/sessions). Without that, you won't have the `csrf_token` hidden input field available.
-
 ### fields_for
 
 Applies the base input name to all fields within the given block.
