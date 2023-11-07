@@ -14,10 +14,6 @@ The overall structure of the attributes available is as follows:
 
 ### Usage
 
-```ruby
-form_for(base_name, url, values: _form_for_values, params: _form_for_params, **attributes)
-```
-
 **Basic Example**
 
 ```ruby
