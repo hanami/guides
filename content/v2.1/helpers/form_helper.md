@@ -129,9 +129,14 @@ Below you can see a range of convenient methods for building the fields within a
 Generates an input tag without any special handling. For more convenience and other advanced features, see specific field type descriptions in this section.
 
 **Basic usage**
-```ruby
-f.input(type: :text, name: "book[title]", id: "book-title", value: book.title)
-=> <input type="text" name="book[title]" id="book-title" value="Hanami book">
+```erb
+<%= f.input(type: :text, name: "book[title]", id: "book-title", value: book.title) %>
+```
+
+The rendered HTML for the code above looks as this:
+
+```html
+<input type="text" name="book[title]" id="book-title" value="Hanami book">
 ```
 ### fields_for
 
@@ -143,7 +148,7 @@ This is a convenience only. You can achieve the same result by including the bas
 the beginning of each input name.
 
 **Usage**
-```ruby
+```erb
 <% f.fields_for "address" do |fa| %>
    <%= fa.text_field "street" %>
    <%= fa.text_field "suburb" %>
@@ -152,12 +157,10 @@ the beginning of each input name.
 
 This is the equivalent of
 
-```ruby
+```erb
 <%= f.text_field "address.street" %>
 <%= f.text_field "address.suburb" %>
 ```
-
-which will render
 
 ```html
 <input type="text" name="delivery[customer_name]" id="delivery-customer-name" value="">
@@ -168,12 +171,12 @@ which will render
 
 There is no hard restriction on how much levels of nesting you can support this way, but general user experience advice is to avoid big multi-level forms, and if your form requires three or more nesting levels, you could consider refactoring it.
 
-```ruby
+```erb
 <% f.fields_for "address" do |fa| %>
    <%= fa.text_field "street" %>
 
    <% fa.fields_for "location" do |fl| %>
-	 <%= fl.text_field "city" %>
+  	 <%= fl.text_field "city" %>
    <% end %>
  <% end %>
 ```
@@ -194,13 +197,13 @@ the base input name to all fields within the block.
 
 Use this whenever generating form fields for a collection of nested fields.
 
-```ruby
+```erb
 <% f.fields_for_collection("addresses") do |fa| %>
   <%= fa.text_field("street") %>
 <% end %>
 ```
 
-It'll render the HTML input types for each of the collection values, setting their ids to the index, which starts from 0.
+It'll render fthe HTML input types for each of the collection values, setting their IDs to the index, which starts from 0.
 
 ```html
 <input type="text" name="delivery[addresses][][street]" id="delivery-address-0-street" value="">
@@ -211,7 +214,7 @@ It'll render the HTML input types for each of the collection values, setting the
 
 You can get access to the index number and the collection item value, by yielding additional parameters. This way you get control over rendering or tweaking them on the flow.
 
-```ruby
+```erb
 <% f.fields_for_collection("bill.addresses") do |fa, i, address| %>
   <div class="form-group">
     Address id: <%= address.id %>
@@ -239,56 +242,67 @@ You can get access to the index number and the collection item value, by yieldin
 Returns a label tag for the given field name, with a humanized version of the field name as the tag's content.
 
 **Usage**
-```ruby
+
+```erb
 <%= f.label("book.extended_title") %>
-# => <label for="book-extended-title">Extended title</label>
 ```
 
-**Adding HTML attibutes**
+```html
+<label for="book-extended-title">Extended title</label>
+```
 
-```ruby
+**With HTML attibutes**
+
+```erb
 <%= f.label("book.title", class: "form-label") %>
-# => <label for="book-title" class="form-label">Title</label>
+```
+
+```html
+<label for="book-title" class="form-label">Title</label>
 ```
 
 **Custom content value**
 
 You may specify the `for:` attribute, and pass the label's content as a first argument, to gain the full control over the rendered HTML.
 
-```ruby
+```erb
 <%= f.label("Title", for: "book.extended_title") %>
-# => <label for="book-extended-title">Title</label>
-
-f.label("book.extended_title", for: "ext-title")
-# => <label for="ext-title">Extended title</label>
+<%= f.label("book.extended_title", for: "ext-title") %>
 ```
+
+```html
+<label for="book-extended-title">Title</label>
+<label for="ext-title">Extended title</label>
+```
+
 
 **Giving value in a block**
 
 You may also provide the content's value in the block, which allows you to include other HTML tags if needed.
-```ruby
+```erb
 <%= f.label for: "book.free_shipping" do %>
   Free shipping
   <abbr title="optional" aria-label="optional">*</abbr>
 <% end %>
+```
 
-# =>
+```html
 <label for="book-free-shipping">
   Free shipping
   <abbr title="optional" aria-label="optional">*</abbr>
 </label>
 ```
+
 ### fieldset
 
 Returns a fieldset tag. It is useful to group related items together.
 
-```ruby
+```erb
 <%= f.fieldset do %>
   <%= f.legend("Author") %>
   <%= f.label("author.name") %>
   <%= f.text_field("author.name") %>
 <% end %>
-
 ```
 
 ```html
@@ -300,6 +314,7 @@ Returns a fieldset tag. It is useful to group related items together.
 ```
 
 Keep in mind that this is only a visual improvement and does not affect the data structure being sent to the server.
+
 ### check_box
 
 Returns the tags for a checkbox.
@@ -308,9 +323,11 @@ When editing a resource, the form automatically assigns the `checked` HTML attri
 
 **Usage**
 
-```ruby
-f.check_box("delivery.free_shipping")
-# =>
+```erb
+<%= f.check_box("delivery.free_shipping") %>
+```
+
+```html
 <input type="hidden" name="delivery[free_shipping]" value="0">
 <input type="checkbox" name="delivery[free_shipping]" id="delivery-free-shipping" value="1">
 ```
@@ -319,10 +336,11 @@ Please notice, that **the helper also returns a hidden input tag preceding the c
 
 **Adding HTML attributes**
 
-```ruby
-f.check_box("delivery.free_shipping", class: "form-check-input")
+```erb
+<%= f.check_box("delivery.free_shipping", class: "form-check-input") %>
+```
 
-# =>
+```html
 <input type="hidden" name="delivery[free_shipping]" value="0">
 <input type="checkbox" name="delivery[free_shipping]" id="delivery-free-shipping" value="1" class="form-check-input">
 ```
@@ -331,9 +349,11 @@ f.check_box("delivery.free_shipping", class: "form-check-input")
 
 By default values of the checkbox are either "0" or "1", but you can control that with the `checked_value` and `unchecked_value` properties.
 
-```ruby
-f.check_box("delivery.free_shipping", checked_value: "true", unchecked_value: "false")
+```erb
+<%= f.check_box("delivery.free_shipping", checked_value: "true", unchecked_value: "false") %>
+```
 
+```html
 <input type="hidden" name="delivery[free_shipping]" value="false">
 <input type="checkbox" name="delivery[free_shipping]" id="delivery-free-shipping" value="true">
 ```
@@ -342,10 +362,10 @@ f.check_box("delivery.free_shipping", checked_value: "true", unchecked_value: "f
 
 If the form values match the `checked_value` of the checkbox, it'll automatically become checked. It works for "0" and "1" strings, integers, and boolean values, but you can match any two values and make them automatically recognized.
 
-```ruby
+```erb
 # Given the request params:
 # {delivery: {free_shipping: "1"}}
-f.check_box("delivery.free_shipping")
+<%= f.check_box("delivery.free_shipping") %>
 # =>
 <input type="hidden" name="delivery[free_shipping]" value="0">
 <input type="checkbox" name="delivery[free_shipping]" id="delivery-free-shipping" value="1" checked="checked">
@@ -355,10 +375,10 @@ f.check_box("delivery.free_shipping")
 
 Even if the corresponding field value is not matching the `checked_value`, you can still force the `check_box` to be checked with a usage of `checked` option.
 
-```ruby
+```erb
 # Given the request params:
 # {delivery: {free_shipping: "0"}}
-f.check_box("deliver.free_shipping", checked: "checked")
+<%= f.check_box("deliver.free_shipping", checked: "checked") %>
 # =>
 <input type="hidden" name="delivery[free_shipping]" value="0">
 <input type="checkbox" name="delivery[free_shipping]" id="delivery-free-shipping" value="1" checked="checked">
@@ -368,10 +388,9 @@ f.check_box("deliver.free_shipping", checked: "checked")
 
 If we have an array of values, and we'd like to send values only for those that are chosen, we can use the multiple checkboxes feature, specifying the name attribute:
 
-```ruby
-f.check_box("book.languages", name: "book[languages][]", value: "italian", id: nil)
-f.check_box("book.languages", name: "book[languages][]", value: "english", id: nil)
-
+```erb
+<%= f.check_box("book.languages", name: "book[languages][]", value: "italian", id: nil) %>
+<%= f.check_box("book.languages", name: "book[languages][]", value: "english", id: nil) %>
 # =>
 <input type="checkbox" name="book[languages][]" value="italian">
 <input type="checkbox" name="book[languages][]" value="english">
@@ -379,13 +398,12 @@ f.check_box("book.languages", name: "book[languages][]", value: "english", id: n
 
 This will also automatically check if the corresponding values are matching or not, which will auto-recognize those fields that need to be checked.
 
-```ruby
+```erb
 @example Automatic "checked" attribute for an array of values
 # Given the request params:
 # {book: {languages: ["italian"]}}
-f.check_box("book.languages", name: "book[languages][]", value: "italian", id: nil)
-f.check_box("book.languages", name: "book[languages][]", value: "english", id: nil)
-
+<%= f.check_box("book.languages", name: "book[languages][]", value: "italian", id: nil) %>
+<%= f.check_box("book.languages", name: "book[languages][]", value: "english", id: nil) %>
 # =>
 <input type="checkbox" name="book[languages][]" value="italian" checked="checked">
 <input type="checkbox" name="book[languages][]" value="english">
@@ -396,16 +414,16 @@ f.check_box("book.languages", name: "book[languages][]", value: "english", id: n
 
 Returns a color input HTML tag.
 
-```ruby
-f.color_field("user.background")
+```erb
+<= f.color_field("user.background") %>
 # =>
 <input type="color" name="user[background]" id="user-background" value="">
 ```
 
 This helper accepts HTML attributes as well, like most of other building blocks we provide.
 
-```ruby
- f.color_field("user.background", class: "form-control")
+```erb
+ <= f.color_field("user.background", class: "form-control") %>
  #=>
  <input type="color" name="user[background]" id="user-background" value="" class="form-control">
 ```
@@ -695,7 +713,6 @@ Returns a radio input tag.
 ```ruby
 f.radio_button("book.category", "Fiction")
 f.radio_button("book.category", "Non-Fiction")
-
 # =>
 <input type="radio" name="book[category]" value="Fiction">
 <input type="radio" name="book[category]" value="Non-Fiction">
@@ -703,7 +720,6 @@ f.radio_button("book.category", "Non-Fiction")
 # With HTML Attributes
 f.radio_button("book.category", "Fiction", class: "form-check")
 f.radio_button("book.category", "Non-Fiction", class: "form-check")
-
 # =>
 <input type="radio" name="book[category]" value="Fiction" class="form-check">
 <input type="radio" name="book[category]" value="Non-Fiction" class="form-check">
@@ -742,7 +758,6 @@ and value (the value for the option) strings.
 ```ruby
 values = {"Italy" => "it", "Australia" => "au"}
 f.select("book.store", values)
-
 # =>
 <select name="book[store]" id="book-store">
   <option value="it">Italy</option>
@@ -752,7 +767,6 @@ f.select("book.store", values)
 # With HTML Attributes
 values = {"Italy" => "it", "Australia" => "au"}
 f.select("book.store", values, class: "form-control")
-
 # =>
 <select name="book[store]" id="book-store" class="form-control">
   <option value="it">Italy</option>
@@ -770,7 +784,6 @@ option tags matching the resource's values.
 # {book: {store: "it"}}
 values = {"Italy" => "it", "Australia" => "au"}
 f.select("book.store", values)
-
 # =>
 <select name="book[store]" id="book-store">
 <option value="it" selected="selected">Italy</option>
@@ -785,7 +798,6 @@ You can specify a text to display by default by passing in the `prompt` option a
 ```ruby
 values = {"Italy" => "it", "Australia" => "au"}
 f.select("book.store", values, options: {prompt: "Select a store"})
-
 # =>
 <select name="book[store]" id="book-store">
   <option>Select a store</option>
@@ -796,7 +808,6 @@ f.select("book.store", values, options: {prompt: "Select a store"})
 # Prompt option and HTML attributes
 values = {"Italy" => "it", "Australia" => "au"}
 f.select("book.store", values, options: {prompt: "Select a store"}, class: "form-control")
-
 # =>
 <select name="book[store]" id="book-store" class="form-control">
   <option disabled="disabled">Select a store</option>
@@ -811,7 +822,6 @@ You may force some items to be selected by passing in the `selected` option argu
 ```ruby
 values = {"Italy" => "it", "Australia" => "au"}
 f.select("book.store", values, options: {selected: "it"})
-
 # =>
 <select name="book[store]" id="book-store">
   <option value="it" selected="selected">Italy</option>
@@ -826,7 +836,6 @@ To allow multiple selection for options, pass in the `multiple: true` argument.
 ```ruby
 values = {"Italy" => "it", "Australia" => "au"}
 f.select("book.stores", values, multiple: true)
-
 # =>
 <select name="book[store][]" id="book-store" multiple="multiple">
   <option value="it">Italy</option>
@@ -836,7 +845,6 @@ f.select("book.stores", values, multiple: true)
 # Multiple select and HTML attributes
 values = {"Italy" => "it", "Australia" => "au"}
 f.select("book.stores", values, multiple: true, class: "form-control")
-
 # =>
 <select name="book[store][]" id="book-store" multiple="multiple" class="form-control">
   <option value="it">Italy</option>
@@ -858,7 +866,6 @@ values = [
   ["Zimbabwe", "zw"]
 ]
 f.select("book.stores", values)
-
 # =>
 <select name="book[store]" id="book-store">
   <option value="it">Italy</option>
@@ -878,7 +885,6 @@ It accepts a Hash or Array of values as a second argument. The third parameter i
 ```ruby
 values = ["Italy", "Australia"]
 f.datalist("book.stores", values, "books")
-
 # =>
 <input type="text" name="book[store]" id="book-store" value="" list="books">
 <datalist id="books">
@@ -890,7 +896,6 @@ f.datalist("book.stores", values, "books")
 # With options as Hash
 values = Hash["Italy" => "it", "Australia" => "au"]
 f.datalist("book.stores", values, "books")
-
 # =>
 <input type="text" name="book[store]" id="book-store" value="" list="books">
 <datalist id="books">
@@ -907,7 +912,6 @@ Below you can check example of specifying separate HTML attributes for the text,
 ```ruby
 values = ["Italy", "Australia"]
 f.datalist "book.stores", values, "books", class: 'text-class', datalist: {class: "datalist-class"}, options: {class: "option-class"}
-
 # =>
 <input type="text" name="book[store]" id="book-store" value="" list="books" class="text-class">
 <datalist id="books" class="datalist-class">
@@ -937,7 +941,6 @@ You may pass in content in a block, which allows you to nest the HTML elements.
 <%= f.button class: "btn btn-secondary" do %>
   <span class="oi oi-check">
 <% end %>
-
 # =>
 <button class="btn btn-secondary">
   <span class="oi oi-check"></span>
@@ -984,7 +987,6 @@ You may pass in content in a block, which allows you to nest the HTML elements.
 <%= f.submit(class: "btn btn-primary") do %>
   <span class="oi oi-check">
 <% end %>
-
 # =>
 <button type="submit" class="btn btn-primary">
   <span class="oi oi-check"></span>
