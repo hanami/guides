@@ -89,7 +89,7 @@ While the default HTTP request method is set to `POST`, you can override it by p
 
 This will override the method giving you control of the type of action you want to perform.
 
-```ruby
+```html
 <form action="/books/123" accept-charset="utf-8" method="POST">
  <input type="hidden" name="_method" value="PUT">
  <input type="hidden" name="_csrf_token" value="920cd5bfaecc6e58368950e790f2f7b4e5561eeeab230aa1b7de1b1f40ea7d5d">
@@ -362,11 +362,16 @@ By default values of the checkbox are either "0" or "1", but you can control tha
 
 If the form values match the `checked_value` of the checkbox, it'll automatically become checked. It works for "0" and "1" strings, integers, and boolean values, but you can match any two values and make them automatically recognized.
 
-```erb
+```ruby
 # Given the request params:
 # {delivery: {free_shipping: "1"}}
+```
+
+```erb
 <%= f.check_box("delivery.free_shipping") %>
-# =>
+```
+
+```html
 <input type="hidden" name="delivery[free_shipping]" value="0">
 <input type="checkbox" name="delivery[free_shipping]" id="delivery-free-shipping" value="1" checked="checked">
 ```
@@ -375,11 +380,16 @@ If the form values match the `checked_value` of the checkbox, it'll automaticall
 
 Even if the corresponding field value is not matching the `checked_value`, you can still force the `check_box` to be checked with a usage of `checked` option.
 
-```erb
+```ruby
 # Given the request params:
 # {delivery: {free_shipping: "0"}}
+```
+
+```erb
 <%= f.check_box("deliver.free_shipping", checked: "checked") %>
-# =>
+```
+
+```html
 <input type="hidden" name="delivery[free_shipping]" value="0">
 <input type="checkbox" name="delivery[free_shipping]" id="delivery-free-shipping" value="1" checked="checked">
 ```
@@ -391,20 +401,28 @@ If we have an array of values, and we'd like to send values only for those that 
 ```erb
 <%= f.check_box("book.languages", name: "book[languages][]", value: "italian", id: nil) %>
 <%= f.check_box("book.languages", name: "book[languages][]", value: "english", id: nil) %>
-# =>
+```
+
+```html
 <input type="checkbox" name="book[languages][]" value="italian">
 <input type="checkbox" name="book[languages][]" value="english">
 ```
 
+**Automatic "checked" attribute for an array of values**
+
 This will also automatically check if the corresponding values are matching or not, which will auto-recognize those fields that need to be checked.
 
-```erb
-@example Automatic "checked" attribute for an array of values
+```ruby
 # Given the request params:
 # {book: {languages: ["italian"]}}
+```
+
+```erb
 <%= f.check_box("book.languages", name: "book[languages][]", value: "italian", id: nil) %>
 <%= f.check_box("book.languages", name: "book[languages][]", value: "english", id: nil) %>
-# =>
+```
+
+```html
 <input type="checkbox" name="book[languages][]" value="italian" checked="checked">
 <input type="checkbox" name="book[languages][]" value="english">
 
@@ -415,62 +433,53 @@ This will also automatically check if the corresponding values are matching or n
 Returns a color input HTML tag.
 
 ```erb
-<= f.color_field("user.background") %>
-# =>
-<input type="color" name="user[background]" id="user-background" value="">
+<%= f.color_field("user.background") %>
+<%= f.color_field("user.background", class: "form-control") %>
 ```
 
-This helper accepts HTML attributes as well, like most of other building blocks we provide.
-
-```erb
- <= f.color_field("user.background", class: "form-control") %>
- #=>
- <input type="color" name="user[background]" id="user-background" value="" class="form-control">
+```html
+<input type="color" name="user[background]" id="user-background" value="">
+<input type="color" name="user[background]" id="user-background" value="" class="form-control">
 ```
 
 ### date_field
 
 Returns a date input tag.
 
-   ```ruby
-
-f.date_field("user.birth_date")
-# =>
-<input type="date" name="user[birth_date]" id="user-birth-date" value="">
-
-# With HTML Attributes
-f.date_field("user.birth_date", class: "form-control")
-# =>
-<input type="date" name="user[birth_date]" id="user-birth-date" value="" class="form-control">
+```erb
+<%= f.date_field("user.birth_date") %>
+<%= f.date_field("user.birth_date", class: "form-control") %>
 ```
 
+```html
+<input type="date" name="user[birth_date]" id="user-birth-date" value="">
+<input type="date" name="user[birth_date]" id="user-birth-date" value="" class="form-control">
+```
 
 ### datetime_field
 
 Returns a datetime input tag.
 
-```ruby
-f.datetime_field("delivery.delivered_at")
-# =>
-<input type="datetime" name="delivery[delivered_at]" id="delivery-delivered-at" value="">
+```erb
+<%= f.datetime_field("delivery.delivered_at") %>
+<%= f.datetime_field("delivery.delivered_at", class: "form-control") %>
+```
 
-# With HTML Attributes
-f.datetime_field("delivery.delivered_at", class: "form-control")
-# =>
+```html
+<input type="datetime" name="delivery[delivered_at]" id="delivery-delivered-at" value="">
 <input type="datetime" name="delivery[delivered_at]" id="delivery-delivered-at" value="" class="form-control">
 ```
 ### datetime_local_field
 
 Returns a datetime-local input tag.
 
-```ruby
-f.datetime_local_field("delivery.delivered_at")
-# =>
-<input type="datetime-local" name="delivery[delivered_at]" id="delivery-delivered-at" value="">
+```erb
+<%= f.datetime_local_field("delivery.delivered_at") %>
+<%= f.datetime_local_field("delivery.delivered_at", class: "form-control") %>
+```
 
-# With HTML Attributes
-f.datetime_local_field("delivery.delivered_at", class: "form-control")
-# =>
+```html
+<input type="datetime-local" name="delivery[delivered_at]" id="delivery-delivered-at" value="">
 <input type="datetime-local" name="delivery[delivered_at]" id="delivery-delivered-at" value="" class="form-control">
 ```
 
@@ -478,14 +487,13 @@ f.datetime_local_field("delivery.delivered_at", class: "form-control")
 
 Returns a time input tag.
 
-```ruby
-f.time_field("book.release_hour")
-# =>
-<input type="time" name="book[release_hour]" id="book-release-hour" value="">
+```erb
+<%= f.time_field("book.release_hour") %>
+<%= f.time_field("book.release_hour", class: "form-control") %>
+```
 
-# With HTML Attributes
-f.time_field("book.release_hour", class: "form-control")
-# =>
+```html
+<input type="time" name="book[release_hour]" id="book-release-hour" value="">
 <input type="time" name="book[release_hour]" id="book-release-hour" value="" class="form-control">
 ```
 
@@ -493,30 +501,27 @@ f.time_field("book.release_hour", class: "form-control")
 
 Returns a month input tag.
 
-```ruby
-f.month_field("book.release_month")
-# =>
-<input type="month" name="book[release_month]" id="book-release-month" value="">
+```erb
+<%= f.month_field("book.release_month") %>
+<%= f.month_field("book.release_month", class: "form-control") %>
+```
 
-# HTML Attributes
-f.month_field("book.release_month", class: "form-control")
-# =>
+```html
+<input type="month" name="book[release_month]" id="book-release-month" value="">
 <input type="month" name="book[release_month]" id="book-release-month" value="" class="form-control">
 ```
 
 ### week_field
 
-   Returns a week input tag.
+Returns a week input tag.
 
-```ruby
+```erb
+<%= f.week_field("book.release_week") %>
+<%= f.week_field("book.release_week", class: "form-control") %>
+```
 
-f.week_field("book.release_week")
-# =>
+```html
 <input type="week" name="book[release_week]" id="book-release-week" value="">
-
-# With HTML Attributes
-f.week_field("book.release_week", class: "form-control")
-# =>
 <input type="week" name="book[release_week]" id="book-release-week" value="" class="form-control">
 ```
 
@@ -524,30 +529,27 @@ f.week_field("book.release_week", class: "form-control")
 
 Returns an email input tag.
 
-```ruby
-f.email_field("user.email")
-# =>
-<input type="email" name="user[email]" id="user-email" value="">
+```erb
+<%= f.email_field("user.email") %>
+<%= f.email_field("user.email", class: "form-control") %>
+```
 
-# With HTML Attributes
-f.email_field("user.email", class: "form-control")
-# =>
+```html
+<input type="email" name="user[email]" id="user-email" value="">
 <input type="email" name="user[email]" id="user-email" value="" class="form-control">
 ```
 
 ### url_field
 
-
 Returns a URL input tag.
 
-```ruby
-f.url_field("user.website")
-# =>
-<input type="url" name="user[website]" id="user-website" value="">
+```erb
+<%= f.url_field("user.website") %>
+<%= f.url_field("user.website", class: "form-control") %>
+```
 
-# With HTML Attributes
-f.url_field("user.website", class: "form-control")
-# =>
+```html
+<input type="url" name="user[website]" id="user-website" value="">
 <input type="url" name="user[website]" id="user-website" value="" class="form-control">
 ```
 
@@ -555,14 +557,13 @@ f.url_field("user.website", class: "form-control")
 
 Returns a telephone input tag.
 
-   ```ruby
-f.tel_field("user.telephone")
-# =>
-<input type="tel" name="user[telephone]" id="user-telephone" value="">
+```erb
+<%= f.tel_field("user.telephone") %>
+<%= f.tel_field("user.telephone", class: "form-control") %>
+```
 
-# With HTML Attributes
-f.tel_field("user.telephone", class: "form-control")
-# =>
+```html
+<input type="tel" name="user[telephone]" id="user-telephone" value="">
 <input type="tel" name="user[telephone]" id="user-telephone" value="" class="form-control">
 ```
 
@@ -570,9 +571,11 @@ f.tel_field("user.telephone", class: "form-control")
 
 Returns a hidden input tag, not visible in the rendered page but only in the source code.
 
-```ruby
-f.hidden_field("delivery.customer_id")
-# =>
+```erb
+<%= f.hidden_field("delivery.customer_id") %>
+```
+
+```html
 <input type="hidden" name="delivery[customer_id]" id="delivery-customer-id" value="">
 ```
 
@@ -582,14 +585,13 @@ There is hardly a need to pass HTML attributes to this one, but you can of cours
 
 Returns a file input tag. It allows you to upload a file or multiple files.
 
-```ruby
-f.file_field("user.avatar")
-# =>
-<input type="file" name="user[avatar]" id="user-avatar">
+```erb
+<%= f.file_field("user.avatar") %>
+<%= f.file_field("user.avatar", class: "avatar-upload") %>
+```
 
-# With  HTML Attributes
-f.file_field("user.avatar", class: "avatar-upload")
-# =>
+```html
+<input type="file" name="user[avatar]" id="user-avatar">
 <input type="file" name="user[avatar]" id="user-avatar" class="avatar-upload">
 ```
 
@@ -597,13 +599,14 @@ f.file_field("user.avatar", class: "avatar-upload")
 
 You can control what MIME Types your input allow by passing in the additional option `:accepted`. This can be a `String`, where types are separated by comma, or an `Array`.
 
-```ruby
-f.file_field("user.resume", accept: "application/pdf,application/ms-word")
-# =>
-<input type="file" name="user[resume]" id="user-resume" accept="application/pdf,application/ms-word">
+```erb
+<%= f.file_field("user.resume", accept: "application/pdf,application/ms-word") %>
+<%= f.file_field("user.resume", accept: ["application/pdf", "application/ms-word"]) %>
+```
 
-f.file_field("user.resume", accept: ["application/pdf", "application/ms-word"])
-# =>
+Both of the above examples will render HTML below
+
+```html
 <input type="file" name="user[resume]" id="user-resume" accept="application/pdf,application/ms-word">
 ```
 
@@ -611,9 +614,11 @@ f.file_field("user.resume", accept: ["application/pdf", "application/ms-word"])
 
 You can control whether to accept multiple file uploads by passing in the `:multiple` option argument. Setting this flag will add the `multipart` attribute to the `<form>` tag`:
 
-```ruby
-f.file_field("user.resume", multiple: true)
-# =>
+```erb
+<%= f.file_field("user.resume", multiple: true) %>
+```
+
+```html
 <input type="file" name="user[resume]" id="user-resume" multiple="multiple">
 ```
 
@@ -621,16 +626,21 @@ f.file_field("user.resume", multiple: true)
 
 Returns a number input tag.
 
-```ruby
-f.number_field("book.percent_read")
-=> <input type="number" name="book[percent_read]" id="book-percent-read" value="">
+```erb
+<%= f.number_field("book.percent_read") %>
+```
+
+```html
+<input type="number" name="book[percent_read]" id="book-percent-read" value="">
 ```
 
 For this tag, you can use the `max`, `min`, and `step` HTML attributes, to control the range of acceptable values.
 
-```ruby
-f.number_field("book.percent_read", min: 1, max: 100, step: 1)
-# =>
+```erb
+<%= f.number_field("book.percent_read", min: 1, max: 100, step: 1) %>
+```
+
+```html
 <input type="number" name="book[percent_read]" id="book-precent-read" value="" min="1" max="100" step="1">
 ```
 
@@ -638,17 +648,21 @@ f.number_field("book.percent_read", min: 1, max: 100, step: 1)
 
 Returns a range input tag.
 
-```ruby
-f.range_field("book.discount_percentage")
-# =>
+```erb
+<%= f.range_field("book.discount_percentage") %>
+```
+
+```html
 <input type="range" name="book[discount_percentage]" id="book-discount-percentage" value="">
 ```
 
 For this tag, you can make use of the `max`, `min`, and `step` HTML attributes.
 
- ```ruby
-f.range_field("book.discount_percentage", min: 1, max: 1, step: 1)
-# =>
+```erb
+<%= f.range_field("book.discount_percentage", min: 1, max: 1, step: 1) %>
+```
+
+```html
 <input type="range" name="book[discount_percentage]" id="book-discount-percentage" value="" min="1" max="100" step="1">
 ```
 
@@ -656,23 +670,23 @@ f.range_field("book.discount_percentage", min: 1, max: 1, step: 1)
 
 Returns a textarea tag.
 
-```ruby
-f.text_area("user.hobby")
-# =>
+```erb
+<%= f.text_area("user.hobby") %>
+<%= f.text_area "user.hobby", class: "form-control" %>
+```
+
+```html
 <textarea name="user[hobby]" id="user-hobby"></textarea>
-
-# With HTML attributes
-f.text_area "user.hobby", class: "form-control"
-# =>
 <textarea name="user[hobby]" id="user-hobby" class="form-control"></textarea>
-
 ```
 
 It accepts the `content` as a second argument.
 
-```ruby
-f.text_area "user.hobby", "Football"
-# =>
+```erb
+<%= f.text_area "user.hobby", "Football" %>
+```
+
+```html
 <textarea name="user[hobby]" id="user-hobby">Football</textarea>
 ```
 
@@ -680,14 +694,13 @@ f.text_area "user.hobby", "Football"
 
 Returns a text input tag.
 
-```ruby
-f.text_field("user.first_name")
-# =>
-<input type="text" name="user[first_name]" id="user-first-name" value="">
+```erb
+<%= f.text_field("user.first_name") %>
+<%= f.text_field("user.first_name", class: "form-control") %>
+```
 
-# With HTML Attributes
-f.text_field("user.first_name", class: "form-control")
-# =>
+```html
+<input type="text" name="user[first_name]" id="user-first-name" value="">
 <input type="text" name="user[first_name]" id="user-first-name" value="" class="form-control">
 ```
 
@@ -695,14 +708,13 @@ f.text_field("user.first_name", class: "form-control")
 
 Returns a search input tag.
 
-```ruby
-f.search_field("search.q")
-# =>
-<input type="search" name="search[q]" id="search-q" value="">
+```erb
+<%= f.search_field("search.q") %>
+<%= f.search_field("search.q", class: "form-control") %>
+```
 
-# With HTML Attributes
-f.search_field("search.q", class: "form-control")
-# =>
+```html
+<input type="search" name="search[q]" id="search-q" value="">
 <input type="search" name="search[q]" id="search-q" value="" class="form-control">
 ```
 
@@ -710,17 +722,24 @@ f.search_field("search.q", class: "form-control")
 
 Returns a radio input tag.
 
-```ruby
-f.radio_button("book.category", "Fiction")
+```erb
+<%= f.radio_button("book.category", "Fiction") %>
 f.radio_button("book.category", "Non-Fiction")
-# =>
+```
+
+```html
 <input type="radio" name="book[category]" value="Fiction">
 <input type="radio" name="book[category]" value="Non-Fiction">
+```
 
-# With HTML Attributes
-f.radio_button("book.category", "Fiction", class: "form-check")
-f.radio_button("book.category", "Non-Fiction", class: "form-check")
-# =>
+**With HTML Attributes**
+
+```erb
+<%= f.radio_button("book.category", "Fiction", class: "form-check") %>
+<%= f.radio_button("book.category", "Non-Fiction", class: "form-check") %>
+```
+
+```html
 <input type="radio" name="book[category]" value="Fiction" class="form-check">
 <input type="radio" name="book[category]" value="Non-Fiction" class="form-check">
 ```
@@ -731,10 +750,14 @@ the tag.
 ```ruby
 # Given the request params:
 # { book: { category: "Non-Fiction" } }
-f.radio_button("book.category", "Fiction")
-f.radio_button("book.category", "Non-Fiction")
+```
 
-#=>
+```erb
+<%= f.radio_button("book.category", "Fiction") %>
+<%= f.radio_button("book.category", "Non-Fiction") %>
+```
+
+```html
 <input type="radio" name="book[category]" value="Fiction">
 <input type="radio" name="book[category]" value="Non-Fiction" checked="checked">
 ```
@@ -743,9 +766,12 @@ f.radio_button("book.category", "Non-Fiction")
 
 Returns a password input tag in which content is hidden by default.
 
-```ruby
-f.password_field("signup.password")
-=> <input type="password" name="signup[password]" id="signup-password" value="">
+```erb
+<%= f.password_field("signup.password") %>
+```
+
+```html
+<input type="password" name="signup[password]" id="signup-password" value="">
 ```
 
 ### select
@@ -755,19 +781,26 @@ Returns a select input tag containing option tags for the given values.
 The values should be an enumerable of pairs of content (the displayed text for the option)
 and value (the value for the option) strings.
 
-```ruby
-values = {"Italy" => "it", "Australia" => "au"}
-f.select("book.store", values)
-# =>
+```erb
+<% values = {"Italy" => "it", "Australia" => "au"} %>
+<%= f.select("book.store", values) %>
+```
+
+```html
 <select name="book[store]" id="book-store">
   <option value="it">Italy</option>
   <option value="au">Australia</option>
 </select>
+```
 
-# With HTML Attributes
-values = {"Italy" => "it", "Australia" => "au"}
-f.select("book.store", values, class: "form-control")
-# =>
+**With HTML Attributes**
+
+```erb
+<% values = {"Italy" => "it", "Australia" => "au"} %>
+<%= f.select("book.store", values, class: "form-control") %>
+```
+
+```html
 <select name="book[store]" id="book-store" class="form-control">
   <option value="it">Italy</option>
   <option value="au">Australia</option>
@@ -782,12 +815,17 @@ option tags matching the resource's values.
 ```ruby
 # Given the following request params:
 # {book: {store: "it"}}
-values = {"Italy" => "it", "Australia" => "au"}
-f.select("book.store", values)
-# =>
+```
+
+```erb
+<% values = {"Italy" => "it", "Australia" => "au"} %>
+<%= f.select("book.store", values) %>
+```
+
+```html
 <select name="book[store]" id="book-store">
-<option value="it" selected="selected">Italy</option>
-<option value="au">Australia</option>
+  <option value="it" selected="selected">Italy</option>
+  <option value="au">Australia</option>
 </select>
 ```
 
@@ -795,20 +833,28 @@ f.select("book.store", values)
 
 You can specify a text to display by default by passing in the `prompt` option argument
 
-```ruby
-values = {"Italy" => "it", "Australia" => "au"}
-f.select("book.store", values, options: {prompt: "Select a store"})
-# =>
+```erb
+<% values = {"Italy" => "it", "Australia" => "au"} %>
+<%= f.select("book.store", values, options: {prompt: "Select a store"}) %>
+```
+
+```html
 <select name="book[store]" id="book-store">
   <option>Select a store</option>
   <option value="it">Italy</option>
   <option value="au">Australia</option>
 </select>
 
-# Prompt option and HTML attributes
-values = {"Italy" => "it", "Australia" => "au"}
-f.select("book.store", values, options: {prompt: "Select a store"}, class: "form-control")
-# =>
+```
+
+**Prompt option and HTML attributes**
+
+```erb
+<% values = {"Italy" => "it", "Australia" => "au"} %>
+<%= f.select("book.store", values, options: {prompt: "Select a store"}, class: "form-control") %>
+```
+
+```html
 <select name="book[store]" id="book-store" class="form-control">
   <option disabled="disabled">Select a store</option>
   <option value="it">Italy</option>
@@ -819,10 +865,12 @@ f.select("book.store", values, options: {prompt: "Select a store"}, class: "form
 **Forcing Selected options**
 You may force some items to be selected by passing in the `selected` option argument
 
-```ruby
-values = {"Italy" => "it", "Australia" => "au"}
-f.select("book.store", values, options: {selected: "it"})
-# =>
+```erb
+<%= values = {"Italy" => "it", "Australia" => "au"} %>
+<%= f.select("book.store", values, options: {selected: "it"}) %>
+```
+
+```html
 <select name="book[store]" id="book-store">
   <option value="it" selected="selected">Italy</option>
   <option value="au">Australia</option>
@@ -833,19 +881,27 @@ f.select("book.store", values, options: {selected: "it"})
 
 To allow multiple selection for options, pass in the `multiple: true` argument.
 
-```ruby
-values = {"Italy" => "it", "Australia" => "au"}
-f.select("book.stores", values, multiple: true)
-# =>
+```erb
+<% values = {"Italy" => "it", "Australia" => "au"} %>
+<%= f.select("book.stores", values, multiple: true) %>
+```
+
+```html
 <select name="book[store][]" id="book-store" multiple="multiple">
   <option value="it">Italy</option>
   <option value="au">Australia</option>
 </select>
 
-# Multiple select and HTML attributes
-values = {"Italy" => "it", "Australia" => "au"}
-f.select("book.stores", values, multiple: true, class: "form-control")
-# =>
+```
+
+**Multiple select and HTML attributes**
+
+```erb
+<% values = {"Italy" => "it", "Australia" => "au"} %>
+<%= f.select("book.stores", values, multiple: true, class: "form-control") %>
+```
+
+```html
 <select name="book[store][]" id="book-store" multiple="multiple" class="form-control">
   <option value="it">Italy</option>
   <option value="au">Australia</option>
@@ -857,16 +913,19 @@ f.select("book.stores", values, multiple: true, class: "form-control")
 Because the only requirement is an enumerable of pairs (content -> value), you can also pass in a nested array.
 It can be useful when there is a need to support repeated option values.
 
-```ruby
-values = [
+```erb
+<% values = [
   ["Italy", "it"],
   ["---", ""],
   ["Afghanistan", "af"],
   ["Italy", "it"],
   ["Zimbabwe", "zw"]
-]
-f.select("book.stores", values)
-# =>
+] %>
+
+<%= f.select("book.stores", values) %>
+```
+
+```html
 <select name="book[store]" id="book-store">
   <option value="it">Italy</option>
   <option value="">---</option>
@@ -882,21 +941,27 @@ Returns a datalist input tag together with the text input field being bind toget
 
 It accepts a Hash or Array of values as a second argument. The third parameter is a `list` HTML tag input name and the ID of the datalist.
 
-```ruby
-values = ["Italy", "Australia"]
-f.datalist("book.stores", values, "books")
-# =>
+```erb
+<% values = ["Italy", "Australia"] %>
+<%= f.datalist("book.stores", values, "books") %>
+```
+
+```html
 <input type="text" name="book[store]" id="book-store" value="" list="books">
 <datalist id="books">
   <option value="Italy"></option>
   <option value="Australia"></option>
 </datalist>
+```
 
+**With options as hash**
 
-# With options as Hash
-values = Hash["Italy" => "it", "Australia" => "au"]
-f.datalist("book.stores", values, "books")
-# =>
+```erb
+<% values = Hash["Italy" => "it", "Australia" => "au"] %>
+<%= f.datalist("book.stores", values, "books") %>
+```
+
+```html
 <input type="text" name="book[store]" id="book-store" value="" list="books">
 <datalist id="books">
   <option value="Italy">it</option>
@@ -909,10 +974,12 @@ f.datalist("book.stores", values, "books")
 You can set HTML attributes for `datalist` and the options fields separately.
 Below you can check example of specifying separate HTML attributes for the text, `datalist` and `options` fields
 
-```ruby
-values = ["Italy", "Australia"]
-f.datalist "book.stores", values, "books", class: 'text-class', datalist: {class: "datalist-class"}, options: {class: "option-class"}
-# =>
+```erb
+<% values = ["Italy", "Australia"] %>
+<%= f.datalist "book.stores", values, "books", class: 'text-class', datalist: {class: "datalist-class"}, options: {class: "option-class"} %>
+```
+
+```html
 <input type="text" name="book[store]" id="book-store" value="" list="books" class="text-class">
 <datalist id="books" class="datalist-class">
   <option value="Italy" class="option-class"></option>
@@ -924,14 +991,13 @@ f.datalist "book.stores", values, "books", class: 'text-class', datalist: {class
 
 Returns a button tag with the given content.
 
-```ruby
-f.button("Click me")
-# =>
-<button>Click me</button>
+```erb
+<%= f.button("Click me") %>
+<%= f.button("Click me", class: "btn btn-secondary") %>
+```
 
-# With HTML Attributes
-f.button("Click me", class: "btn btn-secondary")
-# =>
+```html
+<button>Click me</button>
 <button class="btn btn-secondary">Click me</button>
 ```
 
@@ -941,7 +1007,9 @@ You may pass in content in a block, which allows you to nest the HTML elements.
 <%= f.button class: "btn btn-secondary" do %>
   <span class="oi oi-check">
 <% end %>
-# =>
+```
+
+```html
 <button class="btn btn-secondary">
   <span class="oi oi-check"></span>
 </button>
@@ -953,15 +1021,18 @@ Returns an image input tag, to be used as a visual button for the form.
 
 **For security reasons, you should use the absolute URL of the given image.**
 
+```erb
+<%= f.image_button("https://hanamirb.org/assets/button.png") %>
+```
 
-```ruby
-f.image_button("https://hanamirb.org/assets/button.png")
-# =>
+```html
 <input type="image" src="https://hanamirb.org/assets/button.png">
 
 # With HTML Attributes
-f.image_button("https://hanamirb.org/assets/button.png", name: "image", width: "50")
-# =>
+<%= f.image_button("https://hanamirb.org/assets/button.png", name: "image", width:  %>"50")
+```
+
+```html
 <input name="image" width="50" type="image" src="https://hanamirb.org/assets/button.png">
 ```
 
@@ -970,24 +1041,25 @@ f.image_button("https://hanamirb.org/assets/button.png", name: "image", width: "
 Returns a submit button tag with the given content.
 
 
-```ruby
-f.submit("Create")
-# =>
-<button type="submit">Create</button>
+```erb
+<%= f.submit("Create") %>
+<%= f.submit("Create", class: "btn btn-primary") %>
+```
 
-# With HTML Attributes
-f.submit("Create", class: "btn btn-primary")
-# =>
+```html
+<button type="submit">Create</button>
 <button type="submit" class="btn btn-primary">Create</button>
 ```
 
 You may pass in content in a block, which allows you to nest the HTML elements.
 
-```ruby
+```erb
 <%= f.submit(class: "btn btn-primary") do %>
   <span class="oi oi-check">
 <% end %>
-# =>
+```
+
+```html
 <button type="submit" class="btn btn-primary">
   <span class="oi oi-check"></span>
 </button>
