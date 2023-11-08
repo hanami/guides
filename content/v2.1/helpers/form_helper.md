@@ -2,17 +2,14 @@
 title: Form Helper
 order: 30
 ---
-# Form Helper
-
 Yields a form builder for constructing an HTML form and returns the resulting form string.
 
-
-## form_for
+# form_for
 
 Builds the form using the given base name for all fields.
 The overall structure of the attributes available is as follows:
 
-### Usage
+## Usage
 
 **Basic Example**
 
@@ -121,10 +118,11 @@ The value in the `song-title` test field had been filled in from the passed-in p
 </form>
 ```
 
-## Building blocks
+# Building blocks
 
 Below you can see a range of convenient methods for building the fields within an HTML form, integrating with request params and template locals to populate the fields with appropriate values.
-### input
+
+## input
 
 Generates an input tag without any special handling. For more convenience and other advanced features, see specific field type descriptions in this section.
 
@@ -138,7 +136,8 @@ The rendered HTML for the code above looks as this:
 ```html
 <input type="text" name="book[title]" id="book-title" value="Hanami book">
 ```
-### fields_for
+
+## fields_for
 
 Applies the base input name to all fields within the given block.
 
@@ -148,6 +147,7 @@ This is a convenience only. You can achieve the same result by including the bas
 the beginning of each input name.
 
 **Usage**
+
 ```erb
 <% f.fields_for "address" do |fa| %>
    <%= fa.text_field "street" %>
@@ -188,7 +188,7 @@ The rendered HTML for the code above looks as this:
 <input type="text" name="delivery[address][location][city]" id="delivery-address-location-city" value="">
 ```
 
-### fields_for_collection
+## fields_for_collection
 
 Yields to the given block for each element in the matching collection value, and applies
 the base input name to all fields within the block.
@@ -237,7 +237,7 @@ You can get access to the index number and the collection item value, by yieldin
 </div>
 ```
 
-### label
+## label
 
 Returns a label tag for the given field name, with a humanized version of the field name as the tag's content.
 
@@ -275,10 +275,10 @@ You may specify the `for:` attribute, and pass the label's content as a first ar
 <label for="ext-title">Extended title</label>
 ```
 
-
 **Giving value in a block**
 
 You may also provide the content's value in the block, which allows you to include other HTML tags if needed.
+
 ```erb
 <%= f.label for: "book.free_shipping" do %>
   Free shipping
@@ -293,7 +293,7 @@ You may also provide the content's value in the block, which allows you to inclu
 </label>
 ```
 
-### fieldset
+## fieldset
 
 Returns a fieldset tag. It is useful to group related items together.
 
@@ -315,7 +315,7 @@ Returns a fieldset tag. It is useful to group related items together.
 
 Keep in mind that this is only a visual improvement and does not affect the data structure being sent to the server.
 
-### check_box
+## check_box
 
 Returns the tags for a checkbox.
 
@@ -394,7 +394,7 @@ Even if the corresponding field value is not matching the `checked_value`, you c
 <input type="checkbox" name="delivery[free_shipping]" id="delivery-free-shipping" value="1" checked="checked">
 ```
 
-**Multiple checkboxes
+**Multiple checkboxes**
 
 If we have an array of values, and we'd like to send values only for those that are chosen, we can use the multiple checkboxes feature, specifying the name attribute:
 
@@ -428,7 +428,7 @@ This will also automatically check if the corresponding values are matching or n
 
 ```
 
-### color_field
+## color_field
 
 Returns a color input HTML tag.
 
@@ -442,7 +442,7 @@ Returns a color input HTML tag.
 <input type="color" name="user[background]" id="user-background" value="" class="form-control">
 ```
 
-### date_field
+## date_field
 
 Returns a date input tag.
 
@@ -456,7 +456,7 @@ Returns a date input tag.
 <input type="date" name="user[birth_date]" id="user-birth-date" value="" class="form-control">
 ```
 
-### datetime_field
+## datetime_field
 
 Returns a datetime input tag.
 
@@ -469,7 +469,7 @@ Returns a datetime input tag.
 <input type="datetime" name="delivery[delivered_at]" id="delivery-delivered-at" value="">
 <input type="datetime" name="delivery[delivered_at]" id="delivery-delivered-at" value="" class="form-control">
 ```
-### datetime_local_field
+## datetime_local_field
 
 Returns a datetime-local input tag.
 
@@ -483,7 +483,7 @@ Returns a datetime-local input tag.
 <input type="datetime-local" name="delivery[delivered_at]" id="delivery-delivered-at" value="" class="form-control">
 ```
 
-### time_field
+## time_field
 
 Returns a time input tag.
 
@@ -497,7 +497,7 @@ Returns a time input tag.
 <input type="time" name="book[release_hour]" id="book-release-hour" value="" class="form-control">
 ```
 
-### month_field
+## month_field
 
 Returns a month input tag.
 
@@ -511,7 +511,7 @@ Returns a month input tag.
 <input type="month" name="book[release_month]" id="book-release-month" value="" class="form-control">
 ```
 
-### week_field
+## week_field
 
 Returns a week input tag.
 
@@ -525,7 +525,7 @@ Returns a week input tag.
 <input type="week" name="book[release_week]" id="book-release-week" value="" class="form-control">
 ```
 
-### email_field
+## email_field
 
 Returns an email input tag.
 
@@ -539,7 +539,7 @@ Returns an email input tag.
 <input type="email" name="user[email]" id="user-email" value="" class="form-control">
 ```
 
-### url_field
+## url_field
 
 Returns a URL input tag.
 
@@ -553,7 +553,7 @@ Returns a URL input tag.
 <input type="url" name="user[website]" id="user-website" value="" class="form-control">
 ```
 
-### tel_field
+## tel_field
 
 Returns a telephone input tag.
 
@@ -567,7 +567,7 @@ Returns a telephone input tag.
 <input type="tel" name="user[telephone]" id="user-telephone" value="" class="form-control">
 ```
 
-### hidden_field
+## hidden_field
 
 Returns a hidden input tag, not visible in the rendered page but only in the source code.
 
@@ -581,7 +581,7 @@ Returns a hidden input tag, not visible in the rendered page but only in the sou
 
 There is hardly a need to pass HTML attributes to this one, but you can of course do this as with any other input field.
 
-### file_field
+## file_field
 
 Returns a file input tag. It allows you to upload a file or multiple files.
 
@@ -622,7 +622,7 @@ You can control whether to accept multiple file uploads by passing in the `:mult
 <input type="file" name="user[resume]" id="user-resume" multiple="multiple">
 ```
 
-### number_field
+## number_field
 
 Returns a number input tag.
 
@@ -644,7 +644,7 @@ For this tag, you can use the `max`, `min`, and `step` HTML attributes, to contr
 <input type="number" name="book[percent_read]" id="book-precent-read" value="" min="1" max="100" step="1">
 ```
 
-### range_field
+## range_field
 
 Returns a range input tag.
 
@@ -666,7 +666,7 @@ For this tag, you can make use of the `max`, `min`, and `step` HTML attributes.
 <input type="range" name="book[discount_percentage]" id="book-discount-percentage" value="" min="1" max="100" step="1">
 ```
 
-### text_area
+## text_area
 
 Returns a textarea tag.
 
@@ -690,7 +690,7 @@ It accepts the `content` as a second argument.
 <textarea name="user[hobby]" id="user-hobby">Football</textarea>
 ```
 
-### text_field
+## text_field
 
 Returns a text input tag.
 
@@ -704,7 +704,7 @@ Returns a text input tag.
 <input type="text" name="user[first_name]" id="user-first-name" value="" class="form-control">
 ```
 
-### search_field
+## search_field
 
 Returns a search input tag.
 
@@ -718,7 +718,7 @@ Returns a search input tag.
 <input type="search" name="search[q]" id="search-q" value="" class="form-control">
 ```
 
-### radio_button
+## radio_button
 
 Returns a radio input tag.
 
@@ -762,7 +762,7 @@ the tag.
 <input type="radio" name="book[category]" value="Non-Fiction" checked="checked">
 ```
 
-### password_field
+## password_field
 
 Returns a password input tag in which content is hidden by default.
 
@@ -774,7 +774,7 @@ Returns a password input tag in which content is hidden by default.
 <input type="password" name="signup[password]" id="signup-password" value="">
 ```
 
-### select
+## select
 
 Returns a select input tag containing option tags for the given values.
 
@@ -935,7 +935,7 @@ It can be useful when there is a need to support repeated option values.
 </select>
 ```
 
-### datalist
+## datalist
 
 Returns a datalist input tag together with the text input field being bind together.
 
@@ -987,7 +987,7 @@ Below you can check example of specifying separate HTML attributes for the text,
 </datalist>
 ```
 
-### button
+## button
 
 Returns a button tag with the given content.
 
@@ -1015,7 +1015,7 @@ You may pass in content in a block, which allows you to nest the HTML elements.
 </button>
 ```
 
-### image_button
+## image_button
 
 Returns an image input tag, to be used as a visual button for the form.
 
@@ -1036,7 +1036,7 @@ Returns an image input tag, to be used as a visual button for the form.
 <input name="image" width="50" type="image" src="https://hanamirb.org/assets/button.png">
 ```
 
-### submit
+## submit
 
 Returns a submit button tag with the given content.
 
