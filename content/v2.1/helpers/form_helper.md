@@ -16,8 +16,8 @@ The overall structure of the attributes available is as follows:
 
 **Basic Example**
 
-```ruby
-<%= form_for("book", "/books", class: "form-horizontal") do |f| %>
+```erb
+<%= form_for(:book, routes.path(:books), class: "form-horizontal") do |f| %>
   <div>
     <%= f.label "title" %>
     <%= f.text_field "title", class: "form-control" %>
@@ -51,8 +51,8 @@ To show `csrf_token` hidden field you need to have [sessions enabled](/v2.0/acti
 
 If you don't want to use the form name, skip it, and pass a URL as a first argument.
 
-```ruby
-<%= form_for("/books", class: "form-horizontal") do |f| %>
+```erb
+<%= form_for(routes.path(:books), class: "form-horizontal") do |f| %>
   <div>
     <%= f.label "book.title" %>
     <%= f.text_field "book.title", class: "form-control" %>
@@ -80,14 +80,14 @@ This way you get a full control over naming each of the form's element.
 
 While the default HTTP request method is set to `POST`, you can override it by passing in the `method:` keyword.
 
-```ruby
-<%= form_for("/books/123", method: :put) do |f| %>
- <%= f.text_field "book.title" %>
+```erb
+<%= form_for(:book, routes.path(:book, id: book.id), method: :put) do |f| %>
+ <%= f.text_field "title" %>
  <%= f.submit "Update" %>
 <% end %>
 ```
 
-This will override the method giving you the control of the type of action you want to perform.
+This will override the method giving you control of the type of action you want to perform.
 
 ```ruby
 <form action="/books/123" accept-charset="utf-8" method="POST">
@@ -103,19 +103,19 @@ This will override the method giving you the control of the type of action you w
 
 There is often a scenario where you want to pre-fill the form values with the object loaded from the server. Form helper allows you to override any set of values by simply accepting a hash of attributes you want to replace.
 
-```ruby
-<%= form_for("/songs", values: {song: {title: "Envision"}}) do |f| %>
- <%= f.text_field "song.title" %>
+```erb
+<%= form_for(:book, routes.path(:books), values: {book: {title: "Envision"}}) do |f| %>
+ <%= f.text_field "title" %>
  <%= f.submit "Create" %>
 <%= end %>
 ```
 
-The value in the `song-title` test field had been filled in from the passed in parameters.
+The value in the `song-title` test field had been filled in from the passed-in parameters.
 
 ```html
-<form action="/songs" accept-charset="utf-8" method="POST">
+<form action="/books" accept-charset="utf-8" method="POST">
  <input type="hidden" name="_csrf_token" value="920cd5bfaecc6e58368950e790f2f7b4e5561eeeab230aa1b7de1b1f40ea7d5d">
- <input type="text" name="song[title]" id="song-title" value="Envision">
+ <input type="text" name="book[title]" id="book-title" value="Envision">
 
  <button type="submit">Create</button>
 </form>
