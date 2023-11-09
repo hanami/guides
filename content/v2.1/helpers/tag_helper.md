@@ -54,7 +54,7 @@ module Bookshelf
   module Views
     module Parts
       module Book
-        def content
+        def formatted_title
           helpers.tag.h1(value.title)
         end
       end
@@ -68,7 +68,7 @@ Then in the template you can just access the part:
 ```ruby
 # app/templates/books/show.html.erb
 
-<%= book.content %>
+<%= book.formatted_title %>
 ```
 
 ## Features
