@@ -169,6 +169,29 @@ This server is for local development only. In production, use the following to s
 $ bundle exec puma -C config/puma.rb
 ```
 
+### Debugging 
+
+Since Hanami uses code reloading by default, placing a `binding.irb`
+call in your code won't open an IRB debugging session in the server 
+logs as you might expect. 
+
+Within your own application code, you call `raise` to trigger the 
+[hanami-webconsole][wc] interactive error page and interact with 
+the execution context in an IRB-like REPL.
+
+[webconsole]: https://github.com/hanami/webconsole
+
+However, this will not work with third-party code like gems. In that 
+case you can disable code reloading by starting the server with: 
+
+```shell
+bundle exec hanami server --no-code-reloading
+```
+
+Calls to `binding.irb` (or `binding.pry` for Pry) should now 
+work, not only in your Hanami application code. The IRB debugging 
+console will open your shell wherever you started the Hanami server.
+
 ## hanami version
 
 Prints the version of the installed hanami gem.
