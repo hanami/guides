@@ -9,7 +9,7 @@ These facilities are exposed via methods on the context object. For example, the
 
 In templates and scopes, you can call these methods implicitly, without an explicit receiver:
 
-```erb
+```sql
 <%= inflector.pluralize("koala") %>
 ```
 

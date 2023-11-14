@@ -21,7 +21,7 @@ format_number(1234) # => "1,234"
 
 You can call helpers directly by their method names in your templates:
 
-```erb
+```sql
 <p><%= format_number(1234) %></p>
 ```
 

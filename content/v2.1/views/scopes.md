@@ -87,7 +87,7 @@ Within a scope class, or any partial rendered via that scope, you can access the
 
 For example, from a template:
 
-```erb
+```sql
 <!-- Given an `item:` local passed to the scope -->
 <%= item.title %>
 ```
