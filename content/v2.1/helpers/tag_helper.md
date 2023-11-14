@@ -9,7 +9,7 @@ This helper makes accessible all the HTML-related tags.
 
 Here is how you can use it **in templates**:
 
-```ruby
+```sql
 <%= tag.div(id: "el") do %>
   <p>Template content can be mixed in.</p>
   <%= tag.p("Also nested tag builders.") %>
@@ -65,7 +65,7 @@ end
 
 Then in the template you can just access the part:
 
-```ruby
+```sql
 # app/templates/books/show.html.erb
 
 <%= book.formatted_title %>
@@ -167,7 +167,7 @@ The URL becomes first argument in case the block is passed.
 link_to("/") { "Home" }
 # => <a href="/">Home</a>
 
-link_to("Home", "/", class: "button") %>
+link_to("Home", "/", class: "button")
 # => <a href="/" class="button">Home</a>
 ```
 
