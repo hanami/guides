@@ -235,22 +235,10 @@ end
 
 ## Key concepts in Hanami view
 
-TODO: list and link to each section.
-
-Input and exposures
-
-Action integration
-
-Templates and partials
-
-Helpers
-
-Parts
-
-Context
-
-
-
-
-
-
+- [Input and exposures](/v2.1/views/input-and-exposures)
+- [Action integration](/v2.1/views/rendering-from-actions)
+- [Templates and partials](/v2.1/views/templates-and-partials)
+- [Helpers](/v2.1/views/helpers)
+- [Parts](/v2.1/views/parts)
+- [Context](/v2.1/views/context)
+- [Scopes](/v2.1/views/scopes)
