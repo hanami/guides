@@ -13,7 +13,7 @@ The overall structure of the attributes available is as follows:
 
 **Basic Example**
 
-```erb
+```sql
 <%= form_for(:book, routes.path(:books), class: "form-horizontal") do |f| %>
   <div>
     <%= f.label "title" %>
@@ -48,7 +48,7 @@ To show `csrf_token` hidden field you need to have [sessions enabled](/v2.0/acti
 
 If you don't want to use the form name, skip it, and pass a URL as a first argument.
 
-```erb
+```sql
 <%= form_for(routes.path(:books), class: "form-horizontal") do |f| %>
   <div>
     <%= f.label "book.title" %>
@@ -77,7 +77,7 @@ This way you get a full control over naming each of the form's element.
 
 While the default HTTP request method is set to `POST`, you can override it by passing in the `method:` keyword.
 
-```erb
+```sql
 <%= form_for(:book, routes.path(:book, id: book.id), method: :put) do |f| %>
  <%= f.text_field "title" %>
  <%= f.submit "Update" %>
@@ -100,7 +100,7 @@ This will override the method giving you control of the type of action you want 
 
 There is often a scenario where you want to pre-fill the form values with the object loaded from the server. Form helper allows you to override any set of values by simply accepting a hash of attributes you want to replace.
 
-```erb
+```sql
 <%= form_for(:book, routes.path(:books), values: {book: {title: "Envision"}}) do |f| %>
  <%= f.text_field "title" %>
  <%= f.submit "Create" %>
@@ -127,7 +127,7 @@ Below you can see a range of convenient methods for building the fields within a
 Generates an input tag without any special handling. For more convenience and other advanced features, see specific field type descriptions in this section.
 
 **Basic usage**
-```erb
+```sql
 <%= f.input(type: :text, name: "book[title]", id: "book-title", value: book.title) %>
 ```
 
@@ -148,7 +148,7 @@ the beginning of each input name.
 
 **Usage**
 
-```erb
+```sql
 <% f.fields_for "address" do |fa| %>
    <%= fa.text_field "street" %>
    <%= fa.text_field "suburb" %>
@@ -157,7 +157,7 @@ the beginning of each input name.
 
 This is the equivalent of
 
-```erb
+```sql
 <%= f.text_field "address.street" %>
 <%= f.text_field "address.suburb" %>
 ```
@@ -171,7 +171,7 @@ This is the equivalent of
 
 There is no hard restriction on how much levels of nesting you can support this way, but general user experience advice is to avoid big multi-level forms, and if your form requires three or more nesting levels, you could consider refactoring it.
 
-```erb
+```sql
 <% f.fields_for "address" do |fa| %>
    <%= fa.text_field "street" %>
 
@@ -197,7 +197,7 @@ the base input name to all fields within the block.
 
 Use this whenever generating form fields for a collection of nested fields.
 
-```erb
+```sql
 <% f.fields_for_collection("addresses") do |fa| %>
   <%= fa.text_field("street") %>
 <% end %>
@@ -214,7 +214,7 @@ It'll render fthe HTML input types for each of the collection values, setting th
 
 You can get access to the index number and the collection item value, by yielding additional parameters. This way you get control over rendering or tweaking them on the flow.
 
-```erb
+```sql
 <% f.fields_for_collection("bill.addresses") do |fa, i, address| %>
   <div class="form-group">
     Address id: <%= address.id %>
@@ -243,7 +243,7 @@ Returns a label tag for the given field name, with a humanized version of the fi
 
 **Usage**
 
-```erb
+```sql
 <%= f.label("book.extended_title") %>
 ```
 
@@ -253,7 +253,7 @@ Returns a label tag for the given field name, with a humanized version of the fi
 
 **With HTML attibutes**
 
-```erb
+```sql
 <%= f.label("book.title", class: "form-label") %>
 ```
 
@@ -265,7 +265,7 @@ Returns a label tag for the given field name, with a humanized version of the fi
 
 You may specify the `for:` attribute, and pass the label's content as a first argument, to gain the full control over the rendered HTML.
 
-```erb
+```sql
 <%= f.label("Title", for: "book.extended_title") %>
 <%= f.label("book.extended_title", for: "ext-title") %>
 ```
@@ -279,7 +279,7 @@ You may specify the `for:` attribute, and pass the label's content as a first ar
 
 You may also provide the content's value in the block, which allows you to include other HTML tags if needed.
 
-```erb
+```sql
 <%= f.label for: "book.free_shipping" do %>
   Free shipping
   <abbr title="optional" aria-label="optional">*</abbr>
@@ -297,7 +297,7 @@ You may also provide the content's value in the block, which allows you to inclu
 
 Returns a fieldset tag. It is useful to group related items together.
 
-```erb
+```sql
 <%= f.fieldset do %>
   <%= f.legend("Author") %>
   <%= f.label("author.name") %>
@@ -323,7 +323,7 @@ When editing a resource, the form automatically assigns the `checked` HTML attri
 
 **Usage**
 
-```erb
+```sql
 <%= f.check_box("delivery.free_shipping") %>
 ```
 
@@ -336,7 +336,7 @@ Please notice, that **the helper also returns a hidden input tag preceding the c
 
 **Adding HTML attributes**
 
-```erb
+```sql
 <%= f.check_box("delivery.free_shipping", class: "form-check-input") %>
 ```
 
@@ -349,7 +349,7 @@ Please notice, that **the helper also returns a hidden input tag preceding the c
 
 By default values of the checkbox are either "0" or "1", but you can control that with the `checked_value` and `unchecked_value` properties.
 
-```erb
+```sql
 <%= f.check_box("delivery.free_shipping", checked_value: "true", unchecked_value: "false") %>
 ```
 
@@ -367,7 +367,7 @@ If the form values match the `checked_value` of the checkbox, it'll automaticall
 # {delivery: {free_shipping: "1"}}
 ```
 
-```erb
+```sql
 <%= f.check_box("delivery.free_shipping") %>
 ```
 
@@ -385,7 +385,7 @@ Even if the corresponding field value is not matching the `checked_value`, you c
 # {delivery: {free_shipping: "0"}}
 ```
 
-```erb
+```sql
 <%= f.check_box("deliver.free_shipping", checked: "checked") %>
 ```
 
@@ -398,7 +398,7 @@ Even if the corresponding field value is not matching the `checked_value`, you c
 
 If we have an array of values, and we'd like to send values only for those that are chosen, we can use the multiple checkboxes feature, specifying the name attribute:
 
-```erb
+```sql
 <%= f.check_box("book.languages", name: "book[languages][]", value: "italian", id: nil) %>
 <%= f.check_box("book.languages", name: "book[languages][]", value: "english", id: nil) %>
 ```
@@ -417,7 +417,7 @@ This will also automatically check if the corresponding values are matching or n
 # {book: {languages: ["italian"]}}
 ```
 
-```erb
+```sql
 <%= f.check_box("book.languages", name: "book[languages][]", value: "italian", id: nil) %>
 <%= f.check_box("book.languages", name: "book[languages][]", value: "english", id: nil) %>
 ```
@@ -432,7 +432,7 @@ This will also automatically check if the corresponding values are matching or n
 
 Returns a color input HTML tag.
 
-```erb
+```sql
 <%= f.color_field("user.background") %>
 <%= f.color_field("user.background", class: "form-control") %>
 ```
@@ -446,7 +446,7 @@ Returns a color input HTML tag.
 
 Returns a date input tag.
 
-```erb
+```sql
 <%= f.date_field("user.birth_date") %>
 <%= f.date_field("user.birth_date", class: "form-control") %>
 ```
@@ -460,7 +460,7 @@ Returns a date input tag.
 
 Returns a datetime input tag.
 
-```erb
+```sql
 <%= f.datetime_field("delivery.delivered_at") %>
 <%= f.datetime_field("delivery.delivered_at", class: "form-control") %>
 ```
@@ -473,7 +473,7 @@ Returns a datetime input tag.
 
 Returns a datetime-local input tag.
 
-```erb
+```sql
 <%= f.datetime_local_field("delivery.delivered_at") %>
 <%= f.datetime_local_field("delivery.delivered_at", class: "form-control") %>
 ```
@@ -487,7 +487,7 @@ Returns a datetime-local input tag.
 
 Returns a time input tag.
 
-```erb
+```sql
 <%= f.time_field("book.release_hour") %>
 <%= f.time_field("book.release_hour", class: "form-control") %>
 ```
@@ -501,7 +501,7 @@ Returns a time input tag.
 
 Returns a month input tag.
 
-```erb
+```sql
 <%= f.month_field("book.release_month") %>
 <%= f.month_field("book.release_month", class: "form-control") %>
 ```
@@ -515,7 +515,7 @@ Returns a month input tag.
 
 Returns a week input tag.
 
-```erb
+```sql
 <%= f.week_field("book.release_week") %>
 <%= f.week_field("book.release_week", class: "form-control") %>
 ```
@@ -529,7 +529,7 @@ Returns a week input tag.
 
 Returns an email input tag.
 
-```erb
+```sql
 <%= f.email_field("user.email") %>
 <%= f.email_field("user.email", class: "form-control") %>
 ```
@@ -543,7 +543,7 @@ Returns an email input tag.
 
 Returns a URL input tag.
 
-```erb
+```sql
 <%= f.url_field("user.website") %>
 <%= f.url_field("user.website", class: "form-control") %>
 ```
@@ -557,7 +557,7 @@ Returns a URL input tag.
 
 Returns a telephone input tag.
 
-```erb
+```sql
 <%= f.tel_field("user.telephone") %>
 <%= f.tel_field("user.telephone", class: "form-control") %>
 ```
@@ -571,7 +571,7 @@ Returns a telephone input tag.
 
 Returns a hidden input tag, not visible in the rendered page but only in the source code.
 
-```erb
+```sql
 <%= f.hidden_field("delivery.customer_id") %>
 ```
 
@@ -585,7 +585,7 @@ There is hardly a need to pass HTML attributes to this one, but you can of cours
 
 Returns a file input tag. It allows you to upload a file or multiple files.
 
-```erb
+```sql
 <%= f.file_field("user.avatar") %>
 <%= f.file_field("user.avatar", class: "avatar-upload") %>
 ```
@@ -599,7 +599,7 @@ Returns a file input tag. It allows you to upload a file or multiple files.
 
 You can control what MIME Types your input allow by passing in the additional option `:accepted`. This can be a `String`, where types are separated by comma, or an `Array`.
 
-```erb
+```sql
 <%= f.file_field("user.resume", accept: "application/pdf,application/ms-word") %>
 <%= f.file_field("user.resume", accept: ["application/pdf", "application/ms-word"]) %>
 ```
@@ -614,7 +614,7 @@ Both of the above examples will render HTML below
 
 You can control whether to accept multiple file uploads by passing in the `:multiple` option argument. Setting this flag will add the `multipart` attribute to the `<form>` tag`:
 
-```erb
+```sql
 <%= f.file_field("user.resume", multiple: true) %>
 ```
 
@@ -626,7 +626,7 @@ You can control whether to accept multiple file uploads by passing in the `:mult
 
 Returns a number input tag.
 
-```erb
+```sql
 <%= f.number_field("book.percent_read") %>
 ```
 
@@ -636,7 +636,7 @@ Returns a number input tag.
 
 For this tag, you can use the `max`, `min`, and `step` HTML attributes, to control the range of acceptable values.
 
-```erb
+```sql
 <%= f.number_field("book.percent_read", min: 1, max: 100, step: 1) %>
 ```
 
@@ -648,7 +648,7 @@ For this tag, you can use the `max`, `min`, and `step` HTML attributes, to contr
 
 Returns a range input tag.
 
-```erb
+```sql
 <%= f.range_field("book.discount_percentage") %>
 ```
 
@@ -658,7 +658,7 @@ Returns a range input tag.
 
 For this tag, you can make use of the `max`, `min`, and `step` HTML attributes.
 
-```erb
+```sql
 <%= f.range_field("book.discount_percentage", min: 1, max: 1, step: 1) %>
 ```
 
@@ -670,7 +670,7 @@ For this tag, you can make use of the `max`, `min`, and `step` HTML attributes.
 
 Returns a textarea tag.
 
-```erb
+```sql
 <%= f.text_area("user.hobby") %>
 <%= f.text_area "user.hobby", class: "form-control" %>
 ```
@@ -682,7 +682,7 @@ Returns a textarea tag.
 
 It accepts the `content` as a second argument.
 
-```erb
+```sql
 <%= f.text_area "user.hobby", "Football" %>
 ```
 
@@ -694,7 +694,7 @@ It accepts the `content` as a second argument.
 
 Returns a text input tag.
 
-```erb
+```sql
 <%= f.text_field("user.first_name") %>
 <%= f.text_field("user.first_name", class: "form-control") %>
 ```
@@ -708,7 +708,7 @@ Returns a text input tag.
 
 Returns a search input tag.
 
-```erb
+```sql
 <%= f.search_field("search.q") %>
 <%= f.search_field("search.q", class: "form-control") %>
 ```
@@ -722,7 +722,7 @@ Returns a search input tag.
 
 Returns a radio input tag.
 
-```erb
+```sql
 <%= f.radio_button("book.category", "Fiction") %>
 f.radio_button("book.category", "Non-Fiction")
 ```
@@ -734,7 +734,7 @@ f.radio_button("book.category", "Non-Fiction")
 
 **With HTML Attributes**
 
-```erb
+```sql
 <%= f.radio_button("book.category", "Fiction", class: "form-check") %>
 <%= f.radio_button("book.category", "Non-Fiction", class: "form-check") %>
 ```
@@ -752,7 +752,7 @@ the tag.
 # { book: { category: "Non-Fiction" } }
 ```
 
-```erb
+```sql
 <%= f.radio_button("book.category", "Fiction") %>
 <%= f.radio_button("book.category", "Non-Fiction") %>
 ```
@@ -766,7 +766,7 @@ the tag.
 
 Returns a password input tag in which content is hidden by default.
 
-```erb
+```sql
 <%= f.password_field("signup.password") %>
 ```
 
@@ -781,7 +781,7 @@ Returns a select input tag containing option tags for the given values.
 The values should be an enumerable of pairs of content (the displayed text for the option)
 and value (the value for the option) strings.
 
-```erb
+```sql
 <% values = {"Italy" => "it", "Australia" => "au"} %>
 <%= f.select("book.store", values) %>
 ```
@@ -795,7 +795,7 @@ and value (the value for the option) strings.
 
 **With HTML Attributes**
 
-```erb
+```sql
 <% values = {"Italy" => "it", "Australia" => "au"} %>
 <%= f.select("book.store", values, class: "form-control") %>
 ```
@@ -817,7 +817,7 @@ option tags matching the resource's values.
 # {book: {store: "it"}}
 ```
 
-```erb
+```sql
 <% values = {"Italy" => "it", "Australia" => "au"} %>
 <%= f.select("book.store", values) %>
 ```
@@ -833,7 +833,7 @@ option tags matching the resource's values.
 
 You can specify a text to display by default by passing in the `prompt` option argument
 
-```erb
+```sql
 <% values = {"Italy" => "it", "Australia" => "au"} %>
 <%= f.select("book.store", values, options: {prompt: "Select a store"}) %>
 ```
@@ -849,7 +849,7 @@ You can specify a text to display by default by passing in the `prompt` option a
 
 **Prompt option and HTML attributes**
 
-```erb
+```sql
 <% values = {"Italy" => "it", "Australia" => "au"} %>
 <%= f.select("book.store", values, options: {prompt: "Select a store"}, class: "form-control") %>
 ```
@@ -865,7 +865,7 @@ You can specify a text to display by default by passing in the `prompt` option a
 **Forcing Selected options**
 You may force some items to be selected by passing in the `selected` option argument
 
-```erb
+```sql
 <%= values = {"Italy" => "it", "Australia" => "au"} %>
 <%= f.select("book.store", values, options: {selected: "it"}) %>
 ```
@@ -881,7 +881,7 @@ You may force some items to be selected by passing in the `selected` option argu
 
 To allow multiple selection for options, pass in the `multiple: true` argument.
 
-```erb
+```sql
 <% values = {"Italy" => "it", "Australia" => "au"} %>
 <%= f.select("book.stores", values, multiple: true) %>
 ```
@@ -896,7 +896,7 @@ To allow multiple selection for options, pass in the `multiple: true` argument.
 
 **Multiple select and HTML attributes**
 
-```erb
+```sql
 <% values = {"Italy" => "it", "Australia" => "au"} %>
 <%= f.select("book.stores", values, multiple: true, class: "form-control") %>
 ```
@@ -913,7 +913,7 @@ To allow multiple selection for options, pass in the `multiple: true` argument.
 Because the only requirement is an enumerable of pairs (content -> value), you can also pass in a nested array.
 It can be useful when there is a need to support repeated option values.
 
-```erb
+```sql
 <% values = [
   ["Italy", "it"],
   ["---", ""],
@@ -941,7 +941,7 @@ Returns a datalist input tag together with the text input field being bind toget
 
 It accepts a Hash or Array of values as a second argument. The third parameter is a `list` HTML tag input name and the ID of the datalist.
 
-```erb
+```sql
 <% values = ["Italy", "Australia"] %>
 <%= f.datalist("book.stores", values, "books") %>
 ```
@@ -956,7 +956,7 @@ It accepts a Hash or Array of values as a second argument. The third parameter i
 
 **With options as hash**
 
-```erb
+```sql
 <% values = Hash["Italy" => "it", "Australia" => "au"] %>
 <%= f.datalist("book.stores", values, "books") %>
 ```
@@ -974,7 +974,7 @@ It accepts a Hash or Array of values as a second argument. The third parameter i
 You can set HTML attributes for `datalist` and the options fields separately.
 Below you can check example of specifying separate HTML attributes for the text, `datalist` and `options` fields
 
-```erb
+```sql
 <% values = ["Italy", "Australia"] %>
 <%= f.datalist "book.stores", values, "books", class: 'text-class', datalist: {class: "datalist-class"}, options: {class: "option-class"} %>
 ```
@@ -991,7 +991,7 @@ Below you can check example of specifying separate HTML attributes for the text,
 
 Returns a button tag with the given content.
 
-```erb
+```sql
 <%= f.button("Click me") %>
 <%= f.button("Click me", class: "btn btn-secondary") %>
 ```
@@ -1021,7 +1021,7 @@ Returns an image input tag, to be used as a visual button for the form.
 
 **For security reasons, you should use the absolute URL of the given image.**
 
-```erb
+```sql
 <%= f.image_button("https://hanamirb.org/assets/button.png") %>
 ```
 
@@ -1041,7 +1041,7 @@ Returns an image input tag, to be used as a visual button for the form.
 Returns a submit button tag with the given content.
 
 
-```erb
+```sql
 <%= f.submit("Create") %>
 <%= f.submit("Create", class: "btn btn-primary") %>
 ```
@@ -1053,7 +1053,7 @@ Returns a submit button tag with the given content.
 
 You may pass in content in a block, which allows you to nest the HTML elements.
 
-```erb
+```sql
 <%= f.submit(class: "btn btn-primary") do %>
   <span class="oi oi-check">
 <% end %>
