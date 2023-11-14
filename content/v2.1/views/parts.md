@@ -86,7 +86,7 @@ When using a part, you can call any methods that belond to the decorated value, 
 
 For example, from a template:
 
-```erb
+```sql
 <!-- All the book methods are callable directly on the part -->
 <p><%= book.title %></p>
 ```
@@ -116,7 +116,7 @@ end
 
 When output directly to a template, a part will use its value's `#to_s` (which you can also override in your own part classes):
 
-```erb
+```sql
 <p><%= book %></p>
 ```
 
@@ -132,7 +132,7 @@ class Book < Bookshelf::Views::Part
 end
 ```
 
-```erb
+```sql
 <%= book.info_box %>
 ```
 
@@ -140,7 +140,7 @@ This will render a `books/_info_box` partial template with the part available as
 
 You can also render such partials explicitly within templates:
 
-```erb
+```sql
 <%= book.render("books/info_box") %>
 ```
 

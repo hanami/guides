@@ -43,7 +43,7 @@ Each view's template is rendered within a layout. Layouts are kept within the `t
 
 Every layout should `yield` at the appropriate location to include the content from the template. For example:
 
-```erb
+```sql
 # app/templates/layouts/app.html.erb
 
 <html>
@@ -71,7 +71,7 @@ end
 
 You may choose to skip the auto-escaping of non-HTML safe strings by using particular template tags. In ERB:
 
-```erb
+```sql
 <%== "<p>Non-safe strings will not be auto-escaped</p>" %>
 ```
 
@@ -92,7 +92,7 @@ You may choose to provide custom scopes for templates and partials. To learn mor
 
 You can render a partial from your template using the `render` method:
 
-```erb
+```sql
 <%= render "path/to/my_partial" %>
 ```
 
@@ -100,7 +100,7 @@ Partials are looked up within the templates directory, with the partial's file n
 
 You can provide explicit locals to a partial via keyword arguments:
 
-```erb
+```sql
 <%= render "path/to/my_partial", my_locals: "go here" %>
 ```
 
