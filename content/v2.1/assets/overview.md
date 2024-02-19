@@ -45,7 +45,7 @@ A new Hanami app gives you the following structure for your assets:
 - `public/assets/*` are your compiled assets.
 
 <p class="notice">
-  For brevity, we're only showing assets-specific files here.
+  For brevity, we're only showing assets-specific files on this page.
 </p>
 
 ### Slices
@@ -67,10 +67,6 @@ Here's the structure for assets in a newly generated "admin" slice:
     ├── app-HYVEQYF6.css
     └── app-6PW7FGD5.js
 ```
-
-<p class="notice">
-  For brevity, we're only showing assets-specific files from the slice.
-</p>
 
 ## Assets CLI commands
 
