@@ -40,7 +40,7 @@ A new Hanami app gives you the following structure for your assets:
 - `config/assets.js` configures your asset compilation behaviour (including esbuild customizations).
 - `package.json` and `package-lock.json` are the [npm](https://www.npmjs.com/) standard files for defining dependencies for your assets. Hanami's own [hanami-assets](https://www.npmjs.com/package/hanami-assets) npm package is included here.
 - `node_modules/` contains the installed npm packages.
-- `public/assets/` is the destination directory for compiled assets.
+- `public/assets/` is the destination directory for all compiled assets.
 - `public/assets/assets.json` is the **assets manifest**, a file that allows Hanami to find your compiled assets in production.
 - `public/assets/*` are your compiled assets.
 
@@ -164,3 +164,84 @@ The process of generating an asset bundle involves grouping multiple files (typi
 Hanami's use of [esbuild](https://esbuild.github.io/) means this bundling is extremely fast, while also minimizing the resulting bundle size through advanced techniques like tree shaking and dead code elmination.
 
 This approach, combined with multiple bundles (via multiple corresponding entry points) allows you to arrange your assets so that only the required bundles are loaded for a page or component, which improves your page load times and resource utilisation.
+
+## Assets in production vs development
+
+### In production
+
+When you run `hanami assets compile`, your assets are prepared for production usage.
+
+This means the compiled asset file names include a [content hash suffix](https://esbuild.github.io/api/#entry-names), which marks the file based on its content. The files shown above (such as `public/assets/app-LSLFPUMX.js`) are examples of this.
+
+This content hash will change if and only if the content of any of the input files has changed. This means you can configure your web server to tell browsers to cache these asset files forever, because any changes in their content will result in a new file name, which browsers will download fresh.
+
+Production assets are also [minified](https://esbuild.github.io/api/#minify) to reduce their size, and [source maps](https://esbuild.github.io/api/#sourcemap) are also generated.
+
+### In development
+
+When you run `hanami assets watch`, your assets are expected to be used in local development only.
+
+No content hash is included in the filename, to make it easier for you to locate and inspect you latest compiled assets. In this case, the compiled asset files would have names that match their source files, such as `public/assets/app.js`.
+
+Development assets are not minified, and source maps are not generated.
+
+## Using your assets
+
+Now that you've compiled your assets, you can reference them from within your app, via Hanami's asset view helpers or directly via the assets component.
+
+### Assets component
+
+You can reference your assets directly via the assets component, the object registered as `"assets"` within your app or slice container.
+
+```ruby
+$ bundle exec hanami console
+
+bookshelf[development]> Hanami.app["assets"]["app.js"]
+# => #<Hanami::Assets::Asset:0x0000000121882918
+#  @base_url=#<Hanami::Assets::BaseUrl:0x00000001215b5de8 @url="">,
+#  @path="/assets/app.js",
+#  @sri=nil>
+
+bookshelf[development]> app["assets"]["app.js"].url
+# => "/assets/app.js"
+```
+
+You can include this `"assets"` component as a dependency of any class to access your assets wherever you need across your app. See [Injecting dependencies via `Deps`](/v2.1/app/container-and-components/#injecting-dependencies-via-deps) to learn more.
+
+### View helpers
+
+Hanami includes a range of helpers for referencing your assets across your views, as well as generating asset-related HTML tags.
+
+To use a helper, provide an asset path matching the name of your entry point or any other static asset (such as images, fonts, etc.).
+
+```ruby
+asset_url("app.js")
+# => "/assets/app-LSLFPUMX.js"
+
+javascript_tag("app")
+# => '<script src="/assets/app-LSLFPUMX.js" type="text/javascript"></script>'
+```
+
+See the [assets helpers guide](/v2.1/helpers/assets) for more detail.
+
+### Elsewhere in views
+
+This `"assets"` component is automatically included as a dependency of the [view context](/v2.1/views/context/). This means you can access `assets` in your view [parts](/v2.1/views/parts/) and [scopes](/v2.1/views/scopes/) too.
+
+```ruby
+# app/views/parts/book.rb
+
+# auto_register: false
+
+module Bookshelf
+  module Views
+    module Parts
+      class Book < Bookshelf::Views::Part
+        def cover_image_url
+          value.cover_image_url || context.assets["default-cover-image.jpg"]
+        end
+      end
+    end
+  end
+end
+```
