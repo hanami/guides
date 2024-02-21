@@ -187,7 +187,11 @@ Development assets are not minified, and source maps are not generated.
 
 ## Using your assets
 
-Now that you've compiled your assets, you can reference them from within your app, via Hanami's asset view helpers or directly via the assets component.
+Now that you've compiled your assets, you can reference them from within your app, in your views or directly via the assets component.
+
+### Independent app or slice assets
+
+Via all the methods below, your app or slice _can only access its own assets_, those that originated inside its own `assets/` directory.
 
 ### Assets component
 
