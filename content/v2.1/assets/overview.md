@@ -50,7 +50,7 @@ A new Hanami app gives you the following structure for your assets:
 
 ### Slices
 
-Slices can have their own independent assets. These live in an `assets/` directory within the slice, and will be compiled to a dedicated slice directory under `public/assets/`.
+Slices can have their own independent assets. These live in an `assets/` directory within the slice, and will be compiled to a dedicated slice directory under `public/assets/` (underscored to prevent collisions with your own asset files).
 
 Here's the structure for assets in a newly generated "admin" slice:
 
@@ -62,7 +62,7 @@ Here's the structure for assets in a newly generated "admin" slice:
 │       │   └── app.css
 │       └── js
 │           └── app.js
-└── public/assets/admin
+└── public/assets/_admin
     ├── assets.json
     ├── app-HYVEQYF6.css
     └── app-6PW7FGD5.js
