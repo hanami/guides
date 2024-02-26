@@ -1,6 +1,6 @@
 ---
 title: Assets
-order: 30
+order: 40
 ---
 
 Use these asset helpers to access your asset URLs or generate asset-specific HTML tags within your views.
