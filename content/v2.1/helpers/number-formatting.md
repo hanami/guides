@@ -1,5 +1,5 @@
 ---
-title: Number Formatting Helper
+title: Number formatting
 order: 50
 ---
 
