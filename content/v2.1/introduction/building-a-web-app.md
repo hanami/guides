@@ -943,6 +943,8 @@ Taking this approach allows our handle method to remain concerned only with the 
 ```ruby
 # app/actions/books/show.rb
 
+require "rom"
+
 module Bookshelf
   module Actions
     module Books
@@ -988,6 +990,8 @@ This exception handling behavior can also be moved into the base `Bookshelf::Act
 
 ```ruby
 # app/action.rb
+
+require "rom"
 
 module Bookshelf
   class Action < Hanami::Action
