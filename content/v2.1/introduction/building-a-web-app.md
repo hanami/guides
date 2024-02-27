@@ -189,31 +189,9 @@ Root
 1 example, 0 failures
 ```
 
-Request specs like these are suitable for testing API endpoints, but since we'll be creating HTML pages in our app, we'll want a more appropriate testing tool. For this, we'll use [Capybara](https://github.com/teamcapybara/capybara).
+Request specs like these are suitable for testing API endpoints, but since we'll be creating HTML pages in our app, we'll want a more appropriate testing tool. For this, we'll use [Capybara](https://github.com/teamcapybara/capybara) feature specs.
 
-To install Capybara, add it to your Gemfile in the `:test` group, and then run `bundle install`.
-
-```ruby
-group :test do
-  gem "capybara"
-end
-```
-
-Add the following to a `spec/support/capybara.rb` file:
-
-```ruby
-require "capybara/rspec"
-
-Capybara.app = Hanami.app
-```
-
-And append the following line to `spec/spec_helper.rb`:
-
-```ruby
-require_relative "support/capybara"
-```
-
-Then delete the `spec/requests/root_spec.rb` and replace it with a Capybara-driven test at `spec/features/home_spec.rb`:
+Delete the `spec/requests/root_spec.rb` and replace it with a Capybara-driven test at `spec/features/home_spec.rb`:
 
 ```ruby
 RSpec.feature "Home" do
