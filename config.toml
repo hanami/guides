@@ -10,26 +10,26 @@ pygmentsuseclasses = false
 pygmentsstyle = "monokailight"
 
 [markup.goldmark.renderer]
-  unsafe = true
+unsafe = true
 
 [permalinks]
-  posts = "/:slug/"
+posts = "/:slug/"
 
 [sitemap]
-  changefreq = "weekly"
-  filename = "sitemap.xml"
-  priority = 0.5
+changefreq = "weekly"
+filename = "sitemap.xml"
+priority = 0.5
 
 [params]
-  hanamiversion = "2.0"
-  description = "Code guides for Hanami Ruby web framework"
-  facebook = "hanamirb"
-  twitter = "hanamirb"
-  instagram = "hanamirb"
-  github = "hanami/hanami"
-  keywords = "hanami,hanamirb,hanami guides,documentation,lotus,lotusrb,web,framework,ruby,open source,oss,os,software,free,free software,architecture,fast,lightweight,testing,tdd,bdd,test driven development,behaviour driven development,full stack,mvc,model view object,pattern,patterns,design patterns,oop,object oriented programming,testability,http,https,routing,router,http router,restful,resource,resources,convention,controller,models,repository,query,sql,interactors,two-step view,view,template,presenters,render,rendering,helpers,erb,haml,tilt,json,xml,yaml,yml,framwork,framewrok,riby,free sowftare"
-  githubrepo = "https://github.com/hanami/guides"
-  startingpage = "/introduction/getting-started/"
+hanamiversion = "2.1"
+description = "Code guides for Hanami Ruby web framework"
+facebook = "hanamirb"
+twitter = "hanamirb"
+instagram = "hanamirb"
+github = "hanami/hanami"
+keywords = "hanami,hanamirb,hanami guides,documentation,lotus,lotusrb,web,framework,ruby,open source,oss,os,software,free,free software,architecture,fast,lightweight,testing,tdd,bdd,test driven development,behaviour driven development,full stack,mvc,model view object,pattern,patterns,design patterns,oop,object oriented programming,testability,http,https,routing,router,http router,restful,resource,resources,convention,controller,models,repository,query,sql,interactors,two-step view,view,template,presenters,render,rendering,helpers,erb,haml,tilt,json,xml,yaml,yml,framwork,framewrok,riby,free sowftare"
+githubrepo = "https://github.com/hanami/guides"
+startingpage = "/introduction/getting-started/"
 
 [security.funcs]
-  getenv = ['^HUGO_', 'BRANCH']
+getenv = ['^HUGO_', 'BRANCH']
