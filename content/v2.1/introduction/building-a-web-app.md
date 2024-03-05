@@ -9,7 +9,7 @@ Now that we've [created our app](/v2.1/introduction/getting-started/), let's tur
 
 Let's take a look at Hanami by creating the beginnings of a bookshelf app.
 
-In the file `spec/requests/root_spec.rb`, Hanami provides a request spec confirming the absence of  a defined root page (which is why the welcome screen shows instead).
+In the file `spec/requests/root_spec.rb`, Hanami provides a request spec confirming the absence of a defined root page (which is why the welcome screen shows instead).
 
 ```ruby
 # spec/requests/root_spec.rb
@@ -168,7 +168,7 @@ module Bookshelf
 end
 ```
 
-Just like actions, every view in a Hanami app is an individual class. Views prepare the vaues to be passed to a template, then render that template to generate their output.
+Just like actions, every view in a Hanami app is an individual class. Views prepare the values to be passed to a template, then render that template to generate their output.
 
 We can find this view's template in our `app` directory at `app/templates/home/show.html.erb`. Let's adjust this template to include our desired "Welcome to Bookshelf" text.
 
@@ -334,7 +334,7 @@ end
 ```
 
 <p class="notice">
-  If you do not have Postgres installed, you can install it using <a href="https://brew.sh/">Homebrew</a>,  <a href="https://asdf-vm.com/">asdf</a> or by following the installation instruction on the <a href="https://www.postgresql.org/">PostgreSQL website</a>.
+  If you do not have Postgres installed, you can install it using <a href="https://brew.sh/">Homebrew</a>, <a href="https://asdf-vm.com/">asdf</a> or by following the installation instruction on the <a href="https://www.postgresql.org/">PostgreSQL website</a>.
 </p>
 
 With Postgres running, create databases for development and test using PostgreSQL's `createdb` command:
