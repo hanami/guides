@@ -458,7 +458,7 @@ Of course, returning a static list of books is not particularly useful.
 Let's address this by retrieving books from a database.
 
 <p class="notice">
-  Integrated support for persistence based on <a href="https://rom-rb.org/">rom-rb</a> is coming in Hanami's 2.1 release. For now, we can bring our own simple rom-rb configuration to allow us to store books in a database.
+  Integrated support for persistence based on <a href="https://rom-rb.org/">rom-rb</a> is coming in Hanami's 2.2 release. For now, we can bring our own simple rom-rb configuration to allow us to store books in a database.
 </p>
 
 ### Adding persistence using rom-rb
@@ -648,7 +648,7 @@ end
 ```
 
 <p class="notice">
-  Hanami's 2.1 release, slated for early 2023, will bring persistence as a first class feature, after which none of the above set up will be required.
+  Hanami's 2.2 release will bring persistence as a first class feature, after which none of the above set up will be required.
 </p>
 
 ### Creating a books table
@@ -768,7 +768,7 @@ end
 ```
 
 <p class="convention">
-  Accessing relations directly from actions is not a commonly recommended pattern. Instead, a <a href="https://rom-rb.org/5.0/learn/repositories/quick-start/">rom repository</a> should be used. Here, however, the repository is ommitted for brevity. Hanami's 2.1 release will offer repositories out of the box.
+  Accessing relations directly from actions is not a commonly recommended pattern. Instead, a <a href="https://rom-rb.org/5.0/learn/repositories/quick-start/">rom repository</a> should be used. Here, however, the repository is ommitted for brevity. Hanami's 2.2 release will offer repositories out of the box.
 </p>
 
 With this action in place, the spec passes once more:
