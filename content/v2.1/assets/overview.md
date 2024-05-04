@@ -70,7 +70,7 @@ Here's the structure for assets in a newly generated "admin" slice:
 
 ## Assets CLI commands
 
-You can use two CLI to compile your assets:
+You can use two CLI commands to compile your assets:
 
 - `hanami assets compile` will compile all your assets for production.
 - `hanami assets watch` will watch for changes to your assets and compile the relevant files immediately.
