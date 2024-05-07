@@ -26,7 +26,7 @@ module Bookshelf
 end
 ```
 
-It's recommended to define a base part for the other parts in the app or slice to inherit:
+It's recommended to define a base scope for the other scopes in the app or slice to inherit:
 
 ```ruby
 # app/views/scope.rb
