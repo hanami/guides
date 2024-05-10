@@ -29,7 +29,7 @@ module Profile
 end
 ```
 
-```erb
+```sql
 <%# app/templates/views/profile/show.html.erb %>
 
 <% if current_user.id == user.id %>
