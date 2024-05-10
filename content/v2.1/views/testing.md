@@ -5,16 +5,6 @@ order: 101
 
 Views in Hanami are designed to encourage easier testing of your views, with each aspect of views designed to support direct unit testing. This means you can test your views at whatever level of granularity makes sense for you.
 
-While some coverage via end-to-end feature specs (interacting with your app while driving a browser) is
-
-No single approach is enforced, you can test entire views, parts, templates, or even individual methods. However a general advice would be to:
-
-<p class="convention">
-Resort to detailed unit-level testing when a detailed view logic is present.
-</p>
-
-In those cases a full "feature"-type specs would be too slow to setup, run and hard to maintain. On the other hand, maintaining unit test that are very detailed in what the view renders would also be cumbersome when views are subjects to changes.
-
 ## Testing views
 
 To test a view directly, initialize it, passing in any dependencies it requires. If the view's dependencies are provided via the deps mixin, then a simple `.new` should be sufficient. Provide test doubles for certain dependencies if you want to simulate certain conditions.
