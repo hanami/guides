@@ -86,8 +86,6 @@ token_list(nil, false, 123, "", "foo", { bar: true })
 
 Returns an `a` anchor tag for the given contents and URL.
 
-
-
 This uses the `tag` builder to prepare the tag, so all tag builder options are accepted.
 
 ```ruby
@@ -97,7 +95,7 @@ link_to("Home", "/")
 link_to("/") { "Home" }
 # => <a href="/">Home</a>
 
-link_to("Home", "/", class: "button") %>
+link_to("Home", "/", class: "button")
 # => <a href="/" class="button">Home</a>
 ```
 
