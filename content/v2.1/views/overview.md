@@ -92,7 +92,6 @@ end
 
 Requests for the root will now render a home page:
 
-
 <p><img src="/v2.1/views/welcome-to-bookshelf.png" alt="Welcome to Bookshelf" class="img-responsive"></p>
 
 ### Understanding views
@@ -230,27 +229,3 @@ RSpec.describe Bookshelf::Views::Home::Show do
   end
 end
 ```
-
-
-
-## Key concepts in Hanami view
-
-TODO: list and link to each section.
-
-Input and exposures
-
-Action integration
-
-Templates and partials
-
-Helpers
-
-Parts
-
-Context
-
-
-
-
-
-
