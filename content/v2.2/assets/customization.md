@@ -1,8 +1,6 @@
 ---
 title: Customization
 order: 30
-aliases:
-  - "/assets/customization"
 ---
 
 To customize your assets compilation, update `config/assets.js` to match the following:

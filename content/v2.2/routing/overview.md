@@ -1,8 +1,6 @@
 ---
 title: Overview
 order: 10
-aliases:
-  - "/routing/overview"
 ---
 
 ## Routing

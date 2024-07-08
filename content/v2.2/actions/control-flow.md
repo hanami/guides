@@ -1,8 +1,6 @@
 ---
 title: Control flow
 order: 110
-aliases:
-  - "/actions/control-flow"
 ---
 
 Actions support control flow through callbacks, halting and redirects.
