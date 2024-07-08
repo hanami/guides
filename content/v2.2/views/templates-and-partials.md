@@ -3,7 +3,7 @@ title: Templates and partials
 order: 40
 ---
 
-Every view has a template, which is given the values from the view's [exposures](/v2.1/views/input-and-exposures) and then used to render the view's output.
+Every view has a template, which is given the values from the view's [exposures](/v2.2/views/input-and-exposures) and then used to render the view's output.
 
 Templates are kept the `templates/` directory in the root of `app/` and each slice directory.
 
@@ -16,7 +16,7 @@ Views use ERB templates by default. To use an ERB template, give your file an `.
 Template files follow a 3-part naming scheme: `<name>.<format>.<engine>`:
 
 - `name` matches the name of the view, with Ruby module nesting translated into slashes
-- `format` matches the template with the view's [format](/v2.1/views/configuration)
+- `format` matches the template with the view's [format](/v2.2/views/configuration)
 - `engine` determines the rendering engine to use for the template
 
 Along with ERB, Hanami supports the full range of template engines available through [Tilt](https://github.com/jeremyevans/tilt), and will detect the engine based on each template's file extension.
@@ -61,7 +61,7 @@ If the string is HTML safe, it will be included in the template without escaping
 
 HTML safety checks are made by calling `string.html_safe?`.
 
-When writing your own [helpers](/v2.1/views/helpers/) or other code providing strings to templates, you can make a string as HTML safe by calling `.html_safe` on the string:
+When writing your own [helpers](/v2.2/views/helpers/) or other code providing strings to templates, you can make a string as HTML safe by calling `.html_safe` on the string:
 
 ```
 def my_helper
@@ -81,12 +81,12 @@ Similar tags also exist for Haml and Slim. Use these tags with caution. This is 
 
 Each template and partial is rendered within its own scope, which determines the variables and methods available for the template to use. These include:
 
-- Your template's locals: the values returned from its [exposures](/v2.1/views/intput-and-exposures/), wrapped by [parts](/v2.1/views/parts/)
-- Your app or slice's [helpers](/v2.1/views/helpers/)
-- The public methods available on the view's [context](/v2.1/views/context/)
+- Your template's locals: the values returned from its [exposures](/v2.2/views/intput-and-exposures/), wrapped by [parts](/v2.2/views/parts/)
+- Your app or slice's [helpers](/v2.2/views/helpers/)
+- The public methods available on the view's [context](/v2.2/views/context/)
 - A `#render` method, for rendering partials
 
-You may choose to provide custom scopes for templates and partials. To learn more, see [Scopes](/v2.1/views/scopes/).
+You may choose to provide custom scopes for templates and partials. To learn more, see [Scopes](/v2.2/views/scopes/).
 
 ## Rendering partials
 

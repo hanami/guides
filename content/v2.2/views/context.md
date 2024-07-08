@@ -5,7 +5,7 @@ order: 60
 
 When each view is rendered, a single context object provides access to common facilities from across the app, making these available to every template, partial, part and scope in that rendering.
 
-These facilities are exposed via methods on the context object. For example, the app's [inflector](/v2.1/app/app-config) is returned from the context's `#inflector` method.
+These facilities are exposed via methods on the context object. For example, the app's [inflector](/v2.2/app/app-config) is returned from the context's `#inflector` method.
 
 In templates and scopes, you can call these methods implicitly, without an explicit receiver:
 
@@ -32,7 +32,7 @@ The standard context in Hanami apps includes the following methods:
 - `#inflector`: the app's configured inflector
 - `#routes`: the app's named routes helpers, via `#path` and `#url` methods
 - `#content_for`: a method to get and set content strings to be shared across templates, such as defining a page title (applied in the layout) from a template
-- `#assets`: low-level access to front end assets (but you should prefer the [assets helpers](/v2.1/helpers/assets/))
+- `#assets`: low-level access to front end assets (but you should prefer the [assets helpers](/v2.2/helpers/assets/))
 
 For views rendered from an action, the following methods are also available:
 
@@ -130,7 +130,7 @@ end
 
 ## Decorating context attributes
 
-Your custom context may have attributes that you want deocrated as [parts](/v2.1/views/parts/). To do this, declare these attributes using `decorate` in your context class:
+Your custom context may have attributes that you want deocrated as [parts](/v2.2/views/parts/). To do this, declare these attributes using `decorate` in your context class:
 
 ```ruby
 # app/views/context.rb
@@ -168,4 +168,4 @@ def handle(request, response)
 end
 ```
 
-You may also opt out of the Hanami standard context entirely by configuring a view's `default_context`. To learn more, see [Configuration](/v2.1/views/configuration/).
+You may also opt out of the Hanami standard context entirely by configuring a view's `default_context`. To learn more, see [Configuration](/v2.2/views/configuration/).

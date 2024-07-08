@@ -26,7 +26,7 @@ module Bookshelf
 end
 ```
 
-A common reason for customization is to configure inflections to support desired class names and other constants. For example, the `WNBA` acronym above supports constants like `Games::WNBA` instead of `Games::Wnba`. See the [autoloading guide](/v2.1/app/autoloading/) for more detail.
+A common reason for customization is to configure inflections to support desired class names and other constants. For example, the `WNBA` acronym above supports constants like `Games::WNBA` instead of `Games::Wnba`. See the [autoloading guide](/v2.2/app/autoloading/) for more detail.
 
 
 ## Using the inflector in a component

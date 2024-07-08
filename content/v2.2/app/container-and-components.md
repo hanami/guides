@@ -416,16 +416,16 @@ Hanami provides several standard app components for you to use.
 
 ### `"settings"`
 
-These are your settings defined in `config/settings.rb`. See the [settings guide](/v2.1/app/settings) for more detail.
+These are your settings defined in `config/settings.rb`. See the [settings guide](/v2.2/app/settings) for more detail.
 
 ### `"logger"`
 
-The app's standard logger. See the [logger guide](/v2.1/logger/usage) for more detail.
+The app's standard logger. See the [logger guide](/v2.2/logger/usage) for more detail.
 
 ### `"inflector"`
 
-The app's inflector. See the [inflector guide](/v2.1/app/inflector) for more detail.
+The app's inflector. See the [inflector guide](/v2.2/app/inflector) for more detail.
 
 ### `"routes"`
 
-An object providing URL helpers for your named routes. See the [routing guide](/v2.1/routing/overview/#named-routes) for more detail.
+An object providing URL helpers for your named routes. See the [routing guide](/v2.2/routing/overview/#named-routes) for more detail.

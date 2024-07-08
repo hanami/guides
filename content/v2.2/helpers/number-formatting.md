@@ -23,7 +23,7 @@ This will render the number in the nice, readable form:
   <span>1,000,000.00</span>
 ```
 
-[In parts](/v2.1/views/parts), you can access your helpers via the `helpers` object.
+[In parts](/v2.2/views/parts), you can access your helpers via the `helpers` object.
 
 Given you have a view exposure defined:
 

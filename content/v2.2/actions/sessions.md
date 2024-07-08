@@ -19,7 +19,7 @@ module Bookshelf
 end
 ```
 
-For this to work, you will need to add a `session_secret` to your app settings. See [settings](/v2.1/app/settings/) for more details.
+For this to work, you will need to add a `session_secret` to your app settings. See [settings](/v2.2/app/settings/) for more details.
 
 ```ruby
 # config/settings.rb

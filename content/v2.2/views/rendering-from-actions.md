@@ -26,7 +26,7 @@ module Bookshelf
 end
 ```
 
-When automatically rendering a view, the request's params hash will be passed directly to the view as its [input](/v2.1/views/input-and-exposures/).
+When automatically rendering a view, the request's params hash will be passed directly to the view as its [input](/v2.2/views/input-and-exposures/).
 
 ## Explicit view rendering
 
@@ -109,7 +109,7 @@ This allows you to reuse such views across both their relevant RESTful actions. 
 
 ## Accessing request details
 
-Views rendered from actions make the action's current request available in their [context](/v2.1/views/context/). This means you can use the following methods inside your templates, parts and scopes:
+Views rendered from actions make the action's current request available in their [context](/v2.2/views/context/). This means you can use the following methods inside your templates, parts and scopes:
 
 - `#request`
 - `#session`

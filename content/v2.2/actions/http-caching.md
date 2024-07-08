@@ -93,7 +93,7 @@ In the below example:
 1. The first request to the action (or a request with a stale cache) will see the action handle the request in full before returning its response with a Last-Modified header.
 2. A subsequent request with a matching If-Modified-Since header will receive a `304 Not Modified` response, and the action will halt before its processing logic.
 
-For more detail on action halting, see the [control flow guide](/v2.1/actions/control-flow).
+For more detail on action halting, see the [control flow guide](/v2.2/actions/control-flow).
 
 ```ruby
 # app/actions/books/show.rb
@@ -134,7 +134,7 @@ In the below example:
 1. The firsts request to the action (or a request with a stale cache) will see the action handle the request in full before returning its response with an ETag header.
 2. A subsequent request with a matching If-None-Match header will receive a `304 Not Modified` response, and the action will halt before its processing logic.
 
-For more detail on action halting, see the [control flow guide](/v2.1/actions/control-flow).
+For more detail on action halting, see the [control flow guide](/v2.2/actions/control-flow).
 
 ```ruby
 # app/actions/books/show.rb

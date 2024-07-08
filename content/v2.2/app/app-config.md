@@ -32,9 +32,9 @@ module Bookshelf
 end
 ```
 
-See the [environments guide](/v2.1/app/environments) for more detail.
+See the [environments guide](/v2.2/app/environments) for more detail.
 
-Individual slices may also be configured. See the [slices guide](/v2.1/app/slices) for more detail.
+Individual slices may also be configured. See the [slices guide](/v2.2/app/slices) for more detail.
 
 See below for a description of all available `config` methods.
 
@@ -42,11 +42,11 @@ See below for a description of all available `config` methods.
 
 ### `inflections`
 
-Along with `inflector`, customizes your your app's string inflection rules. See the [inflector guide](/v2.1/app/inflector) for more detail.
+Along with `inflector`, customizes your your app's string inflection rules. See the [inflector guide](/v2.2/app/inflector) for more detail.
 
 ### `slices`
 
-Specifies the slices to load. See the [slices guide](/v2.1/app/slices) for more detail.
+Specifies the slices to load. See the [slices guide](/v2.2/app/slices) for more detail.
 
 ## Code loading
 
@@ -54,21 +54,21 @@ Specifies the slices to load. See the [slices guide](/v2.1/app/slices) for more 
 
 Sets the root for the app or slice. For the app, defaults to `Dir.pwd`. For slices, defaults to the slice's name under the `/slices/` directory.
 
-The root is used for locating the code to be loaded by the app. See the [autoloading guide](/v2.1/app/autoloading) and the [containers and components guide](/v2.1/app/container-and-components) for more detail.
+The root is used for locating the code to be loaded by the app. See the [autoloading guide](/v2.2/app/autoloading) and the [containers and components guide](/v2.2/app/container-and-components) for more detail.
 
 ### `shared_app_component_keys`
 
-Sets the keys for the app components to be automatically imported into each slice. See the [slices guide](/v2.1/app/slices) for more detail.
+Sets the keys for the app components to be automatically imported into each slice. See the [slices guide](/v2.2/app/slices) for more detail.
 
 ### `no_auto_register_paths`
 
-Sets an array of paths (relative to the root of the app or any slice) to be excluded from component auto-registration. Defaults to `["entities"]`. See the [containers and components guide](/v2.1/app/container-and-components) for more detail.
+Sets an array of paths (relative to the root of the app or any slice) to be excluded from component auto-registration. Defaults to `["entities"]`. See the [containers and components guide](/v2.2/app/container-and-components) for more detail.
 
 ## Router
 
 ### `base_url`
 
-Sets the base URL for the app's web server. This is used when building URLs for named routes. Defaults to `"http://0.0.0.0:2300"`. See the [routes guide](/v2.1/routing/overview/) for more detail.
+Sets the base URL for the app's web server. This is used when building URLs for named routes. Defaults to `"http://0.0.0.0:2300"`. See the [routes guide](/v2.2/routing/overview/) for more detail.
 
 ### `middleware`
 
@@ -99,4 +99,4 @@ Sets the configuration to be used by all actions in the app.
 config.actions.format :json
 ```
 
-See the [actions guide](/v2.1/actions/overview) for more detail.
+See the [actions guide](/v2.2/actions/overview) for more detail.

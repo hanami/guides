@@ -18,7 +18,7 @@ Commands:
 
 ### hanami generate action
 
-Generates an [action](/v2.1/actions/overview):
+Generates an [action](/v2.2/actions/overview):
 
 ```shell
 $ bundle exec hanami generate action books.show
@@ -32,7 +32,7 @@ $ bundle exec hanami generate action --help
 
 ### hanami generate part
 
-Generates a view [part](/v2.1/views/parts/):
+Generates a view [part](/v2.2/views/parts/):
 
 ```shell
 $ bundle exec hanami generate part book
@@ -46,7 +46,7 @@ $ bundle exec hanami generate part --help
 
 ### hanami generate slice
 
-Generates a [slice](/v2.1/app/slices/):
+Generates a [slice](/v2.2/app/slices/):
 
 ```shell
 $ bundle exec hanami generate slice admin
@@ -60,7 +60,7 @@ $ bundle exec hanami generate slice --help
 
 ### hanami generate view
 
-Generates a [view](/v2.1/views/overview/):
+Generates a [view](/v2.2/views/overview/):
 
 ```shell
 $ bundle exec hanami generate view books.create

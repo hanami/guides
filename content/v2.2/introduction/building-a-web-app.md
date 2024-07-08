@@ -3,7 +3,7 @@ title: "Building a web app"
 order: 20
 ---
 
-Now that we've [created our app](/v2.1/introduction/getting-started/), let's turn it into a web app.
+Now that we've [created our app](/v2.2/introduction/getting-started/), let's turn it into a web app.
 
 ## Adding our first functionality
 
@@ -84,7 +84,7 @@ module Bookshelf
 end
 ```
 
-This `Bookshelf::Routes` class contains the configuration for our app's router. Routes in Hanami are comprised of a HTTP method, a path, and an endpoint to be invoked, which is usually a Hanami action. (See the [Routing guide](/v2.1/routing/overview/) for more information).
+This `Bookshelf::Routes` class contains the configuration for our app's router. Routes in Hanami are comprised of a HTTP method, a path, and an endpoint to be invoked, which is usually a Hanami action. (See the [Routing guide](/v2.2/routing/overview/) for more information).
 
 To help make our spec pass, let's add a route to invoke a new action.
 
@@ -151,7 +151,7 @@ def handle(request, response)
 end
 ```
 
-For more details on actions, see the [Actions guide](/v2.1/actions/overview/).
+For more details on actions, see the [Actions guide](/v2.2/actions/overview/).
 
 By default, an action will render its equivalent view. We can find our new view in our `app` directory at `app/views/home/show.rb`:
 
@@ -344,7 +344,7 @@ $ createdb bookshelf_development
 $ createdb bookshelf_test
 ```
 
-In Hanami, [providers](/v2.1/app/providers/) offer a mechanism for configuring and using complex dependencies, like database connections, within your app.
+In Hanami, [providers](/v2.2/app/providers/) offer a mechanism for configuring and using complex dependencies, like database connections, within your app.
 
 Copy and paste the following provider into a new file at `config/providers/persistence.rb`:
 
@@ -392,7 +392,7 @@ Settings can be strings, booleans, integers and other types. Each setting can be
 
 Each setting is sourced from an environment variable matching its name. For example `my_flag` will be sourced from `ENV["MY_FLAG"]`.
 
-You can read more about Hanami's settings in the [App guide](/v2.1/app/settings/).
+You can read more about Hanami's settings in the [App guide](/v2.2/app/settings/).
 
 Let's add `database_url` and make it a required setting by using the `Types::String` constructor:
 
@@ -431,7 +431,7 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/bookshelf_test
 </p>
 
 <p class="notice">
-  See <a href="/v2.1/app/settings/#using-dotenv-to-manage-environment-variables">Using dotenv to manage environment variables</a> for recommendations on handling these files.
+  See <a href="/v2.2/app/settings/#using-dotenv-to-manage-environment-variables">Using dotenv to manage environment variables</a> for recommendations on handling these files.
 </p>
 
 To confirm that the `database_url` setting is working as expected, you can run `bundle exec hanami console` to start a console, then call the `database_url` method on your app's settings object.
@@ -593,7 +593,7 @@ end
 
 To get this spec to pass, we'll need to update our books index view to return books from the books relation.
 
-To access the books relation within the view, we can use Hanami's "Deps mixin". Covered in detail in the [container and components](/v2.1/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
+To access the books relation within the view, we can use Hanami's "Deps mixin". Covered in detail in the [container and components](/v2.2/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
 For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make ROM available via a `rom` method within our view. The books relation is then available via `rom.relations[:books]`.
 
@@ -1171,7 +1171,7 @@ SESSION_SECRET=__local_development_secret_only__
 ```
 
 <p class="notice">
-  See <a href="/v2.1/app/settings/#using-dotenv-to-manage-environment-variables">Using dotenv to manage environment variables</a> for recommendations on handling these files.
+  See <a href="/v2.2/app/settings/#using-dotenv-to-manage-environment-variables">Using dotenv to manage environment variables</a> for recommendations on handling these files.
 </p>
 
 Next we can update the app layout to show the flash messages, if there are any:
@@ -1255,4 +1255,4 @@ So far we've seen how to create a new Hanami app, explored some of the basics of
 
 Still, we've barely touched the surface of what Hanami offers.
 
-From here you might want to look in more detail at [routing](/v2.1/routing/overview/) and [actions](/v2.1/actions/overview/), or explore Hanami's [app architecture](/v2.1/app/container-and-components/), starting with its [component management](/v2.1/app/container-and-components/) and [dependency injection](/v2.1/app/container-and-components/) systems. Or you may want to head straight to the front end and learn more about Hanami's [views](/v2.1/views/overview/) and [assets management](/v2.1/assets/overview/)
+From here you might want to look in more detail at [routing](/v2.2/routing/overview/) and [actions](/v2.2/actions/overview/), or explore Hanami's [app architecture](/v2.2/app/container-and-components/), starting with its [component management](/v2.2/app/container-and-components/) and [dependency injection](/v2.2/app/container-and-components/) systems. Or you may want to head straight to the front end and learn more about Hanami's [views](/v2.2/views/overview/) and [assets management](/v2.2/assets/overview/)

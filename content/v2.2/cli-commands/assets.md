@@ -5,7 +5,7 @@ order: 100
 
 ## hanami assets compile
 
-Compiles the app's [assets](/v2.1/actions/overview) into bundles for use in production:
+Compiles the app's [assets](/v2.2/actions/overview) into bundles for use in production:
 
 ```shell
 $ bundle exec hanami assets compile
@@ -20,7 +20,7 @@ $ bundle exec hanami assets compile
 
 ## hanami assets watch
 
-Watches for changes to your assets and compiles the relevant files immediately. This is a long-running command, and is run by [hanami dev](/v2.1/commands/dev) by default.
+Watches for changes to your assets and compiles the relevant files immediately. This is a long-running command, and is run by [hanami dev](/v2.2/commands/dev) by default.
 
 ```shell
 $ bundle exec hanami assets watch

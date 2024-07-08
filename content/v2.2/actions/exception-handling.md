@@ -30,7 +30,7 @@ end
 
 In the above action, when `StandardError` is raised in the `#handle` method, a basic `500 Internal Server Error` will be returned.
 
-<p><img src="/v2.1/actions/default-error-response.png" alt="Default error response"></p>
+<p><img src="/v2.2/actions/default-error-response.png" alt="Default error response"></p>
 
 
 ## Custom method handlers

@@ -3,9 +3,9 @@ title: Scopes
 order: 80
 ---
 
-A scope is the object that determines the methods available to use from within a template. The [standard scope](/v2.1/views/templates-and-partials/) provides access to locals, helpers, the context, partial rendering, as well as the building of _custom scopes_.
+A scope is the object that determines the methods available to use from within a template. The [standard scope](/v2.2/views/templates-and-partials/) provides access to locals, helpers, the context, partial rendering, as well as the building of _custom scopes_.
 
-You can use a custom scope to add your own behavior around a template and its particular set of locals. Along with [parts](/v2.1/views/parts/), this allows you to move your view logic away from templates and into a place where it can be reused and refactored using typical object oriented approaches, as well as tested in isolation.
+You can use a custom scope to add your own behavior around a template and its particular set of locals. Along with [parts](/v2.2/views/parts/), this allows you to move your view logic away from templates and into a place where it can be reused and refactored using typical object oriented approaches, as well as tested in isolation.
 
 ## Defining scope classes
 
@@ -115,7 +115,7 @@ end
 
 ## Accessing the context
 
-You can access the [context](/v2.1/views/context/) for the view's current rendering using the `#context` method (or `#_context` as an alias, in case there is a local named `context`).
+You can access the [context](/v2.2/views/context/) for the view's current rendering using the `#context` method (or `#_context` as an alias, in case there is a local named `context`).
 
 Scopes also delegate missing methods to the context object (provided there is no local with that name).
 

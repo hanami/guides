@@ -3,7 +3,7 @@ title: "Building an API"
 order: 30
 ---
 
-Now that we've [created our app](/v2.1/introduction/getting-started/), let's turn it into an API.
+Now that we've [created our app](/v2.2/introduction/getting-started/), let's turn it into an API.
 
 ## Adding our first functionality
 
@@ -92,7 +92,7 @@ module Bookshelf
 end
 ```
 
-This `Bookshelf::Routes` class contains the configuration for our app's router. Routes in Hanami are comprised of a HTTP method, a path, and an endpoint to be invoked, which is usually a Hanami action. (See the [Routing guide](/v2.1/routing/overview/) for more information).
+This `Bookshelf::Routes` class contains the configuration for our app's router. Routes in Hanami are comprised of a HTTP method, a path, and an endpoint to be invoked, which is usually a Hanami action. (See the [Routing guide](/v2.2/routing/overview/) for more information).
 
 We'll take a look at adding more routes in a moment, but for now let's get our spec to pass. The above `Bookshelf::Routes` class contains only one route, the `root` route, which handles `GET` requests for `"/"`.
 
@@ -168,7 +168,7 @@ end
 
 In the automatically generated home show action above, `*` is used for the `request` argument because the action does not currently use the request.
 
-For more details on actions, see the [Actions guide](/v2.1/actions/overview/).
+For more details on actions, see the [Actions guide](/v2.2/actions/overview/).
 
 For now, let's adjust our home action to return our desired "Welcome to Bookshelf" message.
 
@@ -340,7 +340,7 @@ $ createdb bookshelf_development
 $ createdb bookshelf_test
 ```
 
-In Hanami, [providers](/v2.1/app/providers/) offer a mechanism for configuring and using dependencies, like databases, within your app.
+In Hanami, [providers](/v2.2/app/providers/) offer a mechanism for configuring and using dependencies, like databases, within your app.
 
 Copy and paste the following provider into a new file at `config/providers/persistence.rb`:
 
@@ -388,7 +388,7 @@ Settings can be strings, booleans, integers and other types. Each setting can be
 
 Each setting is sourced from an environment variable matching its name. For example `my_flag` will be sourced from `ENV["MY_FLAG"]`.
 
-You can read more about Hanami's settings in the [app guide](/v2.1/app/settings/).
+You can read more about Hanami's settings in the [app guide](/v2.2/app/settings/).
 
 Let's add `database_url` and make it a required setting by using the `Types::String` constructor:
 
@@ -427,7 +427,7 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/bookshelf_test
 </p>
 
 <p class="notice">
-  See <a href="/v2.1/app/settings/#using-dotenv-to-manage-environment-variables">Using dotenv to manage environment variables</a> for recommendations on handling these files.
+  See <a href="/v2.2/app/settings/#using-dotenv-to-manage-environment-variables">Using dotenv to manage environment variables</a> for recommendations on handling these files.
 </p>
 
 To confirm that the `database_url` setting is working as expected, you can run `bundle exec hanami console` to start a console, then call the `database_url` method on your app's settings object.
@@ -594,7 +594,7 @@ end
 
 To get this spec to pass, we'll need to update our books index action to return books from the books relation.
 
-To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [container and components](/v2.1/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
+To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [container and components](/v2.2/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
 For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make ROM available via a `rom` method within our action. The books relation is then available via `rom.relations[:books]`.
 
@@ -793,7 +793,7 @@ end
 
 Validating parameters in actions is useful for performing parameter coercion and type validation. More complex domain-specific validations, or validations concerned with things such as uniqueness, however, are usually better performed at layers deeper than your HTTP actions.
 
-You can find more details on actions and parameter validation in the [Actions guide](/v2.1/actions/overview/).
+You can find more details on actions and parameter validation in the [Actions guide](/v2.2/actions/overview/).
 
 ## Showing a book
 
@@ -1196,5 +1196,4 @@ So far we've seen how to create a new Hanami app, explored some of the basics of
 
 Still, we've barely touched the surface of what Hanami offers.
 
-From here you might want to look in more detail at [routing](/v2.1/routing/overview/) and [actions](/v2.1/actions/overview/), or explore Hanami's [app architecture](/v2.1/app/container-and-components/), starting with its [component management](/v2.1/app/container-and-components/) and [dependency injection](/v2.1/app/container-and-components/) systems.
-
+From here you might want to look in more detail at [routing](/v2.2/routing/overview/) and [actions](/v2.2/actions/overview/), or explore Hanami's [app architecture](/v2.2/app/container-and-components/), starting with its [component management](/v2.2/app/container-and-components/) and [dependency injection](/v2.2/app/container-and-components/) systems.

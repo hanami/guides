@@ -75,9 +75,9 @@ You can use two CLI commands to compile your assets:
 - `hanami assets compile` will compile all your assets for production.
 - `hanami assets watch` will watch for changes to your assets and compile the relevant files immediately.
 
-The [`hanami dev` command](/v2.1/cli-commands/dev/) will start `hanami assets watch` by defalt, giving you
+The [`hanami dev` command](/v2.2/cli-commands/dev/) will start `hanami assets watch` by defalt, giving you
 
-See the [assets CLI guide](/v2.1/cli-commands/assets/) for more detail.
+See the [assets CLI guide](/v2.2/cli-commands/assets/) for more detail.
 
 ## Asset compilation
 
@@ -210,7 +210,7 @@ bookshelf[development]> app["assets"]["app.js"].url
 # => "/assets/app.js"
 ```
 
-You can include this `"assets"` component as a dependency of any class to access your assets wherever you need across your app. See [Injecting dependencies via `Deps`](/v2.1/app/container-and-components/#injecting-dependencies-via-deps) to learn more.
+You can include this `"assets"` component as a dependency of any class to access your assets wherever you need across your app. See [Injecting dependencies via `Deps`](/v2.2/app/container-and-components/#injecting-dependencies-via-deps) to learn more.
 
 ### View helpers
 
@@ -226,11 +226,11 @@ javascript_tag("app")
 # => '<script src="/assets/app-LSLFPUMX.js" type="text/javascript"></script>'
 ```
 
-See the [assets helpers guide](/v2.1/helpers/assets) for more detail.
+See the [assets helpers guide](/v2.2/helpers/assets) for more detail.
 
 ### Elsewhere in views
 
-This `"assets"` component is automatically included as a dependency of the [view context](/v2.1/views/context/). This means you can access `assets` in your view [parts](/v2.1/views/parts/) and [scopes](/v2.1/views/scopes/) too.
+This `"assets"` component is automatically included as a dependency of the [view context](/v2.2/views/context/). This means you can access `assets` in your view [parts](/v2.2/views/parts/) and [scopes](/v2.2/views/scopes/) too.
 
 ```ruby
 # app/views/parts/book.rb

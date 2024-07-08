@@ -97,10 +97,10 @@ module Bookshelf
 end
 ```
 
-See the [app config guide](/v2.1//app/app-config/) for information on supported config options.
+See the [app config guide](/v2.2//app/app-config/) for information on supported config options.
 
 ## Production deployments
 
 When deploying your application to production, set the `HANAMI_ENV` environment variable to `production`.
 
-In production, Hanami logs to standard out by default, using a structured JSON format with a log level of `:info` rather than `:debug`, which is used in development and test. See the [logger guide](/v2.1/logger/configuration/) for more detail.
+In production, Hanami logs to standard out by default, using a structured JSON format with a log level of `:info` rather than `:debug`, which is used in development and test. See the [logger guide](/v2.2/logger/configuration/) for more detail.

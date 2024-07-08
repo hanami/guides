@@ -33,4 +33,4 @@ end
 
 As the code above suggests, the `request` object provides access to the parameters associated with the incoming request through a `#params` method.
 
-Let's start by taking a look at action [parameters](/v2.1/actions/parameters/).
+Let's start by taking a look at action [parameters](/v2.2/actions/parameters/).
