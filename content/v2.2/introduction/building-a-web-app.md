@@ -316,222 +316,22 @@ Books index
 1 example, 0 failures
 ```
 
-### Adding persistence using ROM
+## Listing books
 
-Let's add just enough ROM to get persistence working using Postgres.
+Let's adapt our spec to expect an index of books from a database. New Hanami apps use an SQLite database by default, so we can set that up first.
 
-First, add these gems to the Gemfile and run `bundle install`:
+### Preparing a books table
 
-```ruby
-# Gemfile
-gem "rom", "~> 5.3"
-gem "rom-sql", "~> 3.6"
-gem "pg"
-
-group :test do
-  gem "database_cleaner-sequel"
-end
-```
-
-<p class="notice">
-  If you do not have Postgres installed, you can install it using <a href="https://brew.sh/">Homebrew</a>, <a href="https://asdf-vm.com/">asdf</a> or by following the installation instruction on the <a href="https://www.postgresql.org/">PostgreSQL website</a>.
-</p>
-
-With Postgres running, create databases for development and test using PostgreSQL's `createdb` command:
+To create a books table, we need to generate a migration:
 
 ```shell
-$ createdb bookshelf_development
-$ createdb bookshelf_test
+$ hanami generate migration create_books
 ```
 
-In Hanami, [providers](/v2.2/app/providers/) offer a mechanism for configuring and using complex dependencies, like database connections, within your app.
-
-Copy and paste the following provider into a new file at `config/providers/persistence.rb`:
+Edit the migration file to create a books table with title and author columns and a primary key:
 
 ```ruby
-Hanami.app.register_provider :persistence, namespace: true do
-  prepare do
-    require "rom"
-
-    config = ROM::Configuration.new(:sql, target["settings"].database_url)
-
-    register "config", config
-    register "db", config.gateways[:default].connection
-  end
-
-  start do
-    config = target["persistence.config"]
-
-    config.auto_registration(
-      target.root.join("lib/bookshelf/persistence"),
-      namespace: "Bookshelf::Persistence"
-    )
-
-    register "rom", ROM.container(config)
-  end
-end
-```
-
-For this persistence provider to function, we need to establish a `database_url` setting.
-
-Settings in Hanami are defined by a `Settings` class in `config/settings.rb`:
-
-```ruby
-# config/settings.rb
-
-module Bookshelf
-  class Settings < Hanami::Settings
-    # Define your app settings here, for example:
-    #
-    # setting :my_flag, default: false, constructor: Types::Params::Bool
-  end
-end
-```
-
-Settings can be strings, booleans, integers and other types. Each setting can be either optional or required (meaning the app won't boot without them), and each can also have a default.
-
-Each setting is sourced from an environment variable matching its name. For example `my_flag` will be sourced from `ENV["MY_FLAG"]`.
-
-You can read more about Hanami's settings in the [App guide](/v2.2/app/settings/).
-
-Let's add `database_url` and make it a required setting by using the `Types::String` constructor:
-
-```ruby
-# config/settings.rb
-
-module Bookshelf
-  class Settings < Hanami::Settings
-    # Define your app settings here, for example:
-    #
-    # setting :my_flag, default: false, constructor: Types::Params::Bool
-
-    setting :database_url, constructor: Types::String
-  end
-end
-```
-
-Our bookshelf app will now raise an invalid settings error when it boots, unless a `DATABASE_URL` environment variable is present.
-
-In development and test environments, Hanami uses the [dotenv gem](https://github.com/bkeepers/dotenv) to load environment variables from `.env` files.
-
-We can now create `.env` and `.env.test` files in order to set `database_url` appropriately in development and test environments:
-
-```shell
-# .env
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/bookshelf_development
-```
-
-```shell
-# .env.test
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/bookshelf_test
-```
-
-<p class="notice">
-  You might need to adjust these connection strings based on your local postgres configuration.
-</p>
-
-<p class="notice">
-  See <a href="/v2.2/app/settings/#using-dotenv-to-manage-environment-variables">Using dotenv to manage environment variables</a> for recommendations on handling these files.
-</p>
-
-To confirm that the `database_url` setting is working as expected, you can run `bundle exec hanami console` to start a console, then call the `database_url` method on your app's settings object.
-
-```shell
-$ bundle exec hanami console
-```
-
-```ruby
-bookshelf[development]> app["settings"].database_url
-=> "postgres://postgres:postgres@localhost:5432/bookshelf_development"
-```
-
-And in test:
-
-```shell
-$ HANAMI_ENV=test bundle exec hanami console
-```
-
-```ruby
-bookshelf[test]> Hanami.app["settings"].database_url
-=> "postgres://postgres:postgres@localhost:5432/bookshelf_test"
-```
-
-To ensure the database is cleaned between tests, add the following to a `spec/support/database_cleaner.rb` file:
-
-```ruby
-# spec/support/database_cleaner.rb
-
-require "database_cleaner-sequel"
-
-Hanami.app.prepare(:persistence)
-DatabaseCleaner[:sequel, db: Hanami.app["persistence.db"]]
-
-RSpec.configure do |config|
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.around(:each, type: :database) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
-end
-```
-
-And then append the following line to `spec/spec_helper.rb`:
-
-```ruby
-require_relative "support/database_cleaner"
-```
-
-Finally, enable ROM's rake tasks for database migrations by appending the following to the `Rakefile`:
-
-```ruby
-# Rakefile
-
-require "rom/sql/rake_task"
-
-task :environment do
-  require_relative "config/app"
-  require "hanami/prepare"
-end
-
-namespace :db do
-  task setup: :environment do
-    Hanami.app.prepare(:persistence)
-    ROM::SQL::RakeSupport.env = Hanami.app["persistence.config"]
-  end
-end
-```
-
-<p class="notice">
-  Hanami's 2.2 release, slated for 2024, will bring persistence as a first class feature, after which none of the above set up will be required.
-</p>
-
-### Creating a books table
-
-With persistence ready, we can now create a books table.
-
-To create a migration run:
-
-```shell
-$ bundle exec rake db:create_migration[create_books]
-```
-
-<p class="notice">
-  If your shell is zsh you will need to escape the square brackets:
-</p>
-
-```shell
-$ bundle exec rake db:create_migration\[create_books\]
-```
-
-Edit the migration file in order to create a books table with title and author columns and a primary key:
-
-```ruby
-# db/migrate/20221113050928_create_books.rb
+# config/db/migrate/20221113050928_create_books.rb
 
 ROM::SQL.migration do
   change do
@@ -547,35 +347,86 @@ end
 Migrate both the development and test databases:
 
 ```shell
-$ bundle exec rake db:migrate
-$ HANAMI_ENV=test bundle exec rake db:migrate
+$ bundle exec hanami db migrate
+$ HANAMI_ENV=test bundle exec hanami db migrate
 ```
 
-Lastly, let's add a ROM relation to allow our app to interact with our books table. Create the following file at `lib/bookshelf/persistence/relations/books.rb`:
+Next, let's generate a relation to allow our app to interact with our books table. To generate a relation:
+
+```shell
+$ bundle exec hanami generate relation books
+```
+
+This creates the following file at `app/relations/books.rb`:
 
 ```ruby
 # lib/bookshelf/persistence/relations/books.rb
 
 module Bookshelf
-  module Persistence
-    module Relations
-      class Books < ROM::Relation[:sql]
-        schema(:books, infer: true)
-      end
+  module Relations
+    class Books < Bookshelf::DB::Relation
+      schema(:books, infer: true)
     end
   end
 end
 ```
 
-## Listing books
+Lastly, we need to ensure the database is cleaned between tests. Add this gem to your `Gemfile`:
 
-With our books table ready to go, let's adapt our books index spec to expect an index of persisted books:
+```ruby
+group :test do
+  gem "database_cleaner-sequel"
+end
+```
+
+Install the gem:
+
+```shell
+$ bundle install
+```
+
+Add the following to a `spec/support/database_cleaner.rb` file:
+
+```ruby
+# spec/support/database_cleaner.rb
+
+require "database_cleaner-sequel"
+
+# Allow Database Cleaner to work on our local sqlite databases
+DatabaseCleaner.url_allowlist = [%r{^sqlite://}]
+
+Hanami.app.prepare :db
+DatabaseCleaner[:sequel]
+
+RSpec.configure do |config|
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each, type: :db) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
+end
+```
+
+And then append the following line to `spec/spec_helper.rb`:
+
+```ruby
+require_relative "support/database_cleaner"
+```
+
+### Updating our test
+
+Now we can go ahead adapt our books index spec to expect an index of books from a database, with authors included alongside titles. We can use the books relation to insert the records.
 
 ```ruby
 # spec/features/books/index_spec.rb
 
 RSpec.feature "Books index" do
-  let(:books) { Hanami.app["persistence.rom"].relations[:books] }
+  let(:books) { Hanami.app["relations.books"] }
 
   before do
     books.insert(title: "Practical Object-Oriented Design in Ruby", author: "Sandi Metz")
@@ -591,36 +442,51 @@ RSpec.feature "Books index" do
 end
 ```
 
-To get this spec to pass, we'll need to update our books index view to return books from the books relation.
+To get this spec to pass, we'll need to update our books index view to retrieve books from our database. To do this, we can generate a book repo:
 
-To access the books relation within the view, we can use Hanami's "Deps mixin". Covered in detail in the [container and components](/v2.2/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
+```shell
+$ bundle exec hanami generate repo book
+```
 
-For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make ROM available via a `rom` method within our view. The books relation is then available via `rom.relations[:books]`.
-
-To satisfy our spec, we need to meet a few requirements. Firstly, we want to render each book's _title_ and _author_. Secondly we want to return books alphabetically by title. We can achieve these requirements by querying for books in our exposure, and using the `select` and `order` methods offered by the books relation:
+Repos serve as the interface to our persisted data from our domain layer. Let's edit the repo to add a method that returns all books ordered by title:
 
 ```ruby
-module Bookshelf
-  module Views
-    module Books
-      class Index < Bookshelf::View
-        include Deps["persistence.rom"]
+# app/repos/book_repo.rb
 
-        expose :books do
-          rom.relations[:books]
-            .select(:title, :author)
-            .order(:title)
-            .to_a
-        end
+module Bookshelf
+  module Repos
+    class BookRepo < Bookshelf::Repo
+      def all_by_title
+        order(self[:title].asc).to_a
       end
     end
   end
 end
 ```
 
-<p class="convention">
-  Accessing relations directly from app components like views and actions is not a commonly recommended pattern. Instead, a <a href="https://rom-rb.org/5.0/learn/repositories/quick-start/">ROM repository</a> should be used. Here, however, the repository is ommitted for brevity. Hanami's 2.2 release will offer repositories out of the box.
-</p>
+To access this book repo from the view, we can use Hanami's Deps mixin. Covered in detail in the [container and components](/v2.2/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
+
+For now however, it's enough to know that we can use `include Deps["repos.book_repo"]` to make the repo available via a `book_repo` method within our view.
+
+We can now call this repo from our exposure:
+
+```ruby
+# app/views/books/index.rb
+
+module Bookshelf
+  module Views
+    module Books
+      class Index < Bookshelf::View
+        include Deps["repos.book_repo"]
+
+        expose :books do
+          book_repo.all_by_title
+        end
+      end
+    end
+  end
+end
+```
 
 Then we can update our template to include the author:
 
@@ -649,20 +515,18 @@ Books index
 
 ## Using request parameters
 
-Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily, ROM relations offer pagination support. Let's add pagination with a default page size of 5:
+Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily, relations offer pagination support. Let's add pagination with a default page size of 5:
 
 ```ruby
-# lib/bookshelf/persistence/relations/books.rb
+# app/relations/books.rb
 
 module Bookshelf
-  module Persistence
-    module Relations
-      class Books < ROM::Relation[:sql]
-        schema(:books, infer: true)
+  module Relations
+    class Books < Bookshelf::DB::Relation
+      schema(:books, infer: true)
 
-        use :pagination
-        per_page 5
-      end
+      use :pagination
+      per_page 5
     end
   end
 end
@@ -676,7 +540,7 @@ Let's add a request spec verifying pagination:
 # spec/features/books/index/pagination_spec.rb
 
 RSpec.feature "Books index pagination" do
-  let(:books) { Hanami.app["persistence.rom"].relations[:books] }
+  let(:books) { Hanami.app["relations.books"] }
 
   before do
     10.times do |n|
@@ -717,7 +581,7 @@ module Bookshelf
 end
 ```
 
-In the view, we can update our books exposure to take these inputs and use them for the database query:
+In the view, we can update our books exposure to take these inputs and pass them to the repo method:
 
 ```ruby
 # app/views/books/index.rb
@@ -726,16 +590,30 @@ module Bookshelf
   module Views
     module Books
       class Index < Bookshelf::View
-        include Deps["persistence.rom"]
+        include Deps["repos.book_repo"]
 
         expose :books do |page:, per_page:|
-          rom.relations[:books]
-            .select(:title, :author)
-            .order(:title)
-            .page(page)
-            .per_page(per_page)
-            .to_a
+          book_repo.all_by_title(page:, per_page:)
         end
+      end
+    end
+  end
+end
+```
+
+And in the relation, we can use these to control the pagination:
+
+```ruby
+# app/repos/book_repo.rb
+
+module Bookshelf
+  module Repos
+    class BookRepo < Bookshelf::Repo
+      def all_by_title(page:, per_page:)
+        order(self[:title].asc)
+          .page(page)
+          .per_page(per_page)
+          .to_a
       end
     end
   end
@@ -763,7 +641,7 @@ Let's specify a `/books/:id` request that renders a book for a given ID, or retu
 # spec/features/books/show_spec.rb
 
 RSpec.feature "Showing a book" do
-  let(:books) { Hanami.app["persistence.rom"].relations[:books] }
+  let(:books) { Hanami.app["relations.books"] }
 
   context "when a book matches the given ID" do
     let!(:book_id) do
@@ -847,7 +725,27 @@ module Bookshelf
 end
 ```
 
-Then we can edit the view at `app/views/books/show.rb` to take this ID and expose a book to the template.
+To fetch a single book from our database, we can add a new method to our book repo:
+
+```ruby
+# app/repos/book_repo.rb
+
+module Bookshelf
+  module Repos
+    class BookRepo < Bookshelf::Repo
+      def get(id)
+        by_pk(id).one
+      end
+
+      def all_by_title
+        order(self[:title].asc).to_a
+      end
+    end
+  end
+end
+```
+
+Then we can edit the view at `app/views/books/show.rb` to get the book via the repo and expose it to the template:
 
 ```ruby
 # app/views/books/show.rb
@@ -856,10 +754,10 @@ module Bookshelf
   module Views
     module Books
       class Show < Bookshelf::View
-        include Deps["persistence.rom"]
+        include Deps["repos.book_repo"]
 
         expose :book do |id:|
-          rom.relations[:books].by_pk(id).one
+          book_repo.get(id)
         end
       end
     end
@@ -904,15 +802,15 @@ Failures:
 
 This is because our relation's `#one` method returns `nil` if there's no book with the requisite ID, leading to this "undefined method on NilClass" error from the template.
 
-However, in addition to `#one`, ROM relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
+However, in addition to `#one`, relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
 
-Let's make that change in our view now:
+Let's make that change in our repo now:
 
 ```ruby
-# app/views/books/show.rb
+# app/repos/book_repo.rb
 
-expose :book do |id:|
-  rom.relations[:books].by_pk(id).one!
+def get(id)
+  by_pk(id).one!
 end
 ```
 
@@ -1158,7 +1056,6 @@ Then add a `session_secret` to your app's settings:
 
 module Bookshelf
   class Settings < Hanami::Settings
-    setting :database_url, constructor: Types::String
     setting :session_secret, constructor: Types::String
   end
 end
@@ -1202,7 +1099,23 @@ Next we can update the app layout to show the flash messages, if there are any:
 </html>
 ```
 
-We can now complete our create action by inserting a book record into the books relation if the posted params are valid, then setting flash messages and redirecting as required:
+To complete our create action, we can add a method to our book repo to create new books:
+
+```ruby
+# app/repos/book_repo.rb
+
+module Bookshelf
+  module Repos
+    class BookRepo < Bookshelf::Repo
+      def create(attributes)
+        books.changeset(:create, attributes).commit
+      end
+    end
+  end
+end
+```
+
+In the action, we can then create this book if the posted params are valid, then setting flash messages and redirecting as required:
 
 ```ruby
 # app/actions/books/create.rb
@@ -1211,7 +1124,7 @@ module Bookshelf
   module Actions
     module Books
       class Create < Bookshelf::Action
-        include Deps["persistence.rom"]
+        include Deps["repos.book_repo"]
 
         params do
           required(:book).hash do
@@ -1222,7 +1135,7 @@ module Bookshelf
 
         def handle(request, response)
           if request.params.valid?
-            book = rom.relations[:books].changeset(:create, request.params[:book]).commit
+            book = book_repo.create(request.params[:book])
 
             response.flash[:notice] = "Book created"
             response.redirect_to routes.path(:show_book, id: book[:id])
