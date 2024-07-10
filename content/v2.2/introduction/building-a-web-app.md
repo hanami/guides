@@ -316,9 +316,9 @@ Books index
 1 example, 0 failures
 ```
 
-## Listing books
+## Listing books from a database
 
-Let's adapt our spec to expect an index of books from a database. New Hanami apps use an SQLite database by default, so we can set that up first.
+Of course, returning a static list of books is not particularly useful. Let's address this by retrieving books from a database.
 
 ### Preparing a books table
 
@@ -371,7 +371,7 @@ module Bookshelf
 end
 ```
 
-Lastly, we need to ensure the database is cleaned between tests. Add this gem to your `Gemfile`:
+Lastly, we need to ensure the database is cleaned between tests. Add the Database Cleaner gem to your `Gemfile`:
 
 ```ruby
 group :test do
@@ -379,13 +379,13 @@ group :test do
 end
 ```
 
-Install the gem:
+Install it:
 
 ```shell
 $ bundle install
 ```
 
-Add the following to a `spec/support/database_cleaner.rb` file:
+Add then add the following to `spec/support/database_cleaner.rb`:
 
 ```ruby
 # spec/support/database_cleaner.rb
@@ -442,7 +442,7 @@ RSpec.feature "Books index" do
 end
 ```
 
-To get this spec to pass, we'll need to update our books index view to retrieve books from our database. To do this, we can generate a book repo:
+To get this spec to pass, we'll need to update our books index view to retrieve books from our database. For this we can generate a book repo:
 
 ```shell
 $ bundle exec hanami generate repo book
@@ -601,7 +601,7 @@ module Bookshelf
 end
 ```
 
-And in the relation, we can use these to control the pagination:
+And in the repo, we can use these to control the pagination:
 
 ```ruby
 # app/repos/book_repo.rb
@@ -635,7 +635,7 @@ Books index pagination
 
 In addition to our books index, we also want to provide an endpoint for viewing the details of a particular book.
 
-Let's specify a `/books/:id` request that renders a book for a given ID, or returns 404 if there's no book for with the given ID.
+Let's specify a `/books/:id` request that renders a book for a given ID, or returns 404 if there's no book for with the ID.
 
 ```ruby
 # spec/features/books/show_spec.rb
@@ -736,10 +736,6 @@ module Bookshelf
       def get(id)
         by_pk(id).one
       end
-
-      def all_by_title
-        order(self[:title].asc).to_a
-      end
     end
   end
 end
@@ -800,7 +796,7 @@ Failures:
 2 examples, 1 failure
 ```
 
-This is because our relation's `#one` method returns `nil` if there's no book with the requisite ID, leading to this "undefined method on NilClass" error from the template.
+This is because in our repo, we used the relation's `#one` method to return out book, which will return `nil` if there's no book with the requisite ID, leading to this "undefined method on NilClass" error from the template.
 
 However, in addition to `#one`, relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
 
