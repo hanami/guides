@@ -9,18 +9,18 @@ Now that we've [created our app](/v2.2/introduction/getting-started/), let's tur
 
 Let's take a look at Hanami by creating the beginnings of a bookshelf app.
 
-In the file `spec/requests/root_spec.rb`, Hanami provides a request spec for the "Hello from Hanami" message we've seen in the browser.
+In the file `spec/requests/root_spec.rb`, Hanami provides a request spec expecting the error we receive as an app with no routes.
 
 ```ruby
 # spec/requests/root_spec.rb
 
 RSpec.describe "Root", type: :request do
-  it "is successful" do
+  it "is not found" do
     get "/"
 
-    # Find me in `config/routes.rb`
-    expect(last_response).to be_successful
-    expect(last_response.body).to eq("Hello from Hanami")
+    # Generate new action via:
+    #   `bundle exec hanami generate action home.index --url=/`
+    expect(last_response.status).to be(404)
   end
 end
 ```
@@ -35,13 +35,13 @@ You should see:
 
 ```shell
 Root
-  is successful
+  is not found
 
 Finished in 0.01986 seconds (files took 0.70103 seconds to load)
 1 example, 0 failures
 ```
 
-Let's change the "Hello from Hanami" message to "Welcome to Bookshelf". First, we'll adjust our spec:
+Let's change this spec to expect a "Welcome to Bookshelf" message on the app's root:
 
 ```ruby
 # spec/requests/root_spec.rb
@@ -50,14 +50,13 @@ RSpec.describe "Root", type: :request do
   it "is successful" do
     get "/"
 
-    # Find me in `config/routes.rb`
-    expect(last_response).to be_successful
     expect(last_response.body).to eq("Welcome to Bookshelf")
+    expect(last_response).to be_successful
   end
 end
 ```
 
-As we expect, when we run the spec again, it fails:
+As we expect, this spec now fails:
 
 ```shell
 $ bundle exec rspec spec/requests/root_spec.rb
@@ -70,35 +69,31 @@ Failures:
   1) Root is successful
      Failure/Error: expect(last_response.body).to eq("Welcome to Bookshelf")
 
-       expected: "Welcome to Bookshelf"
-            got: "Hello from Hanami"
+       expected: #<Encoding:UTF-8> "Welcome to Bookshelf"
+            got: #<Encoding:ASCII-8BIT> "Not Found"
 
        (compared using ==)
-     # ./spec/requests/root_spec.rb:9:in `block (2 levels) in <top (required)>'
+     # ./spec/requests/root_spec.rb:7:in `block (2 levels) in <top (required)>'
 
-Finished in 0.04572 seconds (files took 0.72148 seconds to load)
+Finished in 0.02525 seconds (files took 0.58635 seconds to load)
 1 example, 1 failure
 ```
 
-To fix this, let's open our app's routes file at `config/routes.rb`:
+To fix this, let's look at our app's routes file at `config/routes.rb`:
 
 ```ruby
 # config/routes.rb
 
 module Bookshelf
   class Routes < Hanami::Routes
-    root { "Hello from Hanami" }
+    # Add your routes here. See https://guides.hanamirb.org/routing/overview/ for details.
   end
 end
 ```
 
 This `Bookshelf::Routes` class contains the configuration for our app's router. Routes in Hanami are comprised of a HTTP method, a path, and an endpoint to be invoked, which is usually a Hanami action. (See the [Routing guide](/v2.2/routing/overview/) for more information).
 
-We'll take a look at adding more routes in a moment, but for now let's get our spec to pass. The above `Bookshelf::Routes` class contains only one route, the `root` route, which handles `GET` requests for `"/"`.
-
-Rather than invoking an action, this route is configured to invoke a block, which returns "Hello from Hanami".
-
-Blocks are convenient, but let's adjust our route to invoke an action instead:
+Let's update our routes to invoke an action for our app's root, which handles `GET` requests for `"/"`.
 
 ```ruby
 # config/routes.rb
@@ -147,8 +142,7 @@ module Bookshelf
   module Actions
     module Home
       class Show < Bookshelf::Action
-        def handle(*, response)
-          response.body = self.class.name
+        def handle(request, response)
         end
       end
     end
@@ -166,8 +160,6 @@ def handle(request, response)
 end
 ```
 
-In the automatically generated home show action above, `*` is used for the `request` argument because the action does not currently use the request.
-
 For more details on actions, see the [Actions guide](/v2.2/actions/overview/).
 
 For now, let's adjust our home action to return our desired "Welcome to Bookshelf" message.
@@ -179,7 +171,7 @@ module Bookshelf
   module Actions
     module Home
       class Show < Bookshelf::Action
-        def handle(*, response)
+        def handle(request, response)
           response.body = "Welcome to Bookshelf"
         end
       end
@@ -192,7 +184,6 @@ With this change, our root spec will now pass:
 
 ```shell
 $ bundle exec rspec spec/requests/root_spec.rb
-
 
 Root
   is successful
@@ -215,14 +206,14 @@ RSpec.describe "GET /books", type: :request do
     get "/books"
 
     expect(last_response).to be_successful
-    expect(last_response.content_type).to eq("app/json; charset=utf-8")
+    expect(last_response.content_type).to eq("application/json; charset=utf-8")
 
     response_body = JSON.parse(last_response.body)
 
-    expect(response_body).to eq([
-      { "title" => "Test Driven Development" },
-      { "title" => "Practical Object-Oriented Design in Ruby" }
-    ])
+    expect(response_body).to eq [
+      {"title" => "Test Driven Development"},
+      {"title" => "Practical Object-Oriented Design in Ruby"}
+    ]
   end
 end
 ```
@@ -257,10 +248,10 @@ GET /books
 Failures:
 
   1) GET /books returns a list of books
-     Failure/Error: expect(last_response.content_type).to eq("app/json; charset=utf-8")
+     Failure/Error: expect(last_response.content_type).to eq("application/json; charset=utf-8")
 
-       expected: "app/json; charset=utf-8"
-            got: "app/octet-stream; charset=utf-8"
+       expected: "application/json; charset=utf-8"
+            got: "application/octet-stream; charset=utf-8"
 
        (compared using ==)
      # ./spec/requests/books/index_spec.rb:7:in `block (2 levels) in <top (required)>'
@@ -275,7 +266,7 @@ module Bookshelf
   module Actions
     module Books
       class Index < Bookshelf::Action
-        def handle(*, response)
+        def handle(request, response)
           books = [
             {title: "Test Driven Development"},
             {title: "Practical Object-Oriented Design in Ruby"}
@@ -302,232 +293,22 @@ Finished in 0.02378 seconds (files took 0.49411 seconds to load)
 1 example, 0 failures
 ```
 
-## Persisting books
+## Listing books from a database
 
-Of course, returning a static list of books is not particularly useful.
+Of course, returning a static list of books is not particularly useful. Let's address this by retrieving books from a database.
 
-Let's address this by retrieving books from a database.
+### Preparing a books table
 
-<p class="notice">
-  Integrated support for persistence based on <a href="https://rom-rb.org/">ROM</a> is coming in Hanami's 2.2 release. For now, we can bring our own simple ROM configuration to allow us to store books in a database.
-</p>
-
-### Adding persistence using ROM
-
-Let's add just enough ROM to get persistence working using Postgres.
-
-First, add these gems to the Gemfile and run `bundle install`:
-
-```ruby
-# Gemfile
-gem "rom", "~> 5.3"
-gem "rom-sql", "~> 3.6"
-gem "pg"
-
-group :test do
-  gem "database_cleaner-sequel"
-end
-```
-
-<p class="notice">
-  If you do not have Postgres installed, you can install it using <a href="https://brew.sh/">Homebrew</a>,  <a href="https://asdf-vm.com/">asdf</a> or by following the installation instruction on the <a href="https://www.postgresql.org/">PostgreSQL website</a>.
-</p>
-
-With Postgres running, create databases for development and test using PostgreSQL's `createdb` command:
+To create a books table, we need to generate a migration:
 
 ```shell
-$ createdb bookshelf_development
-$ createdb bookshelf_test
+$ hanami generate migration create_books
 ```
 
-In Hanami, [providers](/v2.2/app/providers/) offer a mechanism for configuring and using dependencies, like databases, within your app.
-
-Copy and paste the following provider into a new file at `config/providers/persistence.rb`:
+Edit the migration file to create a books table with title and author columns and a primary key:
 
 ```ruby
-Hanami.app.register_provider :persistence, namespace: true do
-  prepare do
-    require "rom"
-
-    config = ROM::Configuration.new(:sql, target["settings"].database_url)
-
-    register "config", config
-    register "db", config.gateways[:default].connection
-  end
-
-  start do
-    config = target["persistence.config"]
-
-    config.auto_registration(
-      target.root.join("lib/bookshelf/persistence"),
-      namespace: "Bookshelf::Persistence"
-    )
-
-    register "rom", ROM.container(config)
-  end
-end
-```
-
-For this persistence provider to function, we need to establish a `database_url` setting.
-
-Settings in Hanami are defined by a `Settings` class in `config/settings.rb`:
-
-```ruby
-# config/settings.rb
-
-module Bookshelf
-  class Settings < Hanami::Settings
-    # Define your app settings here, for example:
-    #
-    # setting :my_flag, default: false, constructor: Types::Params::Bool
-  end
-end
-```
-
-Settings can be strings, booleans, integers and other types. Each setting can be either optional or required (meaning the app won't boot without them), and each can also have a default.
-
-Each setting is sourced from an environment variable matching its name. For example `my_flag` will be sourced from `ENV["MY_FLAG"]`.
-
-You can read more about Hanami's settings in the [app guide](/v2.2/app/settings/).
-
-Let's add `database_url` and make it a required setting by using the `Types::String` constructor:
-
-```ruby
-# config/settings.rb
-
-module Bookshelf
-  class Settings < Hanami::Settings
-    # Define your app settings here, for example:
-    #
-    # setting :my_flag, default: false, constructor: Types::Params::Bool
-
-    setting :database_url, constructor: Types::String
-  end
-end
-```
-
-Our bookshelf app will now raise an invalid settings error when it boots, unless a `DATABASE_URL` environment variable is present.
-
-In development and test environments, Hanami uses the [dotenv gem](https://github.com/bkeepers/dotenv) to load environment variables from `.env` files.
-
-We can now create `.env` and `.env.test` files in order to set `database_url` appropriately in development and test environments:
-
-```shell
-# .env
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/bookshelf_development
-```
-
-```shell
-# .env.test
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/bookshelf_test
-```
-
-<p class="notice">
-  You might need to adjust these connection strings based on your local postgres configuration.
-</p>
-
-<p class="notice">
-  See <a href="/v2.2/app/settings/#using-dotenv-to-manage-environment-variables">Using dotenv to manage environment variables</a> for recommendations on handling these files.
-</p>
-
-To confirm that the `database_url` setting is working as expected, you can run `bundle exec hanami console` to start a console, then call the `database_url` method on your app's settings object.
-
-```shell
-$ bundle exec hanami console
-```
-
-```ruby
-bookshelf[development]> Hanami.app["settings"].database_url
-=> "postgres://postgres:postgres@localhost:5432/bookshelf_development"
-```
-
-And in test:
-
-```shell
-$ HANAMI_ENV=test bundle exec hanami console
-```
-
-```ruby
-bookshelf[test]> Hanami.app["settings"].database_url
-=> "postgres://postgres:postgres@localhost:5432/bookshelf_test"
-```
-
-To ensure the database is cleaned between tests, add the following to a `spec/support/database_cleaner.rb` file:
-
-```ruby
-# spec/support/database_cleaner.rb
-
-require "database_cleaner-sequel"
-
-Hanami.app.prepare(:persistence)
-DatabaseCleaner[:sequel, db: Hanami.app["persistence.db"]]
-
-RSpec.configure do |config|
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.around(:each, type: :database) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
-end
-```
-
-And then append the following line to `spec/spec_helper.rb`:
-
-```ruby
-require_relative "support/database_cleaner"
-```
-
-Finally, enable ROM's rake tasks for database migrations by appending the following to the `Rakefile`:
-
-```ruby
-# Rakefile
-
-require "rom/sql/rake_task"
-
-task :environment do
-  require_relative "config/app"
-  require "hanami/prepare"
-end
-
-namespace :db do
-  task setup: :environment do
-    Hanami.app.prepare(:persistence)
-    ROM::SQL::RakeSupport.env = Hanami.app["persistence.config"]
-  end
-end
-```
-
-<p class="notice">
-  Hanami's 2.2 release will bring persistence as a first class feature, after which none of the above set up will be required.
-</p>
-
-### Creating a books table
-
-With persistence ready, we can now create a books table.
-
-To create a migration run:
-
-```shell
-$ bundle exec rake db:create_migration[create_books]
-```
-
-<p class="notice">
-  If your shell is zsh you will need to escape the square brackets:
-</p>
-
-```shell
-bundle exec rake db:create_migration\[create_books\]
-```
-
-Edit the migration file in order to create a books table with title and author columns and a primary key:
-
-```ruby
-# db/migrate/20221113050928_create_books.rb
+# config/db/migrate/20221113050928_create_books.rb
 
 ROM::SQL.migration do
   change do
@@ -543,33 +324,84 @@ end
 Migrate both the development and test databases:
 
 ```shell
-$ bundle exec rake db:migrate
-$ HANAMI_ENV=test bundle exec rake db:migrate
+$ bundle exec hanami db migrate
+$ HANAMI_ENV=test bundle exec hanami db migrate
 ```
 
-Lastly, let's add a ROM relation to allow our app to interact with our books table. Create the following file at `lib/bookshelf/persistence/relations/books.rb`:
+Next, let's generate a relation to allow our app to interact with our books table. To generate a relation:
+
+```shell
+$ bundle exec hanami generate relation books
+```
+
+This creates the following file at `app/relations/books.rb`:
 
 ```ruby
-# lib/bookshelf/persistence/relations/books.rb
+# app/relations/books.rb
 
 module Bookshelf
-  module Persistence
-    module Relations
-      class Books < ROM::Relation[:sql]
-        schema(:books, infer: true)
-      end
+  module Relations
+    class Books < Bookshelf::DB::Relation
+      schema :books, infer: true
     end
   end
 end
 ```
 
-## Listing books
-
-With our books table ready to go, let's adapt our books index spec to expect an index of persisted books:
+Lastly, we need to ensure the database is cleaned between tests. Add the Database Cleaner gem to your `Gemfile`:
 
 ```ruby
-RSpec.describe "GET /books", type: [:request, :database] do
-  let(:books) { app["persistence.rom"].relations[:books] }
+group :test do
+  gem "database_cleaner-sequel"
+end
+```
+
+Install it:
+
+```shell
+$ bundle install
+```
+
+Add then add the following to `spec/support/database_cleaner.rb`:
+
+```ruby
+# spec/support/database_cleaner.rb
+
+require "database_cleaner-sequel"
+
+# Allow Database Cleaner to work on our local sqlite databases
+DatabaseCleaner.url_allowlist = [%r{^sqlite://}]
+
+Hanami.app.prepare :db
+DatabaseCleaner[:sequel]
+
+RSpec.configure do |config|
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each, type: :db) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
+end
+```
+
+And then append the following line to `spec/spec_helper.rb`:
+
+```ruby
+require_relative "support/database_cleaner"
+```
+
+### Updating our test
+
+With our books table ready to go, let's adapt our books index spec to expect an index of persisted books, including authors as well as titles:
+
+```ruby
+RSpec.describe "GET /books", type: [:request, :db] do
+  let(:books) { Hanami.app["relations.books"] }
 
   before do
     books.insert(title: "Practical Object-Oriented Design in Ruby", author: "Sandi Metz")
@@ -580,51 +412,71 @@ RSpec.describe "GET /books", type: [:request, :database] do
     get "/books"
 
     expect(last_response).to be_successful
-    expect(last_response.content_type).to eq("app/json; charset=utf-8")
+    expect(last_response.content_type).to eq("application/json; charset=utf-8")
 
     response_body = JSON.parse(last_response.body)
 
-    expect(response_body).to eq([
-      { "title" => "Practical Object-Oriented Design in Ruby", "author" => "Sandi Metz" },
-      { "title" => "Test Driven Development", "author" => "Kent Beck" }
-    ])
+    expect(response_body).to eq [
+      {"title" => "Practical Object-Oriented Design in Ruby", "author" => "Sandi Metz"},
+      {"title" => "Test Driven Development", "author" => "Kent Beck"}
+    ]
   end
 end
 ```
 
-To get this spec to pass, we'll need to update our books index action to return books from the books relation.
+If we run this spec, we see that it fails because we're not returning the authors for each book.
 
-To access the books relation within the action, we can use Hanami's "Deps mixin". Covered in detail in the [container and components](/v2.2/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
+To get this spec to pass, we'll need to update our books index action to retrieve books from our database along with their authors.
 
-For now however, it's enough to know that we can use `include Deps["persistence.rom"]` to make ROM available via a `rom` method within our action. The books relation is then available via `rom.relations[:books]`.
+For this, we can generate a book repo:
 
-To satisfy our spec, we need to meet a few requirements. Firstly, we want to render each book's _title_ and _author_, but not its _id_. Secondly we want to return books alphabetically by title. We can achieve these requirements using the `select` and `order` methods offered by the books relation:
+```shell
+$ bundle exec hanami generate repo book
+```
+
+Repos serve as the interface to our persisted data from our domain layer. Let's edit the repo to add a method that returns all books ordered by title:
 
 ```ruby
+# app/repos/book_repo.rb
+
 module Bookshelf
-  module Actions
-    module Books
-      class Index < Bookshelf::Action
-        include Deps["persistence.rom"]
-
-        def handle(*, response)
-          books = rom.relations[:books]
-            .select(:title, :author)
-            .order(:title)
-            .to_a
-
-          response.format = :json
-          response.body = books.to_json
-        end
+  module Repos
+    class BookRepo < Bookshelf::DB::Repo
+      def all_by_title
+        books
+          .select(:title, :author)
+          .order(books[:title].asc)
+          .to_a
       end
     end
   end
 end
 ```
 
-<p class="convention">
-  Accessing relations directly from actions is not a commonly recommended pattern. Instead, a <a href="https://rom-rb.org/5.0/learn/repositories/quick-start/">rom repository</a> should be used. Here, however, the repository is ommitted for brevity. Hanami's 2.2 release will offer repositories out of the box.
-</p>
+To access this book repo from the action, we can use Hanami's Deps mixin. Covered in detail in the [container and components](/v2.2/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
+
+For now however, it's enough to know that we can use `include Deps["repos.book_repo"]` to make the repo available via a `book_repo` method within our action.
+
+We can now call this repo to prepare the action's response:
+
+```ruby
+module Bookshelf
+  module Actions
+    module Books
+      class Index < Bookshelf::Action
+        include Deps["repos.book_repo"]
+
+        def handle(request, response)
+          books = book_repo.all_by_title
+
+          response.format = :json
+          response.body = books.map(&:to_h).to_json
+        end
+      end
+    end
+  end
+end
+```
 
 With this action in place, the spec passes once more:
 
@@ -640,20 +492,18 @@ Finished in 0.05765 seconds (files took 1.36 seconds to load)
 
 ## Parameter validation
 
-Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily ROM relations offer pagination support. Let's add pagination with a default page size of 5:
+Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily relations offer pagination support. Let's add pagination with a default page size of 5:
 
 ```ruby
-# lib/bookshelf/persistence/relations/books.rb
+# app/relations/books.rb
 
 module Bookshelf
-  module Persistence
-    module Relations
-      class Books < ROM::Relation[:sql]
-        schema(:books, infer: true)
+  module Relations
+    class Books < Bookshelf::DB::Relation
+      schema :books, infer: true
 
-        use :pagination
-        per_page 5
-      end
+      use :pagination
+      per_page 5
     end
   end
 end
@@ -666,8 +516,8 @@ Let's add a request spec verifying pagination:
 ```ruby
 # spec/requests/books/index/pagination_spec.rb
 
-RSpec.describe "GET /books pagination", type: [:request, :database] do
-  let(:books) { app["persistence.rom"].relations[:books] }
+RSpec.describe "GET /books pagination", type: [:request, :db] do
+  let(:books) { Hanami.app["relations.books"] }
 
   before do
     10.times do |n|
@@ -683,17 +533,17 @@ RSpec.describe "GET /books pagination", type: [:request, :database] do
 
       response_body = JSON.parse(last_response.body)
 
-      expect(response_body).to eq([
-        { "title" => "Book 0", "author" => "Author 0" },
-        { "title" => "Book 1", "author" => "Author 1" },
-        { "title" => "Book 2", "author" => "Author 2" }
-      ])
+      expect(response_body).to eq [
+        {"title" => "Book 0", "author" => "Author 0"},
+        {"title" => "Book 1", "author" => "Author 1"},
+        {"title" => "Book 2", "author" => "Author 2"}
+      ]
     end
   end
 end
 ```
 
-In our action class, we can use the request object to extract the relevant params from the incoming request, which allows our spec to pass:
+In our action class, we can use the request object to extract the relevant params from the incoming request, and then pass them to our repo method:
 
 ```ruby
 # app/actions/books/index.rb
@@ -702,18 +552,16 @@ module Bookshelf
   module Actions
     module Books
       class Index < Bookshelf::Action
-        include Deps["persistence.rom"]
+        include Deps["repos.book_repo"]
 
         def handle(request, response)
-          books = rom.relations[:books]
-            .select(:title, :author)
-            .order(:title)
-            .page(request.params[:page] || 1)
-            .per_page(request.params[:per_page] || 5)
-            .to_a
+          books = book_repo.all_by_title(
+            page: request.params[:page] || 1,
+            per_page: request.params[:per_page] || 5
+          )
 
           response.format = :json
-          response.body = books.to_json
+          response.body = books.map(&:to_h).to_json
         end
       end
     end
@@ -721,7 +569,41 @@ module Bookshelf
 end
 ```
 
-Accepting parameters from the internet without validation is never a good idea however. Hanami actions offer built-in parameter validation, which we can use here to ensure that both `page` and `per_page` are positive integers, and that `per_page` is at most 100:
+And in the repo, we can use these to control the pagination:
+
+```ruby
+# app/repos/book_repo.rb
+
+module Bookshelf
+  module Repos
+    class BookRepo < Bookshelf::Repo
+      def all_by_title(page:, per_page:)
+        books
+          .select(:title, :author)
+          .order(books[:title].asc)
+          .page(page)
+          .per_page(per_page)
+          .to_a
+      end
+    end
+  end
+end
+```
+
+This allows our spec to pass!
+
+```shell
+$ bundle exec rspec spec/requests/books/index/pagination_spec.rb
+
+GET /books pagination
+  given valid page and per_page params
+    returns the correct page of books
+
+Finished in 0.0807 seconds (files took 0.60344 seconds to load)
+1 example, 0 failures
+```
+
+Accepting parameters from the internet without validation is never a good idea, however. Hanami actions offer built-in parameter validation, which we can use here to ensure that both `page` and `per_page` are positive integers, and that `per_page` is at most 100:
 
 ```ruby
 # app/actions/books/index.rb
@@ -730,7 +612,7 @@ module Bookshelf
   module Actions
     module Books
       class Index < Bookshelf::Action
-        include Deps["persistence.rom"]
+        include Deps["repos.book_repo"]
 
         params do
           optional(:page).value(:integer, gt?: 0)
@@ -740,15 +622,13 @@ module Bookshelf
         def handle(request, response)
           halt 422 unless request.params.valid?
 
-          books = rom.relations[:books]
-            .select(:title, :author)
-            .order(:title)
-            .page(request.params[:page] || 1)
-            .per_page(request.params[:per_page] || 5)
-            .to_a
+          books = book_repo.all_by_title(
+            page: request.params[:page] || 1,
+            per_page: request.params[:per_page] || 5
+          )
 
           response.format = :json
-          response.body = books.to_json
+          response.body = books.map(&:to_h).to_json
         end
       end
     end
@@ -799,15 +679,15 @@ You can find more details on actions and parameter validation in the [Actions gu
 
 In addition to our books index, we also want to provide an endpoint for viewing the details of a particular book.
 
-Let's specify a `/books/:id` request that renders a book for a given id, or returns 404 if there's no book with the provided id.
+Let's specify a `/books/:id` request that renders a book for a given ID, or returns 404 if there's no book with the ID.
 
 ```ruby
 # spec/requests/books/show_spec.rb
 
-RSpec.describe "GET /books/:id", type: [:request, :database] do
-  let(:books) { app["persistence.rom"].relations[:books] }
+RSpec.describe "GET /books/:id", type: [:request, :db] do
+  let(:books) { Hanami.app["relations.books"] }
 
-  context "when a book matches the given id" do
+  context "when a book matches the given ID" do
     let!(:book_id) do
       books.insert(title: "Test Driven Development", author: "Kent Beck")
     end
@@ -816,7 +696,7 @@ RSpec.describe "GET /books/:id", type: [:request, :database] do
       get "/books/#{book_id}"
 
       expect(last_response).to be_successful
-      expect(last_response.content_type).to eq("app/json; charset=utf-8")
+      expect(last_response.content_type).to eq("application/json; charset=utf-8")
 
       response_body = JSON.parse(last_response.body)
 
@@ -826,12 +706,12 @@ RSpec.describe "GET /books/:id", type: [:request, :database] do
     end
   end
 
-  context "when no book matches the given id" do
+  context "when no book matches the given ID" do
     it "returns not found" do
       get "/books/#{books.max(:id).to_i + 1}"
 
       expect(last_response).to be_not_found
-      expect(last_response.content_type).to eq("app/json; charset=utf-8")
+      expect(last_response.content_type).to eq("application/json; charset=utf-8")
 
       response_body = JSON.parse(last_response.body)
 
@@ -864,9 +744,9 @@ Failures:
      # ./spec/support/database_cleaner.rb:14:in `block (2 levels) in <top (required)>'
 
   2) GET /books/:id when no book matches the given id returns not found
-     Failure/Error: expect(last_response.content_type).to eq("app/json; charset=utf-8")
+     Failure/Error: expect(last_response.content_type).to eq("application/json; charset=utf-8")
 
-       expected: "app/json; charset=utf-8"
+       expected: "application/json; charset=utf-8"
             got: nil
 
        (compared using ==)
@@ -898,7 +778,23 @@ module Bookshelf
 end
 ```
 
-We can now edit the new action at `app/actions/books/show.rb` to add the required behaviour. Here, we use param validation to coerce `params[:id]` to an integer, render a book if there's one with a matching primary key, or return a 404 response. With this, our test passes.
+For the action to fetch a single book from our database, we can add a new method to our book repo:
+
+```ruby
+# app/repos/book_repo.rb
+
+module Bookshelf
+  module Repos
+    class BookRepo < Bookshelf::Repo
+      def get(id)
+        books.by_pk(id).one
+      end
+    end
+  end
+end
+```
+
+We can now edit the new action at `app/actions/books/show.rb` to add the required behaviour. Here, we use param validation to coerce `params[:id]` to an integer, render a book via the repo if there's one with a matching primary key, or return a 404 response. With this, our test passes.
 
 ```ruby
 # app/actions/books/show.rb
@@ -907,21 +803,19 @@ module Bookshelf
   module Actions
     module Books
       class Show < Bookshelf::Action
-        include Deps["persistence.rom"]
+        include Deps["repos.book_repo"]
 
         params do
           required(:id).value(:integer)
         end
 
         def handle(request, response)
-          book = rom.relations[:books].by_pk(
-            request.params[:id]
-          ).one
+          book = book_repo.get(request.params[:id])
 
           response.format = :json
 
           if book
-            response.body = book.to_json
+            response.body = book.to_h.to_json
           else
             response.status = 404
             response.body = {error: "not_found"}.to_json
@@ -933,22 +827,32 @@ module Bookshelf
 end
 ```
 
-In addition to the `#one` method, which will return `nil` if there's no book with the requisite id, ROM relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
+In our repo, we used the relation's `#one` method to return our book, which will return `nil` if there's no book with the requisite ID.
 
-We can use this to handle 404s via Hanami's action exception handling: `config.handle_exception`. This action configuration takes the name of a method to invoke when a particular exception occurs.
+However, in addition to `#one`, relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
+
+Let's update the repo to use `#one!`:
+
+```ruby
+# app/repos/book_repo.rb
+
+def get(id)
+  by_pk(id).one!
+end
+```
+
+We can now use this to handle 404s via Hanami's action exception handling: `config.handle_exception`. This action configuration takes the name of a method to invoke when a particular exception occurs.
 
 Taking this approach allows our handle method to concern itself only with the happy path:
 
 ```ruby
 # app/actions/books/show.rb
 
-require "rom"
-
 module Bookshelf
   module Actions
     module Books
       class Show < Bookshelf::Action
-        include Deps["persistence.rom"]
+        include Deps["repos.book_repo"]
 
         config.handle_exception ROM::TupleCountMismatchError => :handle_not_found
 
@@ -957,12 +861,10 @@ module Bookshelf
         end
 
         def handle(request, response)
-          book = rom.relations[:books].by_pk(
-            request.params[:id]
-          ).one!
+          book = book_repo.get(request.params[:id])
 
           response.format = :json
-          response.body = book.to_json
+          response.body = book.to_h.to_json
         end
 
         private
@@ -985,9 +887,13 @@ This exception handling behaviour can also be moved into the base `Bookshelf::Ac
 
 # auto_register: false
 require "hanami/action"
+require "dry/monads"
 
 module Bookshelf
   class Action < Hanami::Action
+    # Provide `Success` and `Failure` for pattern matching on operation results
+    include Dry::Monads[:result]
+
     config.handle_exception ROM::TupleCountMismatchError => :handle_not_found
 
     private
@@ -1010,19 +916,17 @@ module Bookshelf
   module Actions
     module Books
       class Show < Bookshelf::Action
-        include Deps["persistence.rom"]
+        include Deps["repos.book_repo"]
 
         params do
           required(:id).value(:integer)
         end
 
         def handle(request, response)
-          book = rom.relations[:books].by_pk(
-            request.params[:id]
-          ).one!
+          book = book_repo.get(request.params[:id])
 
           response.format = :json
-          response.body = book.to_json
+          response.body = book.to_h.to_json
         end
       end
     end
@@ -1052,9 +956,9 @@ Here's a spec for POST requests to the `/books` path, where it's expected that o
 ```ruby
 # spec/requests/books/create_spec.rb
 
-RSpec.describe "POST /books", type: [:request, :database] do
+RSpec.describe "POST /books", type: [:request, :db] do
   let(:request_headers) do
-    {"HTTP_ACCEPT" => "app/json", "CONTENT_TYPE" => "app/json"}
+    {"HTTP_ACCEPT" => "application/json", "CONTENT_TYPE" => "application/json"}
   end
 
   context "given valid params" do
@@ -1113,8 +1017,7 @@ module Bookshelf
   module Actions
     module Books
       class Create < Bookshelf::Action
-        def handle(*, response)
-          response.body = self.class.name
+        def handle(request, response)
         end
       end
     end
@@ -1138,14 +1041,30 @@ end
 
 With this parser in place, the `book` key from the JSON body will be available in the action via `request.params[:book]`.
 
-We can now complete our create action by inserting a record into the books relation if the posted params are valid:
+Before we can update our action, we must first add a method to our book repo to create new books:
+
+```ruby
+# app/repos/book_repo.rb
+
+module Bookshelf
+  module Repos
+    class BookRepo < Bookshelf::Repo
+      def create(attributes)
+        books.changeset(:create, attributes).commit
+      end
+    end
+  end
+end
+```
+
+We can now complete our create action by creating a book via the repo if the posted params are valid:
 
 ```ruby
 module Bookshelf
   module Actions
     module Books
       class Create < Bookshelf::Action
-        include Deps["persistence.rom"]
+        include Deps["repos.book_repo"]
 
         params do
           required(:book).hash do
@@ -1156,7 +1075,7 @@ module Bookshelf
 
         def handle(request, response)
           if request.params.valid?
-            book = rom.relations[:books].changeset(:create, request.params[:book]).commit
+            book = book_repo.create(request.params[:book])
 
             response.status = 201
             response.body = book.to_json

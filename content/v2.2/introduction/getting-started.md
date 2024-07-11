@@ -13,10 +13,6 @@ order: 10
   In this guide we'll set up our first Hanami project and build a simple web app. We'll touch on all the major components of the Hanami framework, guided by tests at each stage.
   <br><br>
   <strong>If you feel alone or frustrated, don't give up, jump into our <a href="https://discourse.hanamirb.org">forum</a> and ask for help.</strong> We and the rest of our community are putting in our best efforts to make Hanami better every day.
-  <br><br>
-  Enjoy,<br>
-  Luca, Peter and Tim<br>
-  <em>Hanami core team</em>
 </p>
 
 <br>
@@ -83,6 +79,14 @@ $ tree --gitignore .
 │   │   │   └── favicon.ico
 │   │   └── js
 │   │       └── app.js
+│   ├── db
+│   │   ├── relation.rb
+│   │   ├── repo.rb
+│   │   └── struct.rb
+│   ├── operation.rb
+│   ├── relations
+│   ├── repos
+│   ├── structs
 │   ├── templates
 │   │   └── layouts
 │   │       └── app.html.erb
@@ -94,6 +98,8 @@ $ tree --gitignore .
 ├── config
 │   ├── app.rb
 │   ├── assets.js
+│   ├── db
+│   │   └── migrate
 │   ├── puma.rb
 │   ├── routes.rb
 │   └── settings.rb
@@ -109,13 +115,12 @@ $ tree --gitignore .
     │   └── root_spec.rb
     ├── spec_helper.rb
     └── support
+        ├── features.rb
         ├── requests.rb
         └── rspec.rb
 
-18 directories, 27 files
+23 directories, 32 files
 ```
-
-As you can see, a new Hanami app consists of less than 30 files in total.
 
 Here's how these files and directories are used:
 
@@ -144,22 +149,22 @@ $ bundle exec hanami dev
 If all has gone well, you should see output similar to:
 
 ```shell
-11:02:11 web.1    | started with pid 31643
-11:02:11 assets.1 | started with pid 31644
-11:02:12 web.1    | 11:02:12 - INFO - Using Guardfile at /Users/jane/bookshelf/Guardfile.
-11:02:12 web.1    | 11:02:12 - INFO - Puma starting on port 2300 in development environment.
-11:02:12 web.1    | 11:02:12 - INFO - Guard is now watching at '/Users/jane/bookshelf'
-11:02:13 assets.1 | [watch] build finished, watching for changes...
-11:02:13 web.1    | Puma starting in single mode...
-11:02:13 web.1    | * Puma version: 6.4.0 (ruby 3.2.0-p0) ("The Eagle of Durango")
-11:02:13 web.1    | *  Min threads: 5
-11:02:13 web.1    | *  Max threads: 5
-11:02:13 web.1    | *  Environment: development
-11:02:13 web.1    | *          PID: 31669
-11:02:13 web.1    | * Listening on http://0.0.0.0:2300
-11:02:13 web.1    | * Starting control server on http://127.0.0.1:9293
-11:02:13 web.1    | * Starting control server on http://[::1]:9293
-11:02:13 web.1    | Use Ctrl-C to stop
+08:14:33 web.1    | started with pid 56242
+08:14:33 assets.1 | started with pid 56243
+08:14:34 assets.1 | [gsg_app] [watch] build finished, watching for changes...
+08:14:34 web.1    | 08:14:34 - INFO - Using Guardfile at /Users/tim/Source/scratch/gsg_app/Guardfile.
+08:14:34 web.1    | 08:14:34 - INFO - Puma starting on port 2300 in development environment.
+08:14:34 web.1    | 08:14:34 - INFO - Guard is now watching at '/Users/tim/Source/scratch/gsg_app'
+08:14:35 web.1    | Puma starting in single mode...
+08:14:35 web.1    | * Puma version: 6.4.2 (ruby 3.3.0-p0) ("The Eagle of Durango")
+08:14:35 web.1    | *  Min threads: 5
+08:14:35 web.1    | *  Max threads: 5
+08:14:35 web.1    | *  Environment: development
+08:14:35 web.1    | *          PID: 56250
+08:14:35 web.1    | * Listening on http://0.0.0.0:2300
+08:14:35 web.1    | * Starting control server on http://127.0.0.1:9293
+08:14:35 web.1    | * Starting control server on http://[::1]:9293
+08:14:35 web.1    | Use Ctrl-C to stop
 ```
 
 Visit your app in the browser at [http://localhost:2300](http://localhost:2300)
@@ -170,6 +175,7 @@ $ open http://localhost:2300
 
 You should see the Hanami welcome screen. We're delighted to have you here!
 
+<!-- TODO: update this screenshot for 2.2 -->
 <p><img src="/v2.2/introduction/hanami-welcome.png" alt="Hanami welcome screen" class="img-responsive"></p>
 
 ## Building a Hanami app
