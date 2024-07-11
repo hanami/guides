@@ -178,7 +178,13 @@ We can find this view's template in our `app` directory at `app/templates/home/s
 <h1>Welcome to Bookshelf</h1>
 ```
 
-With this change, our root spec will now pass!
+At this point we need to compile our frontend assets just once, so they're available to the layout in `app/views/layouts/app.html.erb`:
+
+```shell
+$ bundle exec hanami assets compile
+```
+
+After this, our root spec will now pass!
 
 ```shell
 $ bundle exec rspec spec/requests/root_spec.rb
@@ -233,7 +239,24 @@ RSpec.feature "Books index" do
 end
 ```
 
-If you run this test, you'll see that it fails because the page doesn't have the expected content. This is because our app currently returns a 404 error page for the `/books` route.
+If you run this test, you'll see that it fails because the page doesn't have the expected content. This is because our app currently returns a 404 error page for the `/books` route:
+
+```shell
+$ bundle exec rspec spec/features/books/index_spec.rb
+
+Books index
+  shows a list of books (FAILED - 1)
+
+Failures:
+
+  1) Books index shows a list of books
+     Failure/Error: expect(page).to have_selector "li", text: "Test Driven Development"
+       expected to find css "li" but there were no matches
+     # ./spec/features/books/index_spec.rb:5:in `block (2 levels) in <top (required)>'
+
+Finished in 0.09789 seconds (files took 0.57724 seconds to load)
+1 example, 1 failure
+```
 
 Let's fix that by generating an action for a books index:
 
@@ -252,25 +275,7 @@ module Bookshelf
 end
 ```
 
-If we run our spec again, our expectation for a successful response is now satisfied, but there's a different failure:
-
-```shell
-$ bundle exec rspec spec/features/books/index_spec.rb
-
-Books index
-  shows a list of books (FAILED - 1)
-
-Failures:
-
-  1) Books index shows a list of books
-     Failure/Error: expect(page).to have_selector "li", text: "Test Driven Development"
-       expected to find css "li" but there were no matches
-     # ./spec/features/books/index_spec.rb:5:in `block (2 levels) in <top (required)>'
-
-1 example, 1 failure
-```
-
-Our response is missing the list of books. Let's update our view to provide these books to our template:
+Let's update our view to provide the books to our template:
 
 ```ruby
 # app/views/books/index.rb
@@ -365,7 +370,7 @@ This creates the following file at `app/relations/books.rb`:
 module Bookshelf
   module Relations
     class Books < Bookshelf::DB::Relation
-      schema(:books, infer: true)
+      schema :books, infer: true
     end
   end
 end
@@ -455,9 +460,9 @@ Repos serve as the interface to our persisted data from our domain layer. Let's 
 
 module Bookshelf
   module Repos
-    class BookRepo < Bookshelf::Repo
+    class BookRepo < Bookshelf::DB::Repo
       def all_by_title
-        order(self[:title].asc).to_a
+        books.order(books[:title].asc).to_a
       end
     end
   end
@@ -610,7 +615,8 @@ module Bookshelf
   module Repos
     class BookRepo < Bookshelf::Repo
       def all_by_title(page:, per_page:)
-        order(self[:title].asc)
+        books
+          .order(books[:title].asc)
           .page(page)
           .per_page(per_page)
           .to_a
@@ -707,7 +713,7 @@ module Bookshelf
 end
 ```
 
-We can now edit the new action at `app/actions/books/show.rb` to begin adding the required behaviour, passing the id param to its view.
+We can now edit the action at `app/actions/books/show.rb` to begin adding the required behaviour, passing the id param to its view.
 
 ```ruby
 # app/actions/books/show.rb
@@ -734,7 +740,7 @@ module Bookshelf
   module Repos
     class BookRepo < Bookshelf::Repo
       def get(id)
-        by_pk(id).one
+        books.by_pk(id).one
       end
     end
   end
@@ -788,7 +794,7 @@ Failures:
      Failure/Error: <h1><%= book[:title] %></h1>
 
      NoMethodError:
-       undefined method `[]' for nil:NilClass
+       undefined method `[]' for nil
      # ./app/templates/books/show.html.erb:1:in `__tilt_8300'
      # ./app/actions/books/show.rb:8:in `handle'
      # ./spec/features/books/show_spec.rb:19:in `block (3 levels) in <top (required)>'
@@ -806,7 +812,7 @@ Let's make that change in our repo now:
 # app/repos/book_repo.rb
 
 def get(id)
-  by_pk(id).one!
+  books.by_pk(id).one!
 end
 ```
 
@@ -824,10 +830,6 @@ module Bookshelf
     module Books
       class Show < Bookshelf::Action
         handle_exception ROM::TupleCountMismatchError => :handle_not_found
-
-        params do
-          required(:id).value(:integer)
-        end
 
         def handle(request, response)
           response.render(view, id: request.params[:id])
@@ -869,6 +871,9 @@ require "rom"
 
 module Bookshelf
   class Action < Hanami::Action
+    # Provide `Success` and `Failure` for pattern matching on operation results
+    include Dry::Monads[:result]
+
     handle_exception ROM::TupleCountMismatchError => :handle_not_found
 
     private
@@ -891,10 +896,6 @@ module Bookshelf
   module Actions
     module Books
       class Show < Bookshelf::Action
-        params do
-          required(:id).value(:integer)
-        end
-
         def handle(request, response)
           response.render(view, id: request.params[:id])
         end
@@ -939,7 +940,7 @@ RSpec.feature "Creating books" do
 end
 ```
 
-Running this spec, we get a database-level error about "new" being an "invalid input syntax for type integer". This is because we have no specific route for this new book page, so "new" is being interpreted as an ID for the books show action.
+Running this spec, we see failures due to the title field being missing. This is because we don't yet have the page to display a book form.
 
 Hanami's action generator can take care of this for us:
 
