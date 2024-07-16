@@ -31,7 +31,7 @@ Ideally, you already have some familiarity with web apps and the [Ruby language]
 
 ### Prerequisites
 
-To create a Hanami app, you will need Ruby 3.0 or greater. Check your ruby version:
+To create a Hanami app, you will need Ruby 3.1 or greater. Check your ruby version:
 
 ```shell
 $ ruby --version
