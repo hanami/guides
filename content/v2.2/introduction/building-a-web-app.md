@@ -744,6 +744,8 @@ To fetch a single book from our database, we can add a new method to our book re
 module Bookshelf
   module Repos
     class BookRepo < Bookshelf::Repo
+      # ...
+
       def get(id)
         books.by_pk(id).one
       end
