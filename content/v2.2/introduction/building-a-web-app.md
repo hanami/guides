@@ -178,7 +178,7 @@ We can find this view's template in our `app` directory at `app/templates/home/s
 <h1>Welcome to Bookshelf</h1>
 ```
 
-At this point we need to compile our frontend assets just once, so they're available to the layout in `app/views/layouts/app.html.erb`:
+At this point we need to compile our frontend assets (a favicon, some very simple CSS, and placeholder JS) just once, so they're available to the layout in `app/views/layouts/app.html.erb`:
 
 ```shell
 $ bundle exec hanami assets compile
