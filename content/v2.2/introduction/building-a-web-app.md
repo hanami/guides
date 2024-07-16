@@ -472,7 +472,7 @@ module Bookshelf
 end
 ```
 
-This selects all the attributes from the `books` relation, `order`s them alphabetically by title, and then, finally _materializes_ the query by executing it and turning into an array with `#to_a`.
+This selects all the attributes from the `books` relation (by default), `order`s them alphabetically by title, and then, finally _materializes_ the query with `#to_a`. This executes the query against the database and then automatically turns each row into a simple object (of class `ROM::Struct`) and puts those into an array.
 
 To access this book repo from the view, we use Hanami's `Deps` mixin, which is how Hanami files declare their dependencies on other files. Covered in detail in the [container and components](/v2.2/app/container-and-components/) section of the Architecture guide, the `Deps` mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
