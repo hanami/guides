@@ -472,6 +472,8 @@ module Bookshelf
 end
 ```
 
+This selects all the attributes from the `books` relation, orders them alphabetically by title, and then, finally _materializes_ the query by executing it and turning into an array.
+
 To access this book repo from the view, we use Hanami's `Deps` mixin, which is how Hanami files declare their dependencies on other files. Covered in detail in the [container and components](/v2.2/app/container-and-components/) section of the Architecture guide, the `Deps` mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
 For now however, it's enough to know that we can use `include Deps["repos.book_repo"]` to make the repo available via a `book_repo` method within our view.
