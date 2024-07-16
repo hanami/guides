@@ -376,6 +376,8 @@ module Bookshelf
 end
 ```
 
+This tells the relation to use the `'books'` table we just created, and use that table's schema as its own (instead of manually specifying it).
+
 Lastly, we need to ensure the database is cleaned between tests. Add the Database Cleaner gem to the `:test` section of your `Gemfile`:
 
 ```ruby
