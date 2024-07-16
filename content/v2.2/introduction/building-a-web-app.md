@@ -781,9 +781,9 @@ Lastly, we can populate the template.
 ```sql
 <!-- app/views/books/show.html.erb -->
 
-<h1><%= book[:title] %></h1>
+<h1><%= book.title %></h1>
 
-<p>By <%= book[:author] %></p>
+<p>By <%= book.author %></p>
 ```
 
 With this, our happy path test passes, but the test for our 404 now fails:
