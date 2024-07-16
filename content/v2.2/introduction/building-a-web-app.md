@@ -472,7 +472,7 @@ module Bookshelf
 end
 ```
 
-This selects all the attributes from the `books` relation, orders them alphabetically by title, and then, finally _materializes_ the query by executing it and turning into an array.
+This selects all the attributes from the `books` relation, `order`s them alphabetically by title, and then, finally _materializes_ the query by executing it and turning into an array with `#to_a`.
 
 To access this book repo from the view, we use Hanami's `Deps` mixin, which is how Hanami files declare their dependencies on other files. Covered in detail in the [container and components](/v2.2/app/container-and-components/) section of the Architecture guide, the `Deps` mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
@@ -753,6 +753,8 @@ module Bookshelf
   end
 end
 ```
+
+Now, we're calling the `#by_pk` (primary key) method on the books relation, then the `#one` method is the one that _materializes_ the query by executing it and turning into an object.
 
 Then we can edit the view at `app/views/books/show.rb` to get the book via the repo and expose it to the template:
 
