@@ -412,7 +412,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.around(:each, type: :db) do |example|
+  config.around(:each, type: :feature) do |example|
     DatabaseCleaner.cleaning do
       example.run
     end
