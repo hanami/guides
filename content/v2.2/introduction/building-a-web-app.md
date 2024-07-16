@@ -376,10 +376,11 @@ module Bookshelf
 end
 ```
 
-Lastly, we need to ensure the database is cleaned between tests. Add the Database Cleaner gem to your `Gemfile`:
+Lastly, we need to ensure the database is cleaned between tests. Add the Database Cleaner gem to the `:test` section of your `Gemfile`:
 
 ```ruby
 group :test do
+  # ...
   gem "database_cleaner-sequel"
 end
 ```
