@@ -1115,13 +1115,15 @@ To complete our create action, we can add a method to our book repo to create ne
 module Bookshelf
   module Repos
     class BookRepo < Bookshelf::Repo
-      def create(attributes)
-        books.changeset(:create, attributes).commit
-      end
+      commands :create
+
+      # ...
     end
   end
 end
 ```
+
+Commands are built-in features for repos that you can opt-into. In this case, it defines a `def create(attributes)` method that we can call.
 
 In the action, we can then create this book if the posted params are valid, then setting flash messages and redirecting as required:
 
