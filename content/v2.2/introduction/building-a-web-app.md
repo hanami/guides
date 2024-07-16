@@ -365,7 +365,7 @@ $ bundle exec hanami generate relation books
 This creates the following file at `app/relations/books.rb`:
 
 ```ruby
-# lib/bookshelf/persistence/relations/books.rb
+# lib/bookshelf/relations/books.rb
 
 module Bookshelf
   module Relations
