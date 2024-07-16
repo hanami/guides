@@ -701,8 +701,10 @@ Failures:
 We can use Hanami's action generator to create both a route and an action. Run:
 
 ```shell
-$ bundle exec hanami generate action books.show
+$ bundle exec hanami generate action books.show --skip-tests
 ```
+
+(We skip creating a spec file for this action because we have the feature spec already. We recommend writing them for your real apps.)
 
 If you inspect `config/routes.rb` you will see the generator has automatically added a new `get "/books/:id", to: "books.show"` route:
 
