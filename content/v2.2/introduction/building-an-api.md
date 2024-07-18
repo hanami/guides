@@ -576,7 +576,7 @@ And in the repo, we can use these to control the pagination:
 
 module Bookshelf
   module Repos
-    class BookRepo < Bookshelf::Repo
+    class BookRepo < Bookshelf::DB::Repo
       def all_by_title(page:, per_page:)
         books
           .select(:title, :author)
