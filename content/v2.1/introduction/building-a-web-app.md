@@ -1135,7 +1135,7 @@ Failures:
 
 The form submission appears to be proceeding, and now we need to handle what happens afterwards.
 
-Our plan here is to use flash messages for displaying the the notices about successful or failed book creation. To support these, we first need to enable cookie sessions for our app. To do this, add this to `config/app.rb`:
+Our plan here is to use flash messages for displaying the notices about successful or failed book creation. To support these, we first need to enable cookie sessions for our app. To do this, add this to `config/app.rb`:
 
 ```ruby
 # config/app.rb
