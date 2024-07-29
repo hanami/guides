@@ -31,7 +31,7 @@ Ideally, you already have some familiarity with web apps and the [Ruby language]
 
 ### Prerequisites
 
-To create a Hanami app, you will need Ruby 3.0 or greater. Check your ruby version:
+To create a Hanami app, you will need Ruby 3.1 or greater. Check your ruby version:
 
 ```shell
 $ ruby --version
@@ -104,6 +104,7 @@ $ tree --gitignore .
 │   ├── routes.rb
 │   └── settings.rb
 ├── config.ru
+├── db
 ├── lib
 │   ├── bookshelf
 │   │   └── types.rb
@@ -116,27 +117,29 @@ $ tree --gitignore .
     ├── spec_helper.rb
     └── support
         ├── features.rb
+        ├── operations.rb
         ├── requests.rb
         └── rspec.rb
 
-23 directories, 32 files
+25 directories, 33 files
 ```
 
 Here's how these files and directories are used:
 
-| Location               | Purpose                                      |
-|---------------------------------|--------------------------------------------|
-| Gemfile | The app's gem dependencies, installed using bundler.                   |
-| Guardfile | Supports code reloading in development. |
-| Procfile.dev | For running Hanami dev server processes: both the server and assets watcher. |
-| package.json | The app's Node.js package dependencies, for assets management, installed using npm. |
-| README.md | The app's README document. |
-| Rakefile | Support for running Rake tasks. |
-| app/ | This is the directory where you'll put the majority of your app's code. |
-| config/ | A directory for your app and assets configuration, also including things like routes, settings and Puma configuration. |
-| config.ru | The Rack config file. |
-| lib/ | A directory for supporting code. |
-| spec/ | The app's RSpec test suite. |
+| Location      | Purpose  |
+|---------------|----------|
+| Gemfile       | The app's gem dependencies, installed using bundler. |
+| Guardfile     | Supports code reloading in development. |
+| Procfile.dev  | For running Hanami dev server processes: both the server and assets watcher. |
+| package.json  | The app's Node.js package dependencies, for assets management, installed using npm. |
+| README.md     | The app's README document. |
+| Rakefile      | Support for running Rake tasks. |
+| app/          | This is the directory where you'll put the majority of your app's code. |
+| config/       | A directory for configurations of all kinds. |
+| config.ru     | The Rack config file. |
+| db/           | Where our sqlite database files lives. |
+| lib/          | A directory for supporting code. |
+| spec/         | The app's RSpec test suite. |
 
 We'll see this structure in more detail as this guide progresses.
 
@@ -152,9 +155,9 @@ If all has gone well, you should see output similar to:
 08:14:33 web.1    | started with pid 56242
 08:14:33 assets.1 | started with pid 56243
 08:14:34 assets.1 | [gsg_app] [watch] build finished, watching for changes...
-08:14:34 web.1    | 08:14:34 - INFO - Using Guardfile at /Users/tim/Source/scratch/gsg_app/Guardfile.
+08:14:34 web.1    | 08:14:34 - INFO - Using Guardfile at ~/bookshelf/Guardfile.
 08:14:34 web.1    | 08:14:34 - INFO - Puma starting on port 2300 in development environment.
-08:14:34 web.1    | 08:14:34 - INFO - Guard is now watching at '/Users/tim/Source/scratch/gsg_app'
+08:14:34 web.1    | 08:14:34 - INFO - Guard is now watching at '~/bookshelf'
 08:14:35 web.1    | Puma starting in single mode...
 08:14:35 web.1    | * Puma version: 6.4.2 (ruby 3.3.0-p0) ("The Eagle of Durango")
 08:14:35 web.1    | *  Min threads: 5

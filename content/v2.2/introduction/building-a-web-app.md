@@ -178,7 +178,7 @@ We can find this view's template in our `app` directory at `app/templates/home/s
 <h1>Welcome to Bookshelf</h1>
 ```
 
-At this point we need to compile our frontend assets just once, so they're available to the layout in `app/views/layouts/app.html.erb`:
+At this point we need to compile our frontend assets (a favicon, some very simple CSS, and placeholder JS) just once, so they're available to the layout in `app/views/layouts/app.html.erb`:
 
 ```shell
 $ bundle exec hanami assets compile
@@ -365,7 +365,7 @@ $ bundle exec hanami generate relation books
 This creates the following file at `app/relations/books.rb`:
 
 ```ruby
-# lib/bookshelf/persistence/relations/books.rb
+# lib/bookshelf/relations/books.rb
 
 module Bookshelf
   module Relations
@@ -376,10 +376,13 @@ module Bookshelf
 end
 ```
 
-Lastly, we need to ensure the database is cleaned between tests. Add the Database Cleaner gem to your `Gemfile`:
+This tells the relation to use the `'books'` table we just created, and use that table's schema as its own (instead of manually specifying it).
+
+Lastly, we need to ensure the database is cleaned between tests. Add the Database Cleaner gem to the `:test` section of your `Gemfile`:
 
 ```ruby
 group :test do
+  # ...
   gem "database_cleaner-sequel"
 end
 ```
@@ -409,7 +412,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.around(:each, type: :db) do |example|
+  config.around(:each, type: :feature) do |example|
     DatabaseCleaner.cleaning do
       example.run
     end
@@ -469,7 +472,9 @@ module Bookshelf
 end
 ```
 
-To access this book repo from the view, we can use Hanami's Deps mixin. Covered in detail in the [container and components](/v2.2/app/container-and-components/) section of the Architecture guide, the Deps mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
+This selects all the attributes from the `books` relation (by default), `order`s them alphabetically by title, and then, finally _materializes_ the query with `#to_a`. This executes the query against the database and then automatically turns each row into a simple object (of class `ROM::Struct`) and puts those into an array.
+
+To access this book repo from the view, we use Hanami's `Deps` mixin, which is how Hanami files declare their dependencies on other files. Covered in detail in the [container and components](/v2.2/app/container-and-components/) section of the Architecture guide, the `Deps` mixin gives each of your app's components easy access to the other components it depends on to achieve its work. We'll see this in more detail as these guides progress.
 
 For now however, it's enough to know that we can use `include Deps["repos.book_repo"]` to make the repo available via a `book_repo` method within our view.
 
@@ -502,7 +507,7 @@ Then we can update our template to include the author:
 
 <ul>
   <% books.each do |book| %>
-    <li><%= book[:title] %>, by <%= book[:author] %></li>
+    <li><%= book.title %>, by <%= book.author %></li>
   <% end %>
 </ul>
 ```
@@ -696,8 +701,10 @@ Failures:
 We can use Hanami's action generator to create both a route and an action. Run:
 
 ```shell
-$ bundle exec hanami generate action books.show
+$ bundle exec hanami generate action books.show --skip-tests
 ```
+
+(We skip creating a spec file for this action because we have the feature spec already. We recommend writing them for your real apps.)
 
 If you inspect `config/routes.rb` you will see the generator has automatically added a new `get "/books/:id", to: "books.show"` route:
 
@@ -739,6 +746,8 @@ To fetch a single book from our database, we can add a new method to our book re
 module Bookshelf
   module Repos
     class BookRepo < Bookshelf::Repo
+      # ...
+
       def get(id)
         books.by_pk(id).one
       end
@@ -746,6 +755,8 @@ module Bookshelf
   end
 end
 ```
+
+Now, we're calling the `#by_pk` (primary key) method on the books relation, then the `#one` method is the one that _materializes_ the query by executing it and turning into an object.
 
 Then we can edit the view at `app/views/books/show.rb` to get the book via the repo and expose it to the template:
 
@@ -772,9 +783,9 @@ Lastly, we can populate the template.
 ```sql
 <!-- app/views/books/show.html.erb -->
 
-<h1><%= book[:title] %></h1>
+<h1><%= book.title %></h1>
 
-<p>By <%= book[:author] %></p>
+<p>By <%= book.author %></p>
 ```
 
 With this, our happy path test passes, but the test for our 404 now fails:
@@ -1104,13 +1115,15 @@ To complete our create action, we can add a method to our book repo to create ne
 module Bookshelf
   module Repos
     class BookRepo < Bookshelf::Repo
-      def create(attributes)
-        books.changeset(:create, attributes).commit
-      end
+      commands :create
+
+      # ...
     end
   end
 end
 ```
+
+Commands are built-in features for repos that you can opt-into. In this case, it defines a `def create(attributes)` method that we can call.
 
 In the action, we can then create this book if the posted params are valid, then setting flash messages and redirecting as required:
 
