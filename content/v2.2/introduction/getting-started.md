@@ -143,6 +143,7 @@ We'll see this structure in more detail as this guide progresses.
 For now let's get our new app running. In the bookshelf directory, run:
 
 ```shell
+$ bundle install
 $ bundle exec hanami dev
 ```
 
