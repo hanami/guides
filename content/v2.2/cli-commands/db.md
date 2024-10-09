@@ -105,12 +105,42 @@ If you won't specify options, all matching databases will be created at once.
 => database slices/admin/config/db/pii.sqlite created
 ```
 
+### hanami db drop
+Allows to drop the databases for the current environment. Similar to other DB commands, it works based on `ENV` variables configuration for `DATABASE_URL` of main app, slices and gateways (Check:[hanami db create](#hanami-db-create) for examples about options)
+
+```shell
+$ bundle exec hanami db drop
+=> database db/bookshelf.sqlite dropped
+```
+
+The command will accept options listed below.
+
+```shell
+  --app                             # Use app database, default: false
+  --slice=VALUE                     # Use database for slice
+  --gateway=VALUE                   # Use database for gateway
+  --help, -h                        # Print this help
+```
+
+
+**Multiple databases dropped automatically**
+
+If you don't specify options, all configured databases will be dropped at once.
+
+```ruby
+# .env
+DATABASE_URL=sqlite://db/bookshelf.sqlite
+
+DATABASE_URL__EVENT_STORE=sqlite://db/event_store.sqlite
+
+ADMIN__DATABASE_URL=sqlite://slices/admin/config/db/bookshelf.sqlite
+ADMIN__DATABASE_URL__PII=sqlite://slices/admin/config/db/pii.sqlite
 ```
 
 ```shell
-=> database db/bookshelf.sqlite created
-=> database db/event_store.sqlite created
-=> database slices/admin/config/db/bookshelf.sqlite created
-=> database slices/admin/config/db/pii.sqlite created
+=> database db/bookshelf.sqlite dropped
+=> database db/event_store.sqlite dropped
+=> database slices/admin/config/db/bookshelf.sqlite dropped
+=> database slices/admin/config/db/pii.sqlite dropped
 ```
 
