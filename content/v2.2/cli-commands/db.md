@@ -231,4 +231,85 @@ The command will accept options listed below.
 ```
 
 For examples how to run db preparation only for main app, or specified slice, check the [hanami db create](#hanami-db-create) section.
+### hanami db seed
+Allows to seed data to databases for main app or any slice.
 
+```shell
+$ bundle exec hanami db seed
+```
+
+The command will accept options listed below.
+
+```shell
+  --app                             # Use app database, default: false
+  --slice=VALUE                     # Use database for slice
+  --help, -h                        # Print this help
+
+```
+
+For examples how to seed data only for main app, or specified slice, check the [hanami db create](#hanami-db-create) section.
+
+**Seed file paths**
+
+Seeding data assumes you have `seed.rb` files under the correct paths.
+
+```shell
+# app seeds
+config/db/seeds.rb
+
+# per-slice seeds
+# Example: slices/admin/config/db/seeds.rb
+slices/<<slice>>/config/db/seeds.rb
+```
+
+### hanami db structure dump
+Allows to dump all or any specific database structure into the `structure.sql` file. If no options provided, it'll dump all configured database structures.
+
+```shell
+$ bundle exec hanami db structure dump
+# => db/bookshelf.sqlite structure dumped to config/db/structure.sql in 0.0851s
+# => db/event_store.sqlite structure dumped to config/db/event_store_structure.sql in 0.018s
+# => slices/admin/config/db/bookshelf.sqlite structure dumped to slices/main/config/db/structure.sql in 0.0174s
+# => slices/admin/config/db/pii.sqlite structure dumped to slices/main/config/db/pii_structure.sql in 0.0173s
+```
+
+The command will accept options listed below
+
+```shell
+  --app                             # Use app database, default: false
+  --slice=VALUE                     # Use database for slice
+  --gateway=VALUE                   # Use database for gateway
+  --help, -h                        # Print this help
+```
+
+For examples how to run db structure dump only for main app, or specified slice, check the [hanami db create](#hanami-db-create) section.
+
+### hanami db structure load
+Allows to load all or any specific database structure from the `structure.sql` files, instead of running migrations one after the other, which may be much faster. If no options provided, it'll dump all configured database structures.
+
+```shell
+hanami db create # create empty databases first
+hanami db structure load
+# => db/bookshelf.sqlite structure loaded from config/db/structure.sql in 0.0164s
+# => db/event_store.sqlite structure loaded from config/db/event_store_structure.sql in 0.0139s
+# => slices/main/config/db/bookshelf.sqlite structure loaded from slices/admin/config/db/structure.sql in 0.0175s
+# => slices/main/config/db/pii.sqlite structure loaded from slices/admin/config/db/pii_structure.sql in 0.0176s
+```
+
+The command will accept options listed below
+
+```shell
+  --app                             # Use app database, default: false
+  --slice=VALUE                     # Use database for slice
+  --gateway=VALUE                   # Use database for gateway
+  --help, -h                        # Print this help
+```
+
+For examples how to load db structure only for main app, or specified slice, check the [hanami db create](#hanami-db-create) section.
+### hanami db version
+Prints current schema version for all databases:
+
+```shell
+$ bundle exec hanami db version
+# => db/bookshelf.sqlite current schema version is 20241009140151_add_books_table
+```
