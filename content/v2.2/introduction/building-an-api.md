@@ -321,11 +321,10 @@ ROM::SQL.migration do
 end
 ```
 
-Migrate both the development and test databases:
+Migrate the development and test databases:
 
 ```shell
 $ bundle exec hanami db migrate
-$ HANAMI_ENV=test bundle exec hanami db migrate
 ```
 
 Next, let's generate a relation to allow our app to interact with our books table. To generate a relation:
