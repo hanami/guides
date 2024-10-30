@@ -29,11 +29,13 @@ The simplest way to define your schema is to allow ROM to infer it from your dat
 module Bookshelf
   module Relations
     class Books < Hanami::DB::Relations
-      schema infer: true
+      schema :books, infer: true
     end
   end
 end
 ```
+
+The first argument to `schema` is your table name. You can alias this within ROM using the `:as` keyword.
 
 This should be your starting point in most cases, and you can usually leave it as-is.
 
@@ -43,7 +45,7 @@ However, sometimes you want to customize how types are coerced in Ruby. This is 
 module Bookshelf
   module Relations
     class Books < Hanami::DB::Relations
-      schema infer: true do
+      schema :books, infer: true do
         primary_key :id
         attribute :status, Types::String, read: Types::Coercible::Symbol
       end
@@ -110,12 +112,114 @@ As you can see, the read option we used in the earlier example is a shorthand fo
 module Bookshelf
   module Relations
     class Books < Hanami::DB::Relation
-      schema infer: true do
+      schema :books, infer: true do
         # shorthand syntax
         primary_key :id
 
         # This is equivalent
         attribute :id, Types::Integer.meta(primary_key: true)
+      end
+    end
+  end
+end
+```
+
+## Associations
+
+Establishing canonical relationships between relations is how ROM supports aggregating data together in queries.
+
+These relationships are called **associations** and they are defined within a `schema` block using the `associations` helper combined with a handful of different relationship helpers.
+
+### One-to-Many
+
+{{% one-to-many %}}
+
+One-to-many associations are established with `has_many`.
+
+```ruby
+module Bookshelf
+  module Relations
+    class Publishers < Hanami::DB::Relation
+      schema :publishers, infer: true do
+        associations do
+          has_many :books
+        end
+      end
+    end
+  end
+end
+```
+
+`has_many` is also aliased as `one_to_many`.
+
+### Many-to-One
+
+{{% many-to-one %}}
+
+Many-to-one associations are established with `belongs_to`. They reference the other table in singular form.
+
+```ruby
+module Bookshelf
+  module Relations
+    class Books < Hanami::DB::Relation
+      schema :books, infer: true do
+        associations do
+          belongs_to :language
+        end
+      end
+    end
+
+    class Languages < Hanami::DB::Relation
+      schema :languages, infer: true do
+        associations do
+          has_many :books
+        end
+      end
+    end
+  end
+end
+```
+
+`belongs_to` is a shortcut for `many_to_one :languages, as: :language`.
+
+### Many-to-Many
+
+{{% many-to-many %}}
+
+Many-to-many associations are established with `has_many` with the `:through` option.
+
+```ruby
+module Bookshelf
+  module Relations
+    class Books < Hanami::DB::Relation
+      schema :books, infer: true do
+        associations do
+          has_many :authors, through: :authorships
+        end
+      end
+    end
+
+    class Authorships < Hanami::DB::Relation
+      schema :authorships do
+        primary_key :id
+
+        # These may also be inferred from the db if
+        # they are actual foreign keys, but this is
+        # how you would do it manually.
+        attribute :book_id, Types.ForeignKey(:books)
+        attribute :author_id, Types.ForeignKey(:author)
+        attribute :order, Types::Integer
+
+        associations do
+          belongs_to :book
+          belongs_to :author
+        end
+      end
+    end
+
+    class Authors < Hanami::DB::Relation
+      schema :authors, infer: true do
+        has_many :books, through: :authorships
       end
     end
   end
