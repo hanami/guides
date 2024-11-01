@@ -21,6 +21,10 @@ end
 
 Alternately, if this were located in the Main slice it would be in `slices/main/relations`.
 
+<p class="convention">
+  All the relations for a given slice may be found in the <strong>relations</strong> container key.
+</p>
+
 ## Schema
 
 The simplest way to define your schema is to allow ROM to infer it from your database directly:
@@ -207,7 +211,7 @@ module Bookshelf
         # they are actual foreign keys, but this is
         # how you would do it manually.
         attribute :book_id, Types.ForeignKey(:books)
-        attribute :author_id, Types.ForeignKey(:author)
+        attribute :author_id, Types.ForeignKey(:authors)
         attribute :order, Types::Integer
 
         associations do
@@ -225,3 +229,163 @@ module Bookshelf
   end
 end
 ```
+
+### Aliasing
+
+If you don't wish to use the table name as your relation name, aliasing the relation with `:as` is simple:
+
+```ruby
+module Bookshelf
+  module Relations
+    class Authorships < Hanami::DB::Relation
+      schema :books_authors, infer: true, as: :authorships
+    end
+
+    class Books < Hanami::DB::Relation
+      schema :books, infer: true do
+        associations do
+          has_many :books_authors, as: :authorships, relation: :authorships
+        end
+      end
+    end
+  end
+end
+```
+
+<p class="convention">
+In addition to the relation name in Repositories, the alias is also used by auto-mapping when you combine relations
+together. More on combines later.
+</p>
+
+This is also useful for building multiple relation classes against the same table, if you have radically different
+use-cases and want to separate them.
+
+### Custom Foreign Keys
+
+Integer-based primary keys are the normal case, but you will sometimes want to work with other types. This is supported
+by ROM's `ForeignKey` type. `Integer` is the default, but this can trivially be overwritten:
+
+```ruby
+module Bookshelf
+  module Relations
+    class Credentials < Hanami::DB::Relation
+      schema :credentials, infer: true do
+        attribute :user_id, Types.ForeignKey(:users, Types::PG::UUID)
+      end
+    end
+  end
+end
+```
+
+As with `Types.define` referenced earlier, this is just setting up metadata on your type definition:
+
+```ruby
+Types::Nominal(::String).meta(db_type: "uuid", database: "postgres", foreign_key: true, target: :users)
+```
+
+## Dataset
+
+Every Relation in ROM is initialized with a default dataset that automatically selects all columns. You can adjust this
+by using the `dataset` helper.
+
+```ruby
+module Bookshelf
+  module Relations
+    class Books < Hanami::DB::Relation
+      schema :books, infer: true
+
+      dataset do
+        select(:id, :title, :publication_date).order(:publication_date)
+      end
+    end
+  end
+end
+```
+
+<p class="notice">More on <strong>select</strong> and <strong>order</strong> in the Querying section</p>
+
+Let's say you want to automatically hide any record with an `archived_at` timestamp by default, to simulate deletion.
+
+```ruby
+module Bookshelf
+  module Relations
+    class Books < Hanami::DB::Relation
+      schema :books, infer: true
+
+      dataset { where(archived_at: nil) }
+    end
+  end
+end
+```
+
+You can always use the `unfiltered` method to get back to a blank slate:
+
+```
+app[:relations].books.unfiltered.exclude(archived_at: nil)
+```
+
+<p class="convention">
+  <strong>where</strong> and <strong>exclude</strong> are antonyms.
+</p>
+
+## Scopes
+
+We've all probably seen an application that uses SQL queries directly throughout, without a proper abstraction to hide
+this responsibility. This is poor architecture, because not only does it lead to lots of repetition, but it also creates
+more work for you when the schema of the database changes.
+
+In Hanami applications, we strongly recommend that you encapsulate this responsibility in the proper Relation class.
+
+_Scopes_ are methods of the Relation class that assist in building queries. They are chainable, because every scope
+method returns a new version of the Relation class.
+
+By default, every schema with a primary key defined gets the `by_pk` scope:
+
+```ruby
+app[:relations].books.by_pk(1).one
+# => { id: 1, title: "To Kill a Mockingbird", publication_date: #<Date 1960-07-11> }
+```
+
+This is equivalent to writing:
+
+```ruby
+app[:relations].books.where(id: 1).one
+```
+
+or simply:
+
+```ruby
+app[:relations].books.fetch(1)
+```
+
+<p class="notice">
+  Query-building is terminated by <strong>one</strong> for single records, and
+  <strong>to_a</strong> for multiple. You can also use <strong>each</strong>
+  with a relation directly.
+</p>
+
+Since scopes are just methods, adding your own is this simple:
+
+```ruby
+module Bookshelf
+  module Relations
+    class Books < Hanami::DB::Relation
+      schema :books, infer: true
+
+      def recent = where { publication_date > Date.new(2020, 1, 1) }
+    end
+  end
+end
+```
+
+It is now present on the relation objects:
+
+```ruby
+app[:relations].books.recent
+# => SELECT id, title, publication_date FROM books WHERE publication_date > '2020-01-01'
+```
+
+<p class="notice">
+  ROM Relations are built on top of <a href="http://sequel.jeremyevans.net/rdoc/classes/Sequel/Dataset.html">Sequel
+  Datasets</a>. Inspect the generated SQL of a relation by calling <code>.dataset.sql</code> on it.
+</p>
