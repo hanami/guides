@@ -282,3 +282,48 @@ As with `Types.define` referenced earlier, this is just setting up metadata on y
 ```ruby
 Types::Nominal(::String).meta(db_type: "uuid", database: "postgres", foreign_key: true, target: :users)
 ```
+
+## Dataset
+
+Every Relation in ROM is initialized with a default dataset that automatically selects all columns. You can adjust this
+by using the `dataset` helper.
+
+```ruby
+module Bookshelf
+  module Relations
+    class Books < Hanami::DB::Relation
+      schema :books, infer: true
+
+      dataset do
+        select(:id, :title, :publication_date).order(:publication_date)
+      end
+    end
+  end
+end
+```
+
+<p class="notice">More on <strong>select</strong> and <strong>order</strong> in the Querying section</p>
+
+Let's say you want to automatically hide any record with an `archived_at` timestamp by default, to simulate deletion.
+
+```ruby
+module Bookshelf
+  module Relations
+    class Books < Hanami::DB::Relation
+      schema :books, infer: true
+
+      dataset { where(archived_at: nil) }
+    end
+  end
+end
+```
+
+You can always use the `unfiltered` method to get back to a blank slate:
+
+```
+app[:relations].books.unfiltered.exclude(archived_at: nil)
+```
+
+<p class="convention">
+  <strong>where</strong> and <strong>exclude</strong> are antonyms.
+</p>
