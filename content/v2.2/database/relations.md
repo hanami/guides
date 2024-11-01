@@ -21,6 +21,10 @@ end
 
 Alternately, if this were located in the Main slice it would be in `slices/main/relations`.
 
+<p class="convention">
+  All the relations for a given slice may be found in the <strong>relations</strong> container key.
+</p>
+
 ## Schema
 
 The simplest way to define your schema is to allow ROM to infer it from your database directly:
@@ -207,7 +211,7 @@ module Bookshelf
         # they are actual foreign keys, but this is
         # how you would do it manually.
         attribute :book_id, Types.ForeignKey(:books)
-        attribute :author_id, Types.ForeignKey(:author)
+        attribute :author_id, Types.ForeignKey(:authors)
         attribute :order, Types::Integer
 
         associations do
@@ -224,4 +228,57 @@ module Bookshelf
     end
   end
 end
+```
+
+### Aliasing
+
+If you don't wish to use the table name as your relation name, aliasing the relation with `:as` is simple:
+
+```ruby
+module Bookshelf
+  module Relations
+    class Authorships < Hanami::DB::Relation
+      schema :books_authors, infer: true, as: :authorships
+    end
+
+    class Books < Hanami::DB::Relation
+      schema :books, infer: true do
+        associations do
+          has_many :books_authors, as: :authorships, relation: :authorships
+        end
+      end
+    end
+  end
+end
+```
+
+<p class="convention">
+In addition to the relation name in Repositories, the alias is also used by auto-mapping when you combine relations
+together. More on combines later.
+</p>
+
+This is also useful for building multiple relation classes against the same table, if you have radically different
+use-cases and want to separate them.
+
+### Custom Foreign Keys
+
+Integer-based primary keys are the normal case, but you will sometimes want to work with other types. This is supported
+by ROM's `ForeignKey` type. `Integer` is the default, but this can trivially be overwritten:
+
+```ruby
+module Bookshelf
+  module Relations
+    class Credentials < Hanami::DB::Relation
+      schema :credentials, infer: true do
+        attribute :user_id, Types.ForeignKey(:users, Types::PG::UUID)
+      end
+    end
+  end
+end
+```
+
+As with `Types.define` referenced earlier, this is just setting up metadata on your type definition:
+
+```ruby
+Types::Nominal(::String).meta(db_type: "uuid", database: "postgres", foreign_key: true, target: :users)
 ```
