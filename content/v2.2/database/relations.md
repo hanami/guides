@@ -327,3 +327,65 @@ app[:relations].books.unfiltered.exclude(archived_at: nil)
 <p class="convention">
   <strong>where</strong> and <strong>exclude</strong> are antonyms.
 </p>
+
+## Scopes
+
+We've all probably seen an application that uses SQL queries directly throughout, without a proper abstraction to hide
+this responsibility. This is poor architecture, because not only does it lead to lots of repetition, but it also creates
+more work for you when the schema of the database changes.
+
+In Hanami applications, we strongly recommend that you encapsulate this responsibility in the proper Relation class.
+
+_Scopes_ are methods of the Relation class that assist in building queries. They are chainable, because every scope
+method returns a new version of the Relation class.
+
+By default, every schema with a primary key defined gets the `by_pk` scope:
+
+```ruby
+app[:relations].books.by_pk(1).one
+# => { id: 1, title: "To Kill a Mockingbird", publication_date: #<Date 1960-07-11> }
+```
+
+This is equivalent to writing:
+
+```ruby
+app[:relations].books.where(id: 1).one
+```
+
+or simply:
+
+```ruby
+app[:relations].books.fetch(1)
+```
+
+<p class="notice">
+  Query-building is terminated by <strong>one</strong> for single records, and
+  <strong>to_a</strong> for multiple. You can also use <strong>each</strong>
+  with a relation directly.
+</p>
+
+Since scopes are just methods, adding your own is this simple:
+
+```ruby
+module Bookshelf
+  module Relations
+    class Books < Hanami::DB::Relation
+      schema :books, infer: true
+
+      def recent = where { publication_date > Date.new(2020, 1, 1) }
+    end
+  end
+end
+```
+
+It is now present on the relation objects:
+
+```ruby
+app[:relations].books.recent
+# => SELECT id, title, publication_date FROM books WHERE publication_date > '2020-01-01'
+```
+
+<p class="notice">
+  ROM Relations are built on top of <a href="http://sequel.jeremyevans.net/rdoc/classes/Sequel/Dataset.html">Sequel
+  Datasets</a>. Inspect the generated SQL of a relation by calling <code>.dataset.sql</code> on it.
+</p>
