@@ -1,6 +1,6 @@
 ---
 title: Relations
-order: 20
+order: 40
 ---
 
 Relations own the responsibility of querying your database. They encode what data exists in the table, how to coerce SQL types into Ruby types and vice-versa, and how this table relates to others.
@@ -32,7 +32,7 @@ The simplest way to define your schema is to allow ROM to infer it from your dat
 ```ruby
 module Bookshelf
   module Relations
-    class Books < Hanami::DB::Relations
+    class Books < Hanami::DB::Relation
       schema :books, infer: true
     end
   end
@@ -48,7 +48,7 @@ However, sometimes you want to customize how types are coerced in Ruby. This is 
 ```ruby
 module Bookshelf
   module Relations
-    class Books < Hanami::DB::Relations
+    class Books < Hanami::DB::Relation
       schema :books, infer: true do
         primary_key :id
         attribute :status, Types::String, read: Types::Coercible::Symbol
@@ -76,7 +76,7 @@ With more complex DB types like JSONB, you may want to define a type constant to
 ```ruby
 module Bookshelf
   module Relations
-    class Credentials < Hanami::DB::Relations
+    class Credentials < Hanami::DB::Relation
       JWKS = Types.define(JWT::JWK::Set) do
         input { |jwks| Types::PG::JSONB[jwks.export] }
         output { |jsonb| JWT::JWK::Set.new(jsonb.to_h) }
