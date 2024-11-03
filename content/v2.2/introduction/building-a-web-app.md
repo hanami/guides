@@ -375,53 +375,6 @@ module Bookshelf
 end
 ```
 
-Lastly, we need to ensure the database is cleaned between tests. Add the Database Cleaner gem to your `Gemfile`:
-
-```ruby
-group :test do
-  gem "database_cleaner-sequel"
-end
-```
-
-Install it:
-
-```shell
-$ bundle install
-```
-
-Add then add the following to `spec/support/database_cleaner.rb`:
-
-```ruby
-# spec/support/database_cleaner.rb
-
-require "database_cleaner-sequel"
-
-# Allow Database Cleaner to work on our local sqlite databases
-DatabaseCleaner.url_allowlist = [%r{^sqlite://}]
-
-Hanami.app.prepare :db
-DatabaseCleaner[:sequel]
-
-RSpec.configure do |config|
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.around(:each, type: :db) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
-end
-```
-
-And then append the following line to `spec/spec_helper.rb`:
-
-```ruby
-require_relative "support/database_cleaner"
-```
-
 ### Updating our test
 
 Now we can go ahead adapt our books index spec to expect an index of books from a database, with authors included alongside titles. We can use the books relation to insert the records.
