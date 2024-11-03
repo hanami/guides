@@ -19,11 +19,18 @@ module Bookshelf
 end
 ```
 
-Alternately, if this were located in the Main slice it would be in `slices/main/relations`.
-
 <p class="convention">
-  All the relations for a given slice may be found in the <strong>relations</strong> container key.
+  Alternately, if there were located in the Main slice it would be in <strong>slices/main/relations</strong>
 </p>
+
+All registered relations for the slice are available under the **relations** namespace. For instance, if we have `books`, `authors`, `publishers`, and `languages` as relations, we can expect the following keys:
+
+- `relations.authors`
+- `relations.books`
+- `relations.languages`
+- `relations.publishers`
+
+Although you can inject these relations into your business objects, you will seldom need to do this because Hanami Repositories will already have access to all of them.
 
 ## Schema
 
