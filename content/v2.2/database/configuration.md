@@ -159,3 +159,20 @@ class Users < Hanami::DB::Relation
   schema infer: true
 end
 ```
+
+## Container Keys
+
+Hanami exposes your database configuration through a series of container keys.
+
+<dl class="row">
+  <dt class="col-sm-3"><code>db.config</code></dt>
+  <dd class="col-sm-9">Final ROM Configuration object</dd>
+  <dt class="col-sm-3"><code>db.rom</code></dt>
+  <dd class="col-sm-9">ROM instance for this slice</dd>
+  <dt class="col-sm-3"><code>db.gateway</code></dt>
+  <dd class="col-sm-9">Default DB Gateway</dd>
+  <dt class="col-sm-3"><code>db.gateways.default</code></dt>
+  <dd class="col-sm-9">Explicitly-named gateway</dd>
+</dl>
+
+Any additional gateways that you have defined will be registered under the `db.gateways` namespace.
