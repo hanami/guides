@@ -347,53 +347,6 @@ module Bookshelf
 end
 ```
 
-Lastly, we need to ensure the database is cleaned between tests. Add the Database Cleaner gem to your `Gemfile`:
-
-```ruby
-group :test do
-  gem "database_cleaner-sequel"
-end
-```
-
-Install it:
-
-```shell
-$ bundle install
-```
-
-Add then add the following to `spec/support/database_cleaner.rb`:
-
-```ruby
-# spec/support/database_cleaner.rb
-
-require "database_cleaner-sequel"
-
-# Allow Database Cleaner to work on our local sqlite databases
-DatabaseCleaner.url_allowlist = [%r{^sqlite://}]
-
-Hanami.app.prepare :db
-DatabaseCleaner[:sequel]
-
-RSpec.configure do |config|
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.around(:each, type: :db) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
-end
-```
-
-And then append the following line to `spec/spec_helper.rb`:
-
-```ruby
-require_relative "support/database_cleaner"
-```
-
 ### Updating our test
 
 With our books table ready to go, let's adapt our books index spec to expect an index of persisted books, including authors as well as titles:
@@ -739,8 +692,6 @@ Failures:
      Failure/Error: expect(last_response).to be_successful
        expected `#<Rack::MockResponse:0x000000010c9f5788 @original_headers={"Content-Length"=>"9"}, @errors="", @cooki...ms/rack-2.2.4/lib/rack/response.rb:287>, @block=nil, @body=["Not Found"], @buffered=true, @length=9>.successful?` to be truthy, got false
      # ./spec/requests/books/show_spec.rb:14:in `block (3 levels) in <top (required)>'
-     # ./spec/support/database_cleaner.rb:15:in `block (3 levels) in <top (required)>'
-     # ./spec/support/database_cleaner.rb:14:in `block (2 levels) in <top (required)>'
 
   2) GET /books/:id when no book matches the given id returns not found
      Failure/Error: expect(last_response.content_type).to eq("application/json; charset=utf-8")
@@ -750,8 +701,6 @@ Failures:
 
        (compared using ==)
      # ./spec/requests/books/show_spec.rb:30:in `block (3 levels) in <top (required)>'
-     # ./spec/support/database_cleaner.rb:15:in `block (3 levels) in <top (required)>'
-     # ./spec/support/database_cleaner.rb:14:in `block (2 levels) in <top (required)>'
 
 Finished in 0.05427 seconds (files took 0.88631 seconds to load)
 2 examples, 2 failures
