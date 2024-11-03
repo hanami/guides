@@ -19,11 +19,18 @@ module Bookshelf
 end
 ```
 
-Alternately, if this were located in the Main slice it would be in `slices/main/relations`.
-
 <p class="convention">
-  All the relations for a given slice may be found in the <strong>relations</strong> container key.
+  Alternately, if there were located in the Main slice it would be in <strong>slices/main/relations</strong>
 </p>
+
+All registered relations for the slice are available under the **relations** namespace. For instance, if we have `books`, `authors`, `publishers`, and `languages` as relations, we can expect the following keys:
+
+- `relations.authors`
+- `relations.books`
+- `relations.languages`
+- `relations.publishers`
+
+Although you can inject these relations into your business objects, you will seldom need to do this because Hanami Repositories will already have access to all of them.
 
 ## Schema
 
@@ -355,12 +362,30 @@ books.select(:id, :title).select_append(:pages).first
 # => { id: 1, title: "To Kill a Mockingbird", pages: 336 }
 ```
 
+### Ordering
+
+If the default Ascending order is sufficient, you can use plain arguments:
+
+```ruby
+books.order(:title)
+```
+
+However, if you want to specify order direction, use the expression syntax:
+
+```ruby
+books.order { [publication_date.desc, title.asc] }
+```
+
+Every call to `order` will replace any existing order.
+
+`unordered` will remove any current ordering.
+
 ### Dynamic Columns
 
 ROM supports some limited type coercion of dynamic columns by prefixing it with a type name:
 
 ```ruby
-bookshelf[development]> books.to_a
+books.to_a
 [{:id=>1,
   :language_id=>1,
   :publisher_id=>1,
@@ -376,13 +401,11 @@ bookshelf[development]> books.to_a
   :pages=>288,
   :publication_date=><Date: 2016-05-03>}]
 
-bookshelf[development]> books.select {
-                          [
-                            integer::count(:id).as(:total),
-                            integer::count(:id).filter(pages < 300).as(:short),
-                            integer::count(:id).filter(pages > 300).as(:long)
-                          ]
-                        }.unordered.one
+books.select {[
+  integer::count(:id).as(:total),
+  integer::count(:id).filter(pages < 300).as(:short),
+  integer::count(:id).filter(pages > 300).as(:long)
+]}.unordered.one
 {total: 2, short: 1, long: 1}
 ```
 
@@ -410,21 +433,21 @@ These types are references to those defined in `ROM::SQL::Types`, so these shoul
 
 But if you need complex type coercions, use ROM's schema system.
 
-### Ordering
+### Case Expressions
 
-If the default Ascending order is sufficient, you can use plain arguments:
-
-```ruby
-books.order(:title)
-```
-
-However, if you want to specify order direction, use the expression syntax:
+Case branches are defined as Hash tuples, with an `:else` keyword covering the default case.
 
 ```ruby
-books.order { [publication_date.desc, title.asc] }
+books.select {[
+  id,
+  title,
+  string::case(
+    quantity.is(0) => "out-of-stock",
+    (quantity < 100) => "low-stock",
+    else: "in-stock"
+  ).as(:status)
+]}.to_a
 ```
-
-Every call to `order` will replace any existing order.
 
 ## Dataset
 

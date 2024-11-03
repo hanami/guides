@@ -192,6 +192,10 @@ div.highlight > pre {
   min-width: 100%;
 }
 
+.quote {
+  margin-left: 2em;
+}
+
 main p {
   min-width: 100%;
 }
