@@ -283,6 +283,149 @@ As with `Types.define` referenced earlier, this is just setting up metadata on y
 Types::Nominal(::String).meta(db_type: "uuid", database: "postgres", foreign_key: true, target: :users)
 ```
 
+## Querying
+
+Hanami supports querying the database using a **query builder**, a pattern that provides a Ruby DSL to generate SQL for
+you.
+
+SQL query building is a _gigantic_ topic, so this will only scratch the suface of what is possible.
+
+<p class="notice">
+  ROM Relations are built on top of <a href="http://sequel.jeremyevans.net/rdoc/classes/Sequel/Dataset.html">Sequel
+  Datasets</a>. Inspect the generated SQL of a relation by calling <code>.dataset.sql</code> on it.
+</p>
+
+### Dual Syntactic Conventions
+
+ROM provides query-building DSL into two forms: a simple Hash-based syntax, and a more complex expression-based syntax.
+
+These queries are equivalent:
+
+```ruby
+books.where(publication_date: Date.new(2024, 11, 5))
+books.where { publication_date =~ Date.new(2024, 11, 5) }
+```
+
+What is the purpose of having two different solutions to this problem? It's an 80/20 Rule situation: in most cases, a
+simple interface to match values is sufficient. But for the complicated scenarios, a more complex interface is very nice
+to have, event better when this escape-hatch doesn't complicate the simpler scenarios.
+
+Instead of matching a date exactly, what if we wanted to match just the year part:
+
+```ruby
+books.where { date_part('year', publication_date) > 2020 }
+```
+
+An approach wedded to Hash syntax may just give up here, and require you to write SQL as a string instead, but we can
+achieve much more with ROM's expression syntax.
+
+<p class="notice">
+  Proc-based queries leverage <a href="https://sequel.jeremyevans.net/rdoc/classes/Sequel/SQL/VirtualRow.html">Sequel
+  VirtualRows</a> to support more complex expressions involving functions and operators.
+</p>
+
+### Negative Restrictions
+
+`where` is easy enough, but often we want to assert what _shouldn't_ be included:
+
+```ruby
+# No short reads allowed, hefty tomes only!
+books.exclude(pages: ...1000)
+books.exclude { pages < 1000 }
+```
+
+### Selection
+
+In relational algebra, the definition of what columns you are collecting as part of the query is called the
+**projection**. ROM uses the `select` method to perform this operation, after the SQL operation of the same name.
+
+```ruby
+books.select(:id, :title).first
+books.select { [id, title] }.first
+# => { id: 1, title: "To Kill a Mockingbird" }
+```
+
+Multiple calls to `select` will replace the existing projection. If you wish to add to it, use `select_append`.
+
+```ruby
+books.select(:id, :title).select(:pages).first
+# => { pages: 336 }
+
+books.select(:id, :title).select_append(:pages).first
+# => { id: 1, title: "To Kill a Mockingbird", pages: 336 }
+```
+
+### Dynamic Columns
+
+ROM supports some limited type coercion of dynamic columns by prefixing it with a type name:
+
+```ruby
+bookshelf[development]> books.to_a
+[{:id=>1,
+  :language_id=>1,
+  :publisher_id=>1,
+  :title=>"To Kill a Mockingbird",
+  :isbn13=>"9780060935467",
+  :pages=>336,
+  :publication_date=><Date: 1960-07-11>},
+ {:id=>2,
+  :language_id=>1,
+  :publisher_id=>2,
+  :title=>"Go Set a Watchman",
+  :isbn13=>"9780062409867",
+  :pages=>288,
+  :publication_date=><Date: 2016-05-03>}]
+
+bookshelf[development]> books.select {
+                          [
+                            integer::count(:id).as(:total),
+                            integer::count(:id).filter(pages < 300).as(:short),
+                            integer::count(:id).filter(pages > 300).as(:long)
+                          ]
+                        }.unordered.one
+{total: 2, short: 1, long: 1}
+```
+
+This combines a few different ideas:
+
+- `integer::count(:id)` defines a typed SQL function call with an argument
+- `as(:total)` aliases the column using SQL `AS` syntax
+- `filter(pages < 300)` is an [Aggregate
+  Expression](https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-AGGREGATES)
+
+These types are references to those defined in `ROM::SQL::Types`, so these should work:
+
+- `bool`
+- `date`
+- `datetime`
+- `decimal`
+- `float`
+- `hash`
+- `integer`
+- `json`
+- `range`
+- `serial`
+- `string`
+- `time`
+
+But if you need complex type coercions, use ROM's schema system.
+
+### Ordering
+
+If the default Ascending order is sufficient, you can use plain arguments:
+
+```ruby
+books.order(:title)
+```
+
+However, if you want to specify order direction, use the expression syntax:
+
+```ruby
+books.order { [publication_date.desc, title.asc] }
+```
+
+Every call to `order` will replace any existing order.
+
 ## Dataset
 
 Every Relation in ROM is initialized with a default dataset that automatically selects all columns. You can adjust this
@@ -301,8 +444,6 @@ module Bookshelf
   end
 end
 ```
-
-<p class="notice">More on <strong>select</strong> and <strong>order</strong> in the Querying section</p>
 
 Let's say you want to automatically hide any record with an `archived_at` timestamp by default, to simulate deletion.
 
@@ -323,10 +464,6 @@ You can always use the `unfiltered` method to get back to a blank slate:
 ```
 app[:relations].books.unfiltered.exclude(archived_at: nil)
 ```
-
-<p class="convention">
-  <strong>where</strong> and <strong>exclude</strong> are antonyms.
-</p>
 
 ## Scopes
 
@@ -384,8 +521,3 @@ It is now present on the relation objects:
 app[:relations].books.recent
 # => SELECT id, title, publication_date FROM books WHERE publication_date > '2020-01-01'
 ```
-
-<p class="notice">
-  ROM Relations are built on top of <a href="http://sequel.jeremyevans.net/rdoc/classes/Sequel/Dataset.html">Sequel
-  Datasets</a>. Inspect the generated SQL of a relation by calling <code>.dataset.sql</code> on it.
-</p>
