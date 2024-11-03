@@ -5,6 +5,7 @@ order: 10
 
 Hanami’s persistence layer is based on the Ruby Object Mapper (ROM) project. ROM is a radically different approach to persistence than you may be familiar with. Don’t let that scare you, because all the component parts of ROM are designed to provide clear separation of responsibilities. The hardest part is shifting your perspective to think in a new paradigm.
 
+<blockquote cite="https://rom-rb.org/learn/" class="quote">
 Above all else ROM favors:
 
 - **Explicitness** over "magic" whenever possible
@@ -12,6 +13,7 @@ Above all else ROM favors:
 - **Flexibility** in your domain layer's design
 
 [ROM: Principles & Design](https://rom-rb.org/learn/#principles-amp-design)
+</blockquote>
 
 While traditional Object-Relational Mapping comes from a strictly Object-Oriented approach, ROM combines the best parts of Functional Programming and OOP that play to Ruby’s inherent strengths as a language. Instead of homogenizing all datastores into a lowest-common-denominator API, ROM embraces the diversity of storage engines and the powerful features they can provide.
 
@@ -43,10 +45,10 @@ class Users < Hanami::DB::Relation
 end
 ```
 
+`ROM::SQL` provides a wide array of data types for SQL engines, but you can provide your own based on dry-types. In this
+example, `Types::Email` would be user-defined.
 
-`ROM::SQL` provides a wide array of data types for SQL engines, but you can provide your own based on dry-types.
-
-For more on Schemas, see [ROM Core: Schemas](https://rom-rb.org/learn/core/5.2/schemas/)
+For more on Schemas, see [the relations guide]({{% ref "relations.md#schema" %}}).
 
 ## Associations
 
@@ -64,7 +66,7 @@ end
 ```
 
 
-For more on associations, see [ROM SQL: Associations](https://rom-rb.org/learn/sql/3.3/associations/).
+For more on associations, see [the relations guide]({{% ref "relations.md#associations" %}}).
 
 ## Datasets
 
@@ -84,7 +86,7 @@ The dataset can be thought of as the current state of the query before it happen
 
 The output of Dataset queries are plain Ruby hashes, which are consumed by a Repository.
 
-For more on Datasets, see [Sequel: Dataset Basics](http://sequel.jeremyevans.net/rdoc/files/doc/dataset_basics_rdoc.html)
+For more on Datasets, see [the relations guide]({{% ref "relations.md#dataset" %}}).
 
 ## Repositories
 
@@ -103,10 +105,11 @@ end
 
 Now, the requirement is that you move to usernames as the principal identity. Without a Repository, every place in your codebase that queries a User would need to accommodate this change. But here, we can do:
 
+```ruby
 class UserRepo < Hanami::DB::Repository
   def find(username) = users.where(username:).one
 end
-
+```
 
 If the rest of your business logic treats the identity as an opaque string, then you’re done. The encapsulation afforded by Repository restricts the knowledge of the persistence layer from where it does not belong.
 
@@ -129,8 +132,6 @@ module Main
       def mailbox
         "#{full_name} <#{email}>"
       end
-
-      def to_json = JSON.generate(attributes)
     end
   end
 end
