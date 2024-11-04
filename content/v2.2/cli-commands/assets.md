@@ -1,6 +1,6 @@
 ---
 title: Assets
-order: 100
+order: 110
 ---
 
 ## hanami assets compile
