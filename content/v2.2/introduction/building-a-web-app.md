@@ -93,7 +93,7 @@ To help make our spec pass, let's add a route to invoke a new action.
 
 module Bookshelf
   class Routes < Hanami::Routes
-    root to: "home.show"
+    root to: "home.index"
   end
 end
 ```
@@ -109,9 +109,9 @@ Failures:
      Failure/Error: get "/"
 
      Hanami::Routes::MissingActionError:
-       Could not find action with key "actions.home.show" in Bookshelf::App
+       Could not find action with key "actions.home.index" in Bookshelf::App
 
-       To fix this, define the action class Bookshelf::Actions::Home::Show in /Users/jane/bookshelf/actions/home/show.rb
+       To fix this, define the action class Bookshelf::Actions::Home::Index in /Users/jane/bookshelf/actions/home/index.rb
 
 1 example, 1 failure
 ```
@@ -121,18 +121,18 @@ As this error suggests, we need to create the home show action the route is expe
 Hanami provides an action generator we can use to create this action. Running this command will create the home show action:
 
 ```shell
-$ bundle exec hanami generate action home.show
+$ bundle exec hanami generate action home.index --skip-route
 ```
 
-We can find this action in our `app` directory at `app/actions/home/show.rb`:
+We can find this action in our `app` directory at `app/actions/home/index.rb`:
 
 ```ruby
-# app/actions/home/show.rb
+# app/actions/home/index.rb
 
 module Bookshelf
   module Actions
     module Home
-      class Show < Bookshelf::Action
+      class Index < Bookshelf::Action
         def handle(request, response)
         end
       end
@@ -153,15 +153,15 @@ end
 
 For more details on actions, see the [Actions guide](/v2.2/actions/overview/).
 
-By default, an action will render its equivalent view. We can find our new view in our `app` directory at `app/views/home/show.rb`:
+By default, an action will render its equivalent view. We can find our new view in our `app` directory at `app/views/home/index.rb`:
 
 ```ruby
-# app/views/home/show.rb
+# app/views/home/index.rb
 
 module Bookshelf
   module Views
     module Home
-      class Show < Bookshelf::View
+      class Index < Bookshelf::View
       end
     end
   end
@@ -170,10 +170,10 @@ end
 
 Just like actions, every view in a Hanami app is an individual class. Views prepare the values to be passed to a template, then render that template to generate their output.
 
-We can find this view's template in our `app` directory at `app/templates/home/show.html.erb`. Let's adjust this template to include our desired "Welcome to Bookshelf" text.
+We can find this view's template in our `app` directory at `app/templates/home/index.html.erb`. Let's adjust this template to include our desired "Welcome to Bookshelf" text.
 
 ```sql
-# app/templates/home/show.html.erb
+# app/templates/home/index.html.erb
 
 <h1>Welcome to Bookshelf</h1>
 ```
@@ -269,7 +269,7 @@ In addition to generating an action at `app/actions/books/index.rb` and a view a
 ```ruby
 module Bookshelf
   class Routes < Hanami::Routes
-    root to: "home.show"
+    root to: "home.index"
     get "/books", to: "books.index"
   end
 end
@@ -330,7 +330,7 @@ Of course, returning a static list of books is not particularly useful. Let's ad
 To create a books table, we need to generate a migration:
 
 ```shell
-$ hanami generate migration create_books
+$ bundle exec hanami generate migration create_books
 ```
 
 Edit the migration file to create a books table with title and author columns and a primary key:
@@ -480,7 +480,7 @@ Of course, returning _every_ book in the database when a visitor makes a request
 module Bookshelf
   module Relations
     class Books < Bookshelf::DB::Relation
-      schema(:books, infer: true)
+      schema :books, infer: true
 
       use :pagination
       per_page 5
@@ -724,9 +724,9 @@ Lastly, we can populate the template.
 ```sql
 <!-- app/views/books/show.html.erb -->
 
-<h1><%= book[:title] %></h1>
+<h1><%= book.title %></h1>
 
-<p>By <%= book[:author] %></p>
+<p>By <%= book.author %></p>
 ```
 
 With this, our happy path test passes, but the test for our 404 now fails:
@@ -746,7 +746,7 @@ Failures:
      Failure/Error: <h1><%= book[:title] %></h1>
 
      NoMethodError:
-       undefined method `[]' for nil
+       undefined method `title' for nil
      # ./app/templates/books/show.html.erb:1:in `__tilt_8300'
      # ./app/actions/books/show.rb:8:in `handle'
      # ./spec/features/books/show_spec.rb:19:in `block (3 levels) in <top (required)>'
