@@ -9,7 +9,7 @@ Operations organize business logic in Hanami apps. They are the foundation of yo
 
 Operations are built using [dry-operation](https://dry-rb.org/gems/dry-operation/1.0/).
 
-With operations, you can model your logic as a linear flow of steps, each returning a `Success` or `Failure`. If all an operation's steps succeed, then the operation completes and returns its final value as a success. If any step returns a failure, execution short circuits and returns that failure immediately.
+With operations, you can model your logic as a linear flow of steps, each returning a `Success` or `Failure`. If all steps of an operation succeed, the operation completes and returns its final value as a success. If any step returns a failure, execution short circuits and returns that failure immediately.
 
 To create an operation, run `hanami generate operation`:
 
@@ -108,7 +108,7 @@ def call
 end
 ```
 
-By default, `transaction` uses your "default" [gateway](/v2.2/database/configuration/#gateway-configuration). Specify `gateway:` with a gateway name to use a transaction on a different gateway:
+By default, `transaction` uses your "default" [gateway](/v2.2/database/configuration/#gateway-configuration). To use a different one, specify gateway: followed by the desired gateway name.
 
 ```ruby
 transaction(gateway: :other) do
