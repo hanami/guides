@@ -20,7 +20,7 @@ end
 ```
 
 <p class="convention">
-  Alternately, if there were located in the Main slice it would be in <strong>slices/main/relations</strong>
+  Alternately, if there were located in a Main slice it would be in <strong>slices/main/relations</strong>
 </p>
 
 All registered relations for the slice are available under the **relations** namespace. For instance, if we have `books`, `authors`, `publishers`, and `languages` as relations, we can expect the following keys:
