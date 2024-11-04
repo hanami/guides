@@ -82,7 +82,7 @@ module Bookshelf
   module Views
     module Books
       class Show < Bookshelf::View
-        include Deps["repositories.book_repo"]
+        include Deps["repos.book_repo"]
 
         expose :book do |id:|
           book_repo.get!(id)
@@ -144,7 +144,7 @@ module Bookshelf
   module Views
     module Books
       class Index < Bookshelf::View
-        include Deps["repositories.book_repo"]
+        include Deps["repos.book_repo"]
 
         expose :books do |page: 1, per_page: 20|
           book_repo.listing(page: page, per_page: per_page)
@@ -191,8 +191,8 @@ module Bookshelf
     module Books
       class Show < Bookshelf::View
         include Deps[
-          "repositories.book_repo",
-          "repositories.author_repo"
+          "repos.book_repo",
+          "repos.author_repo"
         ]
 
         expose :book do |id:|
@@ -221,7 +221,7 @@ module Bookshelf
   module Views
     module Authors
       class Show < Bookshelf::View
-        include Deps["repositories.author_repo"]
+        include Deps["repos.author_repo"]
 
         private_expose :author do |author_id:|
           author_repo.get!(author_id)

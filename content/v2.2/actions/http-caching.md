@@ -102,10 +102,10 @@ module Bookshelf
   module Actions
     module Show
       class Index < Bookshelf::Action
-        include Deps['repositories.users']
+        include Deps["repos.user_repo"]
 
         def handle(request, response)
-          user = users.find(params[:id])
+          user = user_repo.find(params[:id])
 
           response.fresh last_modified: user.updated_at
 

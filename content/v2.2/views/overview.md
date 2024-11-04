@@ -120,7 +120,7 @@ module Bookshelf
   module Views
     module Books
       class Index < Bookshelf::View
-        include Deps["repositories.book_repo"]
+        include Deps["repos.book_repo"]
 
         expose :books do
           book_repo.listing
@@ -142,7 +142,7 @@ module Bookshelf
   module Views
     module Books
       class Index < Bookshelf::View
-        include Deps["repositories.book_repo"]
+        include Deps["repos.book_repo"]
 
         expose :books do
           book_repo.listing

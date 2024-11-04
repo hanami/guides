@@ -14,7 +14,7 @@ module Bookshelf
   module Views
     module Books
       class Show < Bookshelf::View
-        include Deps["repositories.book_repo"]
+        include Deps["repos.book_repo"]
 
         expose :book do |id:|
           book_repo.get!(id)

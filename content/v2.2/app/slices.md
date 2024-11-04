@@ -226,7 +226,7 @@ module Admin
     module Operations
       class Update
         include Deps[
-          "repositories.book_repo",
+          "repos.book_repo",
           "cdn.book_covers.purge"
         ]
 
