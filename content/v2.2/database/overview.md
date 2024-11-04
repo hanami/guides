@@ -3,7 +3,7 @@ title: Overview
 order: 10
 ---
 
-Hanami’s persistence layer is based on the Ruby Object Mapper (ROM) project. ROM is a radically different approach to persistence than you may be familiar with. Don’t let that scare you, because all the component parts of ROM are designed to provide clear separation of responsibilities. The hardest part is shifting your perspective to think in a new paradigm.
+Hanami’s persistence layer is based on the [Ruby Object Mapper (ROM)](https://rom-rb.org/) project. ROM is a radically different approach to persistence than you may be familiar with. Don’t let that scare you, because all the component parts of ROM are designed to provide clear separation of responsibilities. The hardest part is shifting your perspective to think in a new paradigm.
 
 <blockquote cite="https://rom-rb.org/learn/" class="quote">
 Above all else ROM favors:
