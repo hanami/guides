@@ -99,7 +99,8 @@ $ tree --gitignore .
 │   ├── app.rb
 │   ├── assets.js
 │   ├── db
-│   │   └── migrate
+│   │   ├── migrate
+│   │   └── seeds.rb
 │   ├── puma.rb
 │   ├── routes.rb
 │   └── settings.rb
@@ -115,11 +116,15 @@ $ tree --gitignore .
     │   └── root_spec.rb
     ├── spec_helper.rb
     └── support
+        ├── db
+        │   └── cleaning.rb
+        ├── db.rb
         ├── features.rb
+        ├── operations.rb
         ├── requests.rb
         └── rspec.rb
 
-23 directories, 32 files
+26 directories, 36 files
 ```
 
 Here's how these files and directories are used:

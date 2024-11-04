@@ -100,7 +100,7 @@ Let's update our routes to invoke an action for our app's root, which handles `G
 
 module Bookshelf
   class Routes < Hanami::Routes
-    root to: "home.show"
+    root to: "home.index"
   end
 end
 ```
@@ -116,9 +116,9 @@ Failures:
      Failure/Error: get "/"
 
      Hanami::Routes::MissingActionError:
-       Could not find action with key "actions.home.show" in Bookshelf::App
+       Could not find action with key "actions.home.index" in Bookshelf::App
 
-       To fix this, define the action class Bookshelf::Actions::Home::Show in app/actions/home/show.rb
+       To fix this, define the action class Bookshelf::Actions::Home::Index in app/actions/home/index.rb
      # ./spec/requests/root_spec.rb:5:in `block (2 levels) in <top (required)>'
 
 Finished in 0.01871 seconds (files took 0.62516 seconds to load)
@@ -130,10 +130,10 @@ As this error suggests, we need to create the home show action the route is expe
 Hanami provides an action generator we can use to create this action. Running this command will create the home show action:
 
 ```shell
-$ bundle exec hanami generate action home.show --skip-view
+$ bundle exec hanami generate action home.index --skip-view --skip-route --skip-tests
 ```
 
-We can find this action in our `app` directory at `app/actions/home/show.rb`:
+We can find this action in our `app` directory at `app/actions/home/index.rb`:
 
 ```ruby
 # app/actions/home/show.rb
@@ -141,7 +141,7 @@ We can find this action in our `app` directory at `app/actions/home/show.rb`:
 module Bookshelf
   module Actions
     module Home
-      class Show < Bookshelf::Action
+      class Index < Bookshelf::Action
         def handle(request, response)
         end
       end
@@ -170,7 +170,7 @@ For now, let's adjust our home action to return our desired "Welcome to Bookshel
 module Bookshelf
   module Actions
     module Home
-      class Show < Bookshelf::Action
+      class Index < Bookshelf::Action
         def handle(request, response)
           response.body = "Welcome to Bookshelf"
         end
@@ -223,7 +223,7 @@ If you run this test, you'll see that it fails because our app currently returns
 Let's fix that by generating an action for a books index:
 
 ```shell
-$ bundle exec hanami generate action books.index --skip-view
+$ bundle exec hanami generate action books.index --skip-view --skip-tests
 ```
 
 In addition to generating an action at `app/actions/books/index.rb`, the generator has also added a route in `config/routes.rb`:
@@ -602,6 +602,8 @@ A helpful response revealing why parameter validation failed can also be rendere
 halt 422, {errors: request.params.errors}.to_json unless request.params.valid?
 ```
 
+We can also add a test to verify this:
+
 ```ruby
 # spec/requests/books/index/pagination_spec.rb
 
@@ -709,7 +711,7 @@ Finished in 0.05427 seconds (files took 0.88631 seconds to load)
 We can use Hanami's action generator to create both a route and an action. Run:
 
 ```shell
-$ bundle exec hanami generate action books.show --skip-view
+$ bundle exec hanami generate action books.show --skip-view --skip-tests
 ```
 
 If you inspect `config/routes.rb` you will see the generator has automatically added a new `get "/books/:id", to: "books.show"` route:
@@ -940,7 +942,7 @@ Executing this spec, we get the message `Method Not Allowed`, because there's no
 Hanami's action generator can add these for us:
 
 ```shell
-$ bundle exec hanami generate action books.create --skip-view
+$ bundle exec hanami generate action books.create --skip-view --skip-tests
 ```
 
 The app's routes now include the expected route - invoking the `books.create` action for `POST` requests to `/books`:
