@@ -5,7 +5,7 @@ order: 40
 
 Relations own the responsibility of querying your database. They encode what data exists in the table, how to coerce SQL types into Ruby types and vice-versa, and how this table relates to others.
 
-Relations are named in the **plural* form because they model a collection of data.
+Relations are named in the **plural** form because they model a collection of data.
 
 They are located in the relations directory of their respective Slice. So, for an App-level database config:
 
@@ -344,8 +344,8 @@ books.exclude { pages < 1000 }
 
 ### Selection
 
-In relational algebra, the definition of what columns you are collecting as part of the query is called the
-**projection**. ROM uses the `select` method to perform this operation, after the SQL operation of the same name.
+In relational algebra, the definition of what columns you are collecting as part of the query is called the **projection**.
+ROM uses the `select` method to perform this operation, named after the SQL operation of the same name.
 
 ```ruby
 books.select(:id, :title).first
