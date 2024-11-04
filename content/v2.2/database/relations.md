@@ -46,7 +46,7 @@ module Bookshelf
 end
 ```
 
-The first argument to `schema` is your table name. You can alias this within ROM using the `:as` keyword.
+The first argument to `schema` is your table name. You can alias this within ROM using the `as:` keyword.
 
 This should be your starting point in most cases, and you can usually leave it as-is.
 
@@ -76,7 +76,7 @@ books.by_pk(id).one
 
 The Types namespace available to Relations comes from `ROM::SQL::Types` and is built from [dry-types](https://dry-rb.org/gems/dry-types/).
 
-Normally, dry-types model a single type with optional coercion logic. However, SQL introduces a two-fold coercion due to the difference between SQL and Ruby types. When these types diverge, the first type argument is the SQL type to be written, and you pass a `:read` argument with the Ruby type.
+Normally, dry-types model a single type with optional coercion logic. However, SQL introduces a two-fold coercion due to the difference between SQL and Ruby types. When these types diverge, the first type argument is the SQL type to be written, and you pass a `read:` argument with the Ruby type.
 
 With more complex DB types like JSONB, you may want to define a type constant to encapsulate the necessary transformation rules. This is particularly useful when you want to instantiate a value object.
 
@@ -197,7 +197,7 @@ end
 
 {{% many-to-many %}}
 
-Many-to-many associations are established with `has_many` with the `:through` option.
+Many-to-many associations are established with `has_many` with the `through:` option.
 
 ```ruby
 module Bookshelf
@@ -239,7 +239,7 @@ end
 
 ### Aliasing
 
-If you don't wish to use the table name as your relation name, aliasing the relation with `:as` is simple:
+If you don't wish to use the table name as your relation name, aliasing the relation with `as:` is simple:
 
 ```ruby
 module Bookshelf
@@ -435,7 +435,7 @@ But if you need complex type coercions, use ROM's schema system.
 
 ### Case Expressions
 
-Case branches are defined as Hash tuples, with an `:else` keyword covering the default case.
+Case branches are defined as Hash tuples, with an `else:` keyword covering the default case.
 
 ```ruby
 books.select {[
