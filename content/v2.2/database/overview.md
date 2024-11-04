@@ -82,9 +82,9 @@ class Users < Hanami::DB::Relation
 end
 ```
 
-The dataset can be thought of as the current state of the query before it happens; adding query conditions builds up the state of this dataset until you initiate the query.
+The dataset can be thought of as the default state of the query; adding query conditions builds up the query from there.
 
-The output of Dataset queries are plain Ruby hashes, which are consumed by a Repository.
+The output of Dataset queries are plain Ruby hashes, which are consumed by a Repository (and automatically converted to Structs there).
 
 For more on Datasets, see [the relations guide]({{% ref "relations.md#dataset" %}}).
 
