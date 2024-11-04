@@ -313,9 +313,10 @@ books.where(publication_date: Date.new(2024, 11, 5))
 books.where { publication_date.is(Date.new(2024, 11, 5)) }
 ```
 
-What is the purpose of having two different solutions to this problem? It's an 80/20 Rule situation: in most cases, a
-simple interface to match values is sufficient. But for the complicated scenarios, a more complex interface is very nice
-to have, event better when this escape-hatch doesn't complicate the simpler scenarios.
+What is the purpose of having two different solutions to this problem?
+In most cases, a simple interface to match values is sufficient.
+But for more complicated scenarios, a more powerful interface is necessary.
+(This helps avoid dropping down to SQL strings to query your data.)
 
 Instead of matching a date exactly, what if we wanted to match just the year part:
 
