@@ -103,7 +103,7 @@ end
 ```
 
 
-Now, the requirement is that you move to usernames as the principal identity. Without a Repository, every place in your codebase that queries a User would need to accommodate this change. But here, we can do:
+Let's say the requirement has changed, to use usernames as the principal identity instead. Without a Repository, every place in your codebase that queries a User would need to accommodate this change. But here, we can do:
 
 ```ruby
 class UserRepo < Hanami::DB::Repository
