@@ -70,7 +70,7 @@ For more on associations, see [the relations guide]({{% ref "relations.md#associ
 
 ## Datasets
 
-Datasets define how the underlying data is fetched by default. ROM defaults to selecting all attributes in the schema, but this is trivial to override.
+Datasets define how the underlying data is fetched by default. ROM defaults to selecting all attributes in the schema, but this is simple to override.
 
 ```ruby
 class Users < Hanami::DB::Relation

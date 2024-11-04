@@ -270,7 +270,7 @@ use-cases and want to separate them.
 ### Custom Foreign Keys
 
 Integer-based primary keys are the normal case, but you will sometimes want to work with other types. This is supported
-by ROM's `ForeignKey` type. `Integer` is the default, but this can trivially be overwritten:
+by ROM's `ForeignKey` type. `Integer` is the default, but this can be overwritten:
 
 ```ruby
 module Bookshelf
