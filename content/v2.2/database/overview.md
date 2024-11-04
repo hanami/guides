@@ -137,7 +137,7 @@ module Main
 end
 ```
 
-But you don’t need to define every struct ahead of time, only to extend its functionality. Structs will be generated on-demand in your slice’s `Structs` namespace.
+But you don’t need to define every struct ahead of time, only to extend its functionality. If you don't define a Struct class, Structs will be generated on-demand in the appropriate namespace.
 
 A Struct is not a permanent abstraction of a piece of data: it is a momentary projection of the data you requested. This means that instead of a User model that fills every role you need of a user, you could project user data as a Credential for authentication, a Role for authorization, a Visitor for displaying their identity on the page. Every projection can serve a specific purpose, and contain exactly the information you need and nothing more.
 
