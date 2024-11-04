@@ -310,7 +310,7 @@ These queries are equivalent:
 
 ```ruby
 books.where(publication_date: Date.new(2024, 11, 5))
-books.where { publication_date =~ Date.new(2024, 11, 5) }
+books.where { publication_date.is(Date.new(2024, 11, 5)) }
 ```
 
 What is the purpose of having two different solutions to this problem? It's an 80/20 Rule situation: in most cases, a
@@ -485,7 +485,7 @@ end
 You can always use the `unfiltered` method to get back to a blank slate:
 
 ```
-app[:relations].books.unfiltered.exclude(archived_at: nil)
+books.unfiltered.exclude(archived_at: nil)
 ```
 
 ## Scopes
@@ -502,20 +502,20 @@ method returns a new version of the Relation class.
 By default, every schema with a primary key defined gets the `by_pk` scope:
 
 ```ruby
-app[:relations].books.by_pk(1).one
+books.by_pk(1).one
 # => { id: 1, title: "To Kill a Mockingbird", publication_date: #<Date 1960-07-11> }
 ```
 
 This is equivalent to writing:
 
 ```ruby
-app[:relations].books.where(id: 1).one
+books.where(id: 1).one
 ```
 
 or simply:
 
 ```ruby
-app[:relations].books.fetch(1)
+books.fetch(1)
 ```
 
 <p class="notice">
@@ -541,6 +541,6 @@ end
 It is now present on the relation objects:
 
 ```ruby
-app[:relations].books.recent
+books.recent
 # => SELECT id, title, publication_date FROM books WHERE publication_date > '2020-01-01'
 ```
