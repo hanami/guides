@@ -30,7 +30,7 @@ All registered relations for the slice are available under the **relations** nam
 - `relations.languages`
 - `relations.publishers`
 
-Although you can inject these relations into your business objects, you will seldom need to do this because Hanami Repositories will already have access to all of them.
+Although you can inject these relations into your business objects, you will seldom need to do this because Hanami Repos will already have access to all of them.
 
 ## Schema
 
