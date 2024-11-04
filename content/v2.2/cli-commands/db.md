@@ -1,6 +1,6 @@
 ---
-title: Routes
-order: 110
+title: DB
+order: 80
 ---
 
 ## hanami db
