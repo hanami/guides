@@ -121,7 +121,7 @@ As this error suggests, we need to create the home show action the route is expe
 Hanami provides an action generator we can use to create this action. Running this command will create the home show action:
 
 ```shell
-$ bundle exec hanami generate action home.index --skip-route
+$ bundle exec hanami generate action home.index --skip-route --skip-tests
 ```
 
 We can find this action in our `app` directory at `app/actions/home/index.rb`:
@@ -261,7 +261,7 @@ Finished in 0.09789 seconds (files took 0.57724 seconds to load)
 Let's fix that by generating an action for a books index:
 
 ```shell
-$ bundle exec hanami generate action books.index
+$ bundle exec hanami generate action books.index --skip-tests
 ```
 
 In addition to generating an action at `app/actions/books/index.rb` and a view at `app/views/books/index.rb`, the generator has also added a route in `config/routes.rb`:
@@ -648,7 +648,7 @@ Failures:
 We can use Hanami's action generator to create both a route and an action. Run:
 
 ```shell
-$ bundle exec hanami generate action books.show
+$ bundle exec hanami generate action books.show --skip-tests
 ```
 
 If you inspect `config/routes.rb` you will see the generator has automatically added a new `get "/books/:id", to: "books.show"` route:
@@ -897,13 +897,13 @@ Running this spec, we see failures due to the title field being missing. This is
 Hanami's action generator can take care of this for us:
 
 ```shell
-$ bundle exec hanami generate action books.new
+$ bundle exec hanami generate action books.new --skip-tests
 ```
 
 Let's also generate a matching create action:
 
 ```shell
-$ bundle exec hanami generate action books.create
+$ bundle exec hanami generate action books.create --skip-tests
 ```
 
 The app's routes now include the expected routes - invoking the `books.new` action for GET requests to `/books/new`, and the `books.create` action for `POST` requests to `/books`:
