@@ -1,6 +1,9 @@
 ---
 title: "Getting Started"
 order: 10
+aliases:
+  - "/getting-started"
+  - "/introduction/getting-started"
 ---
 
 <p id="getting-started-lead" class="lead">
