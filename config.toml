@@ -1,6 +1,6 @@
 baseURL = "https://guides.hanamirb.org/"
 title = "Hanami Guides"
-copyright = "All rights reserved - 2022"
+copyright = "All rights reserved - 2024"
 languageCode = "en-us"
 theme = "hanami"
 googleAnalytics = "UA-47369640-3"
