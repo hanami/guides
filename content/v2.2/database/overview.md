@@ -3,7 +3,7 @@ title: Overview
 order: 10
 ---
 
-Hanami’s persistence layer is based on the Ruby Object Mapper (ROM) project. ROM is a radically different approach to persistence than you may be familiar with. Don’t let that scare you, because all the component parts of ROM are designed to provide clear separation of responsibilities. The hardest part is shifting your perspective to think in a new paradigm.
+Hanami’s persistence layer is based on the [Ruby Object Mapper (ROM)](https://rom-rb.org/) project. ROM may be a radically different approach to persistence than what you're familiar with, but don’t let that scare you. ROM is designed to provide clear separation of responsibilities. The hardest part is shifting your perspective to think in a new paradigm.
 
 <blockquote cite="https://rom-rb.org/learn/" class="quote">
 Above all else ROM favors:
@@ -70,7 +70,7 @@ For more on associations, see [the relations guide]({{% ref "relations.md#associ
 
 ## Datasets
 
-Datasets define how the underlying data is fetched by default. ROM defaults to selecting all attributes in the schema, but this is trivial to override.
+Datasets define how the underlying data is fetched by default. ROM defaults to selecting all attributes in the schema, but this is simple to override.
 
 ```ruby
 class Users < Hanami::DB::Relation
@@ -82,9 +82,9 @@ class Users < Hanami::DB::Relation
 end
 ```
 
-The dataset can be thought of as the current state of the query before it happens; adding query conditions builds up the state of this dataset until you initiate the query.
+The dataset can be thought of as the default state of the query; adding query conditions builds up the query from there.
 
-The output of Dataset queries are plain Ruby hashes, which are consumed by a Repository.
+The output of Dataset queries are plain Ruby hashes, which are consumed by a Repository (and automatically converted to Structs there).
 
 For more on Datasets, see [the relations guide]({{% ref "relations.md#dataset" %}}).
 
@@ -103,7 +103,7 @@ end
 ```
 
 
-Now, the requirement is that you move to usernames as the principal identity. Without a Repository, every place in your codebase that queries a User would need to accommodate this change. But here, we can do:
+Let's say the requirement has changed, to use usernames as the principal identity instead. Without a Repository, every place in your codebase that queries a User would need to accommodate this change. But here, we can do:
 
 ```ruby
 class UserRepo < Hanami::DB::Repository
@@ -137,9 +137,8 @@ module Main
 end
 ```
 
-But you don’t need to define every struct ahead of time, only to extend its functionality. Structs will be generated on-demand in your slice’s `Structs` namespace.
+But you don’t need to define every struct ahead of time, only to extend its functionality. If you don't define a Struct class, Structs will be generated on-demand in the appropriate namespace.
 
-A Struct is not a permanent abstraction of a piece of data: it is a momentary projection of the data you requested. This means that instead of a User model that fills every role you need of a user, you could project user data as a Credential for authentication, a Role for authorization, a Visitor for displaying their identity on the page. Every projection can serve a specific purpose, and contain exactly the information you need and nothing more.
+A Struct is not a permanent abstraction of a piece of data: it is a momentary projection of the data you requested. This means that instead of a `User` model that fills every role you need of a user, you could project user data as a `Credential` for authentication, a `Role` for authorization, a `Visitor` for displaying their identity on the page. Every projection can serve a specific purpose, and contain exactly the information you need and nothing more.
 
 More importantly, the form your structs take in the application layer can change independently of the persistence layer. Your database tables can change without impacting the structs; the application structs can change without impacting the database. All you have to do is manage the changing relationships to produce the same output.
-

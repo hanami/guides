@@ -5,7 +5,7 @@ order: 40
 
 Relations own the responsibility of querying your database. They encode what data exists in the table, how to coerce SQL types into Ruby types and vice-versa, and how this table relates to others.
 
-Relations are named in the **plural* form because they model a collection of data.
+Relations are named in the **plural** form because they model a collection of data.
 
 They are located in the relations directory of their respective Slice. So, for an App-level database config:
 
@@ -20,7 +20,7 @@ end
 ```
 
 <p class="convention">
-  Alternately, if there were located in the Main slice it would be in <strong>slices/main/relations</strong>
+  Alternately, if there were located in a Main slice it would be in <strong>slices/main/relations</strong>
 </p>
 
 All registered relations for the slice are available under the **relations** namespace. For instance, if we have `books`, `authors`, `publishers`, and `languages` as relations, we can expect the following keys:
@@ -30,7 +30,7 @@ All registered relations for the slice are available under the **relations** nam
 - `relations.languages`
 - `relations.publishers`
 
-Although you can inject these relations into your business objects, you will seldom need to do this because Hanami Repositories will already have access to all of them.
+Although you can inject these relations into your business objects, you will seldom need to do this because Hanami Repos will already have access to all of them.
 
 ## Schema
 
@@ -46,7 +46,7 @@ module Bookshelf
 end
 ```
 
-The first argument to `schema` is your table name. You can alias this within ROM using the `:as` keyword.
+The first argument to `schema` is your table name. You can alias this within ROM using the `as:` keyword.
 
 This should be your starting point in most cases, and you can usually leave it as-is.
 
@@ -76,7 +76,7 @@ books.by_pk(id).one
 
 The Types namespace available to Relations comes from `ROM::SQL::Types` and is built from [dry-types](https://dry-rb.org/gems/dry-types/).
 
-Normally, dry-types model a single type with optional coercion logic. However, SQL introduces a two-fold coercion due to the difference between SQL and Ruby types. When these types diverge, the first type argument is the SQL type to be written, and you pass a `:read` argument with the Ruby type.
+Normally, dry-types model a single type with optional coercion logic. However, SQL introduces a two-fold coercion due to the difference between SQL and Ruby types. When these types diverge, the first type argument is the SQL type to be written, and you pass a `read:` argument with the Ruby type.
 
 With more complex DB types like JSONB, you may want to define a type constant to encapsulate the necessary transformation rules. This is particularly useful when you want to instantiate a value object.
 
@@ -197,7 +197,7 @@ end
 
 {{% many-to-many %}}
 
-Many-to-many associations are established with `has_many` with the `:through` option.
+Many-to-many associations are established with `has_many` with the `through:` option.
 
 ```ruby
 module Bookshelf
@@ -239,7 +239,7 @@ end
 
 ### Aliasing
 
-If you don't wish to use the table name as your relation name, aliasing the relation with `:as` is simple:
+If you don't wish to use the table name as your relation name, aliasing the relation with `as:` is simple:
 
 ```ruby
 module Bookshelf
@@ -270,7 +270,7 @@ use-cases and want to separate them.
 ### Custom Foreign Keys
 
 Integer-based primary keys are the normal case, but you will sometimes want to work with other types. This is supported
-by ROM's `ForeignKey` type. `Integer` is the default, but this can trivially be overwritten:
+by ROM's `ForeignKey` type. `Integer` is the default, but this can be overwritten:
 
 ```ruby
 module Bookshelf
@@ -313,9 +313,10 @@ books.where(publication_date: Date.new(2024, 11, 5))
 books.where { publication_date.is(Date.new(2024, 11, 5)) }
 ```
 
-What is the purpose of having two different solutions to this problem? It's an 80/20 Rule situation: in most cases, a
-simple interface to match values is sufficient. But for the complicated scenarios, a more complex interface is very nice
-to have, event better when this escape-hatch doesn't complicate the simpler scenarios.
+What is the purpose of having two different solutions to this problem?
+In most cases, a simple interface to match values is sufficient.
+But for more complicated scenarios, a more powerful interface is necessary.
+(This helps avoid dropping down to SQL strings to query your data.)
 
 Instead of matching a date exactly, what if we wanted to match just the year part:
 
@@ -343,8 +344,8 @@ books.exclude { pages < 1000 }
 
 ### Selection
 
-In relational algebra, the definition of what columns you are collecting as part of the query is called the
-**projection**. ROM uses the `select` method to perform this operation, after the SQL operation of the same name.
+In relational algebra, the definition of what columns you are collecting as part of the query is called the **projection**.
+ROM uses the `select` method to perform this operation, named after the SQL operation of the same name.
 
 ```ruby
 books.select(:id, :title).first
@@ -435,7 +436,7 @@ But if you need complex type coercions, use ROM's schema system.
 
 ### Case Expressions
 
-Case branches are defined as Hash tuples, with an `:else` keyword covering the default case.
+Case branches are defined as Hash tuples, with an `else:` keyword covering the default case.
 
 ```ruby
 books.select {[
