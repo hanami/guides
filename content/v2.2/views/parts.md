@@ -82,7 +82,7 @@ For all the `as:` structures above, you may also provide concrete part classes i
 
 ## Accessing the value
 
-When using a part, you can call any methods that belond to the decorated value, and the part will delegate those methods to the value (via `#method_missing`). This means the part should "quack" just like the value that it wraps.
+When using a part, you can call any methods that belong to the decorated value, and the part will delegate those methods to the value (via `#method_missing`). This means the part should "quack" just like the value that it wraps.
 
 For example, from a template:
 
