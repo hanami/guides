@@ -97,7 +97,7 @@ Because Relation queries are highly dependent on the shape of the persistence la
 Consider the case of a users table that originally used emails as the identity of the user.
 
 ```ruby
-class UserRepo < Hanami::DB::Repository
+class UserRepo < Hanami::DB::Repo
   def find(email) = users.where(email:).one
 end
 ```
@@ -106,7 +106,7 @@ end
 Let's say the requirement has changed, to use usernames as the principal identity instead. Without a Repository, every place in your codebase that queries a User would need to accommodate this change. But here, we can do:
 
 ```ruby
-class UserRepo < Hanami::DB::Repository
+class UserRepo < Hanami::DB::Repo
   def find(username) = users.where(username:).one
 end
 ```
