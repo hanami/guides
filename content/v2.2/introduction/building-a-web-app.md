@@ -754,7 +754,7 @@ Failures:
 2 examples, 1 failure
 ```
 
-This is because in our repo, we used the relation's `#one` method to return out book, which will return `nil` if there's no book with the requisite ID, leading to this "undefined method on NilClass" error from the template.
+This is because in our repo, we used the relation's `#one` method to return our book, which will return `nil` if there's no book with the requisite ID, leading to this "undefined method on NilClass" error from the template.
 
 However, in addition to `#one`, relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
 
