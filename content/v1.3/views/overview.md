@@ -1,8 +1,6 @@
 ---
 title: Overview
 order: 10
-aliases:
-  - "/views/overview"
 ---
 
 A view is an object that's responsible for rendering a template.
