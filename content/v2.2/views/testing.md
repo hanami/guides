@@ -1,6 +1,8 @@
 ---
 title: Testing
 order: 101
+aliases:
+  - "/views/testing"
 ---
 
 Views in Hanami are designed to encourage easier testing of your views, with each aspect of views designed to support direct unit testing. This means you can test your views at whatever level of granularity makes sense for you.

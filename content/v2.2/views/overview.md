@@ -1,6 +1,8 @@
 ---
 title: Overview
 order: 10
+aliases:
+  - "/views/overview"
 ---
 
 Hanami provides a complete view system for rendering HTML, JSON and other formats.
