@@ -100,3 +100,46 @@ config.actions.format :json
 ```
 
 See the [actions guide](/v2.2/actions/overview) for more detail.
+
+### Content Security Policy (CSP)
+
+[CSP rules](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) declare which origins of content (such as scripts or fonts) browsers should be allowed to load on your website.
+
+Hanami is restrictive by default and permits only content served from the same origin as your website. Here, for example, is the default rule for scripts:
+
+```ruby
+config.actions.content_security_policy[:script_src]
+# => "'self'"
+```
+
+To additionally allow scripts from your CDN:
+
+```ruby
+# config/app.rb
+config.actions.content_security_policy[:script_src] += " https://my.cdn.test"
+
+# Resulting CSP rule: script-src 'self' https://my.cdn.test;
+```
+
+Custom CSP keys are supported to accommodate future CSP standards:
+
+```ruby
+# config/app.rb
+config.actions.content_security_policy['my-custom-setting'] = "'self'"
+
+# Resulting CSP rule: my-custom-setting 'self';
+```
+
+You can also delete a CSP key:
+
+```ruby
+# config/app.rb
+config.actions.content_security_policy.delete(:object_src)
+```
+
+Or disable CSP altogether:
+
+```ruby
+# config/app.rb
+config.actions.content_security_policy = false
+```
