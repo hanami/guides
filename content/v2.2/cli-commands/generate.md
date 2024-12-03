@@ -11,6 +11,7 @@ Hanami 2.1 provides a few generators:
 $ bundle exec hanami generate --help
 Commands:
   hanami generate action NAME
+  hanami generate migration NAME
   hanami generate part NAME
   hanami generate slice NAME
   hanami generate view NAME
@@ -29,6 +30,22 @@ Use the `--help` option to access all accepted options:
 ```shell
 $ bundle exec hanami generate action --help
 ```
+
+
+### hanami generate migration
+
+Generates a [migration](v2.2/database/migrations/):
+
+```shell
+$ bundle exec hanami generate migration create_posts
+```
+
+Use the `--help` option to access all accepted options:
+
+```shell
+$ bundle exec hanami generate migration --help
+```
+
 
 ### hanami generate part
 

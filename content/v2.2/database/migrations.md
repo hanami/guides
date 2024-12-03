@@ -16,6 +16,16 @@ config/db/migrate
 └── 20240717170318_add_published_at_to_posts.rb
 ```
 
+## Generating migrations
+
+Migrations can be generated via the Hanami CLI like so:
+
+```
+$ hanami generate migration create_posts
+```
+
+Which will create a timestamped migration with that looks roughly like this: `config/db/migrate/20240717170227_create_posts.rb`
+
 ## Direction
 
 Migration files are bi-directional, they define schema changes *forward* and *backward*, or `up` and `down` in Sequel’s syntax. This is important, in case your migration changes cause a problem you will want to roll them back as quickly as possible, and requiring a fresh migration to do this may take too much time.
