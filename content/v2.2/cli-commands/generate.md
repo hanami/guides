@@ -37,8 +37,15 @@ $ bundle exec hanami generate action --help
 Generates a [migration](v2.2/database/migrations/):
 
 ```shell
-$ bundle exec hanami generate create_posts
+$ bundle exec hanami generate migration create_posts
 ```
+
+Use the `--help` option to access all accepted options:
+
+```shell
+$ bundle exec hanami generate migration --help
+```
+
 
 ### hanami generate part
 
