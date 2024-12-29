@@ -224,7 +224,7 @@ Home
 
 As the next step in our bookshelf project, let's add the ability to show an index of all books in the system.
 
-First we'll create a request spec for listing books that expects a successful response, listing two books:
+First we'll create a feature spec for listing books that expects a successful response, listing two books:
 
 ```ruby
 # spec/features/books/index_spec.rb
