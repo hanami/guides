@@ -95,12 +95,22 @@ end
 
 You would define a `MAIN__DATABASE_URL` environment variable and a `slices/main/config/db` directory.
 
-Slice configuration is hierarchical, so if you have database configuration in the parent it will be inherited by all child slices by default. You can opt out of this via the import_from_parent setting.
+Slice configuration is hierarchical, so if you have database configuration in the parent it will be inherited by all child slices by default. You can opt out of this via the configure_from_parent setting.
 
 ```ruby
 module Main
   class Slice < Hanami::Slice
-    config.db.import_from_parent = false
+    config.db.configure_from_parent = false   # default: true
+  end
+end
+```
+
+If you prefer to define the relations for the entire app including all slices centrally in `app/relations/`, you can use the import_from_parent setting.
+
+```ruby
+module Main
+  class Slice < Hanami::Slice
+    config.db.import_from_parent = true   # default: false
   end
 end
 ```
