@@ -85,7 +85,7 @@ Asset compilation is the transformation of your source assets into optimized, pr
 
 esbuild streamlines this process by offering rapid compilation and efficient bundling of JavaScript and CSS files. This leads to faster build times and smaller file sizes, crucial for web app performance.
 
-When Hanami compiles your assets, it detects your JavaScript **entry points**, resolves their dependencies, applies code transformations, and funally outputs the resulting compiled files into `public/assets/`.
+When Hanami compiles your assets, it detects your JavaScript **entry points**, resolves their dependencies, applies code transformations, and finally outputs the resulting compiled files into `public/assets/`.
 
 ## Entry points
 
