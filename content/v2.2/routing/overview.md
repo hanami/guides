@@ -28,8 +28,8 @@ Each route in Hanami's router is comprised of:
 Endpoints are usually actions within your application, but they can also be a block, a [Rack](https://github.com/rack/rack) application, or anything that responds to `#call`.
 
 ```ruby
-get "/books", to: "books.index"  # Invokes the Bookshelf::Actions:Books::Index action
-post "/books", to: "books.create" # Invokes the Bookshelf::Actions:Books::Create action
+get "/books", to: "books.index"  # Invokes the Bookshelf::Actions::Books::Index action
+post "/books", to: "books.create" # Invokes the Bookshelf::Actions::Books::Create action
 get "/rack-app", to: RackApp.new
 get "/my-lambda", to: ->(env) { [200, {}, ["A Rack compatible response"]] }
 ```
@@ -189,7 +189,6 @@ When a route requires variables, they can be passed to the helper:
 Hanami.app["routes"].path(:book, id: 1)
 => "/books/1"
 ```
-
 
 To set a base URL for the `url` helper, configure it in `config/app.rb`:
 
