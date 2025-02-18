@@ -222,6 +222,44 @@ module Bookshelf
 end
 ```
 
+## Grouping
+
+To avoid conflicting source file names, you may at times wish to group actions by adding additional segments to the `to` endpoint:
+
+```ruby
+module Bookshelf
+  class Routes < Hanami::Routes
+    scope "sign-up" do
+      get "email", to: "sign_up.email.new"  # Invokes the Bookshelf::Actions:SignUp::Email::New action
+      get "phone", to: "sign_up.phone.new"  # Invokes the Bookshelf::Actions:SignUp::Phone::New action
+    end
+    scope "sign-in" do
+      get "email", to: "sign_in.email.new"  # Invokes the Bookshelf::Actions:SignIn::Email::New action
+      get "phone", to: "sign_in.phone.new"  # Invokes the Bookshelf::Actions:SignIn::Phone::New action
+    end
+  end
+end
+```
+
+This wraps the actions with additional `Email` and `Phone` modules and therefore organizes their source files accordingly:
+
+```
+app
+└── actions
+    ├── sign_in
+    |   ├── email
+    |   |   └── new.rb
+    |   └── phone
+    |       └── new.rb
+    └── sign_up
+        ├── email
+        |   └── new.rb
+        └── phone
+            └── new.rb
+```
+
+The same organization applies to the related default views and templates as well.
+
 ## Redirects
 
 Redirects can be added using `redirect`. If you have many redirects, you might consider using a Rack middleware.
