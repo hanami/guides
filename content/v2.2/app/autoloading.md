@@ -127,6 +127,13 @@ end
 | lib/bookshelf/slack_notifier.rb | Bookshelf::SlackNotifier                   |
 | lib/custom_redis/client.rb          | require "custom_redis/client"<br /><br />  CustomRedis::Client |
 
+## Autoloading in the config directory
+
+The config directory is a particular case because some of the code is hit too early in the boot process for Zeitwerk to provide autoloading. Most notably, you have to explicitly `require` in:
+
+* `config/app.rb`
+* `config/routes.rb`
+* `config/settings.rb`
 
 ## Requiring gems
 
