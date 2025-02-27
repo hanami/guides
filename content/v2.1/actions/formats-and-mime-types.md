@@ -188,12 +188,15 @@ If you need your actions to work with additional MIME types, you can configure t
 
 module Bookshelf
   class App < Hanami::App
+    # config.actions.formats.add :html
     config.actions.formats.add :custom, "application/custom"
   end
 end
 ```
 
 This will add the `:custom` format for the `"application/custom"` MIME type and also configure your actions to use this format.
+
+The **first format added will be the default format**, so you likely want to add `:html` or `:json` before any custom formats.
 
 You can also configure a format to map to multiple MIME types:
 
