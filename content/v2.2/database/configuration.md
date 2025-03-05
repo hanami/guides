@@ -3,7 +3,19 @@ title: Configuration
 order: 20
 ---
 
-As of 2.2 Hanami will automatically generate DB configuration for your application. You can suppress this with --skip-db
+As of 2.2 Hanami will automatically generate DB configuration for your application.
+
+By default, it uses SQLite as its default database. It also supports MySQL and PostgreSQL.
+
+You can specify which database you'd like to use when creating your app, with the --database option:
+
+```console
+hanami new bookshelf --database=sqlite # default
+hanami new bookshelf --database=postgres
+hanami new bookshelf --database=mysql
+```
+
+You can also suppress the DB layer entirely with --skip-db
 
 ```console
 hanami new bookshelf --skip-db
@@ -17,10 +29,15 @@ DB persistence is provided by a new provider called db. It is activated by the p
 
 The primary point of configuration for your database connection is the DATABASE_URL environment variable.
 
+You can set this in your `.env` file using the dotenv gem (which is only loaded for `development` and `test` environments).
+
+Note that the value you set is the **development** database URL, and the *test* database URL is **automatically derived** from it, ending with `_test`.
+
+For example:
 ```
+DATABASE_URL=sqlite://config/db/development.sqlite
 DATABASE_URL=postgres://localhost/bookshelf_development
 DATABASE_URL=mysql2://user:password@localhost/bookshelf_dev
-DATABASE_URL=sqlite://config/db/development.sqlite
 ```
 
 For more detail on the syntax of the URLs, see [ROM SQL: Connecting to a Database](https://rom-rb.org/learn/sql/3.3/#connecting-to-a-database)
