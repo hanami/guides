@@ -338,7 +338,7 @@ module Bookshelf
 end
 ```
 
-Note that the default value for `no_auto_register_paths` is `["db", "relations", "structs", "entities"]`,
+Note that the default value for `no_auto_register_paths` is `["db", "entities", "relations", "structs"]`,
 so you do not need to specify those. Also, be sure to append to that list.
 
 These apply for the root of the application, as well within any slices.
