@@ -565,7 +565,7 @@ And in the repo, we can use these to control the pagination:
 
 module Bookshelf
   module Repos
-    class BookRepo < Bookshelf::Repo
+    class BookRepo < Bookshelf::DB::Repo
       def all_by_title(page:, per_page:)
         books
           .order(books[:title].asc)
@@ -690,7 +690,7 @@ To fetch a single book from our database, we can add a new method to our book re
 
 module Bookshelf
   module Repos
-    class BookRepo < Bookshelf::Repo
+    class BookRepo < Bookshelf::DB::Repo
       def get(id)
         books.by_pk(id).one
       end
@@ -1055,7 +1055,7 @@ To complete our create action, we can add a method to our book repo to create ne
 
 module Bookshelf
   module Repos
-    class BookRepo < Bookshelf::Repo
+    class BookRepo < Bookshelf::DB::Repo
       def create(attributes)
         books.changeset(:create, attributes).commit
       end

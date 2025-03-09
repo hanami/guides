@@ -735,7 +735,7 @@ For the action to fetch a single book from our database, we can add a new method
 
 module Bookshelf
   module Repos
-    class BookRepo < Bookshelf::Repo
+    class BookRepo < Bookshelf::DB::Repo
       def get(id)
         books.by_pk(id).one
       end
@@ -998,7 +998,7 @@ Before we can update our action, we must first add a method to our book repo to 
 
 module Bookshelf
   module Repos
-    class BookRepo < Bookshelf::Repo
+    class BookRepo < Bookshelf::DB::Repo
       def create(attributes)
         books.changeset(:create, attributes).commit
       end
