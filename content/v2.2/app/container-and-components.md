@@ -341,7 +341,7 @@ end
 Note that the default value for `no_auto_register_paths` is `["db", "entities", "relations", "structs"]`,
 so you do not need to specify those. Also, be sure to append to that list.
 
-These apply for the root of the application, as well within any slices.
+These apply for the root of the application, as well within any [slices](/v2.2/app/slices)
 Additionally, the `config/` directory within a slice is always excluded from auto-registration.
 
 A third alternative for classes you do not want to be registered in your container is to place them in the `lib` directory at the root of your project.
