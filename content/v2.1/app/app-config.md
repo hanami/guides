@@ -62,7 +62,7 @@ Sets the keys for the app components to be automatically imported into each slic
 
 ### `no_auto_register_paths`
 
-Sets an array of paths to be excluded from component auto-registration. Defaults to `["entities"]`. Note that files in `lib/` are always excluded from auto-registration, too. These paths are all relative to the root of the app or any slice. See the [containers and components guide](/v2.1/app/container-and-components) for more detail.
+Sets an array of paths to be excluded from component auto-registration. Defaults to `["entities"]`. Note that files in `lib/` are always excluded from auto-registration, too. These paths are all relative to the root of the app or any [slice](/v2.1/app/slices). See the [containers and components guide](/v2.1/app/container-and-components) for more detail.
 
 ## Router
 
