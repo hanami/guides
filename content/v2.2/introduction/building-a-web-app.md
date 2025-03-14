@@ -722,7 +722,7 @@ end
 Lastly, we can populate the template.
 
 ```sql
-<!-- app/views/books/show.html.erb -->
+<!-- app/templates/books/show.html.erb -->
 
 <h1><%= book.title %></h1>
 
