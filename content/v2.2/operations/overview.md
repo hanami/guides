@@ -129,7 +129,7 @@ module Bookshelf
       include Deps["books.create"]
 
       def handle(request, response)
-        case create.call(params[:book])
+        case create.call(request.params[:book])
         in Success(book)
           response.redirect_to routes.path(:book, book.id)
         in Failure[:invalid, validation]
