@@ -47,7 +47,7 @@ If you need to install or upgrade Ruby, follow the instructions on [ruby-lang.or
 In order to create a Hanami app, first install the hanami gem:
 
 ```shell
-$ gem install hanami
+$ gem install hanami --pre
 ```
 
 ### Using the app generator
