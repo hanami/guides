@@ -37,7 +37,6 @@ module Bookshelf
         private
 
         def validate_params(request, response)
-          params = request.params
           halt 422, request.params.errors.to_h unless request.params.valid?
         end
       end
