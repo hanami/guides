@@ -97,7 +97,7 @@ To learn more about operations, see [the dry-operation documentation](https://dr
 Operations provide a `#transaction` block method that integrates with the databases in your app. Any step failure inside the transaction block will roll back the transaction as well as short circuiting the operation.
 
 ```ruby
-def call
+def call(attrs)
   transaction do
     attrs = step validate(attrs)
     book = step create(attrs)
