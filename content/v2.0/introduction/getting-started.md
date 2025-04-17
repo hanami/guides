@@ -120,6 +120,7 @@ We'll see this structure in more detail as this guide progresses.
 For now let's get our new application running. In the bookshelf directory, run:
 
 ```shell
+$ bundle install
 $ hanami server
 ```
 
