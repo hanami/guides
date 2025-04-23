@@ -105,7 +105,7 @@ Blocks are convenient, but let's adjust our route to invoke an action instead:
 
 module Bookshelf
   class Routes < Hanami::Routes
-    root to: "home.show"
+    root to: "home.index"
   end
 end
 ```
@@ -121,32 +121,32 @@ Failures:
      Failure/Error: get "/"
 
      Hanami::Routes::MissingActionError:
-       Could not find action with key "actions.home.show" in Bookshelf::App
+       Could not find action with key "actions.home.index" in Bookshelf::App
 
-       To fix this, define the action class Bookshelf::Actions::Home::Show in app/actions/home/show.rb
+       To fix this, define the action class Bookshelf::Actions::Home::Index in app/actions/home/index.rb
      # ./spec/requests/root_spec.rb:5:in `block (2 levels) in <top (required)>'
 
 Finished in 0.01871 seconds (files took 0.62516 seconds to load)
 1 example, 1 failure
 ```
 
-As this error suggests, we need to create the home show action the route is expecting to be able to call.
+As this error suggests, we need to create the home index action the route is expecting to be able to call.
 
-Hanami provides an action generator we can use to create this action. Running this command will create the home show action:
+Hanami provides an action generator we can use to create this action. Running this command will create the home index action:
 
 ```shell
-$ bundle exec hanami generate action home.show --skip-view
+$ bundle exec hanami generate action home.index --skip-view
 ```
 
-We can find this action in our `app` directory at `app/actions/home/show.rb`:
+We can find this action in our `app` directory at `app/actions/home/index.rb`:
 
 ```ruby
-# app/actions/home/show.rb
+# app/actions/home/index.rb
 
 module Bookshelf
   module Actions
     module Home
-      class Show < Bookshelf::Action
+      class Index < Bookshelf::Action
         def handle(*, response)
           response.body = self.class.name
         end
@@ -166,19 +166,19 @@ def handle(request, response)
 end
 ```
 
-In the automatically generated home show action above, `*` is used for the `request` argument because the action does not currently use the request.
+In the automatically generated home index action above, `*` is used for the `request` argument because the action does not currently use the request.
 
 For more details on actions, see the [Actions guide](/v2.1/actions/overview/).
 
 For now, let's adjust our home action to return our desired "Welcome to Bookshelf" message.
 
 ```ruby
-# app/actions/home/show.rb
+# app/actions/home/index.rb
 
 module Bookshelf
   module Actions
     module Home
-      class Show < Bookshelf::Action
+      class Index < Bookshelf::Action
         def handle(*, response)
           response.body = "Welcome to Bookshelf"
         end
@@ -769,6 +769,8 @@ A helpful response revealing why parameter validation failed can also be rendere
 ```ruby
 halt 422, {errors: request.params.errors}.to_json unless request.params.valid?
 ```
+
+We can also add a test to verify this:
 
 ```ruby
 # spec/requests/books/index/pagination_spec.rb
