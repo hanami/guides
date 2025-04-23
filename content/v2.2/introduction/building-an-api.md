@@ -125,9 +125,9 @@ Finished in 0.01871 seconds (files took 0.62516 seconds to load)
 1 example, 1 failure
 ```
 
-As this error suggests, we need to create the home show action the route is expecting to be able to call.
+As this error suggests, we need to create the home index action the route is expecting to be able to call.
 
-Hanami provides an action generator we can use to create this action. Running this command will create the home show action:
+Hanami provides an action generator we can use to create this action. Running this command will create the home index action:
 
 ```shell
 $ bundle exec hanami generate action home.index --skip-view --skip-route --skip-tests
@@ -136,7 +136,7 @@ $ bundle exec hanami generate action home.index --skip-view --skip-route --skip-
 We can find this action in our `app` directory at `app/actions/home/index.rb`:
 
 ```ruby
-# app/actions/home/show.rb
+# app/actions/home/index.rb
 
 module Bookshelf
   module Actions
