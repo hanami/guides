@@ -116,7 +116,7 @@ Failures:
 1 example, 1 failure
 ```
 
-As this error suggests, we need to create the home show action the route is expecting to be able to call.
+As this error suggests, we need to create the home index action the route is expecting to be able to call.
 
 Hanami provides an action generator we can use to create this action. Running this command will create the home show action:
 
