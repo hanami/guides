@@ -911,7 +911,7 @@ The app's routes now include the expected routes - invoking the `books.new` acti
 ```ruby
 module Bookshelf
   class Routes < Hanami::Routes
-    root to: "home.show"
+    root to: "home.index"
     get "/books", to: "books.index"
     get "/books/:id", to: "books.show"
     get "/books/new", to: "books.new"
@@ -925,7 +925,7 @@ Let's add some name aliases to these routes so we can easily refer to them later
 ```ruby
 module Bookshelf
   class Routes < Hanami::Routes
-    root to: "home.show"
+    root to: "home.index"
     get "/books", to: "books.index"
     get "/books/:id", to: "books.show", as: :show_book
     get "/books/new", to: "books.new"
