@@ -177,6 +177,10 @@ This content hash will change if and only if the content of any of the input fil
 
 Production assets are also [minified](https://esbuild.github.io/api/#minify) to reduce their size, and [source maps](https://esbuild.github.io/api/#sourcemap) are also generated.
 
+When run in production mode, Hanami by default will not serve the assets itself and instead expects the proxy server to be configured to serve these assets.
+
+If you are running your Hanami app in an environment like Docker and you want the assets to be served in production as well, you can set the `HANAMI_SERVE_ASSETS` environment variable to `true` to achieve this.
+
 ### In development
 
 When you run `hanami assets watch`, your assets are expected to be used in local development only.
