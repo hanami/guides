@@ -202,7 +202,7 @@ decorate :author, as: :person
 
 ## Memoizing methods
 
-A part object lives for the entirety of a single view rendering, so you can memoize expensive operations to ensure they only run once:
+A part object lives for the entirety of a single view rendering, so you can memoize expensive operations to ensure they only run once. `decorate` has a secondary function of memoizing:
 
 ```ruby
 class Book < Bookshelf::Views::Part
