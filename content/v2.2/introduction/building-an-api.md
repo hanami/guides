@@ -352,7 +352,7 @@ end
 With our books table ready to go, let's adapt our books index spec to expect an index of persisted books, including authors as well as titles:
 
 ```ruby
-RSpec.describe "GET /books", type: [:request, :db] do
+RSpec.describe "GET /books", :db, type: :request do
   let(:books) { Hanami.app["relations.books"] }
 
   before do
@@ -468,7 +468,7 @@ Let's add a request spec verifying pagination:
 ```ruby
 # spec/requests/books/index/pagination_spec.rb
 
-RSpec.describe "GET /books pagination", type: [:request, :db] do
+RSpec.describe "GET /books pagination", :db, type: :request do
   let(:books) { Hanami.app["relations.books"] }
 
   before do
@@ -638,7 +638,7 @@ Let's specify a `/books/:id` request that renders a book for a given ID, or retu
 ```ruby
 # spec/requests/books/show_spec.rb
 
-RSpec.describe "GET /books/:id", type: [:request, :db] do
+RSpec.describe "GET /books/:id", :db, type: :request do
   let(:books) { Hanami.app["relations.books"] }
 
   context "when a book matches the given ID" do
@@ -906,7 +906,7 @@ Here's a spec for POST requests to the `/books` path, where it's expected that o
 ```ruby
 # spec/requests/books/create_spec.rb
 
-RSpec.describe "POST /books", type: [:request, :db] do
+RSpec.describe "POST /books", :db, type: :request do
   let(:request_headers) do
     {"HTTP_ACCEPT" => "application/json", "CONTENT_TYPE" => "application/json"}
   end
