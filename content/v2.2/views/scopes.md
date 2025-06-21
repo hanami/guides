@@ -57,7 +57,7 @@ scope(:media_player, item: audio_file)
 
 When you build a scope, the associated class will be looked up based on the scope's name.
 
-For example, given the exposure named `:media_player`, the `Views::Scopes::MediaPlayer` class will be looked up within your app or slice.
+For example, given the scope named `:media_player`, the `Views::Scopes::MediaPlayer` class will be looked up within your app or slice.
 
 If you have no scope class matching an the scope's name, then a generic `Hanami::View::Scope` will be used.
 
