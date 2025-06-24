@@ -26,7 +26,7 @@ end
 
 ## Rack middleware
 
-Hanami mounts a thin default middleware stack. Additional middleware can be mounted either at application level, in the router, or for an individual action.
+Hanami mounts a thin default middleware stack. Additional middleware can be mounted either at application level or in the router.
 
 ### Inspecting the middleware stack
 
