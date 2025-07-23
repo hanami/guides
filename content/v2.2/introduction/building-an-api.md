@@ -1,6 +1,6 @@
 ---
 title: "Building an API"
-order: 30
+order: 40
 ---
 
 Now that we've [created our app](/v2.2/introduction/getting-started/), let's turn it into an API.
