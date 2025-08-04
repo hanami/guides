@@ -7,9 +7,23 @@ Hanami supports different environments based on a `HANAMI_ENV` environment varia
 
 Setting `HANAMI_ENV` allows your code to act differently, depending on the environment.
 
-If `HANAMI_ENV` is not set, Hanami will fallback to checking `RACK_ENV`. If neither variable is set, the environment defaults to `:development`.
+Setting Hanami env is separate from setting the web server environment. 
 
 By convention, Hanami expects `HANAMI_ENV` to be either `development`, `test`, or `production`.
+
+## Production deployments
+
+### Env variable and running the server
+When deploying your application to production, set the `HANAMI_ENV` environment variable to `production`.
+
+Current version of `hanami server` command only allows to run in development environment. For running hanami in production environment, please use the rack handler command directly command and its config, i.e. `config/puma.rb` and (when using Docker)
+
+```dockerfile
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+```
+
+### Logging
+In production, Hanami logs to standard out by default, using a structured JSON format with a log level of `:info` rather than `:debug`, which is used in development and test. See the [logger guide](/v2.2/logger/configuration/) for more detail.
 
 ## Environment helpers
 
@@ -98,9 +112,3 @@ end
 ```
 
 See the [app config guide](/v2.2//app/app-config/) for information on supported config options.
-
-## Production deployments
-
-When deploying your application to production, set the `HANAMI_ENV` environment variable to `production`.
-
-In production, Hanami logs to standard out by default, using a structured JSON format with a log level of `:info` rather than `:debug`, which is used in development and test. See the [logger guide](/v2.2/logger/configuration/) for more detail.
