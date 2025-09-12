@@ -22,6 +22,10 @@ Commands:
   hanami generate view NAME
 ```
 
+<p class="notice">
+  When generating inside a slice directory, you do not have to specify the --slice option. It will be inferred from the current working directory.
+</p>
+
 ### hanami generate action
 
 Generates an [action](/v2.3/actions/overview):
