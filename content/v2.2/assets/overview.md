@@ -85,7 +85,7 @@ Asset compilation is the transformation of your source assets into optimized, pr
 
 esbuild streamlines this process by offering rapid compilation and efficient bundling of JavaScript and CSS files. This leads to faster build times and smaller file sizes, crucial for web app performance.
 
-When Hanami compiles your assets, it detects your JavaScript **entry points**, resolves their dependencies, applies code transformations, and funally outputs the resulting compiled files into `public/assets/`.
+When Hanami compiles your assets, it detects your JavaScript **entry points**, resolves their dependencies, applies code transformations, and finally outputs the resulting compiled files into `public/assets/`.
 
 ## Entry points
 
@@ -176,6 +176,9 @@ This means the compiled asset file names include a [content hash suffix](https:/
 This content hash will change if and only if the content of any of the input files has changed. This means you can configure your web server to tell browsers to cache these asset files forever, because any changes in their content will result in a new file name, which browsers will download fresh.
 
 Production assets are also [minified](https://esbuild.github.io/api/#minify) to reduce their size, and [source maps](https://esbuild.github.io/api/#sourcemap) are also generated.
+
+In production mode, Hanami does not serve static assets by default. Instead, it expects a proxy server (like Nginx) to be configured to serve these assets.
+However, if you're running your Hanami app in an environment like Docker and want it to serve assets itself in production, you can set the `HANAMI_SERVE_ASSETS` environment variable to true.
 
 ### In development
 

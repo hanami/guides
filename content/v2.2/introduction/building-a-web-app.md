@@ -116,7 +116,7 @@ Failures:
 1 example, 1 failure
 ```
 
-As this error suggests, we need to create the home show action the route is expecting to be able to call.
+As this error suggests, we need to create the home index action the route is expecting to be able to call.
 
 Hanami provides an action generator we can use to create this action. Running this command will create the home show action:
 
@@ -224,7 +224,7 @@ Home
 
 As the next step in our bookshelf project, let's add the ability to show an index of all books in the system.
 
-First we'll create a request spec for listing books that expects a successful response, listing two books:
+First we'll create a feature spec for listing books that expects a successful response, listing two books:
 
 ```ruby
 # spec/features/books/index_spec.rb
@@ -364,7 +364,7 @@ $ bundle exec hanami generate relation books
 This creates the following file at `app/relations/books.rb`:
 
 ```ruby
-# lib/bookshelf/persistence/relations/books.rb
+# app/relations/books.rb
 
 module Bookshelf
   module Relations
@@ -565,7 +565,7 @@ And in the repo, we can use these to control the pagination:
 
 module Bookshelf
   module Repos
-    class BookRepo < Bookshelf::Repo
+    class BookRepo < Bookshelf::DB::Repo
       def all_by_title(page:, per_page:)
         books
           .order(books[:title].asc)
@@ -690,7 +690,7 @@ To fetch a single book from our database, we can add a new method to our book re
 
 module Bookshelf
   module Repos
-    class BookRepo < Bookshelf::Repo
+    class BookRepo < Bookshelf::DB::Repo
       def get(id)
         books.by_pk(id).one
       end
@@ -722,7 +722,7 @@ end
 Lastly, we can populate the template.
 
 ```sql
-<!-- app/views/books/show.html.erb -->
+<!-- app/templates/books/show.html.erb -->
 
 <h1><%= book.title %></h1>
 
@@ -911,7 +911,7 @@ The app's routes now include the expected routes - invoking the `books.new` acti
 ```ruby
 module Bookshelf
   class Routes < Hanami::Routes
-    root to: "home.show"
+    root to: "home.index"
     get "/books", to: "books.index"
     get "/books/:id", to: "books.show"
     get "/books/new", to: "books.new"
@@ -925,7 +925,7 @@ Let's add some name aliases to these routes so we can easily refer to them later
 ```ruby
 module Bookshelf
   class Routes < Hanami::Routes
-    root to: "home.show"
+    root to: "home.index"
     get "/books", to: "books.index"
     get "/books/:id", to: "books.show", as: :show_book
     get "/books/new", to: "books.new"
@@ -1055,7 +1055,7 @@ To complete our create action, we can add a method to our book repo to create ne
 
 module Bookshelf
   module Repos
-    class BookRepo < Bookshelf::Repo
+    class BookRepo < Bookshelf::DB::Repo
       def create(attributes)
         books.changeset(:create, attributes).commit
       end

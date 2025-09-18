@@ -105,7 +105,7 @@ module Bookshelf
         include Deps["repos.user_repo"]
 
         def handle(request, response)
-          user = user_repo.find(params[:id])
+          user = user_repo.find(request.params[:id])
 
           response.fresh last_modified: user.updated_at
 
@@ -146,7 +146,7 @@ module Bookshelf
         include Deps["user_repo"]
 
         def handle(request, response)
-          user = user_repo.find(params[:id])
+          user = user_repo.find(request.params[:id])
 
           response.fresh etag: "#{user.id}-#{user.updated_at}"
 

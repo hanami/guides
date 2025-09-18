@@ -23,7 +23,7 @@ aliases:
   In this guide we will set up our first Hanami project and build a simple bookshelf web application.
   We'll touch on all the major components of Hanami framework, all guided by tests.
   <br><br>
-  <strong>If you feel alone, or frustrated, don't give up, jump in our <a href="http://chat.hanamirb.org">chat</a> and ask for help.</strong>
+  <strong>If you feel alone, or frustrated, don't give up, jump in our <a href="http://discourse.hanamirb.org">forum</a> and ask for help.</strong>
   There will be someone more than happy to talk with you.
   <br><br>
   Enjoy,<br>
