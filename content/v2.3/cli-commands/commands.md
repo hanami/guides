@@ -28,7 +28,7 @@ $ bundle exec hanami --help
 Commands:
   hanami assets [SUBCOMMAND]
   hanami console                              # Start app console (REPL)
-    hanami db [SUBCOMMAND]
+  hanami db [SUBCOMMAND]
   hanami dev                                  # Start the application in development mode
   hanami generate [SUBCOMMAND]
   hanami install                              # Install Hanami third-party plugins
