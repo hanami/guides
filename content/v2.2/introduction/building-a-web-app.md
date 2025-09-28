@@ -942,17 +942,17 @@ To show a form for creating a new book, we don't need any special handling in ei
 <h1>New book</h1>
 
 <%= form_for :book, routes.path(:create_book) do |f| %>
-  <p>
+  <div>
     <%= f.label "Title", for: :title %>
     <%= f.text_field :title %>
-  </p>
-  <p>
+  </div>
+  <div>
     <%= f.label "Author", for: :author %>
     <%= f.text_field :author %>
-  </p>
-  <p>
+  </div>
+  <div>
     <%= f.submit "Create" %>
-  </p>
+  </div>
 <% end %>
 ```
 
