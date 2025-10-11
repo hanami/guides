@@ -43,6 +43,14 @@ $ ruby --version
 
 If you need to install or upgrade Ruby, follow the instructions on [ruby-lang.org](https://www.ruby-lang.org/en/documentation/installation/).
 
+You also need Node.js installed, for front end assets. To confirm this, check that `npm` is available:
+
+```shell
+$ npm --version
+```
+
+If you need to install or upgrade Node.js, follow the instructions on [nodejs.org](https://nodejs.org/en/download).
+
 ### Installing the gem
 
 In order to create a Hanami app, first install the hanami gem:
