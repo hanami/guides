@@ -159,7 +159,6 @@ module Bookshelf
 end
 ```
 
-
 ## Default character set
 
 The default character set for actions is `utf-8`. This is included in your response's `Content-Type` header:
