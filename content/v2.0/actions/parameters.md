@@ -337,6 +337,6 @@ end
 # config/app.rb
 
 class App < Hanami::App
-  config.middleware.use :body_parser, FooParser.new
+  config.middleware.use :body_parser, [:foo, FooParser.new]
 end
 ```
