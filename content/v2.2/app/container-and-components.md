@@ -324,7 +324,7 @@ end
 
 If you have a whole class of objects that shouldn't be placed in your container, you can configure your Hanami application to exclude an entire directory from auto registration by adjusting its `no_auto_register_paths` configuration.
 
-Here for example, the `app/structs` directory is excluded, meaning nothing in the `app/structs` directory will be registered with the container:
+Here for example, the `app/values` directory is excluded, meaning nothing in the `app/values` directory will be registered with the container:
 
 ```ruby
 # config/app.rb
@@ -333,10 +333,16 @@ require "hanami"
 
 module Bookshelf
   class App < Hanami::App
-    config.no_auto_register_paths << "structs"
+    config.no_auto_register_paths << "values"
   end
 end
 ```
+
+Note that the default value for `no_auto_register_paths` is `["db", "entities", "relations", "structs"]`,
+so you do not need to specify those. Also, be sure to append to that list.
+
+These apply for the root of the application, as well within any [slices](/v2.2/app/slices)
+Additionally, the `config/` directory within a slice is always excluded from auto-registration.
 
 A third alternative for classes you do not want to be registered in your container is to place them in the `lib` directory at the root of your project.
 
