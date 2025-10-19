@@ -32,6 +32,26 @@ In the above action, when `StandardError` is raised in the `#handle` method, a b
 
 <p><img src="/v2.3/actions/default-error-response.png" alt="Default error response"></p>
 
+## Using string class names
+
+As an alternative to using class constants you can specify the class name as a string. This can be useful when you want to handle exceptions from dependencies without having to `require` that dependency inside your action.
+
+```ruby
+module Bookshelf
+  module Actions
+    module Books
+      class Index < Bookshelf::Action
+        handle_exception "Stripe::CardError" => 400
+
+        def handle(request, response)
+          # ...
+        end
+      end
+    end
+  end
+end
+```
+
 
 ## Custom method handlers
 
