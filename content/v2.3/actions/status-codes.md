@@ -174,6 +174,10 @@ These values are derived from `Hanami::Http::Status::SYMBOLS`.
   </dd>
   <dt class="col-sm-1">422</dt>
   <dd class="col-sm-11">
+    <code>:unprocessable_content</code>
+  </dd>
+  <dt class="col-sm-1">422</dt>
+  <dd class="col-sm-11">
     <code>:unprocessable_entity</code>
   </dd>
   <dt class="col-sm-1">423</dt>
