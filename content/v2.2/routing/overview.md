@@ -41,6 +41,7 @@ $ bundle exec hanami generate action books.index
 $ bundle exec hanami generate action books.show
 $ bundle exec hanami generate action books.new
 $ bundle exec hanami generate action books.create
+$ bundle exec hanami generate action books.edit
 $ bundle exec hanami generate action books.update
 $ bundle exec hanami generate action books.destroy
 ```
@@ -54,6 +55,7 @@ module Bookshelf
     get "/books/:id", to: "books.show"
     get "/books/new", to: "books.new"
     post "/books", to: "books.create"
+    get "/books/:id/edit", to: "books.edit"
     patch "/books/:id", to: "books.update"
     delete "/books/:id", to: "books.destroy"
   end
@@ -225,7 +227,7 @@ end
 
 ## Redirects
 
-Redirects can be added using `redirect`. 
+Redirects can be added using `redirect`.
 
 ```ruby
 redirect "/old", to: "/new"
@@ -262,6 +264,7 @@ GET     /                             home                          as :root
 GET     /books                        books.index
 GET     /books/:id                    books.show
 GET     /books/new                    books.new
+GET     /books/:id/edit               books.edit
 POST    /books                        books.create
 PATCH   /books/:id                    books.update
 DELETE  /books/:id                    books.destroy
