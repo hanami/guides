@@ -1,6 +1,8 @@
 ---
 title: Context
 order: 60
+aliases:
+  - "/views/context"
 ---
 
 When each view is rendered, a single context object provides access to common facilities from across the app, making these available to every template, partial, part and scope in that rendering.
