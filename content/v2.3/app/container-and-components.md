@@ -392,7 +392,7 @@ Code that you place in other directories under `lib` needs to be explicitly requ
 | lib/my_redis/client.rb          | require "my_redis/client"<br /><br />  MyRedis::Client |
 
 
-## Container compontent loading
+## Container component loading
 
 Hanami applications support a **prepared** state and a **booted** state.
 
