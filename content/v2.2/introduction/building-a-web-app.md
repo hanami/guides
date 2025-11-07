@@ -278,7 +278,7 @@ end
 Let's update our view to provide the books to our template:
 
 ```ruby
-# app/templates/books/index.rb
+# app/views/books/index.rb
 
 module Bookshelf
   module Views
