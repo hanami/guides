@@ -323,7 +323,7 @@ If there is no suitable body parser for your format in Hanami, you can declare a
 ```ruby
 # lib/foo_parser.rb
 class FooParser
-  def mime_types
+  def self.mime_types
     ['application/foo']
   end
 
@@ -337,6 +337,6 @@ end
 # config/app.rb
 
 class App < Hanami::App
-  config.middleware.use :body_parser, FooParser.new
+  config.middleware.use :body_parser, [FooParser]
 end
 ```
