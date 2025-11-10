@@ -14,9 +14,20 @@ $ hanami new my_app # generates a new MyApp application in ./my_app
 
 On the application generation, Hanami performs gem bundling, NPM bundling, and general application setup.
 
+### Specifying a gem source
+
+Provide a `--gem-source` to specify the gem source for your app's `Gemfile`.
+
+```shell
+$ hanami new bookshelf --gem-source=gem.coop
+
+# Generates a Gemfile with:
+# source "https://gem.coop"
+```
+
 ### Using Hanami HEAD
 
-In case you're interested to debug a Hanami issue, you can generate an application that uses the HEAD version of Hanami, directly from the `main` branches of the GitHub repositories.
+If you're interested in testing the latest code or debugging an issue, you can generate an application that uses the HEAD version of Hanami, directly from the `main` branches of the GitHub repositories.
 
 ```shell
 $ hanami new bookshelf --head
