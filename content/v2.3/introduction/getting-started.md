@@ -72,16 +72,20 @@ Running this command has created a new `bookshelf` directory in our current loca
 
 ```shell
 $ cd bookshelf
-$ tree --gitignore .
+$ tree --gitignore --filesfirst .
 .
+├── config.ru
 ├── Gemfile
 ├── Gemfile.lock
 ├── Guardfile
+├── package.json
 ├── Procfile.dev
-├── README.md
 ├── Rakefile
+├── README.md
 ├── app
 │   ├── action.rb
+│   ├── operation.rb
+│   ├── view.rb
 │   ├── actions
 │   ├── assets
 │   │   ├── css
@@ -94,48 +98,51 @@ $ tree --gitignore .
 │   │   ├── relation.rb
 │   │   ├── repo.rb
 │   │   └── struct.rb
-│   ├── operation.rb
 │   ├── relations
 │   ├── repos
 │   ├── structs
 │   ├── templates
 │   │   └── layouts
 │   │       └── app.html.erb
-│   ├── view.rb
 │   └── views
+│       ├── context.rb
 │       └── helpers.rb
 ├── bin
-│   └── dev
+│   ├── dev
+│   ├── hanami
+│   ├── rake
+│   └── setup
 ├── config
 │   ├── app.rb
 │   ├── assets.js
-│   ├── db
-│   │   ├── migrate
-│   │   └── seeds.rb
 │   ├── puma.rb
 │   ├── routes.rb
-│   └── settings.rb
-├── config.ru
+│   ├── settings.rb
+│   └── db
+│       ├── seeds.rb
+│       └── migrate
+├── db
 ├── lib
 │   ├── bookshelf
 │   │   └── types.rb
 │   └── tasks
-├── package-lock.json
-├── package.json
+├── public
+│   ├── 404.html
+│   └── 500.html
 └── spec
+    ├── spec_helper.rb
     ├── requests
     │   └── root_spec.rb
-    ├── spec_helper.rb
     └── support
-        ├── db
-        │   └── cleaning.rb
         ├── db.rb
         ├── features.rb
         ├── operations.rb
         ├── requests.rb
-        └── rspec.rb
+        ├── rspec.rb
+        └── db
+            └── cleaning.rb
 
-26 directories, 36 files
+27 directories, 41 files
 ```
 
 Here's how these files and directories are used:
