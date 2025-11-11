@@ -303,7 +303,7 @@ Register that body parser directly and it will parse its own declared media type
 # config/app.rb
 
 class App < Hanami::App
-  config.middleware.use :body_parser, FooParser # Or FooParser.new
+  config.middleware.use :body_parser, FooParser
 end
 ```
 
