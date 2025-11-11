@@ -14,6 +14,10 @@ $ hanami new my_app # generates a new MyApp application in ./my_app
 
 On the application generation, Hanami performs gem bundling, NPM bundling, and general application setup.
 
+### Specify a database
+
+Provide `--database=DATABASE` to specify the database type for your app. Available options are `sqlite` (default), `mysql`, and `postgres`.
+
 ### Specifying a gem source
 
 Provide a `--gem-source` to specify the gem source for your app's `Gemfile`.
@@ -24,6 +28,10 @@ $ hanami new bookshelf --gem-source=gem.coop
 # Generates a Gemfile with:
 # source "https://gem.coop"
 ```
+
+### Skipping features
+
+Skip the installation of certain Hanami features by passing `--skip-assets`, `--skip-view`, or `--skip-db`.
 
 ### Using Hanami HEAD
 
