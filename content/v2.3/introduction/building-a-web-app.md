@@ -9,9 +9,7 @@ Now that we've [created our app](/v2.3/introduction/getting-started/), let's tur
 
 Let's take a look at Hanami by creating the beginnings of a bookshelf app.
 
-TODO: VISIT THE HOME PAGE
-
-Let's change this to expect a page showing "Welcome to Bookshelf".
+We'll start by creating a home page that displays "Welcome to Bookshelf".
 
 First, let's open our app's routes file at `config/routes.rb`:
 
@@ -27,7 +25,7 @@ end
 
 This `Bookshelf::Routes` class contains the configuration for our app's router. Routes in Hanami are comprised of a HTTP method, a path, and an endpoint to be invoked, which is usually a Hanami action. (See the [Routing guide](/v2.3/routing/overview/) for more information).
 
-To help make our spec pass, let's add a route to invoke a new action.
+Let's add a route for our home page that invokes a new action.
 
 ```ruby
 # config/routes.rb
@@ -103,7 +101,7 @@ We can find this view's template in our `app` directory at `app/templates/home/i
 
 As the next step in our bookshelf project, let's add the ability to show an index of all books in the system.
 
-Let's fix that by generating an action for a books index:
+We'll generate an action for a books index:
 
 ```shell
 $ bundle exec hanami generate action books.index --skip-tests
@@ -209,9 +207,9 @@ module Bookshelf
 end
 ```
 
-### Updating our test
+### Fetching books from the database
 
-To get this spec to pass, we'll need to update our books index view to retrieve books from our database. For this we can generate a book repo:
+Now we need to update our books index view to retrieve books from our database. For this we can generate a book repo:
 
 ```shell
 $ bundle exec hanami generate repo book
@@ -444,9 +442,11 @@ Lastly, we can populate the template.
 <p>By <%= book.author %></p>
 ```
 
-However, in addition to `#one`, relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
+### Handling missing books
 
-Let's make that change in our repo now:
+What happens if someone requests a book that doesn't exist? Currently our repo's `get` method uses `#one`, which returns `nil` when no record is found. Relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
+
+Let's use `#one!` in our repo:
 
 ```ruby
 # app/repos/book_repo.rb
@@ -593,9 +593,11 @@ To show a form for creating a new book, we don't need any special handling in ei
 <% end %>
 ```
 
-The form submission appears to be proceeding, and now we need to handle what happens afterwards.
+### Handling form submissions
 
-Our plan here is to use flash messages for displaying the the notices about successful or failed book creation. To support these, we first need to enable cookie sessions for our app. To do this, add this to `config/app.rb`:
+Now that we have a form for creating books, we need to handle what happens when the form is submitted.
+
+We'll use flash messages to display notices about successful or failed book creation. To support these, we first need to enable cookie sessions for our app. To do this, add this to `config/app.rb`:
 
 ```ruby
 # config/app.rb
