@@ -3,7 +3,7 @@ title: Parameters
 order: 30
 ---
 
-The parameters associated with an incoming request are available via the `#params` method on the `request` object that's passed to the `#handle` method of an action when it is invoked.
+The parameters associated with an incoming request are available via `request.params` within the action's `#handle` method.
 
 ```ruby
 module Bookshelf
@@ -25,7 +25,7 @@ Parameters for a request come from a number of sources:
 
 - [path variables](/v2.3/routing/overview/) as specified in the route that has matched the request (e.g. `/books/:id`)
 - the request's query string (e.g. `/books?page=2&per_page=10`)
-- the request's body (for example the JSON-formatted body of a `POST` request of Content type `application/json`).
+- the request's body (for example the JSON-formatted body of a `POST` request with an `application/json` content type).
 
 ```ruby
 def handle(request, response)
@@ -278,65 +278,43 @@ For example, verifying that an email address has been provided is something an a
 
 ## Body parsers
 
-Rack ignores request bodies unless they come from a form submission. This means that, if we have a JSON endpoint, the payload isn't automatically available in `params`.
+Hanami automatically parses request bodies for requests with the following content types:
 
-```ruby
-# app/actions/users/create.rb
+- `multipart/form-data` (form submissions with file attachments)
+- `application/json` (JSON requests)
+- `application/vnd.api+json` (JSON API requests)
 
-module Bookshelf
-  module Actions
-    module Users
-      class Create < Bookshelf::Action
-        accept :json
-
-        def handle(request, response)
-          request.params.to_h # => {}
-        end
-      end
-    end
-  end
-end
-```
-
-```shell
-$ curl http://localhost:2300/books      \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"       \
-    -d '{"book":{"title":"Hanami"}}'    \
-    -X POST
-```
-
-To enable params from JSON request bodies, use Hanami's body parsing middleware via your app config:
-
-```ruby
-# config/app.rb
-
-class App < Hanami::App
-  config.middleware.use :body_parser, :json
-end
-```
-
-Now `params.dig(:book, :title)` will return `"Hanami"`.
-
-If there is no suitable body parser for your format in Hanami, you can declare a new one:
+If you need to parse different body types, you can declare a new body parser:
 
 ```ruby
 # lib/foo_parser.rb
 class FooParser
-  def mime_types
-    ['application/foo']
-  end
+  def self.media_types = ["application/foo"]
 
   def parse(body)
-    # manually parse body
+    # Your parsing logic here
   end
 end
 ```
+
+Register that body parser directly and it will parse its own declared media types:
 
 ```ruby
 # config/app.rb
 
 class App < Hanami::App
-  config.middleware.use :body_parser, FooParser.new
+  config.middleware.use :body_parser, FooParser
 end
+```
+
+You can also register a body parser to work on additional media types:
+
+```ruby
+config.middleware.use :body_parser, [FooParser: ["application/x-foo"]]
+```
+
+This is particularly useful if you need to activate Hanami's standard JSON parsing for additional content types:
+
+```ruby
+config.middleware.use :body_parser, [json: ["application/scim+json"]]
 ```
