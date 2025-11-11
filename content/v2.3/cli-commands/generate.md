@@ -8,7 +8,8 @@ order: 70
 Hanami 2.3 provides a few generators:
 
 ```shell
-$ bundle exec hanami generate --help
+$ bin/hanami generate --help
+
 Commands:
   hanami generate action NAME
   hanami generate component NAME
@@ -21,6 +22,8 @@ Commands:
   hanami generate struct NAME
   hanami generate view NAME
 ```
+
+If your app has slices, pass `--slice=SLICE` to specify where to generate the file. You can also run `hanami generate` from inside a slice directory and the generator will target that slice automatically.
 
 ### hanami generate action
 
