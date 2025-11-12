@@ -40,7 +40,7 @@ end
 Hanami provides an action generator we can use to create this action. Running this command will create the home show action:
 
 ```shell
-$ bundle exec hanami generate action home.index --skip-route --skip-tests
+$ bin/hanami generate action home.index --skip-route --skip-tests
 ```
 
 We can find this action in our `app` directory at `app/actions/home/index.rb`:
@@ -143,7 +143,7 @@ In this guide, we'll implement the index, show, new, and create actions.
 Now let's generate an action for the books index:
 
 ```shell
-$ bundle exec hanami generate action books.index --skip-route --skip-tests
+$ bin/hanami generate action books.index --skip-route --skip-tests
 ```
 
 Since we've already defined our routes using `resources`, we use the `--skip-route` flag to prevent the generator from adding a duplicate route.
@@ -194,7 +194,7 @@ Of course, returning a static list of books is not particularly useful. Let's ad
 To create a books table, we need to generate a migration:
 
 ```shell
-$ bundle exec hanami generate migration create_books
+$ bin/hanami generate migration create_books
 ```
 
 Edit the migration file to create a books table with title and author columns and a primary key:
@@ -216,13 +216,13 @@ end
 Migrate the development and test databases:
 
 ```shell
-$ bundle exec hanami db migrate
+$ bin/hanami db migrate
 ```
 
 Next, let's generate a relation to allow our app to interact with our books table. To generate a relation:
 
 ```shell
-$ bundle exec hanami generate relation books
+$ bin/hanami generate relation books
 ```
 
 This creates the following file at `app/relations/books.rb`:
@@ -244,7 +244,7 @@ end
 Now we need to update our books index view to retrieve books from our database. For this we can generate a book repo:
 
 ```shell
-$ bundle exec hanami generate repo book
+$ bin/hanami generate repo book
 ```
 
 Repos serve as the interface to our persisted data from our domain layer. Let's edit the repo to add a method that returns all books ordered by title:
@@ -308,7 +308,7 @@ With our books table created and our app configured to read from it, let's add s
 Start Hanami's interactive console:
 
 ```shell
-$ bundle exec hanami console
+$ bin/hanami console
 ```
 
 Then create a few books:
@@ -416,7 +416,7 @@ The `resources :books` route helper we added earlier already created a route for
 Let's generate that action now:
 
 ```shell
-$ bundle exec hanami generate action books.show --skip-route --skip-tests
+$ bin/hanami generate action books.show --skip-route --skip-tests
 ```
 
 We can now edit the action at `app/actions/books/show.rb` to begin adding the required behaviour, passing the id param to its view.
@@ -581,8 +581,8 @@ The `resources :books` helper we added earlier already created the routes we nee
 Let's generate both actions:
 
 ```shell
-$ bundle exec hanami generate action books.new --skip-route --skip-tests
-$ bundle exec hanami generate action books.create --skip-route --skip-tests
+$ bin/hanami generate action books.new --skip-route --skip-tests
+$ bin/hanami generate action books.create --skip-route --skip-tests
 ```
 
 To show a form for creating a new book, we don't need any special handling in either its action or view classes, so we can jump straight to the template:
