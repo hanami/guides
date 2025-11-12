@@ -9,77 +9,9 @@ Now that we've [created our app](/v2.3/introduction/getting-started/), let's tur
 
 Let's take a look at Hanami by creating the beginnings of a bookshelf app.
 
-In the file `spec/requests/root_spec.rb`, Hanami provides a request spec expecting the error we receive as an app with no routes.
+We'll start by creating a home endpoint that returns "Welcome to Bookshelf".
 
-```ruby
-# spec/requests/root_spec.rb
-
-RSpec.describe "Root", type: :request do
-  it "is not found" do
-    get "/"
-
-    # Generate new action via:
-    #   `bundle exec hanami generate action home.index --url=/`
-    expect(last_response.status).to be(404)
-  end
-end
-```
-
-We can run that spec now to prove that it works:
-
-```shell
-$ bundle exec rspec spec/requests/root_spec.rb
-```
-
-You should see:
-
-```shell
-Root
-  is not found
-
-Finished in 0.01986 seconds (files took 0.70103 seconds to load)
-1 example, 0 failures
-```
-
-Let's change this spec to expect a "Welcome to Bookshelf" message on the app's root:
-
-```ruby
-# spec/requests/root_spec.rb
-
-RSpec.describe "Root", type: :request do
-  it "is successful" do
-    get "/"
-
-    expect(last_response.body).to eq("Welcome to Bookshelf")
-    expect(last_response).to be_successful
-  end
-end
-```
-
-As we expect, this spec now fails:
-
-```shell
-$ bundle exec rspec spec/requests/root_spec.rb
-
-Root
-  is successful (FAILED - 1)
-
-Failures:
-
-  1) Root is successful
-     Failure/Error: expect(last_response.body).to eq("Welcome to Bookshelf")
-
-       expected: #<Encoding:UTF-8> "Welcome to Bookshelf"
-            got: #<Encoding:ASCII-8BIT> "Not Found"
-
-       (compared using ==)
-     # ./spec/requests/root_spec.rb:7:in `block (2 levels) in <top (required)>'
-
-Finished in 0.02525 seconds (files took 0.58635 seconds to load)
-1 example, 1 failure
-```
-
-To fix this, let's look at our app's routes file at `config/routes.rb`:
+First, let's look at our app's routes file at `config/routes.rb`:
 
 ```ruby
 # config/routes.rb
@@ -93,7 +25,7 @@ end
 
 This `Bookshelf::Routes` class contains the configuration for our app's router. Routes in Hanami are comprised of a HTTP method, a path, and an endpoint to be invoked, which is usually a Hanami action. (See the [Routing guide](/v2.3/routing/overview/) for more information).
 
-Let's update our routes to invoke an action for our app's root, which handles `GET` requests for `"/"`.
+Let's add a route for our home endpoint that invokes a new action.
 
 ```ruby
 # config/routes.rb
@@ -105,29 +37,7 @@ module Bookshelf
 end
 ```
 
-If we run our test again, we'll see a `Hanami::Routes::MissingActionError`:
-
-```shell
-$ bundle exec rspec spec/requests/root_spec.rb
-
-Failures:
-
-  1) Root is successful
-     Failure/Error: get "/"
-
-     Hanami::Routes::MissingActionError:
-       Could not find action with key "actions.home.index" in Bookshelf::App
-
-       To fix this, define the action class Bookshelf::Actions::Home::Index in app/actions/home/index.rb
-     # ./spec/requests/root_spec.rb:5:in `block (2 levels) in <top (required)>'
-
-Finished in 0.01871 seconds (files took 0.62516 seconds to load)
-1 example, 1 failure
-```
-
-As this error suggests, we need to create the home index action the route is expecting to be able to call.
-
-Hanami provides an action generator we can use to create this action. Running this command will create the home index action:
+We can use Hanami's action generator to create this action:
 
 ```shell
 $ bundle exec hanami generate action home.index --skip-view --skip-route --skip-tests
@@ -162,7 +72,7 @@ end
 
 For more details on actions, see the [Actions guide](/v2.3/actions/overview/).
 
-For now, let's adjust our home action to return our desired "Welcome to Bookshelf" message.
+Let's adjust our home action to return our "Welcome to Bookshelf" message.
 
 ```ruby
 # app/actions/home/show.rb
@@ -180,47 +90,11 @@ module Bookshelf
 end
 ```
 
-With this change, our root spec will now pass:
-
-```shell
-$ bundle exec rspec spec/requests/root_spec.rb
-
-Root
-  is successful
-
-Finished in 0.03029 seconds (files took 0.72932 seconds to load)
-1 example, 0 failures
-```
-
 ## Adding a new route and action
 
 As the next step in our bookshelf project, let's add the ability to display an index of all books in the system, delivered as a JSON API.
 
-First we'll create a request spec for listing books that expects a successful JSON formatted response, listing two books:
-
-```ruby
-# spec/requests/books/index_spec.rb
-
-RSpec.describe "GET /books", type: :request do
-  it "returns a list of books" do
-    get "/books"
-
-    expect(last_response).to be_successful
-    expect(last_response.content_type).to eq("application/json; charset=utf-8")
-
-    response_body = JSON.parse(last_response.body)
-
-    expect(response_body).to eq [
-      {"title" => "Test Driven Development"},
-      {"title" => "Practical Object-Oriented Design in Ruby"}
-    ]
-  end
-end
-```
-
-If you run this test, you'll see that it fails because our app currently returns a 404 response for the `/books` route.
-
-Let's fix that by generating an action for a books index:
+We'll generate an action for a books index:
 
 ```shell
 $ bundle exec hanami generate action books.index --skip-view --skip-tests
@@ -237,27 +111,7 @@ module Bookshelf
 end
 ```
 
-If we run our spec again, our expectation for a successful response is now satisfied, but there's a different failure:
-
-```shell
-$ bundle exec rspec spec/requests/books/index_spec.rb
-
-GET /books
-  returns a list of books (FAILED - 1)
-
-Failures:
-
-  1) GET /books returns a list of books
-     Failure/Error: expect(last_response.content_type).to eq("application/json; charset=utf-8")
-
-       expected: "application/json; charset=utf-8"
-            got: "application/octet-stream; charset=utf-8"
-
-       (compared using ==)
-     # ./spec/requests/books/index_spec.rb:7:in `block (2 levels) in <top (required)>'
-```
-
-Our response doesn't have the expected format. Let's adjust our action to return a JSON formatted response using `response.format = :json`. We'll also set the response body to what our test expects:
+Now let's adjust our action to return a JSON formatted response using `response.format = :json`. We'll also set the response body to a list of books:
 
 ```ruby
 # app/actions/books/index.rb
@@ -279,18 +133,6 @@ module Bookshelf
     end
   end
 end
-```
-
-If we run our spec, it now passes!
-
-```shell
-$ bundle exec rspec spec/requests/books/index_spec.rb
-
-GET /books
-  returns a list of books
-
-Finished in 0.02378 seconds (files took 0.49411 seconds to load)
-1 example, 0 failures
 ```
 
 ## Listing books from a database
@@ -347,38 +189,9 @@ module Bookshelf
 end
 ```
 
-### Updating our test
+### Fetching books from the database
 
-With our books table ready to go, let's adapt our books index spec to expect an index of persisted books, including authors as well as titles:
-
-```ruby
-RSpec.describe "GET /books", :db, type: :request do
-  let(:books) { Hanami.app["relations.books"] }
-
-  before do
-    books.insert(title: "Practical Object-Oriented Design in Ruby", author: "Sandi Metz")
-    books.insert(title: "Test Driven Development", author: "Kent Beck")
-  end
-
-  it "returns a list of books" do
-    get "/books"
-
-    expect(last_response).to be_successful
-    expect(last_response.content_type).to eq("application/json; charset=utf-8")
-
-    response_body = JSON.parse(last_response.body)
-
-    expect(response_body).to eq [
-      {"title" => "Practical Object-Oriented Design in Ruby", "author" => "Sandi Metz"},
-      {"title" => "Test Driven Development", "author" => "Kent Beck"}
-    ]
-  end
-end
-```
-
-If we run this spec, we see that it fails because we're not returning the authors for each book.
-
-To get this spec to pass, we'll need to update our books index action to retrieve books from our database along with their authors.
+Now we need to update our books index action to retrieve books from our database along with their authors.
 
 For this, we can generate a book repo:
 
@@ -430,18 +243,6 @@ module Bookshelf
 end
 ```
 
-With this action in place, the spec passes once more:
-
-```shell
-$ bundle exec rspec spec/requests/books/index_spec.rb
-
-GET /books
-  returns a list of books
-
-Finished in 0.05765 seconds (files took 1.36 seconds to load)
-1 example, 0 failures
-```
-
 ## Parameter validation
 
 Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily relations offer pagination support. Let's add pagination with a default page size of 5:
@@ -463,39 +264,7 @@ end
 
 This will enable our books index to accept `page` and `per_page` params.
 
-Let's add a request spec verifying pagination:
-
-```ruby
-# spec/requests/books/index/pagination_spec.rb
-
-RSpec.describe "GET /books pagination", :db, type: :request do
-  let(:books) { Hanami.app["relations.books"] }
-
-  before do
-    10.times do |n|
-      books.insert(title: "Book #{n}", author: "Author #{n}")
-    end
-  end
-
-  context "given valid page and per_page params" do
-    it "returns the correct page of books" do
-      get "/books?page=1&per_page=3"
-
-      expect(last_response).to be_successful
-
-      response_body = JSON.parse(last_response.body)
-
-      expect(response_body).to eq [
-        {"title" => "Book 0", "author" => "Author 0"},
-        {"title" => "Book 1", "author" => "Author 1"},
-        {"title" => "Book 2", "author" => "Author 2"}
-      ]
-    end
-  end
-end
-```
-
-In our action class, we can use the request object to extract the relevant params from the incoming request, and then pass them to our repo method:
+Now we can use the request object in our action to extract the relevant params from the incoming request, and then pass them to our repo method:
 
 ```ruby
 # app/actions/books/index.rb
@@ -540,19 +309,6 @@ module Bookshelf
     end
   end
 end
-```
-
-This allows our spec to pass!
-
-```shell
-$ bundle exec rspec spec/requests/books/index/pagination_spec.rb
-
-GET /books pagination
-  given valid page and per_page params
-    returns the correct page of books
-
-Finished in 0.0807 seconds (files took 0.60344 seconds to load)
-1 example, 0 failures
 ```
 
 Accepting parameters from the internet without validation is never a good idea, however. Hanami actions offer built-in parameter validation, which we can use here to ensure that both `page` and `per_page` are positive integers, and that `per_page` is at most 100:
@@ -602,29 +358,6 @@ A helpful response revealing why parameter validation failed can also be rendere
 halt 422, {errors: request.params.errors}.to_json unless request.params.valid?
 ```
 
-We can also add a test to verify this:
-
-```ruby
-# spec/requests/books/index/pagination_spec.rb
-
-context "given invalid page and per_page params" do
-  it "returns a 422 unprocessable response" do
-    get "/books?page=-1&per_page=3000"
-
-    expect(last_response).to be_unprocessable
-
-    response_body = JSON.parse(last_response.body)
-
-    expect(response_body).to eq(
-      "errors" => {
-        "page" => ["must be greater than 0"],
-        "per_page" => ["must be less than or equal to 100"]
-      }
-    )
-  end
-end
-```
-
 Validating parameters in actions is useful for performing parameter coercion and type validation. More complex domain-specific validations, or validations concerned with things such as uniqueness, however, are usually better performed at layers deeper than your HTTP actions.
 
 You can find more details on actions and parameter validation in the [Actions guide](/v2.3/actions/overview/).
@@ -632,81 +365,6 @@ You can find more details on actions and parameter validation in the [Actions gu
 ## Showing a book
 
 In addition to our books index, we also want to provide an endpoint for viewing the details of a particular book.
-
-Let's specify a `/books/:id` request that renders a book for a given ID, or returns 404 if there's no book with the ID.
-
-```ruby
-# spec/requests/books/show_spec.rb
-
-RSpec.describe "GET /books/:id", :db, type: :request do
-  let(:books) { Hanami.app["relations.books"] }
-
-  context "when a book matches the given ID" do
-    let!(:book_id) do
-      books.insert(title: "Test Driven Development", author: "Kent Beck")
-    end
-
-    it "renders the book" do
-      get "/books/#{book_id}"
-
-      expect(last_response).to be_successful
-      expect(last_response.content_type).to eq("application/json; charset=utf-8")
-
-      response_body = JSON.parse(last_response.body)
-
-      expect(response_body).to eq(
-        "id" => book_id, "title" => "Test Driven Development", "author" => "Kent Beck"
-      )
-    end
-  end
-
-  context "when no book matches the given ID" do
-    it "returns not found" do
-      get "/books/#{books.max(:id).to_i + 1}"
-
-      expect(last_response).to be_not_found
-      expect(last_response.content_type).to eq("application/json; charset=utf-8")
-
-      response_body = JSON.parse(last_response.body)
-
-      expect(response_body).to eq(
-        "error" => "not_found"
-      )
-    end
-  end
-end
-```
-
-Because there's no matching route yet, this spec immediately fails:
-
-```shell
-$ bundle exec rspec spec/requests/books/show_spec.rb
-
-GET /books/:id
-  when a book matches the given id
-    renders the book (FAILED - 1)
-  when no book matches the given id
-    returns not found (FAILED - 2)
-
-Failures:
-
-  1) GET /books/:id when a book matches the given id renders the book
-     Failure/Error: expect(last_response).to be_successful
-       expected `#<Rack::MockResponse:0x000000010c9f5788 @original_headers={"Content-Length"=>"9"}, @errors="", @cooki...ms/rack-2.3.4/lib/rack/response.rb:287>, @block=nil, @body=["Not Found"], @buffered=true, @length=9>.successful?` to be truthy, got false
-     # ./spec/requests/books/show_spec.rb:14:in `block (3 levels) in <top (required)>'
-
-  2) GET /books/:id when no book matches the given id returns not found
-     Failure/Error: expect(last_response.content_type).to eq("application/json; charset=utf-8")
-
-       expected: "application/json; charset=utf-8"
-            got: nil
-
-       (compared using ==)
-     # ./spec/requests/books/show_spec.rb:30:in `block (3 levels) in <top (required)>'
-
-Finished in 0.05427 seconds (files took 0.88631 seconds to load)
-2 examples, 2 failures
-```
 
 We can use Hanami's action generator to create both a route and an action. Run:
 
@@ -728,7 +386,7 @@ module Bookshelf
 end
 ```
 
-For the action to fetch a single book from our database, we can add a new method to our book repo:
+To fetch a single book from our database, we can add a new method to our book repo:
 
 ```ruby
 # app/repos/book_repo.rb
@@ -744,7 +402,7 @@ module Bookshelf
 end
 ```
 
-We can now edit the new action at `app/actions/books/show.rb` to add the required behaviour. Here, we use param validation to coerce `params[:id]` to an integer, render a book via the repo if there's one with a matching primary key, or return a 404 response. With this, our test passes.
+We can now edit the new action at `app/actions/books/show.rb` to add the required behaviour. Here, we use param validation to coerce `params[:id]` to an integer, render a book via the repo if there's one with a matching primary key, or return a 404 response.
 
 ```ruby
 # app/actions/books/show.rb
@@ -777,11 +435,11 @@ module Bookshelf
 end
 ```
 
-In our repo, we used the relation's `#one` method to return our book, which will return `nil` if there's no book with the requisite ID.
+### Handling missing books
 
-However, in addition to `#one`, relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
+What happens if someone requests a book that doesn't exist? Currently our repo's `get` method uses `#one`, which returns `nil` when no record is found. Relations also provide a `#one!` method, which instead raises a `ROM::TupleCountMismatchError` exception when no record is found.
 
-Let's update the repo to use `#one!`:
+Let's use `#one!` in our repo:
 
 ```ruby
 # app/repos/book_repo.rb
@@ -791,9 +449,9 @@ def get(id)
 end
 ```
 
-We can now use this to handle 404s via Hanami's action exception handling: `config.handle_exception`. This action configuration takes the name of a method to invoke when a particular exception occurs.
+We can use this exception to handle 404s via Hanami's action exception handling: `config.handle_exception`. This action configuration takes the name of a method to invoke when a particular exception occurs.
 
-Taking this approach allows our handle method to concern itself only with the happy path:
+Taking this approach allows our handle method to focus only on the happy path:
 
 ```ruby
 # app/actions/books/show.rb
@@ -857,7 +515,7 @@ module Bookshelf
 end
 ```
 
-With its base action configured to handle `ROM::TupleCountMismatchError` exceptions, the `Books::Show` action can now be as follows and our spec continues to pass:
+With its base action configured to handle `ROM::TupleCountMismatchError` exceptions, the `Books::Show` action can now be simplified:
 
 ```ruby
 # app/actions/books/show.rb
@@ -884,62 +542,11 @@ module Bookshelf
 end
 ```
 
-```shell
-$ bundle exec rspec spec/requests/books/show_spec.rb
-
-GET /books/:id
-  when a book matches the given id
-    renders the book
-  when no book matches the given id
-    returns not found
-
-Finished in 0.07726 seconds (files took 1.29 seconds to load)
-2 examples, 0 failures
-```
-
 ## Creating a book
 
 Now that our visitors can list and view books, let's allow them to create books too.
 
-Here's a spec for POST requests to the `/books` path, where it's expected that only valid requests result in a book being created:
-
-```ruby
-# spec/requests/books/create_spec.rb
-
-RSpec.describe "POST /books", :db, type: :request do
-  let(:request_headers) do
-    {"HTTP_ACCEPT" => "application/json", "CONTENT_TYPE" => "application/json"}
-  end
-
-  context "given valid params" do
-    let(:params) do
-      {book: {title: "Practical Object-Oriented Design in Ruby", author: "Sandi Metz"}}
-    end
-
-    it "creates a book" do
-      post "/books", params.to_json, request_headers
-
-      expect(last_response).to be_created
-    end
-  end
-
-  context "given invalid params" do
-    let(:params) do
-      {book: {title: nil}}
-    end
-
-    it "returns 422 unprocessable" do
-      post "/books", params.to_json, request_headers
-
-      expect(last_response).to be_unprocessable
-    end
-  end
-end
-```
-
-Executing this spec, we get the message `Method Not Allowed`, because there's no route or action for handling this request.
-
-Hanami's action generator can add these for us:
+We'll use Hanami's action generator to create a route and action for creating books:
 
 ```shell
 $ bundle exec hanami generate action books.create --skip-view --skip-tests
@@ -991,7 +598,7 @@ end
 
 With this parser in place, the `book` key from the JSON body will be available in the action via `request.params[:book]`.
 
-Before we can update our action, we must first add a method to our book repo to create new books:
+First, let's add a method to our book repo to create new books:
 
 ```ruby
 # app/repos/book_repo.rb
@@ -1039,21 +646,6 @@ module Bookshelf
     end
   end
 end
-```
-
-Our request spec now passes!
-
-```shell
-$ bundle exec rspec spec/requests/books/create_spec.rb
-
-POST /books
-  given valid params
-    creates a book
-  given invalid params
-    returns 422 unprocessable
-
-Finished in 0.07143 seconds (files took 1.32 seconds to load)
-2 examples, 0 failures
 ```
 
 In addition to validating title and author are present, the `params` block in the action also serves to prevent mass assignment - params not included in the schema (for example an attempt to inject a price of 0) will be discarded.
