@@ -30,9 +30,9 @@ asset_url("app.js")
 
 ## Content Security Policy (CSP)
 
-By default, Hanami sets a `Content-Security-Policy` header that does not allow for the execution of external JavaScript code.
+By default, Hanami sets a `Content-Security-Policy` header that only allows resources from the same origin. To permit code hosted on your CDN, you'll need to update your CSP configuration.
 
-To permit code hosted on your CDN, use `config.actions.content_security_policy` in your app class.
+Use `config.actions.content_security_policy` in your app class to allow your CDN:
 
 ```ruby
 # config/app.rb
@@ -41,11 +41,14 @@ module Bookshelf
   class App < Hanami::App
     environment :production do
       config.actions.content_security_policy[:script_src] += " https://some-cdn.net"
+      config.actions.content_security_policy[:style_src] += " https://some-cdn.net"
       config.assets.base_url = "https://some-cdn.net/my-site"
     end
   end
 end
 ```
+
+For more details about Content Security Policy configuration, including nonce support, custom directives, and security best practices, see [Content Security Policy](/v2.3/actions/content-security-policy).
 
 ## Subresource integrity
 
