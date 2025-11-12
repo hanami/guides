@@ -130,13 +130,13 @@ end
 
 The `resources` helper creates seven standard RESTful routes for a resource:
 
-- `GET /books` → `books.index` (list all books)
-- `GET /books/new` → `books.new` (form for new book)
-- `POST /books` → `books.create` (create a book)
-- `GET /books/:id` → `books.show` (show a specific book)
-- `GET /books/:id/edit` → `books.edit` (form for editing a book)
-- `PATCH /books/:id` → `books.update` (update a book)
-- `DELETE /books/:id` → `books.destroy` (delete a book)
+- `GET /books` → `"books.index"` (list all books)
+- `GET /books/new` → `"books.new"` (form for a new book)
+- `POST /books` → `"books.create"` (create a book)
+- `GET /books/:id` → `"books.show"` (show a specific book)
+- `GET /books/:id/edit` → `"books.edit"` (form for editing a book)
+- `PATCH /books/:id` → `"books.update"` (update a book)
+- `DELETE /books/:id` → `"books.destroy"` (delete a book)
 
 In this guide, we'll implement the index, show, new, and create actions.
 
