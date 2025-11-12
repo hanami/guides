@@ -17,7 +17,7 @@ module Bookshelf
 end
 ```
 
-## Adding a route
+## Defining routes
 
 Each route in Hanami's router is comprised of:
 
@@ -34,33 +34,99 @@ get "/rack-app", to: RackApp.new
 get "/my-lambda", to: ->(env) { [200, {}, ["A Rack compatible response"]] }
 ```
 
-To add a full set of routes for viewing and managing books, you can either manually add the required routes to your `config/routes.rb` file, or use Hanami's action generator, which will generate actions in addition to adding routes for you.
+## Resource routes
 
-```shell
-$ bundle exec hanami generate action books.index
-$ bundle exec hanami generate action books.show
-$ bundle exec hanami generate action books.new
-$ bundle exec hanami generate action books.create
-$ bundle exec hanami generate action books.edit
-$ bundle exec hanami generate action books.update
-$ bundle exec hanami generate action books.destroy
-```
+To define a full set of RESTful routes for a resource, use the `resources` or `resource` methods.
+
+Use `resources` (plural) to generate a full set of RESTful routes for a collection resource:
 
 ```ruby
-module Bookshelf
-  class Routes < Hanami::Routes
-    root { "Hello from Hanami" }
+resources :books
+```
 
-    get "/books", to: "books.index"
-    get "/books/:id", to: "books.show"
-    get "/books/new", to: "books.new"
-    post "/books", to: "books.create"
-    get "/books/:id/edit", to: "books.edit"
-    patch "/books/:id", to: "books.update"
-    delete "/books/:id", to: "books.destroy"
-  end
+This generates the following routes:
+
+```
+GET     /books          books.index
+GET     /books/:id      books.show
+GET     /books/new      books.new
+POST    /books          books.create
+GET     /books/:id/edit books.edit
+PATCH   /books/:id      books.update
+DELETE  /books/:id      books.destroy
+```
+
+Use `resource` (singular) for singleton resources that don't have an index action or ID:
+
+```ruby
+resource :profile
+```
+
+This generates the following routes:
+
+```
+GET     /profile        profile.show
+GET     /profile/new    profile.new
+POST    /profile        profile.create
+GET     /profile/edit   profile.edit
+PATCH   /profile        profile.update
+DELETE  /profile        profile.destroy
+```
+
+To generate only specific actions, use the `only` option:
+
+```ruby
+resources :books, only: [:index, :show]
+```
+
+To exclude specific actions, use the `except` option:
+
+```ruby
+resources :books, except: [:destroy]
+```
+
+Customize the URL path using the `path` option:
+
+```ruby
+resources :comments, path: "reviews"
+# Routes will use /reviews instead of /comments
+```
+
+Override the action namespace using the `to` option:
+
+```ruby
+resources :books, to: "library.books"
+# Routes will invoke actions under library.books namespace
+```
+
+Customize route names using the `as` option:
+
+```ruby
+resources :books, as: :publications
+# Named routes will use :publications (e.g., :publications_path)
+```
+
+Resources can be nested (to any level) to represent hierarchical relationships:
+
+```ruby
+resources :books do
+  resources :reviews
 end
 ```
+
+This generates nested routes like `/books/:book_id/reviews`.
+
+The actions for nested resources are namespaced by any parent resources. In the above example, the reviews index route will have a `to:` of `"books.reviews.index"`.
+
+Basic routes can also be nested within resources:
+
+```ruby
+resources :books do
+  get "/latest", to: "books.latest"
+end
+```
+
+This generates a route at "/books/latest".
 
 ## Root request routing
 
@@ -192,7 +258,6 @@ Hanami.app["routes"].path(:book, id: 1)
 => "/books/1"
 ```
 
-
 To set a base URL for the `url` helper, configure it in `config/app.rb`:
 
 ```ruby title="config/app.rb"
@@ -218,10 +283,42 @@ To nest a series of routes under a particular namespace, you can use a scope:
 module Bookshelf
   class Routes < Hanami::Routes
     scope "about" do
-      get "/contact-us", to: "content.contact_us" # => /about/contact-us
-      get "/faq", to: "content.faq" # => /about/faq
+      get "/contact-us", to: "content.contact", as: :contact # => /about/contact-us
+      get "/faq", to: "content.faq", as: :faq # => /about/faq
     end
   end
+end
+```
+
+Scopes supply a prefix to the names of their enclosed routes. The routes above are accessible as `path(:about_contact)` and `path(:about_faq)`.
+
+Scopes can also include all the elements of regular routes. In this case, you can supply a friendlier name prefix with `as:`:
+
+```ruby
+module Bookshelf
+  class Routes < Hanami::Routes
+    scope "authors/:author_id", as: :author do
+      resources :books, only: [:index, :show], to: "authors.books"
+      get "/news", to: "authors.news", as: :news
+    end
+  end
+end
+```
+
+This creates the following routes:
+
+```
+GET  /authors/:author_id/books      authors.books.index  :author_books
+GET  /authors/:author_id/books/:id  authors.books.show   :author_book
+GET  /authors/:author_id/news       authors.news         :author_news
+```
+
+If you need to create a route name with a prefix that _precedes_ a scope prefix, provide an array to `as:`. The scope prefix will be inserted after the first element.
+
+```ruby
+scope "authors/:author_id", as: :author do
+  get "send-feedback", to: "authors.send_feedback", as: [:send, :feedback]
+  # Will be named :send_author_feedback
 end
 ```
 
