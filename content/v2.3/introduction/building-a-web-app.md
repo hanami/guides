@@ -101,22 +101,36 @@ We can find this view's template in our `app` directory at `app/templates/home/i
 
 As the next step in our bookshelf project, let's add the ability to show an index of all books in the system.
 
-We'll generate an action for a books index:
-
-```shell
-$ bundle exec hanami generate action books.index --skip-tests
-```
-
-In addition to generating an action at `app/actions/books/index.rb` and a view at `app/views/books/index.rb`, the generator has also added a route in `config/routes.rb`:
+First, let's set up RESTful routes for books by using the `resources` helper in `config/routes.rb`:
 
 ```ruby
 module Bookshelf
   class Routes < Hanami::Routes
     root to: "home.index"
-    get "/books", to: "books.index"
+    resources :books
   end
 end
 ```
+
+The `resources` helper creates seven standard RESTful routes for a resource:
+
+- `GET /books` → `books.index` (list all books)
+- `GET /books/new` → `books.new` (form for new book)
+- `POST /books` → `books.create` (create a book)
+- `GET /books/:id` → `books.show` (show a specific book)
+- `GET /books/:id/edit` → `books.edit` (form for editing a book)
+- `PATCH /books/:id` → `books.update` (update a book)
+- `DELETE /books/:id` → `books.destroy` (delete a book)
+
+In this guide, we'll implement the index, show, new, and create actions.
+
+Now let's generate an action for the books index:
+
+```shell
+$ bundle exec hanami generate action books.index --skip-route --skip-tests
+```
+
+Since we've already defined our routes using `resources`, we use the `--skip-route` flag to prevent the generator from adding a duplicate route.
 
 Let's update our view to provide the books to our template:
 
@@ -356,26 +370,12 @@ end
 
 In addition to our books index, we also want to provide an endpoint for viewing the details of a particular book.
 
-Let's specify a `/books/:id` request that renders a book for a given ID, or returns 404 if there's no book for with the ID.
+The `resources :books` route helper we added earlier already created a route for showing individual books at `GET /books/:id`, which will invoke the `books.show` action.
 
-We can use Hanami's action generator to create both a route and an action. Run:
+Let's generate that action now:
 
 ```shell
-$ bundle exec hanami generate action books.show --skip-tests
-```
-
-If you inspect `config/routes.rb` you will see the generator has automatically added a new `get "/books/:id", to: "books.show"` route:
-
-```ruby
-# config/routes.rb
-
-module Bookshelf
-  class Routes < Hanami::Routes
-    root to: "home.index"
-    get "/books", to: "books.index"
-    get "/books/:id", to: "books.show"
-  end
-end
+$ bundle exec hanami generate action books.show --skip-route --skip-tests
 ```
 
 We can now edit the action at `app/actions/books/show.rb` to begin adding the required behaviour, passing the id param to its view.
@@ -531,44 +531,15 @@ end
 
 Now that our visitors can list and view books, let's allow them to create books too.
 
-Hanami's action generator can take care of this for us:
+The `resources :books` helper we added earlier already created the routes we need:
+- `GET /books/new` → `books.new` (to show the form)
+- `POST /books` → `books.create` (to handle the form submission)
+
+Let's generate both actions:
 
 ```shell
-$ bundle exec hanami generate action books.new --skip-tests
-```
-
-Let's also generate a matching create action:
-
-```shell
-$ bundle exec hanami generate action books.create --skip-tests
-```
-
-The app's routes now include the expected routes - invoking the `books.new` action for GET requests to `/books/new`, and the `books.create` action for `POST` requests to `/books`:
-
-```ruby
-module Bookshelf
-  class Routes < Hanami::Routes
-    root to: "home.index"
-    get "/books", to: "books.index"
-    get "/books/:id", to: "books.show"
-    get "/books/new", to: "books.new"
-    post "/books", to: "books.create"
-  end
-end
-```
-
-Let's add some name aliases to these routes so we can easily refer to them later:
-
-```ruby
-module Bookshelf
-  class Routes < Hanami::Routes
-    root to: "home.index"
-    get "/books", to: "books.index"
-    get "/books/:id", to: "books.show", as: :show_book
-    get "/books/new", to: "books.new"
-    post "/books", to: "books.create", as: :create_book
-  end
-end
+$ bundle exec hanami generate action books.new --skip-route --skip-tests
+$ bundle exec hanami generate action books.create --skip-route --skip-tests
 ```
 
 To show a form for creating a new book, we don't need any special handling in either its action or view classes, so we can jump straight to the template:
@@ -578,7 +549,7 @@ To show a form for creating a new book, we don't need any special handling in ei
 
 <h1>New book</h1>
 
-<%= form_for :book, routes.path(:create_book) do |f| %>
+<%= form_for :book, routes.path(:books) do |f| %>
   <div>
     <%= f.label "Title", for: :title %>
     <%= f.text_field :title %>
@@ -702,7 +673,7 @@ module Bookshelf
             book = book_repo.create(request.params[:book])
 
             response.flash[:notice] = "Book created"
-            response.redirect_to routes.path(:show_book, id: book[:id])
+            response.redirect_to routes.path(:book, id: book[:id])
           else
             response.flash.now[:alert] = "Could not create book"
             # Implicitly re-renders the "new" view
