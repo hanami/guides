@@ -97,6 +97,22 @@ We can find this view's template at `app/templates/home/index.html.erb`. Let's a
 <h1>Welcome to Bookshelf</h1>
 ```
 
+### Seeing your changes
+
+Now that we've created our first page, let's start the development server and see it in action.
+
+Run the following command to start the server:
+
+```shell
+$ bin/hanami dev
+```
+
+This starts Hanami's development server, which watches for file changes and automatically reloads your app as you work.
+
+Once the server is running, visit [http://localhost:2300](http://localhost:2300) in your browser. You should see "Welcome to Bookshelf" displayed on the page.
+
+Keep the dev server running as you continue through this guide - you'll be able to refresh your browser to see your changes as you make them.
+
 ## Adding a new route and action
 
 As the next step in our bookshelf project, let's add the ability to show an index of all books in the system.
@@ -166,6 +182,8 @@ Then we can update our template to present the books:
   <% end %>
 </ul>
 ```
+
+Now visit [http://localhost:2300/books](http://localhost:2300/books) to see your books index. You should see the two hardcoded books displayed.
 
 ## Listing books from a database
 
@@ -283,6 +301,27 @@ Then we can update our template to include the author:
 </ul>
 ```
 
+### Verifying the database integration
+
+With our books table created and our app configured to read from it, let's add some books to the database and verify everything is working.
+
+Start Hanami's interactive console:
+
+```shell
+$ bundle exec hanami console
+```
+
+Then create a few books:
+
+```ruby
+bookshelf[development]> book_repo = Bookshelf::App["repos.book_repo"]
+bookshelf[development]> book_repo.create(title: "Test Driven Development", author: "Kent Beck")
+bookshelf[development]> book_repo.create(title: "Practical Object-Oriented Design in Ruby", author: "Sandi Metz")
+bookshelf[development]> book_repo.create(title: "The Pragmatic Programmer", author: "Dave Thomas and Andy Hunt")
+```
+
+Now refresh [http://localhost:2300/books](http://localhost:2300/books) in your browser. You should see your books listed with their authors, ordered alphabetically by title.
+
 ## Using request parameters
 
 Of course, returning _every_ book in the database when a visitor makes a request to `/books` is not going to be a good strategy for very long. Luckily, relations offer pagination support. Let's add pagination with a default page size of 5:
@@ -366,6 +405,8 @@ module Bookshelf
 end
 ```
 
+Now refresh [http://localhost:2300/books](http://localhost:2300/books) and you'll see only the first 5 books (if you have that many). Try visiting [http://localhost:2300/books?page=2](http://localhost:2300/books?page=2) to see the second page, or [http://localhost:2300/books?per_page=2](http://localhost:2300/books?per_page=2) to show just 2 books per page.
+
 ## Showing a book
 
 In addition to our books index, we also want to provide an endpoint for viewing the details of a particular book.
@@ -441,6 +482,8 @@ Lastly, we can populate the template.
 
 <p>By <%= book.author %></p>
 ```
+
+Visit [http://localhost:2300/books/1](http://localhost:2300/books/1) to see the details for the first book. You can replace the `1` with any book ID from your database.
 
 ### Handling missing books
 
@@ -684,6 +727,8 @@ module Bookshelf
   end
 end
 ```
+
+Now visit [http://localhost:2300/books/new](http://localhost:2300/books/new) to see your new book form. Try creating a book - if you fill in both fields and submit, you'll be redirected to the newly created book's page with a success message. If you try to submit an empty form, you'll see an error message.
 
 ## What's next
 

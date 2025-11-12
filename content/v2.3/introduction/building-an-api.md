@@ -90,6 +90,27 @@ module Bookshelf
 end
 ```
 
+### Testing your API
+
+Now that we've created our first endpoint, let's start the development server and verify it works.
+
+Run the following command to start the server:
+
+```shell
+$ bin/hanami dev
+```
+
+This starts Hanami's development server, which watches for file changes and automatically reloads your app as you work.
+
+Once the server is running, open a new terminal and use `curl` to test your endpoint:
+
+```shell
+$ curl http://localhost:2300
+Welcome to Bookshelf
+```
+
+Keep the dev server running as you continue through this guide - you'll be able to make requests to test your changes as you make them.
+
 ## Adding a new route and action
 
 As the next step in our bookshelf project, let's add the ability to display an index of all books in the system, delivered as a JSON API.
@@ -148,6 +169,15 @@ module Bookshelf
   end
 end
 ```
+
+Test your books endpoint with curl:
+
+```shell
+$ curl http://localhost:2300/books
+[{"title":"Test Driven Development"},{"title":"Practical Object-Oriented Design in Ruby"}]
+```
+
+You should see the two hardcoded books returned as JSON.
 
 ## Listing books from a database
 
@@ -256,6 +286,34 @@ module Bookshelf
   end
 end
 ```
+
+### Verifying the database integration
+
+With our books table created and our app configured to read from it, let's add some books to the database and verify everything is working.
+
+Start Hanami's interactive console:
+
+```shell
+$ bundle exec hanami console
+```
+
+Then create a few books:
+
+```ruby
+bookshelf[development]> book_repo = Bookshelf::App["repos.book_repo"]
+bookshelf[development]> book_repo.create(title: "Test Driven Development", author: "Kent Beck")
+bookshelf[development]> book_repo.create(title: "Practical Object-Oriented Design in Ruby", author: "Sandi Metz")
+bookshelf[development]> book_repo.create(title: "The Pragmatic Programmer", author: "Dave Thomas and Andy Hunt")
+```
+
+Now test your endpoint with curl:
+
+```shell
+$ curl http://localhost:2300/books
+[{"title":"Practical Object-Oriented Design in Ruby","author":"Sandi Metz"},{"title":"Test Driven Development","author":"Kent Beck"},{"title":"The Pragmatic Programmer","author":"Dave Thomas and Andy Hunt"}]
+```
+
+You should see your books returned as JSON, ordered alphabetically by title.
 
 ## Parameter validation
 
@@ -375,6 +433,17 @@ halt 422, {errors: request.params.errors}.to_json unless request.params.valid?
 Validating parameters in actions is useful for performing parameter coercion and type validation. More complex domain-specific validations, or validations concerned with things such as uniqueness, however, are usually better performed at layers deeper than your HTTP actions.
 
 You can find more details on actions and parameter validation in the [Actions guide](/v2.3/actions/overview/).
+
+Test pagination with curl:
+
+```shell
+$ curl http://localhost:2300/books?page=2
+$ curl http://localhost:2300/books?per_page=2
+$ curl http://localhost:2300/books?page=invalid
+{"errors":{"page":[{"text":"must be an integer","code":"int?","path":["page"],"input":"invalid"}]}}
+```
+
+The first request shows the second page of books, the second shows just 2 books per page, and the third demonstrates the validation error for an invalid parameter.
 
 ## Showing a book
 
@@ -544,6 +613,17 @@ module Bookshelf
 end
 ```
 
+Test your show endpoint with curl:
+
+```shell
+$ curl http://localhost:2300/books/1
+{"id":1,"title":"Test Driven Development","author":"Kent Beck"}
+$ curl http://localhost:2300/books/999
+{"error":"not_found"}
+```
+
+The first request returns the book with ID 1, while the second returns a 404 error for a non-existent book.
+
 ## Creating a book
 
 Now that our visitors can list and view books, let's allow them to create books too.
@@ -641,6 +721,23 @@ end
 
 In addition to validating title and author are present, the `params` block in the action also serves to prevent mass assignment - params not included in the schema (for example an attempt to inject a price of 0) will be discarded.
 
+Test your create endpoint with curl:
+
+```shell
+$ curl -X POST http://localhost:2300/books \
+  -H "Content-Type: application/json" \
+  -d '{"book":{"title":"Refactoring","author":"Martin Fowler"}}'
+{"id":4,"title":"Refactoring","author":"Martin Fowler"}
+```
+
+Try creating a book with missing data to see the validation errors:
+
+```shell
+$ curl -X POST http://localhost:2300/books \
+  -H "Content-Type: application/json" \
+  -d '{"book":{"title":""}}'
+{"title":[{"text":"must be filled","code":"filled?","path":["book","title"],"input":""}],"author":[{"text":"is missing","code":"required","path":["book","author"]}]}
+```
 
 ## What's next
 
