@@ -157,6 +157,23 @@ public/assets
 
 Since `public/assets/login/app.js` is a bundle, it includes the content from the `app/assets/js/login/resetPassword.js` file it imported.
 
+## Assets from Node.js
+
+To use a Node.js package such as Alpine.js, add it as a production dependency:
+
+```bash
+npm install alpinejs
+```
+
+To bundle it, add the following to the entry point of your choice:
+
+```js
+import Alpine from "alpinejs";
+
+window.Alpine = Alpine;
+Alpine.start();
+```
+
 ## Asset bundles
 
 The process of generating an asset bundle involves grouping multiple files (typically JavaScript or CSS) referenced from your entry point into single bundled file. This consolidation is helpful for web app performance, since it reduces the number of HTTP requests required to load a single page.
