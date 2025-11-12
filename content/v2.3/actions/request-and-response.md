@@ -35,6 +35,10 @@ module Bookshelf
       class Index < Bookshelf::Action
         def handle(request, response)
           request.path_info                        # => "/books"
+          request.subdomain                        # => "www"   (for a 1-element TLD)
+          request.subdomains                       # => ["www"] (for a 1-element TLD)
+          request.subdomain(2)                     # => "www"   (for a 2-element TLD)
+          request.subdomains(2)                    # => ["www"] (for a 2-element TLD)
           request.request_method                   # => "GET"
           request.get?                             # => true
           request.post?                            # => false
@@ -49,6 +53,12 @@ module Bookshelf
     end
   end
 end
+```
+
+You can also configure your app's TLD length (for accurate `#subdomains`) in your app class:
+
+```ruby
+config.actions.default_tld_length = 2 # for ".org.au" or similar
 ```
 
 ## Response
@@ -89,4 +99,4 @@ In situations where you want an action to halt, for example to return a `401 Una
 
 ### Response format
 
-The value set using `response.format` can either be a format name (`:json`) or a content type string (`"application/json"`). Consult [MIME types and formats](/v2.3/actions/formats-and-mime-types/) for more information about setting response formats.
+The value set using `response.format` can either be a format name (`:json`) or a content type string (`"application/json"`). Consult [Formats and media types](/v2.3/actions/formats-and-media-types/) for more information about setting response formats.
