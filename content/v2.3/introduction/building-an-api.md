@@ -190,7 +190,7 @@ $ hanami generate migration create_books
 Edit the migration file to create a books table with title and author columns and a primary key:
 
 ```ruby
-# config/db/migrate/20221113050928_create_books.rb
+# config/db/migrate/20251112215119_create_books.rb
 
 ROM::SQL.migration do
   change do
@@ -296,10 +296,10 @@ $ bundle exec hanami console
 Then create a few books:
 
 ```ruby
-bookshelf[development]> book_repo = Bookshelf::App["repos.book_repo"]
-bookshelf[development]> book_repo.create(title: "Test Driven Development", author: "Kent Beck")
-bookshelf[development]> book_repo.create(title: "Practical Object-Oriented Design in Ruby", author: "Sandi Metz")
-bookshelf[development]> book_repo.create(title: "The Pragmatic Programmer", author: "Dave Thomas and Andy Hunt")
+bookshelf[development]> books_relation = app["relations.books"]
+bookshelf[development]> books_relation.insert(title: "Test Driven Development", author: "Kent Beck")
+bookshelf[development]> books_relation.insert(title: "Practical Object-Oriented Design in Ruby", author: "Sandi Metz")
+bookshelf[development]> books_relation.insert(title: "The Pragmatic Programmer", author: "Dave Thomas and Andy Hunt")
 ```
 
 Now test your endpoint with curl:
@@ -448,15 +448,11 @@ In addition to our books index, we also want to provide an endpoint for viewing 
 First, let's update our routes to add the `:show` action:
 
 ```ruby
-module Bookshelf
-  class Routes < Hanami::Routes
-    root to: "home.index"
-    resources :books, only: [:index, :show]
-  end
-end
+# config/routes.rb
+resources :books, only: [:index, :show]
 ```
 
-This adds a route for showing individual books at `GET /books/:id`, which will invoke the `books.show` action.
+This adds a route for showing individual books at `GET /books/:id`, which will invoke the `"books.show"` action.
 
 Now let's generate that action:
 
@@ -469,14 +465,8 @@ To fetch a single book from our database, we can add a new method to our book re
 ```ruby
 # app/repos/book_repo.rb
 
-module Bookshelf
-  module Repos
-    class BookRepo < Bookshelf::DB::Repo
-      def get(id)
-        books.by_pk(id).one
-      end
-    end
-  end
+def get(id)
+  books.by_pk(id).one
 end
 ```
 
@@ -523,50 +513,13 @@ Let's use `#one!` in our repo:
 # app/repos/book_repo.rb
 
 def get(id)
-  by_pk(id).one!
+  books.by_pk(id).one!
 end
 ```
 
-We can use this exception to handle 404s via Hanami's action exception handling: `config.handle_exception`. This action configuration takes the name of a method to invoke when a particular exception occurs.
+We can handle this exception via Hanami's action exception handling: `config.handle_exception`. This action configuration takes the name of a method to invoke when a particular exception occurs.
 
-Taking this approach allows our handle method to focus only on the happy path:
-
-```ruby
-# app/actions/books/show.rb
-
-module Bookshelf
-  module Actions
-    module Books
-      class Show < Bookshelf::Action
-        include Deps["repos.book_repo"]
-
-        config.handle_exception ROM::TupleCountMismatchError => :handle_not_found
-
-        params do
-          required(:id).value(:integer)
-        end
-
-        def handle(request, response)
-          book = book_repo.get(request.params[:id])
-
-          response.format = :json
-          response.body = book.to_h.to_json
-        end
-
-        private
-
-        def handle_not_found(_request, response, _exception)
-          response.status = 404
-          response.format = :json
-          response.body = {error: "not_found"}.to_json
-        end
-      end
-    end
-  end
-end
-```
-
-This exception handling behaviour can also be moved into the base `Bookshelf::Action` class at `app/action.rb`, meaning that any action inheriting from `Bookshelf::Action` will handle `ROM::TupleCountMismatchError` in the same way.
+Let's add this to the base `Bookshelf::Action` class at `app/action.rb`, so that any action inheriting from `Bookshelf::Action` will handle `ROM::TupleCountMismatchError` by returning a 404 response:
 
 ```ruby
 # app/action.rb
@@ -593,32 +546,7 @@ module Bookshelf
 end
 ```
 
-With its base action configured to handle `ROM::TupleCountMismatchError` exceptions, the `Books::Show` action can now be simplified:
-
-```ruby
-# app/actions/books/show.rb
-
-module Bookshelf
-  module Actions
-    module Books
-      class Show < Bookshelf::Action
-        include Deps["repos.book_repo"]
-
-        params do
-          required(:id).value(:integer)
-        end
-
-        def handle(request, response)
-          book = book_repo.get(request.params[:id])
-
-          response.format = :json
-          response.body = book.to_h.to_json
-        end
-      end
-    end
-  end
-end
-```
+With this in place, our `Books::Show` action can remain focused on the happy path, and will automatically return a 404 response when a book isn't found.
 
 Test your show endpoint with curl:
 
@@ -638,15 +566,12 @@ Now that our visitors can list and view books, let's allow them to create books 
 First, let's update our routes to add the `:create` action:
 
 ```ruby
-module Bookshelf
-  class Routes < Hanami::Routes
-    root to: "home.index"
-    resources :books, only: [:index, :show, :create]
-  end
-end
+# config/routes.rb
+
+resources :books, only: [:index, :show, :create]
 ```
 
-This adds a route for creating books at `POST /books`, which will invoke the `books.create` action.
+This adds a route for creating books at `POST /books`, which will invoke the `"books.create"` action.
 
 Now let's generate that action:
 
@@ -692,14 +617,8 @@ First, let's add a method to our book repo to create new books:
 ```ruby
 # app/repos/book_repo.rb
 
-module Bookshelf
-  module Repos
-    class BookRepo < Bookshelf::DB::Repo
-      def create(attributes)
-        books.changeset(:create, attributes).commit
-      end
-    end
-  end
+def create(attributes)
+  books.changeset(:create, attributes).commit
 end
 ```
 
