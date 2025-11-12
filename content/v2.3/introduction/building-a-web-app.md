@@ -117,18 +117,18 @@ Keep the dev server running as you continue through this guide - you'll be able 
 
 As the next step in our bookshelf project, let's add the ability to show an index of all books in the system.
 
-First, let's set up RESTful routes for books by using the `resources` helper in `config/routes.rb`:
+First, let's set up a RESTful route for listing books by using the `resources` helper in `config/routes.rb`:
 
 ```ruby
 module Bookshelf
   class Routes < Hanami::Routes
     root to: "home.index"
-    resources :books
+    resources :books, only: [:index]
   end
 end
 ```
 
-The `resources` helper creates seven standard RESTful routes for a resource:
+The `resources` helper can create seven standard RESTful routes for a resource:
 
 - `GET /books` → `"books.index"` (list all books)
 - `GET /books/new` → `"books.new"` (form for a new book)
@@ -138,7 +138,7 @@ The `resources` helper creates seven standard RESTful routes for a resource:
 - `PATCH /books/:id` → `"books.update"` (update a book)
 - `DELETE /books/:id` → `"books.destroy"` (delete a book)
 
-In this guide, we'll implement the index, show, new, and create actions.
+In this guide, we'll implement the index, show, new, and create actions. We use the `only:` option to specify which routes to create, adding each action as we implement it.
 
 Now let's generate an action for the books index:
 
@@ -411,9 +411,20 @@ Now refresh [http://localhost:2300/books](http://localhost:2300/books) and you'l
 
 In addition to our books index, we also want to provide an endpoint for viewing the details of a particular book.
 
-The `resources :books` route helper we added earlier already created a route for showing individual books at `GET /books/:id`, which will invoke the `books.show` action.
+First, let's update our routes to add the `:show` action:
 
-Let's generate that action now:
+```ruby
+module Bookshelf
+  class Routes < Hanami::Routes
+    root to: "home.index"
+    resources :books, only: [:index, :show]
+  end
+end
+```
+
+This adds a route for showing individual books at `GET /books/:id`, which will invoke the `books.show` action.
+
+Now let's generate that action:
 
 ```shell
 $ bin/hanami generate action books.show --skip-route --skip-tests
@@ -574,11 +585,22 @@ end
 
 Now that our visitors can list and view books, let's allow them to create books too.
 
-The `resources :books` helper we added earlier already created the routes we need:
+First, let's update our routes to add the `:new` and `:create` actions:
+
+```ruby
+module Bookshelf
+  class Routes < Hanami::Routes
+    root to: "home.index"
+    resources :books, only: [:index, :show, :new, :create]
+  end
+end
+```
+
+This adds routes for creating books:
 - `GET /books/new` → `books.new` (to show the form)
 - `POST /books` → `books.create` (to handle the form submission)
 
-Let's generate both actions:
+Now let's generate both actions:
 
 ```shell
 $ bin/hanami generate action books.new --skip-route --skip-tests
