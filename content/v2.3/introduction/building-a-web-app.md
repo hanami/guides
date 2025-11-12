@@ -72,7 +72,7 @@ end
 
 For more details on actions, see the [Actions guide](/v2.3/actions/overview/).
 
-By default, an action will render its equivalent view. We can find our new view in our `app` directory at `app/views/home/index.rb`:
+By default, an action will render its matching view. We can find our new view at `app/views/home/index.rb`:
 
 ```ruby
 # app/views/home/index.rb
@@ -89,7 +89,7 @@ end
 
 Just like actions, every view in a Hanami app is an individual class. Views prepare the values to be passed to a template, then render that template to generate their output.
 
-We can find this view's template in our `app` directory at `app/templates/home/index.html.erb`. Let's adjust this template to include our desired "Welcome to Bookshelf" text.
+We can find this view's template at `app/templates/home/index.html.erb`. Let's adjust this template to include our desired "Welcome to Bookshelf" text.
 
 ```sql
 # app/templates/home/index.html.erb
