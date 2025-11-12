@@ -121,20 +121,16 @@ First, let's set up RESTful routes for our books API by using the `resources` he
 module Bookshelf
   class Routes < Hanami::Routes
     root to: "home.index"
-    resources :books
+    resources :books, only: [:index, :show, :create]
   end
 end
 ```
 
-The `resources` helper creates seven standard RESTful routes for a resource:
+The `resources` helper creates three of the standard RESTful routes for a resource:
 
-- `GET /books` → `books.index` (list all books)
-- `GET /books/new` → `books.new` (form for new book)
-- `POST /books` → `books.create` (create a book)
-- `GET /books/:id` → `books.show` (show a specific book)
-- `GET /books/:id/edit` → `books.edit` (form for editing a book)
-- `PATCH /books/:id` → `books.update` (update a book)
-- `DELETE /books/:id` → `books.destroy` (delete a book)
+- `GET /books` → `"books.index"` (list all books)
+- `POST /books` → `"books.create"` (create a book)
+- `GET /books/:id` → `"books.show"` (show a specific book)
 
 In this guide, we'll implement the index, show, and create actions. (The new and edit actions are typically used for HTML forms, which we don't need in a JSON API.)
 
