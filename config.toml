@@ -21,7 +21,7 @@ filename = "sitemap.xml"
 priority = 0.5
 
 [params]
-hanamiversion = "2.2"
+hanamiversion = "2.3"
 description = "Code guides for Hanami Ruby web framework"
 facebook = "hanamirb"
 twitter = "hanamirb"

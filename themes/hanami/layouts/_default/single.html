@@ -67,9 +67,7 @@
               {{ range .Site.Sections }}
                 {{ $versionPathPrefix := replace .RelPermalink "/" "" }}
                 {{ $title := $versionPathPrefix }}
-                {{ if ne $versionPathPrefix "v2.3" }}
                 <option value="/{{ $versionPathPrefix }}{{ .Site.Params.startingpage }}" {{ if eq .Section $currentSection}}selected{{end}}>{{ $title }}</option>
-                {{ end }}
               {{ end }}
             </select>
           </li>
