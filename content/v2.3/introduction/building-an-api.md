@@ -94,22 +94,36 @@ end
 
 As the next step in our bookshelf project, let's add the ability to display an index of all books in the system, delivered as a JSON API.
 
-We'll generate an action for a books index:
-
-```shell
-$ bundle exec hanami generate action books.index --skip-view --skip-tests
-```
-
-In addition to generating an action at `app/actions/books/index.rb`, the generator has also added a route in `config/routes.rb`:
+First, let's set up RESTful routes for our books API by using the `resources` helper in `config/routes.rb`:
 
 ```ruby
 module Bookshelf
   class Routes < Hanami::Routes
     root to: "home.index"
-    get "/books", to: "books.index"
+    resources :books
   end
 end
 ```
+
+The `resources` helper creates seven standard RESTful routes for a resource:
+
+- `GET /books` → `books.index` (list all books)
+- `GET /books/new` → `books.new` (form for new book)
+- `POST /books` → `books.create` (create a book)
+- `GET /books/:id` → `books.show` (show a specific book)
+- `GET /books/:id/edit` → `books.edit` (form for editing a book)
+- `PATCH /books/:id` → `books.update` (update a book)
+- `DELETE /books/:id` → `books.destroy` (delete a book)
+
+In this guide, we'll implement the index, show, and create actions. (The new and edit actions are typically used for HTML forms, which we don't need in a JSON API.)
+
+Now let's generate an action for the books index:
+
+```shell
+$ bundle exec hanami generate action books.index --skip-view --skip-route --skip-tests
+```
+
+Since we've already defined our routes using `resources`, we use the `--skip-route` flag to prevent the generator from adding a duplicate route.
 
 Now let's adjust our action to return a JSON formatted response using `response.format = :json`. We'll also set the response body to a list of books:
 
@@ -366,24 +380,12 @@ You can find more details on actions and parameter validation in the [Actions gu
 
 In addition to our books index, we also want to provide an endpoint for viewing the details of a particular book.
 
-We can use Hanami's action generator to create both a route and an action. Run:
+The `resources :books` route helper we added earlier already created a route for showing individual books at `GET /books/:id`, which will invoke the `books.show` action.
+
+Let's generate that action now:
 
 ```shell
-$ bundle exec hanami generate action books.show --skip-view --skip-tests
-```
-
-If you inspect `config/routes.rb` you will see the generator has automatically added a new `get "/books/:id", to: "books.show"` route:
-
-```ruby
-# config/routes.rb
-
-module Bookshelf
-  class Routes < Hanami::Routes
-    root to: "home.index"
-    get "/books", to: "books.index"
-    get "/books/:id", to: "books.show"
-  end
-end
+$ bundle exec hanami generate action books.show --skip-view --skip-route --skip-tests
 ```
 
 To fetch a single book from our database, we can add a new method to our book repo:
@@ -546,26 +548,15 @@ end
 
 Now that our visitors can list and view books, let's allow them to create books too.
 
-We'll use Hanami's action generator to create a route and action for creating books:
+The `resources :books` helper we added earlier already created a route for creating books at `POST /books`, which will invoke the `books.create` action.
+
+Let's generate that action now:
 
 ```shell
-$ bundle exec hanami generate action books.create --skip-view --skip-tests
+$ bundle exec hanami generate action books.create --skip-view --skip-route --skip-tests
 ```
 
-The app's routes now include the expected route - invoking the `books.create` action for `POST` requests to `/books`:
-
-```ruby
-module Bookshelf
-  class Routes < Hanami::Routes
-    root to: "home.index"
-    get "/books", to: "books.index"
-    get "/books/:id", to: "books.show"
-    post "/books", to: "books.create"
-  end
-end
-```
-
-And Hanami has generated an action at `app/actions/books/create.rb`:
+This generates an action at `app/actions/books/create.rb`:
 
 ```ruby
 # app/actions/books/create.rb
