@@ -35,6 +35,7 @@ With that configuration we can specify options that will be set for all cookies 
   * `:max_age` - `Integer` (`nil` by default), cookie duration expressed in seconds
   * `:secure` - `Boolean` (`true` by default if using SSL), restrict cookies to secure connections
   * `:httponly` - `Boolean` (`true` by default), restrict JavaScript access to cookies
+  * `:same_site` - `String` (`nil` by default), to control when cookies are sent even on different websites. Possible values are: nil, None, Lax, Strict
 
 ## Usage
 
