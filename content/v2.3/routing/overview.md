@@ -28,8 +28,8 @@ Each route in Hanami's router is comprised of:
 Endpoints are usually actions within your application, but they can also be a block, a [Rack](https://github.com/rack/rack) application, or anything that responds to `#call`.
 
 ```ruby
-get "/books", to: "books.index"  # Invokes the Bookshelf::Actions:Books::Index action
-post "/books", to: "books.create" # Invokes the Bookshelf::Actions:Books::Create action
+get "/books", to: "books.index"  # Invokes the Bookshelf::Actions::Books::Index action
+post "/books", to: "books.create" # Invokes the Bookshelf::Actions::Books::Create action
 get "/rack-app", to: RackApp.new
 get "/my-lambda", to: ->(env) { [200, {}, ["A Rack compatible response"]] }
 ```
@@ -321,6 +321,44 @@ scope "authors/:author_id", as: :author do
   # Will be named :send_author_feedback
 end
 ```
+
+## Grouping
+
+To avoid conflicting source file names, you may at times wish to group actions by adding additional segments to the `to` endpoint:
+
+```ruby
+module Bookshelf
+  class Routes < Hanami::Routes
+    scope "sign-up" do
+      get "email", to: "sign_up.email.new"  # Invokes the Bookshelf::Actions:SignUp::Email::New action
+      get "phone", to: "sign_up.phone.new"  # Invokes the Bookshelf::Actions:SignUp::Phone::New action
+    end
+    scope "sign-in" do
+      get "email", to: "sign_in.email.new"  # Invokes the Bookshelf::Actions:SignIn::Email::New action
+      get "phone", to: "sign_in.phone.new"  # Invokes the Bookshelf::Actions:SignIn::Phone::New action
+    end
+  end
+end
+```
+
+This wraps the actions with additional `Email` and `Phone` modules and therefore organizes their source files accordingly:
+
+```
+app
+└── actions
+    ├── sign_in
+    |   ├── email
+    |   |   └── new.rb
+    |   └── phone
+    |       └── new.rb
+    └── sign_up
+        ├── email
+        |   └── new.rb
+        └── phone
+            └── new.rb
+```
+
+The same organization applies to the related default views and templates as well.
 
 ## Redirects
 
