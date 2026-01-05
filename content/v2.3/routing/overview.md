@@ -28,8 +28,8 @@ Each route in Hanami's router is comprised of:
 Endpoints are usually actions within your application, but they can also be a block, a [Rack](https://github.com/rack/rack) application, or anything that responds to `#call`.
 
 ```ruby
-get "/books", to: "books.index"  # Invokes the Bookshelf::Actions:Books::Index action
-post "/books", to: "books.create" # Invokes the Bookshelf::Actions:Books::Create action
+get "/books", to: "books.index"  # Invokes the Bookshelf::Actions::Books::Index action
+post "/books", to: "books.create" # Invokes the Bookshelf::Actions::Books::Create action
 get "/rack-app", to: RackApp.new
 get "/my-lambda", to: ->(env) { [200, {}, ["A Rack compatible response"]] }
 ```
