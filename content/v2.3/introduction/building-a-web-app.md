@@ -138,7 +138,7 @@ The `resources` helper can create seven standard RESTful routes for a resource:
 - `PATCH /books/:id` → `"books.update"` (update a book)
 - `DELETE /books/:id` → `"books.destroy"` (delete a book)
 
-In this guide, we'll implement the index, show, new, create, update, and delete actions. We use the `only:` option to specify which routes to create, adding each action as we implement it.
+In this guide, we'll implement the index, show, new, create, and update actions. We use the `only:` option to specify which routes to create, adding each action as we implement it.
 
 Now let's generate an action for the books index:
 
