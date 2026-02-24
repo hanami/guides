@@ -138,7 +138,7 @@ The `resources` helper can create seven standard RESTful routes for a resource:
 - `PATCH /books/:id` → `"books.update"` (update a book)
 - `DELETE /books/:id` → `"books.destroy"` (delete a book)
 
-In this guide, we'll implement the index, show, new, and create actions. We use the `only:` option to specify which routes to create, adding each action as we implement it.
+In this guide, we'll implement the index, show, new, create, update, and delete actions. We use the `only:` option to specify which routes to create, adding each action as we implement it.
 
 Now let's generate an action for the books index:
 
@@ -691,6 +691,121 @@ end
 ```
 
 Now visit [http://localhost:2300/books/new](http://localhost:2300/books/new) to see your new book form. Try creating a book - if you fill in both fields and submit, you'll be redirected to the newly created book's page with a success message. If you try to submit an empty form, you'll see an error message.
+
+## Updating a book
+
+Now that our visitors can create books, let's allow them to update books too.
+
+To update a book we will again need two actions
+
+First, let's update our routes to add the `:edit` and `:update` actions:
+
+```ruby
+# config/routes.rb
+
+resources :books, only: [:index, :show, :new, :create, :edit, :update]
+```
+
+This adds routes for creating books:
+
+- `GET /books/update/1` → `books.update` (to show the form)
+- `POST /books/1` → `books.update` (to handle the form submission)
+
+Now let's generate both actions:
+
+```shell
+$ bin/hanami generate action books.edit --skip-route --skip-tests
+$ bin/hanami generate action books.update --skip-route --skip-tests
+```
+
+To load the existing book in the edit view we need to update the view to expose the book:
+
+```sql
+<!-- app/views/books/edit.eb -->
+
+module Bookshelf
+  module Views
+    module Books
+      class Edit < Bookshelf::View
+        include Deps["repos.book_repo"]
+
+        expose :book do |id:|
+          book_repo.get(id)
+        end
+      end
+    end
+  end
+end
+```
+
+To show a form for updateing an existing book we update the template to include a form that shows the existing values:
+
+```sql
+<!-- app/templates/books/edit.html.erb -->
+
+<%= form_for :book, routes.path(:book, id: book.id), method: :patch do |f| %>
+  <div>
+    <%= f.label "Title", for: :title %>
+    <%= f.text_field :title, value: book.title %>
+  </div>
+  <div>
+    <%= f.label "Author", for: :author %>
+    <%= f.text_field :author, value: book.author %>
+  </div>
+  <div>
+    <%= f.submit "Update" %>
+  </div>
+<% end %>
+```
+
+To complete our update action, we can add a method to our book repo to update an existing book:
+
+```ruby
+# app/repos/book_repo.rb
+
+  def update(id, attributes)
+    books.by_pk(id).changeset(:update, attributes).commit
+  end
+```
+
+In the action, we can then update this book if the posted params are valid, then setting flash messages and redirecting as required:
+
+```ruby
+# app/actions/books/update.rb
+
+module Bookshelf
+  module Actions
+    module Books
+      class Update < Bookshelf::Action
+        include Deps["repos.book_repo"]
+
+        params do
+          required(:id).filled(:integer)
+          required(:book).hash do
+            required(:title).filled(:string)
+            required(:author).filled(:string)
+          end
+        end
+
+        def handle(request, response)
+          if request.params.valid?
+            book = book_repo.update(request.params[:id], request.params[:book])
+
+            response.flash[:notice] = "Book updated"
+            response.redirect_to routes.path(:book, id: book[:id])
+          else
+            response.flash.now[:alert] = "Could not update book"
+            # Implicitly re-renders the "new" view
+          end
+        end
+      end
+    end
+  end
+end
+```
+
+Now visit [http://localhost:2300/books/1/edit](http://localhost:2300/books/1/edit) to see your edit book form. Try updating the book - if you fill in both fields and submit, you'll be redirected to the updated book's page with a success message. If you try to submit with an empty field in the form, you'll see an error message.
+
 
 ## What's next
 
