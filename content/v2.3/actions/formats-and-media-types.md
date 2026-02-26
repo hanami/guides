@@ -12,7 +12,7 @@ Accepting one or more formats from your actions will:
 - Ensure the actions accept only appropriate requests based on their `Accept` or `Content-Type` headers.
 - Set an appropriate `Content-Type` header on responses.
 
-## Configuring a format for all actions
+## Accepting a format for all actions
 
 To accept a format for all actions, use `config.actions.format.accept` in your app class.
 
@@ -32,9 +32,10 @@ You can also configure actions to accept multiple formats:
 config.actions.formats.accept :json, :html
 ```
 
-## Configuring a format for particular actions
+## Accepting a format for particular actions
 
-You can also configure formats on any action class. `config.formats` in an action class is analogous to `config.actions.formats` in your app class.
+You can also accept formats on any individual action class. `config.formats` in an action class is
+analogous to `config.actions.formats` in your app class.
 
 ```ruby
 # app/actions/books/index.rb
@@ -54,7 +55,7 @@ module Bookshelf
 end
 ```
 
-If you configure a format on a base action class, then it will be inherited by all its subclasses.
+If you accept a format on a base action class, then it will be inherited by all its subclasses.
 
 ```ruby
 # app/action.rb
@@ -95,7 +96,7 @@ While requests with these headers will be rejected:
 
 ## Response format
 
-Actions set a `Content-Type` response header based on your accepted formats along with the media type and charset of the incoming request.
+Actions set a default `Content-Type` response header based on your accepted formats along with the media type and charset of the incoming request.
 
 For example, if a request's `Accept` header is `"text/html,application/xhtml+xml,application/xml;q=0.9"`, the action will return a content type of `"text/html; charset=utf-8"`, assuming that the action accepts the `:html` format.
 
