@@ -738,25 +738,34 @@ module Bookshelf
 end
 ```
 
-To show a form for updateing an existing book we update the template to include a form that shows the existing values:
+To show a form for updating an existing book we can change the generated template to include the following:
 
 ```sql
 <!-- app/templates/books/edit.html.erb -->
 
-<%= form_for :book, routes.path(:book, id: book.id), method: :patch do |f| %>
-  <div>
-    <%= f.label "Title", for: :title %>
-    <%= f.text_field :title, value: book.title %>
-  </div>
-  <div>
-    <%= f.label "Author", for: :author %>
-    <%= f.text_field :author, value: book.author %>
-  </div>
-  <div>
-    <%= f.submit "Update" %>
-  </div>
-<% end %>
+<%= form_for :book, routes.path(:book, id: book.id), method: :patch do |f| %>  
+  <div>  
+    <%= f.label "Title", for: :title %>  
+    <%= f.text_field :title %>  
+  </div>  
+  <div>  
+    <%= f.label "Author", for: :author %>  
+    <%= f.text_field :author %>  
+  </div>  
+  <div>  
+    <%= f.submit "Update" %>  
+  </div>  
+<% end %> 
+
+<!--
+The Hanami form helpers show the existing values by default
+  when we declare that the form is for the book.
+You can also specify a value for the field utilizing the value parameter:
+  <%= f.text_field :title, value: "#{book.title} updated at #{Time.now}" %>
+-->
 ```
+ 
+
 
 To complete our update action, we can add a method to our book repo to update an existing book:
 
