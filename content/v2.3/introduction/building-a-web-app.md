@@ -721,7 +721,7 @@ $ bin/hanami generate action books.update --skip-route --skip-tests
 To load the existing book in the edit view we need to update the view to expose the book:
 
 ```sql
-<!-- app/views/books/edit.eb -->
+<!-- app/views/books/edit.rb -->
 
 module Bookshelf
   module Views
@@ -763,9 +763,9 @@ To complete our update action, we can add a method to our book repo to update an
 ```ruby
 # app/repos/book_repo.rb
 
-  def update(id, attributes)
-    books.by_pk(id).changeset(:update, attributes).commit
-  end
+def update(id, attributes)
+  books.by_pk(id).changeset(:update, attributes).commit
+end
 ```
 
 In the action, we can then update this book if the posted params are valid, then setting flash messages and redirecting as required:
