@@ -119,7 +119,7 @@ For more on Repositories, see [ROM: Repositories](https://rom-rb.org/learn/repos
 
 The final output of a Repository is a Struct.
 
-A Hanami struct is immutable, and contains no business logic. They are extensible for adding presentation logic:
+A Hanami struct is immutable, and contains no business logic. They are extensible for adding read only data enhancements (For more complex logic consider utilizing an Operation):
 
 ```ruby
 module Main
