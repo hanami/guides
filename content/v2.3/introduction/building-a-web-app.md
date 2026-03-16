@@ -822,7 +822,7 @@ Now that our visitors can view, create, and update books, let's allow them to de
 
 To delete a book we will only need one action, destroy.
 
-First, let's update our routes. We could add `:delete` to our only list, but we can just remove the only list as we will have implemented all actions a resource provides ([:index, :show, :new, :create, :edit, :update, :delete]).
+First, let's update our routes. We could add `:destroy` to our only list, but we can just remove the only list as we will have implemented all actions a resource provides ([:index, :show, :new, :create, :edit, :update, :destroy]).
 
 ```ruby
 # config/routes.rb
@@ -883,12 +883,11 @@ module Bookshelf
         def handle(request, response)
           result = book_repo.delete(request.params[:id])
 
-          response.flash[:notice] =  if !result.nil?
-                                       "Book deleted successfully"
-
-                                     else
-                                       response.flash.now[:alert] = "Could not delete book #{request.params[:id]}!"
-                                     end
+          if !result.nil?
+            response.flash[:notice] = "Book deleted successfully"
+          else
+            response.flash.now[:alert] = "Could not delete book #{request.params[:id]}!"
+          end
           response.redirect_to routes.path(:books)
         end
       end
@@ -901,7 +900,7 @@ Now visit [http://localhost:2300/books/1](http://localhost:2300/books/1) to see 
 
 ## What's next
 
-So far we've seen how to create a new Hanami app, explored some of the basics of how an app is structured, and seen how we can list, display,create, update and delete a simple book entity while validating user input.
+So far we've seen how to create a new Hanami app, explored some of the basics of how an app is structured, and seen how we can list, display, create, update and delete a simple book entity while validating user input.
 
 Still, we've barely touched the surface of what Hanami offers.
 
