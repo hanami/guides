@@ -820,9 +820,9 @@ Now visit [http://localhost:2300/books/1/edit](http://localhost:2300/books/1/edi
 
 Now that our visitors can view, create, and update books, let's allow them to delete books too.
 
-To delete a book we will only need one action, destroy.
+To delete a book we will only need one action, delete.
 
-First, let's update our routes. We could add `:destroy` to our only list, but we can just remove the only list as we will have implemented all actions a resource provides ([:index, :show, :new, :create, :edit, :update, :destroy]).
+First, let's update our routes. We could add `:delete` to our `only:` list, but we can just remove the list as we will have implemented all actions a resource provides ([:index, :show, :new, :create, :edit, :update, :delete]).
 
 ```ruby
 # config/routes.rb
@@ -830,7 +830,8 @@ First, let's update our routes. We could add `:destroy` to our only list, but we
 resources :books
 ```
 
-:book
+This adds a route for deleting books:
+
 - `DELETE /books/1` → `books.destroy`
 
 Now let's generate the action:
@@ -883,11 +884,7 @@ module Bookshelf
         def handle(request, response)
           result = book_repo.delete(request.params[:id])
 
-          if !result.nil?
-            response.flash[:notice] = "Book deleted successfully"
-          else
-            response.flash.now[:alert] = "Could not delete book #{request.params[:id]}!"
-          end
+          response.flash[:notice] = "Book deleted"
           response.redirect_to routes.path(:books)
         end
       end
