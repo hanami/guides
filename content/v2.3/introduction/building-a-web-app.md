@@ -138,7 +138,7 @@ The `resources` helper can create seven standard RESTful routes for a resource:
 - `PATCH /books/:id` → `"books.update"` (update a book)
 - `DELETE /books/:id` → `"books.destroy"` (delete a book)
 
-In this guide, we'll implement the index, show, new, create, and update actions. We use the `only:` option to specify which routes to create, adding each action as we implement it.
+In this guide, we'll implement the index, show, new, create, update and delete actions. We use the `only:` option to specify which routes to create, adding each action as we implement it.
 
 Now let's generate an action for the books index:
 
@@ -706,7 +706,7 @@ First, let's update our routes to add the `:edit` and `:update` actions:
 resources :books, only: [:index, :show, :new, :create, :edit, :update]
 ```
 
-This adds routes for creating books:
+This adds routes for updating books:
 
 - `GET /books/update/1` → `books.update` (to show the form)
 - `POST /books/1` → `books.update` (to handle the form submission)
@@ -816,9 +816,88 @@ end
 Now visit [http://localhost:2300/books/1/edit](http://localhost:2300/books/1/edit) to see your edit book form. Try updating the book - if you fill in both fields and submit, you'll be redirected to the updated book's page with a success message. If you try to submit with an empty field in the form, you'll see an error message.
 
 
+## Deleting a book
+
+Now that our visitors can view, create, and update books, let's allow them to delete books too.
+
+To delete a book we will only need one action, delete.
+
+First, let's update our routes. We could add `:delete` to our `only:` list, but we can just remove the list as we will have implemented all actions a resource provides ([:index, :show, :new, :create, :edit, :update, :delete]).
+
+```ruby
+# config/routes.rb
+
+resources :books
+```
+
+This adds a route for deleting books:
+
+- `DELETE /books/1` → `books.destroy`
+
+Now let's generate the action:
+
+```shell
+$ bin/hanami generate action books.destroy --skip-route --skip-tests --skip-view
+```
+
+We are not planning any special view associated with deleting a book, we will just add a button in the show template:
+
+```sql
+<!-- app/templates/books/show.html.erb -->
+
+<h1><%= book.title %></h1>
+
+<p>By <%= book.author %></p>
+
+<div>
+  <%= form_for :book, routes.path(:book, id: book.id), method: :delete do |f| %>
+    <%= f.submit "Delete" %>
+  <% end %>
+</div>
+```
+
+To complete our delete action, we can add a method to our book repo to delete an existing book:
+
+```ruby
+# app/repos/book_repo.rb
+
+def delete(id)
+  books.by_pk(id).changeset(:delete).commit
+end
+```
+
+In the action, we can now delete the existing book, set a flash message and redirect to the book list:
+
+```ruby
+# app/actions/books/delete.rb
+
+module Bookshelf
+  module Actions
+    module Books
+      class Delete < Bookshelf::Action
+        include Deps["repos.book_repo"]
+
+        params do
+          required(:id).filled(:integer)
+        end
+
+        def handle(request, response)
+          result = book_repo.delete(request.params[:id])
+
+          response.flash[:notice] = "Book deleted"
+          response.redirect_to routes.path(:books)
+        end
+      end
+    end
+  end
+end
+```
+
+Now visit [http://localhost:2300/books/1](http://localhost:2300/books/1) to see your show book page with the delete button. Click the delete button, you'll be redirected to the book index page with a success message. 
+
 ## What's next
 
-So far we've seen how to create a new Hanami app, explored some of the basics of how an app is structured, and seen how we can list, display and create a simple book entity while validating user input.
+So far we've seen how to create a new Hanami app, explored some of the basics of how an app is structured, and seen how we can list, display, create, update and delete a simple book entity while validating user input.
 
 Still, we've barely touched the surface of what Hanami offers.
 
