@@ -708,7 +708,7 @@ resources :books, only: [:index, :show, :new, :create, :edit, :update]
 
 This adds routes for updating books:
 
-- `GET /books/update/1` → `books.update` (to show the form)
+- `GET /books/update/1` → `books.edit` (to show the form)
 - `POST /books/1` → `books.update` (to handle the form submission)
 
 Now let's generate both actions:
